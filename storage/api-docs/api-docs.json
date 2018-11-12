@@ -1,0 +1,1051 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API Base - Massad",
+        "version": "1.0.0"
+    },
+    "host": "/var/www/massad.luby.com.br/",
+    "basePath": "api",
+    "paths": {
+        "/customers": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Retorna todas as pessoas",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Adiciona um novo cliente",
+                "operationId": "store",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "email2": {
+                                    "type": "string"
+                                },
+                                "senha": {
+                                    "type": "string"
+                                },
+                                "senha2": {
+                                    "type": "string"
+                                },
+                                "cpf": {
+                                    "type": "string"
+                                },
+                                "rg": {
+                                    "type": "string"
+                                },
+                                "data_nascimento": {
+                                    "type": "string"
+                                },
+                                "orgao_expedidor": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_zona": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_secao": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_uf": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_uf_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_municipio": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_municipio_id": {
+                                    "type": "integer"
+                                },
+                                "nome_mae": {
+                                    "type": "string"
+                                },
+                                "estado_civil": {
+                                    "type": "integer"
+                                },
+                                "genero": {
+                                    "type": "integer"
+                                },
+                                "escolaridade": {
+                                    "type": "integer"
+                                },
+                                "opcao_religiosa": {
+                                    "type": "integer"
+                                },
+                                "profissao": {
+                                    "type": "string"
+                                },
+                                "filiacao": {
+                                    "type": "integer"
+                                },
+                                "filiacao_qual_partido": {
+                                    "type": "string"
+                                },
+                                "termo_aceite_1": {
+                                    "type": "integer"
+                                },
+                                "termo_aceite_2": {
+                                    "type": "integer"
+                                },
+                                "termo_aceite_3": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o adicionada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            }
+        },
+        "/customers/{id}": {
+            "get": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Procurar uma pessoa pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Atualiza uma pessoa existente",
+                "operationId": "update",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "senha": {
+                                    "type": "string"
+                                },
+                                "cpf": {
+                                    "type": "string"
+                                },
+                                "rg": {
+                                    "type": "string"
+                                },
+                                "data_nascimento": {
+                                    "type": "string"
+                                },
+                                "orgao_expedidor": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_zona": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_secao": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_uf": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_uf_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_municipio": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_municipio_id": {
+                                    "type": "integer"
+                                },
+                                "nome_mae": {
+                                    "type": "string"
+                                },
+                                "estado_civil": {
+                                    "type": "integer"
+                                },
+                                "genero": {
+                                    "type": "integer"
+                                },
+                                "escolaridade": {
+                                    "type": "integer"
+                                },
+                                "opcao_religiosa": {
+                                    "type": "integer"
+                                },
+                                "profissao": {
+                                    "type": "string"
+                                },
+                                "filiacao": {
+                                    "type": "integer"
+                                },
+                                "filiacao_qual_partido": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Exclui uma pessoa",
+                "operationId": "destroy",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o exclu\u00edda com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+    },
+    "definitions": {
+        "C\u00f3digo HTTP 200": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "success": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "data": {
+                            "type": "object"
+                        }
+                    }
+                }
+            ]
+        },
+        "C\u00f3digo HTTP 404": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "success": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "C\u00f3digo HTTP 400": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "success": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "errors": {
+                            "type": "object"
+                        }
+                    }
+                }
+            ]
+        },
+        "CEP": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "estado": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Cidade": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "capital": {
+                            "type": "integer"
+                        },
+                        "ibge_code": {
+                            "type": "integer"
+                        },
+                        "tb_estado_id": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Endere\u00e7o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "pessoa_id": {
+                            "type": "integer"
+                        },
+                        "tb_tipo_endereco_id": {
+                            "type": "integer"
+                        },
+                        "reside_exterior": {
+                            "type": "integer"
+                        },
+                        "tb_pais_id": {
+                            "type": "integer"
+                        },
+                        "tb_estado_id": {
+                            "type": "integer"
+                        },
+                        "estado": {
+                            "type": "string"
+                        },
+                        "tb_cidade_id": {
+                            "type": "integer"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "cep": {
+                            "type": "string"
+                        },
+                        "cep_status": {
+                            "type": "integer"
+                        },
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "numero": {
+                            "type": "string"
+                        },
+                        "complemento": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Escolaridade": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "escolaridade": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Estado": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "estado": {
+                            "type": "string"
+                        },
+                        "sigla": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Estado Civil": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "estadocivil": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Evento": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "diretorio_id": {
+                            "type": "string"
+                        },
+                        "nucleo_id": {
+                            "type": "string"
+                        },
+                        "usuario_responsavel_id": {
+                            "type": "string"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "tipo": {
+                            "type": "string"
+                        },
+                        "cep": {
+                            "type": "string"
+                        },
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "complemento": {
+                            "type": "string"
+                        },
+                        "estado_id": {
+                            "type": "string"
+                        },
+                        "cidade_id": {
+                            "type": "string"
+                        },
+                        "data_inicio": {
+                            "type": "string"
+                        },
+                        "data_termino": {
+                            "type": "string"
+                        },
+                        "data_evento": {
+                            "type": "string"
+                        },
+                        "path_logo": {
+                            "type": "string"
+                        },
+                        "path_banner": {
+                            "type": "string"
+                        },
+                        "link_video": {
+                            "type": "string"
+                        },
+                        "limite_inscritos": {
+                            "type": "string"
+                        },
+                        "descricao": {
+                            "type": "string"
+                        },
+                        "apenas_filiados": {
+                            "type": "string"
+                        },
+                        "dias_boleto": {
+                            "type": "string"
+                        },
+                        "removido": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Evento Pre\u00e7os": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "evento_id": {
+                            "type": "string"
+                        },
+                        "descricao": {
+                            "type": "string"
+                        },
+                        "valor": {
+                            "type": "string"
+                        },
+                        "data_inicio": {
+                            "type": "string"
+                        },
+                        "data_termino": {
+                            "type": "string"
+                        },
+                        "limite_inscritos": {
+                            "type": "string"
+                        },
+                        "limite_total": {
+                            "type": "string"
+                        },
+                        "apenas_filiados": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Evento Perguntas": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "evento_id": {
+                            "type": "string"
+                        },
+                        "tipo": {
+                            "type": "string"
+                        },
+                        "descricao": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Foi Filiado": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "foi_filiado": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "G\u00eanero": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "genero": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Motivo": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "motivo": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Pa\u00eds": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "iso": {
+                            "type": "string"
+                        },
+                        "iso3": {
+                            "type": "string"
+                        },
+                        "code": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Pessoa": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "senha": {
+                            "type": "string"
+                        },
+                        "cpf": {
+                            "type": "string"
+                        },
+                        "rg": {
+                            "type": "string"
+                        },
+                        "data_nascimento": {
+                            "type": "string"
+                        },
+                        "orgao_expedidor": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_zona": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_secao": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_pais": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_pais_id": {
+                            "type": "integer"
+                        },
+                        "titulo_eleitoral_uf": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_uf_id": {
+                            "type": "integer"
+                        },
+                        "titulo_eleitoral_municipio": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_municipio_id": {
+                            "type": "integer"
+                        },
+                        "nome_mae": {
+                            "type": "string"
+                        },
+                        "estado_civil": {
+                            "type": "integer"
+                        },
+                        "genero": {
+                            "type": "integer"
+                        },
+                        "escolaridade": {
+                            "type": "integer"
+                        },
+                        "opcao_religiosa": {
+                            "type": "integer"
+                        },
+                        "profissao": {
+                            "type": "string"
+                        },
+                        "filiacao": {
+                            "type": "integer"
+                        },
+                        "filiacao_qual_partido": {
+                            "type": "string"
+                        },
+                        "termo_aceite_1": {
+                            "type": "integer"
+                        },
+                        "termo_aceite_2": {
+                            "type": "integer"
+                        },
+                        "termo_aceite_3": {
+                            "type": "integer"
+                        },
+                        "tb_motivo_id": {
+                            "type": "integer"
+                        },
+                        "observacao": {
+                            "type": "string"
+                        },
+                        "motivo_desfiliacao": {
+                            "type": "string"
+                        },
+                        "token": {
+                            "type": "string"
+                        },
+                        "token_ad": {
+                            "type": "string"
+                        },
+                        "email_confirmado": {
+                            "type": "integer"
+                        },
+                        "filiado_id": {
+                            "type": "integer"
+                        },
+                        "status": {
+                            "type": "integer"
+                        },
+                        "doador": {
+                            "type": "integer"
+                        },
+                        "filiado": {
+                            "type": "integer"
+                        },
+                        "bloqueado": {
+                            "type": "integer"
+                        },
+                        "candidatura": {
+                            "type": "integer"
+                        },
+                        "data_solicitacao_filiacao": {
+                            "type": "string"
+                        },
+                        "data_solicitacao_refiliacao": {
+                            "type": "string"
+                        },
+                        "data_filiacao": {
+                            "type": "string"
+                        },
+                        "data_desfiliacao": {
+                            "type": "string"
+                        },
+                        "data_refiliacao": {
+                            "type": "string"
+                        },
+                        "data_cancelamento_pedido": {
+                            "type": "string"
+                        },
+                        "data_impugnacao": {
+                            "type": "string"
+                        },
+                        "data_validade_ativo": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Religi\u00e3o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "religiao": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Tipo Endere\u00e7o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "tipo_endereco": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

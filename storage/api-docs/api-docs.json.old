@@ -1,0 +1,1447 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API Base - NOVO",
+        "version": "1.0.0"
+    },
+    "host": "localhost/novo/espaco-novo/webservice/public/",
+    "basePath": "api",
+    "paths": {
+        "/cidade/{id}": {
+            "get": {
+                "tags": [
+                    "Cidade"
+                ],
+                "summary": "Procurar uma cidade pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da cidade",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/endereco/cep/{cep}": {
+            "get": {
+                "tags": [
+                    "CEP"
+                ],
+                "summary": "Procurar um endere\u00e7o pelo CEP",
+                "operationId": "cep",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "cep",
+                        "in": "path",
+                        "description": "CEP",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/escolaridade": {
+            "get": {
+                "tags": [
+                    "Escolaridade"
+                ],
+                "summary": "Retorna todas as escolaridades",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/escolaridade/{id}": {
+            "get": {
+                "tags": [
+                    "Escolaridade"
+                ],
+                "summary": "Procurar uma escolaridade pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da escolaridade",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/estado": {
+            "get": {
+                "tags": [
+                    "Estado"
+                ],
+                "summary": "Retorna todos os estado",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/estado/{id}": {
+            "get": {
+                "tags": [
+                    "Estado"
+                ],
+                "summary": "Procurar um estado pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do estado",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/estadocivil": {
+            "get": {
+                "tags": [
+                    "Estado Civil"
+                ],
+                "summary": "Retorna todos os estados civis",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/estadocivil/{id}": {
+            "get": {
+                "tags": [
+                    "Estado Civil"
+                ],
+                "summary": "Procurar um estado civil pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do estado civil",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/foifiliado": {
+            "get": {
+                "tags": [
+                    "Foi Filiado"
+                ],
+                "summary": "Retorna todas as op\u00e7\u00f5es de filia\u00e7\u00e3o",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/foifiliado/{id}": {
+            "get": {
+                "tags": [
+                    "Foi Filiado"
+                ],
+                "summary": "Procurar uma filia\u00e7\u00e3o pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID dda filia\u00e7\u00e3o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genero": {
+            "get": {
+                "tags": [
+                    "G\u00eanero"
+                ],
+                "summary": "Retorna todos os g\u00eaneros",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genero/{id}": {
+            "get": {
+                "tags": [
+                    "G\u00eanero"
+                ],
+                "summary": "Procurar um g\u00eanero pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do g\u00eanero",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/motivo": {
+            "get": {
+                "tags": [
+                    "Motivo"
+                ],
+                "summary": "Retorna todos os motivos de desfilia\u00e7\u00e3o",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/motivo/{id}": {
+            "get": {
+                "tags": [
+                    "Motivo"
+                ],
+                "summary": "Procurar um motivo de desfilia\u00e7\u00e3o pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do motivo de desfilia\u00e7\u00e3o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pais": {
+            "get": {
+                "tags": [
+                    "Pa\u00eds"
+                ],
+                "summary": "Retorna todos os pa\u00edses",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pais/{id}": {
+            "get": {
+                "tags": [
+                    "Pa\u00eds"
+                ],
+                "summary": "Procurar um pa\u00eds pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do pa\u00eds",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pessoa": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Retorna todas as pessoas",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "errors": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Adiciona uma nova pessoa",
+                "operationId": "store",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Pessoa"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o adicionada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "errors": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pessoa/{id}": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Procurar uma pessoa pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza uma pessoa existente",
+                "operationId": "update",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Pessoa"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o atualizada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados",
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "errors": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Exclui uma pessoa",
+                "operationId": "destroy",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o exclu\u00edda com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/religiao": {
+            "get": {
+                "tags": [
+                    "Religi\u00e3o"
+                ],
+                "summary": "Retorna todas as religi\u00f5es",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/religiao/{id}": {
+            "get": {
+                "tags": [
+                    "Religi\u00e3o"
+                ],
+                "summary": "Procurar uma religi\u00e3o pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da religi\u00e3o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "CEP": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "estado": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Cidade": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "capital": {
+                            "type": "integer"
+                        },
+                        "tb_estado_id": {
+                            "type": "integer"
+                        },
+                        "ibge_code": {
+                            "type": "integer"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Escolaridade": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "escolaridade": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Estado": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "estado": {
+                            "type": "string"
+                        },
+                        "sigla": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Estado Civil": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "estadocivil": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Foi Filiado": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "foi_filiado": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "G\u00eanero": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "genero": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Motivo": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "motivo": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Pa\u00eds": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "iso": {
+                            "type": "string"
+                        },
+                        "iso3": {
+                            "type": "string"
+                        },
+                        "code": {
+                            "type": "string"
+                        },
+                        "datacriacao": {
+                            "type": "string"
+                        },
+                        "deletado": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Pessoa": {
+            "type": "object",
+            "allOf": [
+                {
+                    "required": [
+                        "nome",
+                        "senha",
+                        "email",
+                        "data_nascimento",
+                        "cpf",
+                        "rg",
+                        "orgao_expedidor",
+                        "estado_civil",
+                        "genero",
+                        "escolaridade",
+                        "opcao_religiosa",
+                        "titulo_eleitoral",
+                        "titulo_eleitoral_zona",
+                        "titulo_eleitoral_secao",
+                        "nome_mae",
+                        "profissao",
+                        "filiacao"
+                    ],
+                    "properties": {
+                        "nome": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "senha": {
+                            "type": "string"
+                        },
+                        "cpf": {
+                            "type": "string"
+                        },
+                        "rg": {
+                            "type": "string"
+                        },
+                        "data_nascimento": {
+                            "type": "string"
+                        },
+                        "orgao_expedidor": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_zona": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_secao": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_pais": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_pais_id": {
+                            "type": "integer"
+                        },
+                        "titulo_eleitoral_uf": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_uf_id": {
+                            "type": "integer"
+                        },
+                        "titulo_eleitoral_municipio": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_municipio_id": {
+                            "type": "integer"
+                        },
+                        "nome_mae": {
+                            "type": "string"
+                        },
+                        "estado_civil": {
+                            "type": "integer"
+                        },
+                        "genero": {
+                            "type": "integer"
+                        },
+                        "escolaridade": {
+                            "type": "integer"
+                        },
+                        "opcao_religiosa": {
+                            "type": "integer"
+                        },
+                        "profissao": {
+                            "type": "string"
+                        },
+                        "filiacao": {
+                            "type": "integer"
+                        },
+                        "filiacao_qual_partido": {
+                            "type": "string"
+                        },
+                        "termo_aceite_1": {
+                            "type": "integer"
+                        },
+                        "termo_aceite_2": {
+                            "type": "integer"
+                        },
+                        "termo_aceite_3": {
+                            "type": "integer"
+                        },
+                        "observacao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Religi\u00e3o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "religiao": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "update_at": {
+                            "type": "string"
+                        },
+                        "deleted_at": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

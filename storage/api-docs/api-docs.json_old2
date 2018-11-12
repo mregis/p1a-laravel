@@ -1,0 +1,2180 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API Base - Massad",
+        "version": "1.0.0"
+    },
+    "host": "/var/www/massad.luby.com.br/",
+    "basePath": "api",
+    "paths": {
+        "/cep/{cep}": {
+            "get": {
+                "tags": [
+                    "CEP"
+                ],
+                "summary": "Procurar um endere\u00e7o pelo CEP",
+                "operationId": "cep",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "cep",
+                        "in": "path",
+                        "description": "CEP",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/cidade/estado/{id}": {
+            "get": {
+                "tags": [
+                    "Cidade"
+                ],
+                "summary": "Retorna todas as cidades por estado",
+                "operationId": "porestado",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do estado",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/cidade/{id}": {
+            "get": {
+                "tags": [
+                    "Cidade"
+                ],
+                "summary": "Procurar uma cidade pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da cidade",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/endereco": {
+            "post": {
+                "tags": [
+                    "Endere\u00e7o"
+                ],
+                "summary": "Adiciona um novo endere\u00e7o",
+                "operationId": "store",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "required": [
+                                "pessoa_id",
+                                "tb_tipo_endereco_id",
+                                "tb_pais_id",
+                                "endereco",
+                                "numero",
+                                "bairro"
+                            ],
+                            "properties": {
+                                "pessoa_id": {
+                                    "type": "integer"
+                                },
+                                "tb_tipo_endereco_id": {
+                                    "type": "integer"
+                                },
+                                "reside_exterior": {
+                                    "type": "integer"
+                                },
+                                "tb_pais_id": {
+                                    "type": "integer"
+                                },
+                                "tb_estado_id": {
+                                    "type": "integer"
+                                },
+                                "estado": {
+                                    "type": "string"
+                                },
+                                "tb_cidade_id": {
+                                    "type": "integer"
+                                },
+                                "cidade": {
+                                    "type": "string"
+                                },
+                                "cep": {
+                                    "type": "string"
+                                },
+                                "cep_status": {
+                                    "type": "integer"
+                                },
+                                "endereco": {
+                                    "type": "string"
+                                },
+                                "numero": {
+                                    "type": "string"
+                                },
+                                "complemento": {
+                                    "type": "string"
+                                },
+                                "bairro": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o adicionada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            }
+        },
+        "/endereco/{id}": {
+            "get": {
+                "tags": [
+                    "Endere\u00e7o"
+                ],
+                "summary": "Procurar um endere\u00e7o pelo ID da pessoa",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Endere\u00e7o"
+                ],
+                "summary": "Atualiza um endere\u00e7o existente",
+                "operationId": "update",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do endere\u00e7o",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "required": [
+                                "pessoa_id",
+                                "tb_tipo_endereco_id",
+                                "tb_pais_id",
+                                "endereco",
+                                "numero",
+                                "bairro"
+                            ],
+                            "properties": {
+                                "pessoa_id": {
+                                    "type": "integer"
+                                },
+                                "tb_tipo_endereco_id": {
+                                    "type": "integer"
+                                },
+                                "reside_exterior": {
+                                    "type": "integer"
+                                },
+                                "tb_pais_id": {
+                                    "type": "integer"
+                                },
+                                "tb_estado_id": {
+                                    "type": "integer"
+                                },
+                                "estado": {
+                                    "type": "string"
+                                },
+                                "tb_cidade_id": {
+                                    "type": "integer"
+                                },
+                                "cidade": {
+                                    "type": "string"
+                                },
+                                "cep": {
+                                    "type": "string"
+                                },
+                                "cep_status": {
+                                    "type": "integer"
+                                },
+                                "endereco": {
+                                    "type": "string"
+                                },
+                                "numero": {
+                                    "type": "string"
+                                },
+                                "complemento": {
+                                    "type": "string"
+                                },
+                                "bairro": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            }
+        },
+        "/escolaridade": {
+            "get": {
+                "tags": [
+                    "Escolaridade"
+                ],
+                "summary": "Retorna todas as escolaridades",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/escolaridade/{id}": {
+            "get": {
+                "tags": [
+                    "Escolaridade"
+                ],
+                "summary": "Procurar uma escolaridade pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da escolaridade",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/estadocivil": {
+            "get": {
+                "tags": [
+                    "Estado Civil"
+                ],
+                "summary": "Retorna todos os estados civis",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/estadocivil/{id}": {
+            "get": {
+                "tags": [
+                    "Estado Civil"
+                ],
+                "summary": "Procurar um estado civil pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do estado civil",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/estado": {
+            "get": {
+                "tags": [
+                    "Estado"
+                ],
+                "summary": "Retorna todos os estado",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/estado/{id}": {
+            "get": {
+                "tags": [
+                    "Estado"
+                ],
+                "summary": "Procurar um estado pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do estado",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/eventos": {
+            "get": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Retorna todos os eventos",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Adiciona um evento",
+                "operationId": "store",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "diretorio_id": {
+                                    "type": "integer"
+                                },
+                                "nucleo_id": {
+                                    "type": "integer"
+                                },
+                                "usuario_responsavel_id": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "string"
+                                },
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "tipo": {
+                                    "type": "string"
+                                },
+                                "cep": {
+                                    "type": "string"
+                                },
+                                "endereco": {
+                                    "type": "string"
+                                },
+                                "bairro": {
+                                    "type": "string"
+                                },
+                                "complemento": {
+                                    "type": "string"
+                                },
+                                "estado_id": {
+                                    "type": "integer"
+                                },
+                                "cidade_id": {
+                                    "type": "integer"
+                                },
+                                "data_inicio": {
+                                    "type": "string"
+                                },
+                                "data_termino": {
+                                    "type": "string"
+                                },
+                                "data_evento": {
+                                    "type": "string"
+                                },
+                                "path_logo": {
+                                    "type": "string"
+                                },
+                                "path_banner": {
+                                    "type": "string"
+                                },
+                                "link_video": {
+                                    "type": "string"
+                                },
+                                "limite_inscritos": {
+                                    "type": "integer"
+                                },
+                                "descricao": {
+                                    "type": "string"
+                                },
+                                "apenas_filiados": {
+                                    "type": "integer"
+                                },
+                                "dias_boleto": {
+                                    "type": "integer"
+                                },
+                                "preco": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "evento_id": {
+                                                "type": "integer"
+                                            },
+                                            "descricao": {
+                                                "type": "string"
+                                            },
+                                            "valor": {
+                                                "type": "string"
+                                            },
+                                            "data_inicio": {
+                                                "type": "string"
+                                            },
+                                            "data_termino": {
+                                                "type": "string"
+                                            },
+                                            "limite_inscritos": {
+                                                "type": "integer"
+                                            },
+                                            "limite_total": {
+                                                "type": "integer"
+                                            },
+                                            "apenas_filiados": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "pergunta": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "evento_id": {
+                                                "type": "integer"
+                                            },
+                                            "tipo": {
+                                                "type": "string"
+                                            },
+                                            "descricao": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o adicionada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            }
+        },
+        "/eventos/{id}": {
+            "get": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Procurar um evento pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de um evento",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Atualiza um evento existente",
+                "operationId": "update",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do evento",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "diretorio_id": {
+                                    "type": "integer"
+                                },
+                                "nucleo_id": {
+                                    "type": "integer"
+                                },
+                                "usuario_responsavel_id": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "string"
+                                },
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "tipo": {
+                                    "type": "string"
+                                },
+                                "cep": {
+                                    "type": "string"
+                                },
+                                "endereco": {
+                                    "type": "string"
+                                },
+                                "bairro": {
+                                    "type": "string"
+                                },
+                                "complemento": {
+                                    "type": "string"
+                                },
+                                "estado_id": {
+                                    "type": "integer"
+                                },
+                                "cidade_id": {
+                                    "type": "integer"
+                                },
+                                "data_inicio": {
+                                    "type": "string"
+                                },
+                                "data_termino": {
+                                    "type": "string"
+                                },
+                                "data_evento": {
+                                    "type": "string"
+                                },
+                                "path_logo": {
+                                    "type": "string"
+                                },
+                                "path_banner": {
+                                    "type": "string"
+                                },
+                                "link_video": {
+                                    "type": "string"
+                                },
+                                "limite_inscritos": {
+                                    "type": "integer"
+                                },
+                                "descricao": {
+                                    "type": "string"
+                                },
+                                "apenas_filiados": {
+                                    "type": "integer"
+                                },
+                                "dias_boleto": {
+                                    "type": "integer"
+                                },
+                                "preco": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "descricao": {
+                                                "type": "string"
+                                            },
+                                            "valor": {
+                                                "type": "string"
+                                            },
+                                            "data_inicio": {
+                                                "type": "string"
+                                            },
+                                            "data_termino": {
+                                                "type": "string"
+                                            },
+                                            "limite_inscritos": {
+                                                "type": "integer"
+                                            },
+                                            "limite_total": {
+                                                "type": "integer"
+                                            },
+                                            "apenas_filiados": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "pergunta": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "tipo": {
+                                                "type": "string"
+                                            },
+                                            "descricao": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Exclui um evento",
+                "operationId": "destroy",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do evento",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o exclu\u00edda com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/eventopreco/{id}": {
+            "delete": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Exclui um pre\u00e7o de um evento",
+                "operationId": "eventopreco",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do pre\u00e7o do evento",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o exclu\u00edda com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/eventopergunta/{id}": {
+            "delete": {
+                "tags": [
+                    "Eventos"
+                ],
+                "summary": "Exclui uma pergunta de um evento",
+                "operationId": "eventopergunta",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pergunta do evento",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o exclu\u00edda com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/foifiliado": {
+            "get": {
+                "tags": [
+                    "Foi Filiado"
+                ],
+                "summary": "Retorna todas as op\u00e7\u00f5es de filia\u00e7\u00e3o",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/foifiliado/{id}": {
+            "get": {
+                "tags": [
+                    "Foi Filiado"
+                ],
+                "summary": "Procurar uma filia\u00e7\u00e3o pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da filia\u00e7\u00e3o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/genero": {
+            "get": {
+                "tags": [
+                    "G\u00eanero"
+                ],
+                "summary": "Retorna todos os g\u00eaneros",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/genero/{id}": {
+            "get": {
+                "tags": [
+                    "G\u00eanero"
+                ],
+                "summary": "Procurar um g\u00eanero pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do g\u00eanero",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/motivo": {
+            "get": {
+                "tags": [
+                    "Motivo"
+                ],
+                "summary": "Retorna todos os motivos de desfilia\u00e7\u00e3o",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/motivo/{id}": {
+            "get": {
+                "tags": [
+                    "Motivo"
+                ],
+                "summary": "Procurar um motivo de desfilia\u00e7\u00e3o pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do motivo de desfilia\u00e7\u00e3o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/pais": {
+            "get": {
+                "tags": [
+                    "Pa\u00eds"
+                ],
+                "summary": "Retorna todos os pa\u00edses",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/pais/{id}": {
+            "get": {
+                "tags": [
+                    "Pa\u00eds"
+                ],
+                "summary": "Procurar um pa\u00eds pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do pa\u00eds",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/pessoa": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Retorna todas as pessoas",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Adiciona uma nova pessoa",
+                "operationId": "store",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "email2": {
+                                    "type": "string"
+                                },
+                                "senha": {
+                                    "type": "string"
+                                },
+                                "senha2": {
+                                    "type": "string"
+                                },
+                                "cpf": {
+                                    "type": "string"
+                                },
+                                "rg": {
+                                    "type": "string"
+                                },
+                                "data_nascimento": {
+                                    "type": "string"
+                                },
+                                "orgao_expedidor": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_zona": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_secao": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_uf": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_uf_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_municipio": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_municipio_id": {
+                                    "type": "integer"
+                                },
+                                "nome_mae": {
+                                    "type": "string"
+                                },
+                                "estado_civil": {
+                                    "type": "integer"
+                                },
+                                "genero": {
+                                    "type": "integer"
+                                },
+                                "escolaridade": {
+                                    "type": "integer"
+                                },
+                                "opcao_religiosa": {
+                                    "type": "integer"
+                                },
+                                "profissao": {
+                                    "type": "string"
+                                },
+                                "filiacao": {
+                                    "type": "integer"
+                                },
+                                "filiacao_qual_partido": {
+                                    "type": "string"
+                                },
+                                "termo_aceite_1": {
+                                    "type": "integer"
+                                },
+                                "termo_aceite_2": {
+                                    "type": "integer"
+                                },
+                                "termo_aceite_3": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o adicionada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            }
+        },
+        "/pessoa/{id}": {
+            "get": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Procurar uma pessoa pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Atualiza uma pessoa existente",
+                "operationId": "update",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "senha": {
+                                    "type": "string"
+                                },
+                                "cpf": {
+                                    "type": "string"
+                                },
+                                "rg": {
+                                    "type": "string"
+                                },
+                                "data_nascimento": {
+                                    "type": "string"
+                                },
+                                "orgao_expedidor": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_zona": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_secao": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_pais_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_uf": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_uf_id": {
+                                    "type": "integer"
+                                },
+                                "titulo_eleitoral_municipio": {
+                                    "type": "string"
+                                },
+                                "titulo_eleitoral_municipio_id": {
+                                    "type": "integer"
+                                },
+                                "nome_mae": {
+                                    "type": "string"
+                                },
+                                "estado_civil": {
+                                    "type": "integer"
+                                },
+                                "genero": {
+                                    "type": "integer"
+                                },
+                                "escolaridade": {
+                                    "type": "integer"
+                                },
+                                "opcao_religiosa": {
+                                    "type": "integer"
+                                },
+                                "profissao": {
+                                    "type": "string"
+                                },
+                                "filiacao": {
+                                    "type": "integer"
+                                },
+                                "filiacao_qual_partido": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    },
+                    "400": {
+                        "description": "Erro na valida\u00e7\u00e3o dos dados"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pessoa"
+                ],
+                "summary": "Exclui uma pessoa",
+                "operationId": "destroy",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da pessoa",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o exclu\u00edda com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/religiao": {
+            "get": {
+                "tags": [
+                    "Religi\u00e3o"
+                ],
+                "summary": "Retorna todas as religi\u00f5es",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/religiao/{id}": {
+            "get": {
+                "tags": [
+                    "Religi\u00e3o"
+                ],
+                "summary": "Procurar uma religi\u00e3o pelo ID",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da religi\u00e3o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        },
+        "/tipoendereco": {
+            "get": {
+                "tags": [
+                    "Tipo Endere\u00e7o"
+                ],
+                "summary": "Retorna todos os tipos de endere\u00e7os",
+                "operationId": "index",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    }
+                }
+            }
+        },
+        "/tipoendereco/{id}": {
+            "get": {
+                "tags": [
+                    "Tipo Endere\u00e7o"
+                ],
+                "summary": "Procurar um tipo de endere\u00e7o",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do tipo de endere\u00e7o",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informa\u00e7\u00e3o recuperada com sucesso"
+                    },
+                    "404": {
+                        "description": "Informa\u00e7\u00e3o n\u00e3o encontrada"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "C\u00f3digo HTTP 200": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "success": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "data": {
+                            "type": "object"
+                        }
+                    }
+                }
+            ]
+        },
+        "C\u00f3digo HTTP 404": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "success": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "C\u00f3digo HTTP 400": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "success": {
+                            "type": "boolean"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "errors": {
+                            "type": "object"
+                        }
+                    }
+                }
+            ]
+        },
+        "CEP": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "estado": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Cidade": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "capital": {
+                            "type": "integer"
+                        },
+                        "ibge_code": {
+                            "type": "integer"
+                        },
+                        "tb_estado_id": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Endere\u00e7o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "pessoa_id": {
+                            "type": "integer"
+                        },
+                        "tb_tipo_endereco_id": {
+                            "type": "integer"
+                        },
+                        "reside_exterior": {
+                            "type": "integer"
+                        },
+                        "tb_pais_id": {
+                            "type": "integer"
+                        },
+                        "tb_estado_id": {
+                            "type": "integer"
+                        },
+                        "estado": {
+                            "type": "string"
+                        },
+                        "tb_cidade_id": {
+                            "type": "integer"
+                        },
+                        "cidade": {
+                            "type": "string"
+                        },
+                        "cep": {
+                            "type": "string"
+                        },
+                        "cep_status": {
+                            "type": "integer"
+                        },
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "numero": {
+                            "type": "string"
+                        },
+                        "complemento": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Escolaridade": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "escolaridade": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Estado": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "estado": {
+                            "type": "string"
+                        },
+                        "sigla": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Estado Civil": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "estadocivil": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Evento": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "diretorio_id": {
+                            "type": "string"
+                        },
+                        "nucleo_id": {
+                            "type": "string"
+                        },
+                        "usuario_responsavel_id": {
+                            "type": "string"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "tipo": {
+                            "type": "string"
+                        },
+                        "cep": {
+                            "type": "string"
+                        },
+                        "endereco": {
+                            "type": "string"
+                        },
+                        "bairro": {
+                            "type": "string"
+                        },
+                        "complemento": {
+                            "type": "string"
+                        },
+                        "estado_id": {
+                            "type": "string"
+                        },
+                        "cidade_id": {
+                            "type": "string"
+                        },
+                        "data_inicio": {
+                            "type": "string"
+                        },
+                        "data_termino": {
+                            "type": "string"
+                        },
+                        "data_evento": {
+                            "type": "string"
+                        },
+                        "path_logo": {
+                            "type": "string"
+                        },
+                        "path_banner": {
+                            "type": "string"
+                        },
+                        "link_video": {
+                            "type": "string"
+                        },
+                        "limite_inscritos": {
+                            "type": "string"
+                        },
+                        "descricao": {
+                            "type": "string"
+                        },
+                        "apenas_filiados": {
+                            "type": "string"
+                        },
+                        "dias_boleto": {
+                            "type": "string"
+                        },
+                        "removido": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Evento Pre\u00e7os": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "evento_id": {
+                            "type": "string"
+                        },
+                        "descricao": {
+                            "type": "string"
+                        },
+                        "valor": {
+                            "type": "string"
+                        },
+                        "data_inicio": {
+                            "type": "string"
+                        },
+                        "data_termino": {
+                            "type": "string"
+                        },
+                        "limite_inscritos": {
+                            "type": "string"
+                        },
+                        "limite_total": {
+                            "type": "string"
+                        },
+                        "apenas_filiados": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Evento Perguntas": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "evento_id": {
+                            "type": "string"
+                        },
+                        "tipo": {
+                            "type": "string"
+                        },
+                        "descricao": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Foi Filiado": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "foi_filiado": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "G\u00eanero": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "genero": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Motivo": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "motivo": {
+                            "type": "string"
+                        },
+                        "visivel": {
+                            "type": "integer"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Pa\u00eds": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "iso": {
+                            "type": "string"
+                        },
+                        "iso3": {
+                            "type": "string"
+                        },
+                        "code": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Pessoa": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "nome": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "senha": {
+                            "type": "string"
+                        },
+                        "cpf": {
+                            "type": "string"
+                        },
+                        "rg": {
+                            "type": "string"
+                        },
+                        "data_nascimento": {
+                            "type": "string"
+                        },
+                        "orgao_expedidor": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_zona": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_secao": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_pais": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_pais_id": {
+                            "type": "integer"
+                        },
+                        "titulo_eleitoral_uf": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_uf_id": {
+                            "type": "integer"
+                        },
+                        "titulo_eleitoral_municipio": {
+                            "type": "string"
+                        },
+                        "titulo_eleitoral_municipio_id": {
+                            "type": "integer"
+                        },
+                        "nome_mae": {
+                            "type": "string"
+                        },
+                        "estado_civil": {
+                            "type": "integer"
+                        },
+                        "genero": {
+                            "type": "integer"
+                        },
+                        "escolaridade": {
+                            "type": "integer"
+                        },
+                        "opcao_religiosa": {
+                            "type": "integer"
+                        },
+                        "profissao": {
+                            "type": "string"
+                        },
+                        "filiacao": {
+                            "type": "integer"
+                        },
+                        "filiacao_qual_partido": {
+                            "type": "string"
+                        },
+                        "termo_aceite_1": {
+                            "type": "integer"
+                        },
+                        "termo_aceite_2": {
+                            "type": "integer"
+                        },
+                        "termo_aceite_3": {
+                            "type": "integer"
+                        },
+                        "tb_motivo_id": {
+                            "type": "integer"
+                        },
+                        "observacao": {
+                            "type": "string"
+                        },
+                        "motivo_desfiliacao": {
+                            "type": "string"
+                        },
+                        "token": {
+                            "type": "string"
+                        },
+                        "token_ad": {
+                            "type": "string"
+                        },
+                        "email_confirmado": {
+                            "type": "integer"
+                        },
+                        "filiado_id": {
+                            "type": "integer"
+                        },
+                        "status": {
+                            "type": "integer"
+                        },
+                        "doador": {
+                            "type": "integer"
+                        },
+                        "filiado": {
+                            "type": "integer"
+                        },
+                        "bloqueado": {
+                            "type": "integer"
+                        },
+                        "candidatura": {
+                            "type": "integer"
+                        },
+                        "data_solicitacao_filiacao": {
+                            "type": "string"
+                        },
+                        "data_solicitacao_refiliacao": {
+                            "type": "string"
+                        },
+                        "data_filiacao": {
+                            "type": "string"
+                        },
+                        "data_desfiliacao": {
+                            "type": "string"
+                        },
+                        "data_refiliacao": {
+                            "type": "string"
+                        },
+                        "data_cancelamento_pedido": {
+                            "type": "string"
+                        },
+                        "data_impugnacao": {
+                            "type": "string"
+                        },
+                        "data_validade_ativo": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Religi\u00e3o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "religiao": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "Tipo Endere\u00e7o": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "tipo_endereco": {
+                            "type": "string"
+                        },
+                        "data_criacao": {
+                            "type": "string"
+                        },
+                        "data_atualizacao": {
+                            "type": "string"
+                        },
+                        "data_exclusao": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

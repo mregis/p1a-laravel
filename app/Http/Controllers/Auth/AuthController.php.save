@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Users;
+
+class AuthController extends Controller
+{
+
+    /**
+     * Where to redirect users after login / registration.
+     *
+     * @var string
+     */
+    protected $redirectTo = 'dashboard';
+
+
+    public function index(Request $request)
+    {
+	if($request->email){
+		$dados = array('pass' => Hash::make('123mudar'));x
+		\Mail::send('emails.recuperar-senha',$dados, function ($message)use($request){
+		$message
+                ->to(Input::get('email'))
+                ->subject('Resgate de Senha');
+		});
+	}else{
+	        return view('auth/auth');
+	}
+    }
+    public function login(){
+
+        $username = Input::get('email');
+        $password = Input::get('password');
+        $errors = "";
+        if ($username && $password)
+        {
+            if (Auth::attempt(['email' => $username, 'password' => $password])) {
+		$user = Users::where('id', Auth::user()->id)->first();
+		$input = array();
+		$input['last_login'] = date("Y-m-d H:i:s");
+		$user->fill($input)->save();
+
+                return response()->json([
+                    'result' => true,
+                    'url' => $this->redirectTo
+                ]);
+            }else{
+
+                return response()->json([
+                    'result' => false,
+                    'message' => Lang::get("auth.failed")
+                ]);
+
+            }
+        }
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('/');
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('address');
+    }
+
+
+}
+x
