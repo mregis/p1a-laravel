@@ -18,7 +18,6 @@
         "laravel/passport": "^5.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "~5.0",
-        "laravelista/lumen-vendor-publish": "^2.1",
         "laravellegends/pt-br-validator": "5.1.*",
         "lcobucci/jwt": "^3.2",
         "michael/laravelpagseguro": "dev-master",
