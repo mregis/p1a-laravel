@@ -50,7 +50,7 @@ Route::group(['prefix' => 'ocorrencias'], function() {
 
 Route::get('/arquivos', 'Api\UploadController@arquivos')->name('uploads.upload_index');
 Route::get('/arquivo/{id}', 'Api\UploadController@arquivo')->name('uploads.upload_edit');
-Route::any('/arquivo/delete/{id}', 'Api\UploadController@destroy')->name('uploads.upload_delete');
+Route::any('/arquivos/delete/{id}', 'Api\UploadController@removearquivo')->name('uploads.upload_delete');
 Route::delete('/arquivo/recebe/{id}', 'Api\ReceiveController@check')->name('receive.receive_check');
 
 Route::get('/remessa/registrar', 'Api\UploadController@registrar')->name('uploads.upload_register');
