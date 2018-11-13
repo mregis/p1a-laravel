@@ -28,17 +28,26 @@ class ReceiveController extends BaseController
     {
         $menu = new Menu();
         $menus = $menu->menu();
-
 	$files = Files::all();
 	foreach($files as &$file){
-		$docs = Docs::where('file_id', $file->id)->get();
-		$pendentes = 0;
-		foreach($docs as &$d){
-			if($d->status == 'pendente'){
-				$pendentes++;
-			}
+            $dcs = Docs::where('file_id', $file->id)->get();
+            $docs = array();
+            foreach($dcs as &$d){
+                if(Auth::user()->profile == 'ADMINISTRADOR'){
+                    $docs[] = $d;
+                }else{
+                    if(substr($d->content,0,4) == Auth::user()->juncao){
+                        $docs[] = $d;
+                    }
+                }
+            }
+            $pendentes = 0;
+            foreach($docs as &$d){
+		if($d->status == 'pendente'){
+                    $pendentes++;
 		}
-		$file->pendentes = $pendentes;
+            }
+            $file->pendentes = $pendentes;
 	}
         return view('receive.receive', compact('menus','files'));
     }
@@ -70,8 +79,17 @@ class ReceiveController extends BaseController
     {
 	$params = array('file_id'=> $id,'status'=>'pendente');
 	//$docs = Docs::where('file_id', $id)->get();
-	$docs = Docs::where($params)->get();
-
+        $dcs = Docs::where($params)->get();
+        $docs = array();
+        foreach($dcs as &$d){
+            if(Auth::user()->profile == 'ADMINISTRADOR'){
+                $docs[] = $d;
+            }else{
+                if(substr($d->content,0,4) == Auth::user()->juncao){
+                    $docs[] = $d;
+                }
+            }
+        }
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" type="checkbox" name="lote[]" class="form-control m-input input-doc" value="'.$docs->id.'">';

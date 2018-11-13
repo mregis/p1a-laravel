@@ -31,7 +31,7 @@ class DashboardController extends Controller
                               }
   //                          $docs = Docs::where('file_id',$f->)->get();                               
                         }
-                        $dr = Docs::where('user_id','!=','NULL')->get();
+                        $dr = Docs::where('user_id','<>',null)->get();
 
                         return view('dashboard/dashboard', compact('menus','profile','da','dm','dr'));
 		}

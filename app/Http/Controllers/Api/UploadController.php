@@ -110,8 +110,17 @@ class UploadController extends BaseController
     }
     public function docs(Request $request, $id)
     {
-	$docs = Docs::where('file_id', $id)->get();
-
+	$dcs = Docs::where('file_id', $id)->get();
+        $docs = array();
+        foreach($dcs as &$d){
+            if(Auth::user()->profile == 'ADMINISTRADOR'){
+                $docs[] = $d;
+            } else {
+                if(substr($d->content,0,4) == Auth::user()->juncao){
+                    $docs[] = $d;
+                }
+            }
+        }
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
 		return '';
@@ -141,8 +150,17 @@ class UploadController extends BaseController
     {
         $menu = new Menu();
         $menus = $menu->menu();
-	$docs = Docs::where('status', 'pendente')->get();
-
+	$dcs = Docs::where('status', 'pendente')->get();
+        $docs = array();
+        foreach($dcs as &$d){
+            if(Auth::user()->profile == 'ADMINISTRADOR'){
+                   $docs[] = $d;
+            }else{
+                if(substr($d->content,0,4) == Auth::user()->juncao){
+                    $docs[] = $d;
+                }
+            }
+        }
         return view('upload.upload_register', compact('menus','docs'));
     }
     public function register(Request $request)
