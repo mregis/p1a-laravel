@@ -61,3 +61,5 @@ Route::get('/arquivo-remessa/{id}', 'Api\ReportController@arquivo')->name('repor
 Route::get('/receber-operador','Api\ReceiveController@operador');
 
 Route::get('/upload/docs/{id}', 'Api\UploadController@docs');
+
+Route::get('/receive/docs/{id}', 'Api\ReceiveController@docs');
