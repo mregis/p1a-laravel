@@ -110,20 +110,15 @@ class UploadController extends BaseController
     }
     public function docs(Request $request, $id)
     {
-	$dcs = Docs::where('file_id', $id)->get();
-        $docs = array();
-        foreach($dcs as &$d){
-            if(Auth::user()->profile == 'ADMINISTRADOR'){
-                $docs[] = $d;
-            } else {
-                if(substr($d->content,0,4) == Auth::user()->juncao){
-                    $docs[] = $d;
-                }
-            }
+        if (Auth::user()->profile == 'ADMINISTRADOR') {
+            $docs = Docs::where('file_id', $id)->get();
+        } else {
+            $docs = Docs::where('file_id = ? and content LIKE ?', [$id, Auth::user()->juncao . '%'])->get();
         }
+
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
-		return '';
+		        return '';
                 // return '<div align="center"><button onclick="modalDelete(' . $docs->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
             ->editColumn('created_at', function ($docs) {
