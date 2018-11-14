@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="columns" value="id,content,status,action">
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}">
+                <input type="hidden" id="baseurl" value="{{URL::to('/upload/docs/')}}/{{$id}}">
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">

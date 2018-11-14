@@ -43,7 +43,7 @@ Route::get('/audit/list', 'Api\AuditController@list');
 Route::post('/products/', 'Api\ProductsController@store');
 Route::post('/upload/', 'Api\UploadController@index');
 Route::get('/upload/list', 'Api\UploadController@list');
-Route::get('/upload/docs/{id}', 'Api\UploadController@docs');
+// Route::get('/upload/docs/{id}', 'Api\UploadController@docs');
 Route::delete('upload/{id}', 'Api\UploadController@destroy');
 
 Route::get('/receive/docs/{id}', 'Api\ReceiveController@docs');
