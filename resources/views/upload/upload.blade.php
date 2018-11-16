@@ -27,7 +27,7 @@
 				<div class="form-group m-form__group row upp">
 					<label class="col-form-label col-lg-2 col-sm-12">Importação de arquivos com códigos dos envelopes em trânsito</label>
 					<div class="col-lg-4 col-md-9 col-sm-12">
-						<div class="m-dropzone dropzone m-dropzone--primary" action="/api/upload" id="m-dropzone-two">
+						<div class="m-dropzone dropzone m-dropzone--primary" action="/api/upload/{{Auth::user()->id}}" id="m-dropzone-two">
 							<div class="m-dropzone__msg dz-message needsclick">
 							    <h3 class="m-dropzone__msg-title">Arraste os arquivos ou clique para fazer o upload.</h3>
 							    <span class="m-dropzone__msg-desc">Faça upload de até 10 arquivos</span>

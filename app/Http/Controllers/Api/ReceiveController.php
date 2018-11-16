@@ -7,6 +7,7 @@ use App\Models\Users;
 use App\Models\Audit;
 use App\Models\Files;
 use App\Models\Docs;
+use App\Models\DocsHistory;
 use App\Models\Seal;
 use App\Models\SealGroup;
 use Carbon\Carbon;
@@ -30,6 +31,7 @@ class ReceiveController extends BaseController
         $menus = $menu->menu();
 	$files = Files::all();
 	foreach($files as &$file){
+            $pendentes = 0;
             $dcs = Docs::where('file_id', $file->id)->get();
             $docs = array();
             foreach($dcs as &$d){
@@ -40,9 +42,6 @@ class ReceiveController extends BaseController
                         $docs[] = $d;
                     }
                 }
-            }
-            $pendentes = 0;
-            foreach($docs as &$d){
 		if($d->status == 'pendente'){
                     $pendentes++;
 		}
@@ -75,17 +74,22 @@ class ReceiveController extends BaseController
         $menus = $menu->menu();
 //        return view('upload.upload_list', compact('menus'));
     }
-    public function docs(Request $request, $id)
+    public function docs(Request $request, $id , $profile , $juncao = false)
     {
-	$params = array('file_id'=> $id,'status'=>'pendente');
+	$params = array('file_id'=> $id);
 	//$docs = Docs::where('file_id', $id)->get();
         $dcs = Docs::where($params)->get();
         $docs = array();
         foreach($dcs as &$d){
-            if(Auth::user()->profile == 'ADMINISTRADOR'){
+            $d->content = trim($d->content);
+            $total_string = strlen($d->content);
+            $separate = substr($d->content,($total_string - 4),4);
+            $separatedm = substr($d->content,0,4);
+            if($profile == 'ADMINISTRADOR'){
                 $docs[] = $d;
             }else{
-                if(substr($d->content,0,4) == Auth::user()->juncao){
+                if($separate == $juncao || $separatedm == $juncao){
+                    if($d->status != 'pendente' && $d->status != 'recebido')
                     $docs[] = $d;
                 }
             }
@@ -95,10 +99,23 @@ class ReceiveController extends BaseController
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" type="checkbox" name="lote[]" class="form-control m-input input-doc" value="'.$docs->id.'">';
             })
             ->addColumn('origin', function ($docs) {
-                return substr($docs->content,0,4);
+                $file = Files::where('id',$docs->file_id)->first();
+                if($file->constante == "DM"){
+                    return "DM";                    
+                }else{
+                    return substr($docs->content,0,4);                    
+                }
             })
             ->addColumn('destin', function ($docs) {
-                return substr($docs->content, -6 , 6);
+                $docs->content = trim($docs->content);
+                $total_string = strlen($docs->content);
+                $file = Files::where('id',$docs->file_id)->first();
+                if($file->constante == "DM"){
+                    $separate = substr($docs->content,0,4);
+                }else{
+                    $separate = substr($docs->content,($total_string - 4),4);
+                }
+                return $separate;
             })
             ->editColumn('created_at', function ($docs) {
                 return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
@@ -143,6 +160,12 @@ die('aki');
                         $docs->status = 'recebido';
                         $docs->user_id = $params['user'];
                         $docs->save();
+                        $docsHistory = new DocsHistory();
+                        $docsHistory->doc_id = $doc;
+                        $docsHistory->description = "Capa recebida";
+                        $docsHistory->user_id = $params['user'];
+                        $docsHistory->save();                        
+
                 }
         }
     }
@@ -160,25 +183,27 @@ die('aki');
 		$id = $seal->id;
         }
         foreach($params['doc'] as &$d){
-	        if($doc = Docs::where('content',$d)->first()){
-			$doc_id = $doc->id;
-	        } else {
-			$doc = new Docs();
-			$doc->content = $d;
-			$doc->status = 'recebido';
-			$doc->user_id = $params['user'];
-			$doc->save();
-			$doc_id = $doc->id;
-        	}
-                if($sealGroup = SealGroup::where('doc_id',$doc_id)->first()){
-                        $idGroup = $sealGroup->id;
+            $doc = Docs::where('content','like','%'.trim($d).'%')->first();
+	    if($doc->id){
+                $doc->status = 'em trânsito';
+                $doc->user_id = $params['user'];
+                $doc->save();
+
+                $docsHistory = new DocsHistory();
+                $docsHistory->doc_id = $doc->id;
+                $docsHistory->description = "Capa em trânsito";
+                $docsHistory->user_id = $params['user'];
+                $docsHistory->save();                        
+                if($sealGroup = SealGroup::where('doc_id',$doc->id)->first()){
+                    $idGroup = $sealGroup->id;
                 } else {
-                        $sealGroup = new SealGroup();
-                        $sealGroup->seal_id = $id;
-                        $sealGroup->doc_id = $doc_id;
-                        $sealGroup->save();
-                        $idGroup = $sealGroup->id;
+                    $sealGroup = new SealGroup();
+                    $sealGroup->seal_id = $id;
+                    $sealGroup->doc_id = $doc->id;
+                    $sealGroup->save();
+                    $idGroup = $sealGroup->id;
                 }
+            }
         }
         return $this->sendResponse($idGroup, 'Informação atualizada com sucesso');
     }
