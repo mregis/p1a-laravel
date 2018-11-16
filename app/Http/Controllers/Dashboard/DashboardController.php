@@ -23,17 +23,31 @@ class DashboardController extends Controller
                         $dm = array();
                         $da = array();
                         foreach($files as &$f){
+                            $docs = Docs::where('file_id',$f->id)->get();
+                            $pendentes = 0;
+                            $concluidos = 0;
+                            foreach($docs as &$d){
+                                if($d->status == 'pendente'){
+                                    $pendentes++;
+                                }
+                                if($d->status == 'concluido' || $d->status == 'enviado' || $d->status == 'recebido'){
+                                    $concluidos++;
+                                }
+                            }
                               if($f->constante == "DA"){
-                                $da[$f->dia.'/'.$f->mes.'/'.$f->ano] = $f->total;
+                                $da[$f->dia.'/'.$f->mes.'/'.$f->ano]['total'] = $f->total;
+                                $da[$f->dia.'/'.$f->mes.'/'.$f->ano]['pendentes'] = $pendentes;
+                                $da[$f->dia.'/'.$f->mes.'/'.$f->ano]['concluidos'] = $concluidos;
                               }
                               if($f->constante == "DM"){
-                                $dm[$f->dia.'/'.$f->mes.'/'.$f->ano] = $f->total;
+                                $dm[$f->dia.'/'.$f->mes.'/'.$f->ano]['total'] = $f->total;
+                                $dm[$f->dia.'/'.$f->mes.'/'.$f->ano]['pendentes'] = $pendentes;
+                                $dm[$f->dia.'/'.$f->mes.'/'.$f->ano]['concluidos'] = $concluidos;
                               }
-  //                          $docs = Docs::where('file_id',$f->)->get();                               
-                        }
-                        $dr = Docs::where('user_id','<>',null)->get();
 
-                        return view('dashboard/dashboard', compact('menus','profile','da','dm','dr'));
+                        }
+
+                        return view('dashboard/dashboard', compact('menus','profile','da','dm'));
 		}
 	}
 }

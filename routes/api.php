@@ -41,12 +41,17 @@ Route::get('/audit/list', 'Api\AuditController@list');
 
 
 Route::post('/products/', 'Api\ProductsController@store');
-Route::post('/upload/', 'Api\UploadController@index');
+Route::post('/upload/{user_id}', 'Api\UploadController@index');
 Route::get('/upload/list', 'Api\UploadController@list');
-Route::get('/upload/docs/{id}', 'Api\UploadController@docs');
+Route::get('/upload/docs/{id}/{profile}/{juncao}', 'Api\UploadController@docs');
+Route::get('/upload/docs/{id}/{profile}', 'Api\UploadController@docs');
+Route::get('/upload/report/{id}/{profile}/{juncao}', 'Api\UploadController@report');
+Route::get('/upload/report/{id}/{profile}', 'Api\UploadController@report');
+
 Route::delete('upload/{id}', 'Api\UploadController@destroy');
 
-Route::get('/receive/docs/{id}', 'Api\ReceiveController@docs');
+Route::get('/receive/docs/{id}/{profile}/{juncao}', 'Api\ReceiveController@docs');
+Route::get('/receive/docs/{id}/{profile}', 'Api\ReceiveController@docs');
 
 Route::post('/remessa/registrar', 'Api\UploadController@register');
 Route::post('/receber/registrar', 'Api\ReceiveController@register');
