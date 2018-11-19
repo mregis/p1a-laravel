@@ -44,10 +44,6 @@
                                             </table>
 
                                             <?php
-                                            
-                                            //foreach($da as $k=>&$agencia){
-                                              //   echo $k . " = <b>" . $agencia."</b>";   
-                                            //}
                                             ?>
 					</div>
 				</div>

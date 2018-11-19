@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-//use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Users;
 use App\Models\Audit;
 use App\Models\Files;
