@@ -20,8 +20,11 @@
                     </div>
                 </div>
                 <input type="hidden" id="columns" value="id,content,status,action">
-                <input type="hidden" id="baseurl" value="{{URL::to('/upload/docs/')}}/{{$id}}">
-
+                @if(Auth::user()->juncao)
+                <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
+                @else
+                <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}/{{Auth::user()->profile}}">
+                @endif
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
                         <table class="table"
