@@ -20,7 +20,7 @@ use Auth;
 
 
 
-class UploadController extends Controller
+class UploadController extends BaseController
 {
     /**
      * Display a listing of the resource.
