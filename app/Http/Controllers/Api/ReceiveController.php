@@ -88,10 +88,19 @@ class ReceiveController extends BaseController
             if($profile == 'ADMINISTRADOR'){
                 $docs[] = $d;
             }else{
-                if($separate == $juncao || $separatedm == $juncao){
-                    if($d->status != 'pendente' && $d->status != 'recebido')
-                    $docs[] = $d;
+                $file = Files::where('id', $d->file_id)->first();
+                if($file->constante == "DM"){
+                    if($separatedm == $juncao){
+                        if($d->status != 'pendente' && $d->status != 'recebido')
+                        $docs[] = $d;
+                    }
+                }else{
+                    if($separate == $juncao){
+                        if($d->status != 'pendente' && $d->status != 'recebido')
+                        $docs[] = $d;
+                    }
                 }
+                
             }
         }
         return Datatables::of($docs)
