@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Users;
 use App\Models\Audit;
 use App\Models\Files;
@@ -20,7 +20,7 @@ use Auth;
 
 
 
-class UploadController extends BaseController
+class UploadController extends Controller
 {
     /**
      * Display a listing of the resource.
