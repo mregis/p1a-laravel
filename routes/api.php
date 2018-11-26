@@ -61,3 +61,5 @@ Route::get('/report/list', 'Api\ReportController@list');
 Route::get('/report/docs/{id}', 'Api\ReportController@docs');
 
 Route::post('/contingencia', 'Api\UploadController@contingencia');
+
+Route::post('/perfil/', 'Api\ProfileController@store');
