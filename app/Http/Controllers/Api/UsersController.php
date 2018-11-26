@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Profile;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,17 +14,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends BaseController
 {
-    public function list()
+    public function list(Request $request)
     {
-        $users = Users::all();
-        return Datatables::of($users)
+        return Datatables::of(Users::query())
             ->addColumn('action', function ($users) {
-                return '<div align="center"><a href="edit/' . $users->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $users->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
-            })
-            ->editColumn('birth_date', function ($Users) {
-                return $Users->created_at ? with(new Carbon($Users->birth_date))->format('d/m/Y') : '';
-            })
-            ->make(true);
+                return '<div align="center"><a href="edit/' . $users->id .
+                    '" data-toggle="tooltip" title="Editar" ' .
+                    'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $users->id . ')"' .
+                    'data-toggle="tooltip" title="Excluir" ' .
+                    'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fa fa-trash"></i></button></div>';
+            })->editColumn('created_at', function ($users) {
+                return $users->created_at ? with(new Carbon($users->created_at))->format('d/m/Y H:i:s') : null;
+            })->editColumn('updated_at', function ($users) {
+                return $users->updated_at ? with(new Carbon($users->updated_at))->format('d/m/Y H:i:s') : '';
+            })->make(true);
     }
 
     /**
@@ -47,7 +53,7 @@ class UsersController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-	$input['password'] = Hash::make($input['password']);
+	    $input['password'] = Hash::make($input['password']);
         $user = Users::create($input);
         $ret = "/users/" . $user->id;
         return $this->sendResponse(null, 'Cadastrado com sucesso', $ret);
@@ -144,32 +150,18 @@ class UsersController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function create()
+    public function create()
     {
         $menu = new Menu();
         $menus = $menu->menu();
 
-        $permissao = $this->getEnum();
+        $permissao = [];
+        foreach(Profile::all() as $profile)
+        {
+            $permissao[] = $profile->nome;
+        }
 
         return view('users.users_add', compact('menus','permissao'));
     }
 
-    /**
-     * Show enum values.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public
-    function getEnum()
-    {
-      $type = DB::select(DB::raw('SHOW COLUMNS FROM users WHERE Field = "profile"'))[0]->Type;
-      preg_match('/^enum\((.*)\)$/', $type, $matches);
-      $values = array();
-
-      foreach(explode(',', $matches[1]) as $value){
-          $permissao[] = trim($value, "'");
-      }
-      return $permissao;
-    }
 }

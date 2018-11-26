@@ -140,50 +140,54 @@ class UploadController extends Controller
                 return $files->updated_at ? with(new Carbon($files->updated_at))->format('d/m/Y H:i:s') : '-';
             })->make(true);
     }
+
     public function arquivos(Request $request)
     {
         $menu = new Menu();
         $menus = $menu->menu();
         return view('upload.upload_list', compact('menus'));
     }
-    public function arquivo(Request $request,$id)
+
+    public function arquivo(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('upload.upload_edit', compact('menus','id'));
+        return view('upload.upload_edit', compact('menus', 'id'));
     }
-    public function removearquivo(Request $request,$id)
+
+    public function removearquivo(Request $request, $id)
     {
         $files = Files::where('id', $id)->first();
 
         if (is_null($files)) {
             return $this->sendError('Informação não encontrada', 404);
         }
-        $docs = Docs::where('file_id',$files->id);
-        foreach($docs as &$d){
+        $docs = Docs::where('file_id', $files->id);
+        foreach ($docs as &$d) {
             $d->delete();
         }
         $files->delete();
 
         return $this->sendResponse(null, 'Informação excluída com sucesso');
     }
-    public function docs(Request $request, $id, $profile,$juncao = false)
+
+    public function docs(Request $request, $id, $profile, $juncao = false)
     {
-	$dcs = Docs::where('file_id', $id)->get();
+        $dcs = Docs::where('file_id', $id)->get();
         $docs = array();
-        foreach($dcs as &$d){
+        foreach ($dcs as &$d) {
             $d->content = trim($d->content);
-            if($profile == 'ADMINISTRADOR'){
+            if ($profile == 'ADMINISTRADOR') {
                 $docs[] = $d;
             } else {
-                if(substr($d->content,0,4) == $juncao){
+                if (substr($d->content, 0, 4) == $juncao) {
                     $docs[] = $d;
                 }
             }
         }
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
-		return '';
+                return '';
                 // return '<div align="center"><button onclick="modalDelete(' . $docs->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
             ->editColumn('created_at', function ($docs) {
@@ -194,16 +198,17 @@ class UploadController extends Controller
             })
             ->make(true);
     }
-    public function report(Request $request, $id, $profile,$juncao = false)
+
+    public function report(Request $request, $id, $profile, $juncao = false)
     {
-	$dcs = Docs::where('file_id', $id)->get();
+        $dcs = Docs::where('file_id', $id)->get();
         $docs = array();
-        foreach($dcs as &$d){
+        foreach ($dcs as &$d) {
             $d->content = trim($d->content);
             $total_string = strlen($d->content);
-            $separate = substr($d->content,($total_string - 4),4);
-            if($profile == 'AGÊNCIA'){
-                if(substr($d->content,0,4) == $juncao || $separate == $juncao){
+            $separate = substr($d->content, ($total_string - 4), 4);
+            if ($profile == 'AGÊNCIA') {
+                if (substr($d->content, 0, 4) == $juncao || $separate == $juncao) {
                     $docs[] = $d;
                 }
             } else {
@@ -212,7 +217,7 @@ class UploadController extends Controller
         }
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
-                return '<div align="center"><a data-toggle="modal" href="#modal" onclick="getHistory('.$docs->id.')" title="Histórico" class="btn m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></button></div>';
+                return '<div align="center"><a data-toggle="modal" href="#modal" onclick="getHistory(' . $docs->id . ')" title="Histórico" class="btn m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></button></div>';
             })
             ->editColumn('created_at', function ($docs) {
                 return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
@@ -222,6 +227,7 @@ class UploadController extends Controller
             })
             ->make(true);
     }
+
     public function destroy(Request $request, $id)
     {
         $files = Files::where('id', $id)->first();
@@ -234,109 +240,108 @@ class UploadController extends Controller
 
         return $this->sendResponse(null, 'Informação excluída com sucesso');
     }
+
     public function registrar(Request $request)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-	$dcs = Docs::where('status', 'pendente')->get();
+        $dcs = Docs::where('status', 'pendente')->get();
         $docs = array();
-        foreach($dcs as &$d){
+        foreach ($dcs as &$d) {
             $d->content = trim($d->content);
-            if(Auth::user()->profile == 'ADMINISTRADOR'){
-                   $docs[] = $d;
-            }else{
-                if(substr($d->content,0,4) == Auth::user()->juncao){
+            if (Auth::user()->profile == 'ADMINISTRADOR') {
+                $docs[] = $d;
+            } else {
+                if (substr($d->content, 0, 4) == Auth::user()->juncao) {
                     $docs[] = $d;
                 }
             }
         }
-        return view('upload.upload_register', compact('menus','docs'));
+        return view('upload.upload_register', compact('menus', 'docs'));
     }
+
     public function register(Request $request)
     {
-	$params = $request->all();
+        $params = $request->all();
 
-	if($seal = Seal::where('content',$params['lacre'])->first()){
-		$id = $seal->id;
-	}else{
-	        $seal = new Seal();
-		$seal->user_id = $params['user'];
-		$seal->content = $params['lacre'];
-		$seal->save();
-		$id = $seal->id;
-	}
-	foreach($params['doc'] as &$doc){
-		if($sealGroup = SealGroup::where('doc_id',$doc)->first()){
-			$idGroup = $sealGroup->id;
-		} else {
-			$sealGroup = new SealGroup();
-			$sealGroup->seal_id = $id;
-			$sealGroup->doc_id = $doc;
-			$sealGroup->save();
-			$idGroup = $sealGroup->id;
-		}
-		if($docs = Docs::where('id',$doc)->first()){
-			$docs->status = 'enviado';
-			$docs->save();
-                        $docsHistory = new DocsHistory();
-                        $docsHistory->doc_id = $doc;
-                        $docsHistory->description = "Capa enviada";
-                        $docsHistory->user_id = $params['user'];
-                        $docsHistory->save();                        
-		}
-	}
+        if ($seal = Seal::where('content', $params['lacre'])->first()) {
+            $id = $seal->id;
+        } else {
+            $seal = new Seal();
+            $seal->user_id = $params['user'];
+            $seal->content = $params['lacre'];
+            $seal->save();
+            $id = $seal->id;
+        }
+        foreach ($params['doc'] as &$doc) {
+            if ($sealGroup = SealGroup::where('doc_id', $doc)->first()) {
+                $idGroup = $sealGroup->id;
+            } else {
+                $sealGroup = new SealGroup();
+                $sealGroup->seal_id = $id;
+                $sealGroup->doc_id = $doc;
+                $sealGroup->save();
+                $idGroup = $sealGroup->id;
+            }
+            if ($docs = Docs::where('id', $doc)->first()) {
+                $docs->status = 'enviado';
+                $docs->save();
+                $docsHistory = new DocsHistory();
+                $docsHistory->doc_id = $doc;
+                $docsHistory->description = "Capa enviada";
+                $docsHistory->user_id = $params['user'];
+                $docsHistory->save();
+            }
+        }
     }
+
     public function contingencia(Request $request)
     {
-	$params = $request->all();
-	print_r($params);
+        $params = $request->all();
+        print_r($params);
 
-//		if($docs = Docs::where('id',$doc)->first()){
-//			$docs->status = 'enviado';
-//			$docs->save();
-//		}
     }
+
     public function history(Request $request, $id)
     {
-	$doc = Docs::where('id', $id)->first();
+        $doc = Docs::where('id', $id)->first();
         $content = trim($doc->content);
-                
-        $file = Files::where('id',$doc->file_id)->first();
-                
-        if($file->constante == "DM"){
-            $doc->dest = substr($content,0,4);
+
+        $file = Files::where('id', $doc->file_id)->first();
+
+        if ($file->constante == "DM") {
+            $doc->dest = substr($content, 0, 4);
             $doc->origin = "DM";
-        }else{
-            $doc->origin = substr($content,0,4);
-            $doc->dest = substr($content,strlen($content)-4,4);
+        } else {
+            $doc->origin = substr($content, 0, 4);
+            $doc->dest = substr($content, strlen($content) - 4, 4);
         }
 
 
         $doc->register = "Upload do Arquivo";
 
-        $user = Users::where('id',$doc->user_id)->first();
+        $user = Users::where('id', $doc->user_id)->first();
         $doc->user = $user;
         $doc->unidade = strlen($user->juncao) > 0 ? $user->juncao : $user->unidade;
 
 
-
         $history = DocsHistory::where('doc_id', $id)->get();
-        foreach($history as &$h){
+        foreach ($history as &$h) {
             $h->content = $doc->content;
-            if($file->constante == "DM"){
-                $h->dest = substr($content,0,4);
+            if ($file->constante == "DM") {
+                $h->dest = substr($content, 0, 4);
                 $h->origin = "DM";
-            }else{
-                $h->origin = substr($content,0,4);
-                $h->dest = substr($content,strlen($content)-4,4);
+            } else {
+                $h->origin = substr($content, 0, 4);
+                $h->dest = substr($content, strlen($content) - 4, 4);
             }
-            $user = Users::where('id',$h->user_id)->first();
+            $user = Users::where('id', $h->user_id)->first();
             $h->user = $user;
             $h->register = $h->description;
             $h->unidade = strlen($h->juncao) > 0 ? $h->juncao : $h->unidade;
             $docs[] = $h;
         }
-        
+
         echo json_encode($docs);
     }
 
