@@ -110,18 +110,18 @@ class ReceiveController extends BaseController
             ->addColumn('action', function ($docs) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" type="checkbox" name="lote[]" class="form-control m-input input-doc" value="'.$docs->id.'">';
             })
-            ->addColumn('origin', function ($docs) {
-                $file = Files::where('id',$docs->file_id)->first();
+            ->addColumn('origem', function ($doc) {
+                $file = Files::where('id', $doc->file_id)->first();
                 if($file->constante == "DM"){
                     return "DM";                    
                 } else {
                     return substr($doc->content, 0, 4);
                 }
             })
-            ->addColumn('destin', function ($docs) {
-                $docs->content = trim($docs->content);
-                $total_string = strlen($docs->content);
-                $file = Files::where('id',$docs->file_id)->first();
+            ->addColumn('destino', function ($doc) {
+                $doc->content = trim($doc->content);
+                $total_string = strlen($doc->content);
+                $file = Files::where('id', $doc->file_id)->first();
                 if($file->constante == "DM"){
                     $separate = substr($doc->content, 0, 4);
                 }else{
@@ -129,11 +129,14 @@ class ReceiveController extends BaseController
                 }
                 return $separate;
             })
-            ->editColumn('created_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            ->addColumn('status', function($doc) {
+                return $doc->status ? $doc->status : '-';
             })
-            ->editColumn('updated_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
             })
             ->make(true);
     }
