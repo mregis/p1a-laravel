@@ -131,8 +131,7 @@ class UploadController extends Controller
 
     public function list()
     {
-        $files = Files::all();
-        return Datatables::of($files)
+        return Datatables::of(Files::query())
             ->addColumn('action', function ($files) {
                 return '<div align="center"><a href="/arquivo/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
