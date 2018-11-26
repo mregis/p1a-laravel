@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Menu;
+use App\Models\Menu;
 use App\User;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;

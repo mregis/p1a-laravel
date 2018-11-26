@@ -7,7 +7,7 @@ use App\Models\Profile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
-use App\Menu;
+use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 
 

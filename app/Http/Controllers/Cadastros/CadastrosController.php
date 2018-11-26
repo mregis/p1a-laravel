@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cadastros;
 
 use App\Http\Controllers\Controller;
-use App\Menu;
+use App\Models\Menu;
 use App\Models\Profile;
 use App\User;
 use App\Models\Products;
