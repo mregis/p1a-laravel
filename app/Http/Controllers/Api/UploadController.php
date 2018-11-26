@@ -134,14 +134,11 @@ class UploadController extends Controller
         return Datatables::of(Files::query())
             ->addColumn('action', function ($files) {
                 return '<div align="center"><a href="/arquivo/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
-            })
-            ->editColumn('created_at', function ($files) {
-                return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '';
-            })
-            ->editColumn('updated_at', function ($files) {
-                return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '';
-            })
-            ->make(true);
+            })->editColumn('created_at', function ($files) {
+                return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '-';
+            })->editColumn('updated_at', function ($files) {
+                return $files->updated_at ? with(new Carbon($files->updated_at))->format('d/m/Y H:i:s') : '-';
+            })->make(true);
     }
     public function arquivos(Request $request)
     {
