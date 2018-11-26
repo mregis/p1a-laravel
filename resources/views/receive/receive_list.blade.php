@@ -20,7 +20,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,origem,destino,status">
+                <input type="hidden" id="columns" value="action,content,origem,destino,created_at,status">
                 @if(Auth::user()->juncao)
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/receive/docs/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
                 @else
@@ -38,6 +38,7 @@
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Origem')}}</th>
                                 <th>{{__('Destino')}}</th>
+                                <th>{{__('Inserido em')}}</th>
                                 <th>{{__('Status')}}</th>
                             </tr>
                             </thead>
