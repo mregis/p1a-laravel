@@ -22,12 +22,12 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table" id="datatable">
+                        <table class="table table-striped" id="datatable">
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
                                 <th>{{__('tables.id')}}</th>
-                                <th>{{__('tables.desc')}}</th>
+                                <th>{{__('tables.description')}}</th>
                                 <th>{{__('tables.created_at')}}</th>
                             </tr>
                             </thead>
@@ -35,7 +35,7 @@
                         <script id="details-template" type="text/x-handlebars-template">
                             <table class="table" id="check_details">
                                 <tr>
-                                    <td>{{__('labels.desc')}}:</td>
+                                    <td>{{__('labels.description')}}:</td>
                                     <td>@{{desc}}</td>
                                 </tr>
                             </table>

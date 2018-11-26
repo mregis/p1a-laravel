@@ -29,8 +29,8 @@
     <link href="{{url('assets/vendors/base/vendors.bundle.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{url('assets/demo/default/base/style.bundle.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{url('assets/app/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{url('assets/app/css/stylesheet.css')}}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+    <link href="{{url('css/app.css')}}" rel="stylesheet" type="text/css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @yield('styles')
 
@@ -201,7 +201,7 @@
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center"
-                                                 style="background: url(assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
+                                                 style="background: url('{{url('assets/app/media/img/misc/user_profile_bg.jpg')}}'); background-size: cover;">
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
                                                         <img src="{{url('assets/app/media/img/users/user4.jpg')}}"
