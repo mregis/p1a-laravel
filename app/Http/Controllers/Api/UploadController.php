@@ -12,12 +12,12 @@ use App\Models\Seal;
 use App\Models\SealGroup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Yajra\Datatables\Datatables;
 use App\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Auth;
-
 
 
 class UploadController extends Controller
@@ -27,65 +27,108 @@ class UploadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$user_id=false)
+    public function index(Request $request, $user_id = false)
     {
-        if($request->hasFile('file')){
-                if($file = $request->file('file')->isValid()){
-                        $name = $request->file->getClientOriginalName();
-			$ext = substr($name,-3);
-//			if($ext === 'txt' || $ext === 'TXT'){
-				if(($handle = fopen($request->file->getPathName(), 'r')) !== FALSE) {
-					set_time_limit(0);
-					$row = 0;
-					while(! feof($handle)){
-						$rows[$row] = fgets($handle);
-						$row++;
-					}
-					fclose($handle);
-				}
-				$files = new Files();
-				$files->name = $name;
-				$files->total = count($rows);
-				$files->constante = substr($name,0,2);
-				$files->codigo = substr($name,2,3);
-				$files->dia = substr($name,5,2);
-				$files->mes = substr($name,7,2);
-				$files->ano = substr($name,10,2);
-				$files->sequencial = substr($name,12,1);
-                                $files->user_id = $user_id;
-				if($files->save()){
-					foreach($rows as &$r){
-                                                $doc = Docs::where('content','like','%'.trim($r).'%')->first();
-                                                if(!$doc && strlen($r) > 5){
-                                                    $docs = new Docs();
-                                                    $docs->file_id = $files->id;
-                                                    $docs->content = trim($r);
-                                                    $docs->user_id = $user_id;
-                                                    if($files->constante == 'DM'){
-                                                        $docs->status = 'enviado';
-                                                    }
-                                                    $docs->save();
-                                                    
-                                                    $history = new DocsHistory();
-                                                    $history->doc_id = $docs->id;
-                                                    $history->description = "Upload do Arquivo";
-                                                    $history->user_id = $user_id;
-                                                    $history->save();
-                                                }
-					}
-				}
+        if ($request->hasFile('file')) {
+            if ($file = $request->file('file')->isValid()) {
+                $name = $request->file->getClientOriginalName();
 
+                $file_hash = hash_file('crc32b', $request->file->getPathName());
+                $f = Files::where('file_hash', '=', $file_hash)->first();
+                if ($f) {
+                    return response()->json('Arquivo já carregado anteriormente', 400);
+                }
+                if (($handle = fopen($request->file->getPathName(), 'r')) !== FALSE) {
+                    $i = 1;
+                    $rows = [];
+                    while (!feof($handle)) {
+                        $r = trim(fgets($handle));
+                        if ($r == '') continue; // Evitar linhas em branco
+                        if (strlen($r) < 6) { // Linhas com menos de 6 caracteres são considerados erros
+                            fclose($handle);
+                            return response()->json(
+                                sprintf('Registro [%s] da linha %d é inválido. Processo abortado', $r, $i), 400);
                         }
-  //              }
-		exit();
-        }
 
+                        $rows[] = $r;
+                        $i++;
+                    }
+                    fclose($handle);
+                } else {
+                    return response()->json('Erro ao ler arquivo.', 400);
+                }
+                if (count($rows) < 1) {
+                    return response()->json('Arquivo não contém registros', 400);
+                }
+                // Criando o registro do Arquivo
+                $oFile = new Files(
+                    [
+                        'name' => $name,
+                        'total' => count($rows),
+                        'constante' => substr($name, 0, 2),
+                        'file_hash' => $file_hash,
+                        'codigo' => substr($name, 2, 3),
+                        'dia' => substr($name, 5, 2),
+                        'mes' => substr($name, 7, 2),
+                        'ano' => substr($name, 10, 2),
+                        'sequencial' => substr($name, 12, 1),
+                        'user_id' => $user_id,
+                    ]
+                );
+                if ($oFile->save()) {
+                    $cntr = 0;
+                    foreach ($rows as $k => &$r) { // Qual é o intuito do programador de usar referencia num loop for
+                        if (!Docs::where('content', 'like', $r)->first()) {
+                            $oDoc = new Docs(
+                                [
+                                    'file_id' => $oFile->id,
+                                    'content' => $r,
+                                    'status' => ($oFile->constante == 'DM' ? 'enviado' : null),
+                                    'user_id' => $user_id,
+                                ]
+                            );
+                            if ($oDoc->save()) {
+                                $oHistory = new DocsHistory(
+                                    [
+                                        'doc_id' => $oDoc->id,
+                                        'description' => "Upload do Arquivo",
+                                        'user_id' => $user_id,
+
+                                    ]
+                                );
+                                if ($oHistory->save()) {
+                                    $cntr++;
+                                } else {
+                                    $oDoc->delete();
+                                    $oFile->delete();
+                                    return response()->json('Erro ao criar entrada de historico.', 400);
+                                }
+                            } else {
+                                $oFile->delete();
+                                return response()->json('Erro ao criar entrada de registro.', 400);
+                            }
+                        }
+                    }
+                    $oFile->total = $cntr;
+                    $oFile->save();
+                } else {
+                    return response()->json('Erro ao carregar arquivo.', 400);
+                }
+                (($cntr == 0) && ($msg = ' Nenhum registro novo inserido')) ||
+                (($cntr == 1) && ($msg = ' 1 registro novo inserido')) ||
+                (($cntr > 1) && ($msg = sprintf(' %d registros novos inserido', $cntr)));
+
+                return response()->json('Arquivo carregado.' . $msg, 200);
+            }
+            return response()->json('Arquivo não carregado', 400);// Somente com erro chega aqui
+        }
 
 
         $menu = new Menu();
         $menus = $menu->menu();
         return view('upload.upload', compact('menus'));
     }
+
     public function list()
     {
         $files = Files::all();
