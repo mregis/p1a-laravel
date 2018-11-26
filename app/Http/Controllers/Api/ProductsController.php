@@ -135,8 +135,7 @@ class ProductsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function create()
+    public function create()
     {
         $menu = new Menu();
         $menus = $menu->menu();
@@ -151,8 +150,7 @@ class ProductsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function getEnum()
+    public function getEnum()
     {
       $type = DB::select(DB::raw('SHOW COLUMNS FROM Products WHERE Field = "profile"'))[0]->Type;
       preg_match('/^enum\((.*)\)$/', $type, $matches);

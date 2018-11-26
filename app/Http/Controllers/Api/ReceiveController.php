@@ -29,32 +29,33 @@ class ReceiveController extends BaseController
     {
         $menu = new Menu();
         $menus = $menu->menu();
-	$files = Files::all();
-	foreach($files as &$file){
-            $pendentes = 0;
-            $dcs = Docs::where('file_id', $file->id)->get();
-            $docs = array();
-            foreach($dcs as &$d){
-                if(Auth::user()->profile == 'ADMINISTRADOR'){
-                    $docs[] = $d;
-                }else{
-                    if(substr($d->content,0,4) == Auth::user()->juncao){
+        $files = Files::all();
+        foreach($files as &$file){
+                $pendentes = 0;
+                $dcs = Docs::where('file_id', $file->id)->get();
+                $docs = array();
+                foreach($dcs as &$d){
+                    if(Auth::user()->profile == 'ADMINISTRADOR') {
                         $docs[] = $d;
+                    } else {
+                        if(substr($d->content,0,4) == Auth::user()->juncao) {
+                            $docs[] = $d;
+                        }
                     }
-                }
-		if($d->status == 'pendente'){
-                    $pendentes++;
-		}
+            if($d->status == 'pendente') {
+                        $pendentes++;
             }
-            $file->pendentes = $pendentes;
-	}
-        return view('receive.receive', compact('menus','files'));
+                }
+                $file->pendentes = $pendentes;
+        }
+        return view('receive.receive', compact('menus', 'files'));
     }
-    public function list(Request $request,$id)
+
+    public function list(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('receive.receive_list', compact('menus','id'));
+        return view('receive.receive_list', compact('menus', 'id'));
     }
     public function arquivos(Request $request)
     {
@@ -62,18 +63,20 @@ class ReceiveController extends BaseController
         $menus = $menu->menu();
         return view('upload.upload_list', compact('menus'));
     }
-    public function arquivo(Request $request,$id)
+    public function arquivo(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('upload.upload_edit', compact('menus','id'));
+        return view('upload.upload_edit', compact('menus', 'id'));
     }
+
     public function removearquivo(Request $request,$id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
 //        return view('upload.upload_list', compact('menus'));
     }
+
     public function docs(Request $request, $id , $profile , $juncao = false)
     {
 	$params = array('file_id'=> $id);
@@ -111,8 +114,8 @@ class ReceiveController extends BaseController
                 $file = Files::where('id',$docs->file_id)->first();
                 if($file->constante == "DM"){
                     return "DM";                    
-                }else{
-                    return substr($docs->content,0,4);                    
+                } else {
+                    return substr($doc->content, 0, 4);
                 }
             })
             ->addColumn('destin', function ($docs) {
@@ -120,9 +123,9 @@ class ReceiveController extends BaseController
                 $total_string = strlen($docs->content);
                 $file = Files::where('id',$docs->file_id)->first();
                 if($file->constante == "DM"){
-                    $separate = substr($docs->content,0,4);
+                    $separate = substr($doc->content, 0, 4);
                 }else{
-                    $separate = substr($docs->content,($total_string - 4),4);
+                    $separate = substr($doc->content, ($total_string - 4), 4);
                 }
                 return $separate;
             })
@@ -134,9 +137,10 @@ class ReceiveController extends BaseController
             })
             ->make(true);
     }
+
     public function destroy(Request $request, $id)
     {
-die('aki');
+        die('aki');
     }
 
     public function check(Request $request, $id)
