@@ -170,4 +170,30 @@ class CadastrosController extends Controller
         $menus = $menu->menu();
         return view('cadastros.contingencia', compact('menus'));
     }
+
+
+    public function perfis()
+    {
+        if (!Auth::user()) return redirect('/');
+        $menu = new Menu();
+        $menus = $menu->menu();
+        $profiles = Profile::where('id', '>', 0)->get();
+        return view('cadastros.profiles', compact('menus', 'profiles'));
+    }
+
+    public function perfil_edit(Request $request, $id)
+    {
+        $menu = new Menu();
+        $menus = $menu->menu();
+        $profiles = Profile::all();
+        $profile = Profile::where('id', $id)->first();
+        return view('cadastros.profiles', compact('menus', 'profiles', 'profile'));
+    }
+
+    public function perfil_remove(Request $request, $id)
+    {
+        $profile = Profile::where('id', $id)->first();
+        $profile->delete();
+        return $this->perfis();
+    }
 }
