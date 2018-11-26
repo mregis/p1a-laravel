@@ -17,7 +17,8 @@ class Files extends BaseModel
         'dia',
         'mes',
         'ano',
-        'sequencial'
+        'sequencial',
+        'file_hash'
     ];
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'deleted_at'
