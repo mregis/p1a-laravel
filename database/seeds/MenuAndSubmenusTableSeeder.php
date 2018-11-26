@@ -36,6 +36,22 @@ class MenuAndSubmenusTableSeeder extends Seeder
             "menu_id" => $menu->id,
         ]);
 
+        // Menu Relatórios
+        $menu = Menu::create([
+            "name" => "Relatórios",
+            "icon" => "fa fa-file-text-o",
+            "url" => "/reports",
+            "item_order" => 6,
+        ]);
+        // SubMenus para Menu Relatórios
+        Sub_Menu::create([
+            "name" => "Geral",
+            "icon" => "fa fa-file-text",
+            "url" => "/remessa",
+            "item_order" => 1,
+            "menu_id" => $menu->id,
+        ]);
+
         // Menu Dashboard
         Menu::create([
             "name" => "Dashboard",
@@ -50,7 +66,6 @@ class MenuAndSubmenusTableSeeder extends Seeder
             "icon" => "fa fa-home",
             "item_order" => 2,
         ]);
-
         // SubMenus para Menu Remessa
         Sub_Menu::create([
             "name" => "Upload de Arquivos",
@@ -74,20 +89,13 @@ class MenuAndSubmenusTableSeeder extends Seeder
             "menu_id" => $menu->id,
         ]);
 
+        // Menu Recebimento
         $menu = Menu::create([
             "name" => "Recebimento",
             "icon" => "fa fa-file-o",
             "item_order" => 4,
         ]);
-
-        // Menu Relatórios
-        $menu = Menu::create([
-            "name" => "Relatórios",
-            "icon" => "fa fa-file-text-o",
-            "url" => "/reports",
-            "item_order" => 6,
-        ]);
-        // SubMenus para Menu Relatórios
+        // SubMenus para Menu Recebimento
         Sub_Menu::create([
             "name" => "Agência",
             "icon" => "fa fa-external-link-square",
@@ -116,7 +124,6 @@ class MenuAndSubmenusTableSeeder extends Seeder
             "icon" => "fa fa-newspaper-o",
             "item_order" => 5,
         ]);
-
         // SubMenu para Menu Ocorrências
         Sub_Menu::create([
             "name" => "Listar",
