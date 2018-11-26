@@ -16,10 +16,7 @@ class AuditController extends BaseController
 {
     public function list()
     {
-        $audit = Audit::all();
-
-
-        return Datatables::of($audit)
+        return Datatables::of(Audit::query())
             ->editColumn('created_at', function ($audit) {
                 return $audit->created_at ? with(new Carbon($audit->created_at))->format('d/m/Y H:i:s') : '';
             })
