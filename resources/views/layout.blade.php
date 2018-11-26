@@ -126,7 +126,8 @@
 
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center"
-                                                 style="background: url(assets/app/media/img/misc/notification_bg.jpg); background-size: cover;">
+                                                 style="background: url('{{ url('assets/app/media/img/misc/notification_bg.jpg') }}');
+                                                         background-size: cover;">
 														<span class="m-dropdown__header-title">
 															 Nenhuma notificação
 														</span>
@@ -212,10 +213,10 @@
                                                     </div>
                                                     <div class="m-card-user__details">
 																<span class="m-card-user__name m--font-weight-500">
-																	{{{ Auth::user()->name }}}
+																	{{ Auth::user()->name }}
 																</span>
                                                         <a href="" class="m-card-user__email m--font-weight-300 m-link">
-                                                            {{{ Auth::user()->email }}}
+                                                            {{ Auth::user()->email }}
                                                         </a>
                                                     </div>
                                                 </div>
