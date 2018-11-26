@@ -20,7 +20,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,origin,destin,status">
+                <input type="hidden" id="columns" value="action,content,origem,destino,status">
                 @if(Auth::user()->juncao)
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/receive/docs/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
                 @else
@@ -29,7 +29,7 @@
 		<input type="hidden" id="check_url" value="{{URL::to('/arquivo/recebe')}}">
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table"
+                        <table class="table table-striped"
                                id="datatable">
                             <thead class="thead-dark">
                             <tr>

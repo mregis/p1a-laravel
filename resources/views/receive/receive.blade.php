@@ -25,8 +25,8 @@
 			<div class="m-portlet__head"><br><h3>Recebimento</h3></div>
 			<div class="m-portlet__body">
 				<div class="form-group m-form__group row">
-					<table class="table">
-						<thead>
+					<table class="table table-striped">
+						<thead class="thead-dark">
 							<tr>
 								<th>Nome</th>
 								<th>Total</th>
