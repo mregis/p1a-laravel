@@ -57,6 +57,7 @@ class ReceiveController extends BaseController
         $menus = $menu->menu();
         return view('receive.receive_list', compact('menus', 'id'));
     }
+
     public function arquivos(Request $request)
     {
         $menu = new Menu();
@@ -79,55 +80,49 @@ class ReceiveController extends BaseController
 
     public function docs(Request $request, $id , $profile , $juncao = false)
     {
-	$params = array('file_id'=> $id);
-	//$docs = Docs::where('file_id', $id)->get();
-        $dcs = Docs::where($params)->get();
-        $docs = array();
-        foreach($dcs as &$d){
-            $d->content = trim($d->content);
-            $total_string = strlen($d->content);
-            $separate = substr($d->content,($total_string - 4),4);
-            $separatedm = substr($d->content,0,4);
-            if($profile == 'ADMINISTRADOR'){
-                $docs[] = $d;
-            }else{
-                $file = Files::where('id', $d->file_id)->first();
-                if($file->constante == "DM"){
-                    if($separatedm == $juncao){
-                        if($d->status != 'pendente' && $d->status != 'recebido')
-                        $docs[] = $d;
-                    }
-                }else{
-                    if($separate == $juncao){
-                        if($d->status != 'pendente' && $d->status != 'recebido')
-                        $docs[] = $d;
-                    }
-                }
-                
+	 $params = array('file_id'=> $id);
+        $file = Files::where('id', $id)->first();
+        $query = Docs::query()
+            ->where($params);
+        if ($profile != 'ADMINISTRADOR') {
+            if ($file->constante == "DM") {
+                $query = Docs::query()
+                    ->where([
+                        ['file_id', '=', $id],
+                        ['content', 'like', sprintf("%04d", $juncao) . '%'],
+                    ])
+                    ->orWhere(function ($query) {
+                        $query->whereNotIn('status', ['pendente','recebido'])
+                            ->whereNull('status');
+                    })
+                ;
+            } else {
+                $query = Docs::query()
+                    ->where([
+                        ['file_id', '=', $id],
+                        ['content', 'like', '%' . sprintf("%04d", $juncao)],
+                    ])
+                    ->orWhere(function ($query) {
+                        $query->whereNotIn('status', ['pendente','recebido'])
+                            ->whereNull('status');
+                    })
+                ;
             }
         }
-        return Datatables::of($docs)
-            ->addColumn('action', function ($docs) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" type="checkbox" name="lote[]" class="form-control m-input input-doc" value="'.$docs->id.'">';
+
+        return Datatables::of($query)
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                    'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                    'value="'. $doc->id.'">';
             })
-            ->addColumn('origem', function ($doc) {
-                $file = Files::where('id', $doc->file_id)->first();
-                if($file->constante == "DM"){
-                    return "DM";                    
-                } else {
-                    return substr($doc->content, 0, 4);
-                }
-            })
-            ->addColumn('destino', function ($doc) {
+            ->addColumn('origem', function ($doc) use ($file) {
                 $doc->content = trim($doc->content);
-                $total_string = strlen($doc->content);
-                $file = Files::where('id', $doc->file_id)->first();
-                if($file->constante == "DM"){
-                    $separate = substr($doc->content, 0, 4);
-                }else{
-                    $separate = substr($doc->content, ($total_string - 4), 4);
-                }
-                return $separate;
+                return ($file->constante == "DM" ? "DM" : substr($doc->content, 0, 4));
+            })
+            ->addColumn('destino', function ($doc) use ($file) {
+                $doc->content = trim($doc->content);
+                return ($file->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
             })
             ->addColumn('status', function($doc) {
                 return $doc->status ? $doc->status : '-';

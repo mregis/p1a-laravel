@@ -173,28 +173,29 @@ class UploadController extends Controller
 
     public function docs(Request $request, $id, $profile, $juncao = false)
     {
-        $dcs = Docs::where('file_id', $id)->get();
-        $docs = array();
-        foreach ($dcs as &$d) {
-            $d->content = trim($d->content);
-            if ($profile == 'ADMINISTRADOR') {
-                $docs[] = $d;
-            } else {
-                if (substr($d->content, 0, 4) == $juncao) {
-                    $docs[] = $d;
-                }
-            }
+        $params = array('file_id'=> $id);
+        $query = Docs::query()
+            ->where($params);
+
+        if($profile != 'ADMINISTRADOR') {
+            $query = Docs::query()
+                ->where([
+                    ['file_id', '=', $id],
+                    ['content', 'like', sprintf("%04d", $juncao) . '%'],
+                ])
+
+            ;
         }
-        return Datatables::of($docs)
-            ->addColumn('action', function ($docs) {
+
+        return Datatables::of($query)
+            ->addColumn('action', function ($doc) {
                 return '';
-                // return '<div align="center"><button onclick="modalDelete(' . $docs->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
-            ->editColumn('created_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
             })
-            ->editColumn('updated_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
             })
             ->make(true);
     }
