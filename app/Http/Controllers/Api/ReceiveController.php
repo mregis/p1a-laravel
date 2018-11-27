@@ -83,7 +83,7 @@ class ReceiveController extends BaseController
 	 $params = array('file_id'=> $id);
         $file = Files::where('id', $id)->first();
         $query = Docs::query()
-            ->where($params);
+            ->where($params)->orderBy('created_at', 'desc');
         if ($profile != 'ADMINISTRADOR') {
             if ($file->constante == "DM") {
                 $query = Docs::query()
@@ -95,6 +95,7 @@ class ReceiveController extends BaseController
                         $query->whereNotIn('status', ['pendente','recebido'])
                             ->whereNull('status');
                     })
+                    ->orderBy('created_at', 'desc')
                 ;
             } else {
                 $query = Docs::query()
@@ -106,6 +107,7 @@ class ReceiveController extends BaseController
                         $query->whereNotIn('status', ['pendente','recebido'])
                             ->whereNull('status');
                     })
+                    ->orderBy('created_at', 'desc')
                 ;
             }
         }
@@ -235,6 +237,69 @@ class ReceiveController extends BaseController
 		$file->pendentes = $pendentes;
 	}
         return view('receive.operador', compact('menus','files'));
+    }
+
+    public function docListingIndex() {
+        $menu = new Menu();
+        $menus = $menu->menu();
+        return view('receive.receive_doclist', compact('menus', 'id'));
+    }
+
+    public function doclisting(Request $request, $profile , $juncao = false)
+    {
+        $query = Docs::query()->orderBy('created_at', 'desc')
+            ->select("docs.*", "files.constante as constante")
+            ->join("files", "docs.file_id", "=", "files.id")
+        ;
+        if ($profile != 'ADMINISTRADOR') {
+                $query
+                    ->orWhere(function ($query) use ($juncao) {
+                        $query->where([
+                            ['files.constante', '=', 'DM'],
+                            ['content', 'like', sprintf("%04d", $juncao) . '%']
+                        ])
+                            ->orWhere(function ($query) {
+                                $query->whereNotIn('status', ['pendente', 'recebido'])
+                                    ->whereNull('status');
+                            });
+                    })
+                    ->orWhere(function ($query) use ($juncao) {
+                        $query->where([
+                            ['files.constante', '<>', 'DM'],
+                            ['content', 'like', '%' . sprintf("%04d", $juncao)]
+                        ])
+                            ->orWhere(function ($query) {
+                                $query->whereNotIn('status', ['pendente', 'recebido'])
+                                    ->whereNull('status');
+                            });
+                    });
+
+        }
+        $sql = $query->getQuery()->toSql();
+        return Datatables::of($query)
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                'value="'. $doc->id.'">';
+            })
+            ->addColumn('origem', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? "DM" : substr($doc->content, 0, 4));
+            })
+            ->addColumn('destino', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
+            })
+            ->addColumn('status', function($doc) {
+                return $doc->status ? $doc->status : '-';
+            })
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->make(true);
     }
 
 }

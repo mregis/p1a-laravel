@@ -65,3 +65,5 @@ Route::get('/report-remessa/{id}', 'Api\ReportController@arquivo')->name('upload
 
 Route::get('/receber-operador','Api\ReceiveController@operador');
 Route::get('/doc/history/{id}','Api\UploadController@history');
+
+Route::get('/receber-todos/','Api\ReceiveController@docListingIndex');

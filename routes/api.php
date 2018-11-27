@@ -63,3 +63,6 @@ Route::get('/report/docs/{id}', 'Api\ReportController@docs');
 Route::post('/contingencia', 'Api\UploadController@contingencia');
 
 Route::post('/perfil/', 'Api\ProfileController@store');
+
+Route::get('/receber-todos/{profile}/{juncao}', 'Api\ReceiveController@doclisting');
+Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
