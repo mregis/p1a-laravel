@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,origem,destino,created_at,status">
+                <input type="hidden" id="columns" value="action,content,constante,origem,destino,created_at,status">
                 @if(Auth::user()->juncao)
                     <input type="hidden" id="baseurl"
                            value="{{URL::to('/api/receber-todos/')}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
@@ -42,6 +42,7 @@
                                     <th></th>
                                     <th style="width:20px"></th>
                                     <th>{{__('Capa Lote')}}</th>
+                                    <th>{{__('Constante')}}</th>
                                     <th>{{__('Origem')}}</th>
                                     <th>{{__('Destino')}}</th>
                                     <th>{{__('Inserido em')}}</th>

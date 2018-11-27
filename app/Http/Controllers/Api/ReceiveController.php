@@ -275,7 +275,6 @@ class ReceiveController extends BaseController
                     });
 
         }
-        $sql = $query->getQuery()->toSql();
         return Datatables::of($query)
             ->addColumn('action', function ($doc) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
