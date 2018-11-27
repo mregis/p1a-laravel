@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Menu;
-use App\Sub_Menu;
+use App\Models\Menu;
+use App\Models\Sub_Menu;
 use Auth;
 use App\Models\Files;
 use App\Models\Docs;

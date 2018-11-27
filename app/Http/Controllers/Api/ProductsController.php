@@ -7,7 +7,7 @@ use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
-use App\Menu;
+use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,8 +20,8 @@ class ProductsController extends BaseController
             ->addColumn('action', function ($Products) {
                 return '<div align="center"><a href="edit/' . $Products->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $Products->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
-            ->editColumn('birth_date', function ($Products) {
-                return $Products->created_at ? with(new Carbon($Products->birth_date))->format('d/m/Y') : '';
+            ->editColumn('created_at', function ($Products) {
+                return $Products->created_at ? with(new Carbon($Products->created_at))->format('d/m/Y') : '';
             })
             ->make(true);
     }
@@ -135,8 +135,7 @@ class ProductsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function create()
+    public function create()
     {
         $menu = new Menu();
         $menus = $menu->menu();
@@ -151,8 +150,7 @@ class ProductsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function getEnum()
+    public function getEnum()
     {
       $type = DB::select(DB::raw('SHOW COLUMNS FROM Products WHERE Field = "profile"'))[0]->Type;
       preg_match('/^enum\((.*)\)$/', $type, $matches);

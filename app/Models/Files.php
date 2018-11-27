@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Files extends BaseModel
@@ -16,7 +17,8 @@ class Files extends BaseModel
         'dia',
         'mes',
         'ano',
-        'sequencial'
+        'sequencial',
+        'file_hash'
     ];
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'deleted_at'

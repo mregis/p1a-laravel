@@ -8,7 +8,7 @@ use App\Models\Audit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
-use App\Menu;
+use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,10 +16,7 @@ class AuditController extends BaseController
 {
     public function list()
     {
-        $audit = Audit::all();
-
-
-        return Datatables::of($audit)
+        return Datatables::of(Audit::query())
             ->editColumn('created_at', function ($audit) {
                 return $audit->created_at ? with(new Carbon($audit->created_at))->format('d/m/Y H:i:s') : '';
             })

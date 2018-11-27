@@ -10,6 +10,7 @@ class Docs extends BaseModel
     protected $fillable = [
         'file_id',
         'content',
+        'status',
         'user_id',
         'type'
     ];

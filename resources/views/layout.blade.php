@@ -29,12 +29,12 @@
     <link href="{{url('assets/vendors/base/vendors.bundle.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{url('assets/demo/default/base/style.bundle.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{url('assets/app/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{url('assets/app/css/stylesheet.css')}}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+    <link href="{{url('css/app.css')}}" rel="stylesheet" type="text/css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-@yield('styles')
+    @yield('styles')
 
-<!--end::Base Styles -->
+            <!--end::Base Styles -->
     <link rel="shortcut icon" href="{{url('assets/demo/default/media/img/logo/favicon.ico')}}"/>
 </head>
 <!-- end::Head -->
@@ -56,8 +56,8 @@
                         </div>
                         <div class="m-stack__item m-stack__item--middle m-brand__tools">
                             <!-- BEGIN: Left Aside Minimize Toggle -->
-                            <a href="javascript:;" id="m_aside_left_minimize_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block
-					 ">
+                            <a href="javascript:;" id="m_aside_left_minimize_toggle"
+                               class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block">
                                 <span></span>
                             </a>
                             <!-- END -->
@@ -86,12 +86,12 @@
                     <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                         <div class="m-stack__item m-topbar__nav-wrapper">
                             <ul class="m-topbar__nav m-nav m-nav--inline">
-                                <li class="
-	m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light"
+                                <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light"
                                     data-dropdown-toggle="click" data-dropdown-persistent="true" id="m_quicksearch"
                                     data-search-type="dropdown">
                                     <div class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
+
                                         <div class="m-dropdown__inner ">
                                             <div class="m-dropdown__header">
                                                 <form class="m-list-search__form">
@@ -123,9 +123,11 @@
 
                                     <div class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
+
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center"
-                                                 style="background: url(assets/app/media/img/misc/notification_bg.jpg); background-size: cover;">
+                                                 style="background: url('{{ url('assets/app/media/img/misc/notification_bg.jpg') }}');
+                                                         background-size: cover;">
 														<span class="m-dropdown__header-title">
 															 Nenhuma notificação
 														</span>
@@ -197,11 +199,13 @@
 													Nick
 												</span>
                                     </a>
+
                                     <div class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center"
-                                                 style="background: url(assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
+                                                 style="background: url('{{url('assets/app/media/img/misc/user_profile_bg.jpg')}}'); background-size: cover;">
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
                                                         <img src="{{url('assets/app/media/img/users/user4.jpg')}}"
@@ -209,10 +213,10 @@
                                                     </div>
                                                     <div class="m-card-user__details">
 																<span class="m-card-user__name m--font-weight-500">
-																	{{{ Auth::user()->name }}}
+																	{{ Auth::user()->name }}
 																</span>
                                                         <a href="" class="m-card-user__email m--font-weight-300 m-link">
-                                                            {{{ Auth::user()->email }}}
+                                                            {{ Auth::user()->email }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -253,7 +257,7 @@
                                                         <li class="m-nav__separator m-nav__separator--fit"></li>
                                                         <li class="m-nav__item">
                                                             <a href="{{url('auth/logout')}}"
-                                                               class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
+                                                               class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
                                                                 Logout
                                                             </a>
                                                         </li>
@@ -290,115 +294,117 @@
                 {{--MENU LATERAL--}}
                 <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow">
                     @foreach($menus as $menu)
-			@if($menu->name == "Cadastros" || $menu->name == "Usuários")
-			@if((Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO"))
-                        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
-                            m-menu-submenu-toggle="hover" >
-                        @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
-                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                                @else
-                                    <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
-                                        @endif
-                                        <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
-                                           data-placement="top"
-                                           title="{{$menu->name}}"></i>
-                                        <span class="m-menu__link-text">{{$menu->name}}</span>
-                                        @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
-                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                        @if($menu->name == "Cadastros" || $menu->name == "Usuários")
+                            @if((Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO"))
+                                <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
+                                    m-menu-submenu-toggle="hover">
+                                    @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
+                                    <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                        @else
+                                            <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
+                                                @endif
+                                                <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="{{$menu->name}}"></i>
+                                                <span class="m-menu__link-text">{{$menu->name}}</span>
+                                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
+                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                @endif
+                                            </a>
+                                            @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
+                                            @foreach($menu->sub_menus as $sub_menu)
+                                                @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
+                                                    @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
+                                                        <div class="m-menu__submenu "><span
+                                                                    class="m-menu__arrow"></span>
+                                                            <ul class="m-menu__subnav">
+                                                                <li class="m-menu__item " aria-haspopup="true">
+                                                                    <a href="{{$menu->url.$sub_menu->url}}"
+                                                                       class="m-menu__link ">
+                                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                            <span></span>
+                                                                        </i>
+                                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                    </a>
+                                                            </ul>
+                                                        </div>
+                                                    @endif
+                                                @else
+
+                                                    <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
+                                                        <ul class="m-menu__subnav">
+                                                            <li class="m-menu__item " aria-haspopup="true">
+                                                                <a href="{{$menu->url.$sub_menu->url}}"
+                                                                   class="m-menu__link ">
+                                                                    <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                </a>
+                                                        </ul>
+                                                    </div>
+                                                @endif
+
+                                            @endforeach
                                         @endif
                                     </a>
-                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
-                                    @foreach($menu->sub_menus as $sub_menu)
-					@if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
-					@if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
-                                        <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                            <ul class="m-menu__subnav">
-                                                <li class="m-menu__item " aria-haspopup="true">
-                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                       class="m-menu__link ">
-                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                            <span></span>
-                                                        </i>
-                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                    </a>
-                                            </ul>
-                                        </div>
-					@endif
-					@else
-
-                                        <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                            <ul class="m-menu__subnav">
-                                                <li class="m-menu__item " aria-haspopup="true">
-                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                       class="m-menu__link ">
-                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                            <span></span>
-                                                        </i>
-                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                    </a>
-                                            </ul>
-                                        </div>
-					@endif
-
-                                    @endforeach
-                                    @endif
-                            </a>
                             @endif
-			@else
-                        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
-                            m-menu-submenu-toggle="hover" @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
-                        @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
-                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                                @else
-                                    <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
-                                        @endif
-                                        <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
-                                           data-placement="top"
-                                           title="{{$menu->name}}"></i>
-                                        <span class="m-menu__link-text">{{$menu->name}}</span>
-                                        @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
-                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                        @endif
-                                    </a>
-                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
-                                    @foreach($menu->sub_menus as $sub_menu)
-					@if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
-					@if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
-                                       <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                            <ul class="m-menu__subnav">
-                                                <li class="m-menu__item " aria-haspopup="true">
-                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                       class="m-menu__link ">
-                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                            <span></span>
-                                                        </i>
-                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                    </a>
-                                            </ul>
-                                        </div>
-                     			@endif
-					@else
-                                        @if(Auth::user()->profile == "AGÊNCIA" && $sub_menu->name == "Operador" || Auth::user()->profile == "OPERADOR" && $sub_menu->name == "Agência")
-                                        @else                   
-                                        <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                            <ul class="m-menu__subnav">
-                                                <li class="m-menu__item " aria-haspopup="true">
-                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                       class="m-menu__link ">
-                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                            <span></span>
-                                                        </i>
-                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                    </a>
-                                            </ul>
-                                        </div>
-					@endif
-					@endif
+                        @else
+                            <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
+                                m-menu-submenu-toggle="hover"
+                                @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
+                                @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
+                                <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    @else
+                                        <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
+                                            @endif
+                                            <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
+                                               data-placement="top"
+                                               title="{{$menu->name}}"></i>
+                                            <span class="m-menu__link-text">{{$menu->name}}</span>
+                                            @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
+                                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                            @endif
+                                        </a>
+                                        @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
+                                        @foreach($menu->sub_menus as $sub_menu)
+                                            @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
+                                                @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
+                                                    <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
+                                                        <ul class="m-menu__subnav">
+                                                            <li class="m-menu__item " aria-haspopup="true">
+                                                                <a href="{{$menu->url.$sub_menu->url}}"
+                                                                   class="m-menu__link ">
+                                                                    <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                </a>
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                            @else
+                                                @if(Auth::user()->profile == "AGÊNCIA" && $sub_menu->name == "Operador" || Auth::user()->profile == "OPERADOR" && $sub_menu->name == "Agência")
+                                                @else
+                                                    <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
+                                                        <ul class="m-menu__subnav">
+                                                            <li class="m-menu__item " aria-haspopup="true">
+                                                                <a href="{{$menu->url.$sub_menu->url}}"
+                                                                   class="m-menu__link ">
+                                                                    <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                </a>
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                            @endif
 
-                                    @endforeach
+                                        @endforeach
                                     @endif
-                            </a>
-                           @endif
+                                </a>
+                        @endif
                     @endforeach
                 </ul>
             </div>
@@ -423,7 +429,8 @@
 
             </div>
         </div>
-    </div>   <!-- By Wagner - Adcionei essa div porque o scroll estava enorme -->
+    </div>
+    <!-- By Wagner - Adcionei essa div porque o scroll estava enorme -->
     <!-- END: Left Aside -->
     <!-- end:: Body -->
     <!-- begin::Footer -->
@@ -654,9 +661,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" checked="checked" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" checked="checked" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -667,9 +674,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -680,9 +687,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -693,9 +700,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -706,9 +713,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" checked="checked" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" checked="checked" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -724,9 +731,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -737,9 +744,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -750,9 +757,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -763,9 +770,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" checked="checked" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" checked="checked" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -776,9 +783,9 @@
                             <span class="m-list-settings__item-control">
 										<span class="m-switch m-switch--outline m-switch--icon-check m-switch--brand">
 											<label>
-												<input type="checkbox" name="">
-												<span></span>
-											</label>
+                                                <input type="checkbox" name="">
+                                                <span></span>
+                                            </label>
 										</span>
 									</span>
                         </div>
@@ -1122,7 +1129,7 @@
 
 @yield('scripts')
 
-<!--end::Page Snippets -->
+        <!--end::Page Snippets -->
 
 </body>
 <!-- end::Body -->

@@ -108,4 +108,7 @@ return [
     'alerts' => 'Ocorrências',
     'add_alerts' => 'Cadastro de Ocorrências',
     'list_alerts' => 'Lista  de Ocorrências',
+    'profile'=> 'Perfil',
+    'profiles'=> 'Perfis',
+    'add_profile'=> 'Cadastrar Perfil',
 ];

@@ -107,4 +107,5 @@ return [
     'others' => 'Outros',
     'city_service' => 'Vara / Cidade',
     'product_name' => 'Nome do Produto',
+    'juncao' => 'Junção',
 ];

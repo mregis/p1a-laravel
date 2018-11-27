@@ -39,6 +39,10 @@ Route::group(['prefix' => 'cadastros'], function() {
 	Route::get('produto/remove/{id}', 'Cadastros\CadastrosController@produto_remove');
 	Route::get('produto/edit/{id}', 'Cadastros\CadastrosController@produto_edit');
 	Route::get('contingencia', 'Cadastros\CadastrosController@contingencia');
+
+	Route::get('perfil', 'Cadastros\CadastrosController@perfis');
+	Route::get('perfil/remove/{id}', 'Cadastros\CadastrosController@perfil_remove');
+	Route::get('perfil/edit/{id}', 'Cadastros\CadastrosController@perfil_edit');
 });
 
 Route::group(['prefix' => 'ocorrencias'], function() {
@@ -61,3 +65,5 @@ Route::get('/report-remessa/{id}', 'Api\ReportController@arquivo')->name('upload
 
 Route::get('/receber-operador','Api\ReceiveController@operador');
 Route::get('/doc/history/{id}','Api\UploadController@history');
+
+Route::get('/receber-todos/','Api\ReceiveController@docListingIndex');

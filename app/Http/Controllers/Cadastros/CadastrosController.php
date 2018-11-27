@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Cadastros;
 
 use App\Http\Controllers\Controller;
-use App\Menu;
+use App\Models\Menu;
+use App\Models\Profile;
 use App\User;
 use App\Models\Products;
 use App\Models\Alerts;
@@ -20,7 +21,7 @@ class CadastrosController extends Controller
      */
     public function index(Request $request)
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         return view('users.users_list', compact('menus'));
@@ -33,7 +34,7 @@ class CadastrosController extends Controller
      */
     public function create()
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         return view('users.users_add', compact('menus'));
@@ -45,8 +46,7 @@ class CadastrosController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
         //
     }
@@ -57,8 +57,7 @@ class CadastrosController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function show($id)
+    public function show($id)
     {
         //
     }
@@ -71,7 +70,7 @@ class CadastrosController extends Controller
      */
     public function edit($id)
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $user = User::where('id', $id)->first();
         $menus = $menu->menu();
@@ -87,8 +86,7 @@ class CadastrosController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -99,70 +97,103 @@ class CadastrosController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy($id)
+    public function destroy($id)
     {
         //
     }
+
     public function produtos()
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
-	$produtos = Products::where('id','>' ,0)->get();
-        return view('cadastros.produtos', compact('menus','produtos'));
+        $produtos = Products::where('id', '>', 0)->get();
+        return view('cadastros.produtos', compact('menus', 'produtos'));
     }
+
     public function alert_add()
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         return view('cadastros.alerts', compact('menus'));
     }
+
     public function alert_list()
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
-	$alerts = Alerts::where('id','>' ,0)->get();
-        foreach($alerts as &$a){
+        $alerts = Alerts::where('id', '>', 0)->get();
+        foreach ($alerts as &$a) {
             $a->user = User::where('id', $a->user_id)->first();
         }
 
-        return view('cadastros.alerts_list', compact('menus','alerts'));
+        return view('cadastros.alerts_list', compact('menus', 'alerts'));
     }
+
     public function alert_edit(Request $request, $id)
     {
-	if(!Auth::user()) return redirect('/');
+        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         $alert = Alerts::where('id', $id)->first();
-        return view('cadastros.alerts_edit', compact('menus','alert'));
+        return view('cadastros.alerts_edit', compact('menus', 'alert'));
     }
+
     public function alert_remove(Request $request, $id)
     {
         $alert = Alerts::where('id', $id)->first();
         $alert->delete();
-	return $this->alert_list();
+        return $this->alert_list();
     }
+
     public function produto_edit(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-	$produtos = Products::where('id','>' ,0)->get();
-	$produto = Products::where('id',$id)->first();
-        return view('cadastros.produtos', compact('menus','produtos','produto'));
+        $produtos = Products::where('id', '>', 0)->get();
+        $produto = Products::where('id', $id)->first();
+        return view('cadastros.produtos', compact('menus', 'produtos', 'produto'));
     }
+
     public function produto_remove(Request $request, $id)
     {
         $produtos = Products::where('id', $id)->first();
         $produtos->delete();
-	return $this->produtos();
+        return $this->produtos();
     }
+
     public function contingencia()
     {
         $menu = new Menu();
         $menus = $menu->menu();
         return view('cadastros.contingencia', compact('menus'));
+    }
+
+
+    public function perfis()
+    {
+        if (!Auth::user()) return redirect('/');
+        $menu = new Menu();
+        $menus = $menu->menu();
+        $profiles = Profile::where('id', '>', 0)->get();
+        return view('cadastros.profiles', compact('menus', 'profiles'));
+    }
+
+    public function perfil_edit(Request $request, $id)
+    {
+        $menu = new Menu();
+        $menus = $menu->menu();
+        $profiles = Profile::all();
+        $profile = Profile::where('id', $id)->first();
+        return view('cadastros.profiles', compact('menus', 'profiles', 'profile'));
+    }
+
+    public function perfil_remove(Request $request, $id)
+    {
+        $profile = Profile::where('id', $id)->first();
+        $profile->delete();
+        return $this->perfis();
     }
 }

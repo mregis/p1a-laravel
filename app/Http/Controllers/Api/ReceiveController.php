@@ -13,7 +13,7 @@ use App\Models\SealGroup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
-use App\Menu;
+use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,114 +29,118 @@ class ReceiveController extends BaseController
     {
         $menu = new Menu();
         $menus = $menu->menu();
-	$files = Files::all();
-	foreach($files as &$file){
-            $pendentes = 0;
-            $dcs = Docs::where('file_id', $file->id)->get();
-            $docs = array();
-            foreach($dcs as &$d){
-                if(Auth::user()->profile == 'ADMINISTRADOR'){
-                    $docs[] = $d;
-                }else{
-                    if(substr($d->content,0,4) == Auth::user()->juncao){
+        $files = Files::all();
+        foreach($files as &$file){
+                $pendentes = 0;
+                $dcs = Docs::where('file_id', $file->id)->get();
+                $docs = array();
+                foreach($dcs as &$d){
+                    if(Auth::user()->profile == 'ADMINISTRADOR') {
                         $docs[] = $d;
+                    } else {
+                        if(substr($d->content,0,4) == Auth::user()->juncao) {
+                            $docs[] = $d;
+                        }
                     }
-                }
-		if($d->status == 'pendente'){
-                    $pendentes++;
-		}
+            if($d->status == 'pendente') {
+                        $pendentes++;
             }
-            $file->pendentes = $pendentes;
-	}
-        return view('receive.receive', compact('menus','files'));
+                }
+                $file->pendentes = $pendentes;
+        }
+        return view('receive.receive', compact('menus', 'files'));
     }
-    public function list(Request $request,$id)
+
+    public function list(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('receive.receive_list', compact('menus','id'));
+        return view('receive.receive_list', compact('menus', 'id'));
     }
+
     public function arquivos(Request $request)
     {
         $menu = new Menu();
         $menus = $menu->menu();
         return view('upload.upload_list', compact('menus'));
     }
-    public function arquivo(Request $request,$id)
+    public function arquivo(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('upload.upload_edit', compact('menus','id'));
+        return view('upload.upload_edit', compact('menus', 'id'));
     }
+
     public function removearquivo(Request $request,$id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
 //        return view('upload.upload_list', compact('menus'));
     }
+
     public function docs(Request $request, $id , $profile , $juncao = false)
     {
-	$params = array('file_id'=> $id);
-	//$docs = Docs::where('file_id', $id)->get();
-        $dcs = Docs::where($params)->get();
-        $docs = array();
-        foreach($dcs as &$d){
-            $d->content = trim($d->content);
-            $total_string = strlen($d->content);
-            $separate = substr($d->content,($total_string - 4),4);
-            $separatedm = substr($d->content,0,4);
-            if($profile == 'ADMINISTRADOR'){
-                $docs[] = $d;
-            }else{
-                $file = Files::where('id', $d->file_id)->first();
-                if($file->constante == "DM"){
-                    if($separatedm == $juncao){
-                        if($d->status != 'pendente' && $d->status != 'recebido')
-                        $docs[] = $d;
-                    }
-                }else{
-                    if($separate == $juncao){
-                        if($d->status != 'pendente' && $d->status != 'recebido')
-                        $docs[] = $d;
-                    }
-                }
-                
+	 $params = array('file_id'=> $id);
+        $file = Files::where('id', $id)->first();
+        $query = Docs::query()
+            ->where($params)->orderBy('created_at', 'desc');
+        if ($profile != 'ADMINISTRADOR') {
+            if ($file->constante == "DM") {
+                $query = Docs::query()
+                    ->where([
+                        ['file_id', '=', $id],
+                        ['content', 'like', sprintf("%04d", $juncao) . '%'],
+                    ])
+                    ->orWhere(function ($query) {
+                        $query->whereNotIn('status', ['pendente','recebido'])
+                            ->whereNull('status');
+                    })
+                    ->orderBy('created_at', 'desc')
+                ;
+            } else {
+                $query = Docs::query()
+                    ->where([
+                        ['file_id', '=', $id],
+                        ['content', 'like', '%' . sprintf("%04d", $juncao)],
+                    ])
+                    ->orWhere(function ($query) {
+                        $query->whereNotIn('status', ['pendente','recebido'])
+                            ->whereNull('status');
+                    })
+                    ->orderBy('created_at', 'desc')
+                ;
             }
         }
-        return Datatables::of($docs)
-            ->addColumn('action', function ($docs) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" type="checkbox" name="lote[]" class="form-control m-input input-doc" value="'.$docs->id.'">';
+
+        return Datatables::of($query)
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                    'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                    'value="'. $doc->id.'">';
             })
-            ->addColumn('origin', function ($docs) {
-                $file = Files::where('id',$docs->file_id)->first();
-                if($file->constante == "DM"){
-                    return "DM";                    
-                }else{
-                    return substr($docs->content,0,4);                    
-                }
+            ->addColumn('origem', function ($doc) use ($file) {
+                $doc->content = trim($doc->content);
+                return ($file->constante == "DM" ? "DM" : substr($doc->content, 0, 4));
             })
-            ->addColumn('destin', function ($docs) {
-                $docs->content = trim($docs->content);
-                $total_string = strlen($docs->content);
-                $file = Files::where('id',$docs->file_id)->first();
-                if($file->constante == "DM"){
-                    $separate = substr($docs->content,0,4);
-                }else{
-                    $separate = substr($docs->content,($total_string - 4),4);
-                }
-                return $separate;
+            ->addColumn('destino', function ($doc) use ($file) {
+                $doc->content = trim($doc->content);
+                return ($file->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
             })
-            ->editColumn('created_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            ->addColumn('status', function($doc) {
+                return $doc->status ? $doc->status : '-';
             })
-            ->editColumn('updated_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
             })
             ->make(true);
     }
+
     public function destroy(Request $request, $id)
     {
-die('aki');
+        die('aki');
     }
 
     public function check(Request $request, $id)
@@ -233,6 +237,69 @@ die('aki');
 		$file->pendentes = $pendentes;
 	}
         return view('receive.operador', compact('menus','files'));
+    }
+
+    public function docListingIndex() {
+        $menu = new Menu();
+        $menus = $menu->menu();
+        return view('receive.receive_doclist', compact('menus', 'id'));
+    }
+
+    public function doclisting(Request $request, $profile , $juncao = false)
+    {
+        $query = Docs::query()->orderBy('created_at', 'desc')
+            ->select("docs.*", "files.constante as constante")
+            ->join("files", "docs.file_id", "=", "files.id")
+        ;
+        if ($profile != 'ADMINISTRADOR') {
+                $query
+                    ->orWhere(function ($query) use ($juncao) {
+                        $query->where([
+                            ['files.constante', '=', 'DM'],
+                            ['content', 'like', sprintf("%04d", $juncao) . '%']
+                        ])
+                            ->orWhere(function ($query) {
+                                $query->whereNotIn('status', ['pendente', 'recebido'])
+                                    ->whereNull('status');
+                            });
+                    })
+                    ->orWhere(function ($query) use ($juncao) {
+                        $query->where([
+                            ['files.constante', '<>', 'DM'],
+                            ['content', 'like', '%' . sprintf("%04d", $juncao)]
+                        ])
+                            ->orWhere(function ($query) {
+                                $query->whereNotIn('status', ['pendente', 'recebido'])
+                                    ->whereNull('status');
+                            });
+                    });
+
+        }
+        $sql = $query->getQuery()->toSql();
+        return Datatables::of($query)
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                'value="'. $doc->id.'">';
+            })
+            ->addColumn('origem', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? "DM" : substr($doc->content, 0, 4));
+            })
+            ->addColumn('destino', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
+            })
+            ->addColumn('status', function($doc) {
+                return $doc->status ? $doc->status : '-';
+            })
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->make(true);
     }
 
 }
