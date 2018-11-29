@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', __('Receber'))
+@section('title', __('Receber Envelope'))
 <style type="text/css">
     .m-body .m-content {
         background-color: #f0f0f0
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,constante,origem,destino,created_at,status">
+                <input type="hidden" id="columns" value="action,content,constante,origem,destino,created_at,updated_at,status">
                 @if(Auth::user()->juncao)
                     <input type="hidden" id="baseurl"
                            value="{{URL::to('/api/receber-todos/')}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
@@ -42,10 +42,11 @@
                                     <th></th>
                                     <th style="width:20px"></th>
                                     <th>{{__('Capa Lote')}}</th>
-                                    <th>{{__('Constante')}}</th>
+                                    <th>{{__('Tipo')}}</th>
                                     <th>{{__('Origem')}}</th>
                                     <th>{{__('Destino')}}</th>
-                                    <th>{{__('Inserido em')}}</th>
+                                    <th>{{__('Movimento')}}</th>
+                                    <th>{{__('Ultima Atualização')}}</th>
                                     <th>{{__('Status')}}</th>
                                 </tr>
                             </thead>
@@ -69,6 +70,43 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal" tabindex="-1" role="modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:95%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="m-widget14__title">Histórico da Capa</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div style="background-color:#fff;width:100%;text-align:right;padding:10px">
+                    Exportar:
+                    <a href="javacript:void(0)" id="btnExport"><i class="fa fa-file-excel-o"></i></a>
+                    <a href="javacript:void(0)" id="btnPdf"><i class="fa fa-file-pdf-o"></i></a>
+                </div>
+
+                <table class="table table-bordered table-striped table-compact" id="history">
+                    <thead class="table-dark">
+                    <th>#CAPA</th>
+                    <th>ORIGEM</th>
+                    <th>DESTINO</th>
+                    <th>REGISTRO</th>
+                    <th>DATA</th>
+                    <th>USUÁRIO</th>
+                    <th>PERFIL</th>
+                    <th>LOCAL</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+    </div>
+
     <script type="text/javascript">
         function allCheck(elem) {
             if ($('#all_lote').prop('checked') == true) {
@@ -91,6 +129,60 @@
             $.post('/api/receber/registrar', {doc: doc, user: user}, function (r) {
                 location.reload();
             });
+        }
+
+        function getHistory(id){
+            $('#history tbody').html('');
+            $.get("/doc/history/"+id, function(r) {
+                var html = "";
+                var created_at = "";
+                var unidade = "";
+                for(var i in r) {
+                    unidade = "";
+                    html += "<tr>";
+                    html += "<td>"+r[i]['content']+"</td>";
+                    html += "<td>"+r[i]['origin']+"</td>";
+                    html += "<td>"+r[i]['dest']+"</td>";
+                    html += "<td>"+r[i]['register']+"</td>";
+                    created_at = r[i]['created_at'].split(" ")[0].split("-")[2]+"/"+r[i]['created_at'].split(" ")[0].split("-")[1]+"/"+r[i]['created_at'].split(" ")[0].split("-")[0]+" "+r[i]['created_at'].split(" ")[1];
+                    html += "<td>"+created_at+"</td>";
+                    html += "<td>"+r[i]['user']['name']+"</td>";
+                    html += "<td>"+r[i]['user']['profile']+"</td>";
+                    unidade = r[i]['user']['unidade'] ? r[i]['user']['unidade'] : r[i]['user']['juncao'];
+                    html += "<td>"+unidade+"</td>";
+                    html += "</tr>";
+                }
+
+                $('#history tbody').html(html);
+            }, 'json').fail(function(r){
+                alert('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
+
+            });
+            activate();
+        }
+        function activate(){
+            $("#btnExport").click(function(e) {
+                var a = document.createElement('a');
+                var data_type = 'data:application/vnd.ms-excel';
+                var table_div = document.getElementById('history');
+                var table_html = table_div.outerHTML.replace(/ /g, '%20');
+                a.href = data_type + ', ' + table_html;
+                a.download = 'filename.xlsx';
+                a.click();
+                e.preventDefault();
+            });
+            $("#btnPdf").click(function(e) {
+                printBy('#history');
+            });
+        }
+        function printBy(selector){
+            var $print = $(selector).clone().addClass('print').prependTo('body');
+            $('.m-page').hide();
+            $('.modal-backdrop').hide();
+            window.print();
+            $print.remove();
+            $('.m-page').show();
+            $('.modal-backdrop').show();
         }
     </script>
 @stop
