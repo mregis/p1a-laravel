@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', __('Receber'))
+@section('title', __('Receber Envelope'))
 <style type="text/css">
 .m-body .m-content {background-color:#f0f0f0}
 .details-control {display:none}
