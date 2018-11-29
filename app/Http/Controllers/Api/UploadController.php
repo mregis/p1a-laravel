@@ -305,10 +305,14 @@ class UploadController extends Controller
 
     public function history(Request $request, $id)
     {
-        $doc = Docs::where('id', $id)->first();
+        if( !$doc = Docs::where('id', $id)->first()) {
+            return response()->json('Capa de Lote inexistente', 400);
+        }
         $content = trim($doc->content);
 
-        $file = Files::where('id', $doc->file_id)->first();
+        if (!$file = Files::find($doc->file_id)) {
+            return response()->json('Arquivo não encontrado', 400);
+        }
 
         if ($file->constante == "DM") {
             $doc->dest = substr($content, 0, 4);
@@ -337,9 +341,11 @@ class UploadController extends Controller
                 $h->dest = substr($content, strlen($content) - 4, 4);
             }
             $user = Users::where('id', $h->user_id)->first();
+            $user->juncao = (int)$user->juncao;
+            $user->unidade == null && $user->unidade = '-';
             $h->user = $user;
             $h->register = $h->description;
-            $h->unidade = strlen($h->juncao) > 0 ? $h->juncao : $h->unidade;
+            $h->unidade = (int)$h->juncao > 0 ? $h->juncao : ($h->unidade != null ? $h->unidade : '-' );
             $docs[] = $h;
         }
 

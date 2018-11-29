@@ -247,7 +247,7 @@ class ReceiveController extends BaseController
 
     public function doclisting(Request $request, $profile , $juncao = false)
     {
-        $query = Docs::query()->orderBy('created_at', 'desc')
+        $query = Docs::query()
             ->select("docs.*", "files.constante as constante")
             ->join("files", "docs.file_id", "=", "files.id")
         ;
@@ -258,9 +258,9 @@ class ReceiveController extends BaseController
                             ['files.constante', '=', 'DM'],
                             ['content', 'like', sprintf("%04d", $juncao) . '%']
                         ])
-                            ->orWhere(function ($query) {
-                                $query->whereNotIn('status', ['pendente', 'recebido'])
-                                    ->whereNull('status');
+                            ->where(function ($query) {
+                                $query->whereNotIn('status', ['recebido'])
+                                    ->orWhere('status', '=', null);
                             });
                     })
                     ->orWhere(function ($query) use ($juncao) {
@@ -268,9 +268,9 @@ class ReceiveController extends BaseController
                             ['files.constante', '<>', 'DM'],
                             ['content', 'like', '%' . sprintf("%04d", $juncao)]
                         ])
-                            ->orWhere(function ($query) {
-                                $query->whereNotIn('status', ['pendente', 'recebido'])
-                                    ->whereNull('status');
+                            ->where(function ($query) {
+                                $query->whereNotIn('status', ['recebido'])
+                                    ->orWhere('status', '=', null);
                             });
                     });
 
@@ -281,9 +281,18 @@ class ReceiveController extends BaseController
                 'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
+            ->editColumn('content', function($doc) {
+                return '<a data-toggle="modal" href="#modal" onclick="getHistory(' . $doc->id . ')" ' .
+                'title="Histórico" class="btn btn-primary m-btn m-btn--icon">' . $doc->content .
+                '</a>';
+            })
+            ->editColumn('constante', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
+            })
             ->addColumn('origem', function ($doc) {
                 $doc->content = trim($doc->content);
-                return ($doc->constante == "DM" ? "DM" : substr($doc->content, 0, 4));
+                return ($doc->constante == "DM" ? "<b>4510</b>" : substr($doc->content, 0, 4));
             })
             ->addColumn('destino', function ($doc) {
                 $doc->content = trim($doc->content);
@@ -292,12 +301,13 @@ class ReceiveController extends BaseController
             ->addColumn('status', function($doc) {
                 return $doc->status ? $doc->status : '-';
             })
-            ->editColumn('created_at', function ($doc) {
-                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
-            })
             ->editColumn('updated_at', function ($doc) {
-                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+                return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
             })
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
+            })
+            ->escapeColumns([])
             ->make(true);
     }
 
