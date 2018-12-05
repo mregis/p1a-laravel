@@ -341,8 +341,7 @@ class UploadController extends Controller
                 $h->dest = substr($content, strlen($content) - 4, 4);
             }
             $user = Users::where('id', $h->user_id)->first();
-            $user->juncao = (int)$user->juncao;
-            $user->unidade == null && $user->unidade = '-';
+            $user->juncao = ($user->juncao == null ? '-' : $user->juncao);
             $h->user = $user;
             $h->register = $h->description;
             $h->unidade = (int)$h->juncao > 0 ? $h->juncao : ($h->unidade != null ? $h->unidade : '-' );

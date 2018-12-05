@@ -16,7 +16,7 @@ class UsersFacebookController extends BaseController
         $users = Users::all();
         return Datatables::of($users)
             ->addColumn('action', function ($users) {
-                return '<div align="center"><a href="edit/' . $users->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $users->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
+                return '<div align="center"><a href="edit/' . $users->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fas fa-edit"></i></a><button onclick="modalDelete(' . $users->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
             ->editColumn('birth_date', function ($Users) {
                 return $Users->created_at ? with(new Carbon($Users->birth_date))->format('d/m/Y') : '';
@@ -30,7 +30,7 @@ class UsersFacebookController extends BaseController
 
         return Datatables::of($users)
             ->addColumn('action', function ($users) {
-                return '<div align="center"><a href="edit/' . $users->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $users->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
+                return '<div align="center"><a href="edit/' . $users->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fas fa-edit"></i></a><button onclick="modalDelete(' . $users->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })->make(true);
     }
 

@@ -89,8 +89,8 @@
             </div>
             <div style="background-color:#fff;width:100%;text-align:right;padding:10px">
             Exportar: 
-            <a href="javacript:void(0)" id="btnExport"><i class="fa fa-file-excel-o"></i></a>
-            <a href="javacript:void(0)" id="btnPdf"><i class="fa fa-file-pdf-o"></i></a>
+            <a href="javacript:void(0)" id="btnExport"><i class="fa far fa-file-excel"></i></a>
+            <a href="javacript:void(0)" id="btnPdf"><i class="fa far fa-file-pdf"></i></a>
             </div>
  
            <table class="table table-bordered" id="history">

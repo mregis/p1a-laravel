@@ -23,7 +23,7 @@ class AlertsController extends BaseController
 
         return Datatables::of($Alerts)
             ->addColumn('action', function ($Alerts) {
-                return '<div align="center"><a href="edit/' . $Alerts->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $Alerts->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
+                return '<div align="center"><a href="edit/' . $Alerts->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fas fa-edit"></i></a><button onclick="modalDelete(' . $Alerts->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
             ->editColumn('birth_date', function ($Alerts) {
                 return $Alerts->created_at ? with(new Carbon($Alerts->birth_date))->format('d/m/Y') : '';
