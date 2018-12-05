@@ -135,10 +135,10 @@
                                                                 <td scope="row">{{$p->mod}}</td>
                                                                 <td class="text-center">
                                                                         <a href="/cadastros/produto/edit/{{$p->id}}" data-toggle="tooltip" title="{{__('buttons.edit')}}" class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only">
-                                                                                <i class="fa fa-pencil"></i>
+                                                                                <i class="fas fa-pencil-alt"></i>
                                                                         </a>
                                                                         <a href="/cadastros/produto/remove/{{$p->id}}" data-toggle="tooltip" title="{{__('buttons.delete')}}" onclick="if(confirm('Deseja remover esse registro ?')){return true;}else{return false;}" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only">
-                                                                                <i class="fa fa-remove"></i>
+                                                                                <i class="fas fa-times"></i>
                                                                         </a>
                                                                 </td>
                                                         </tr>

@@ -42,7 +42,7 @@
 								<td>{{$f->total}}</td>
 								<td>{{$f->pendentes}}</td>
 								<td>{{\Carbon\Carbon::parse($f->updated_at)->format('d/m/Y H:i:s')}}</td>
-								<td><a href="/receber/{{$f->id}}" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></a></td>
+								<td><a href="/receber/{{$f->id}}" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></a></td>
 							</tr>
 							@endforeach
 						</tbody>
