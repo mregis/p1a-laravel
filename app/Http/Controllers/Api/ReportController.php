@@ -74,7 +74,7 @@ class ReportController extends BaseController
         $files = Files::all();
         return Datatables::of($files)
             ->addColumn('action', function ($files) {
-                return '<div align="center"><a href="/report-remessa/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></a></div>';
+                return '<div align="center"><a href="/report-remessa/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></a></div>';
             })
             ->editColumn('created_at', function ($files) {
                 return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '';

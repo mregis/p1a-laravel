@@ -133,7 +133,7 @@ class UploadController extends Controller
     {
         return Datatables::of(Files::query())
             ->addColumn('action', function ($files) {
-                return '<div align="center"><a href="/arquivo/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
+                return '<div align="center"><a href="/arquivo/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-trash-alt"></i></button></div>';
             })->editColumn('created_at', function ($files) {
                 return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '-';
             })->editColumn('updated_at', function ($files) {
@@ -218,7 +218,7 @@ class UploadController extends Controller
         }
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
-                return '<div align="center"><a data-toggle="modal" href="#modal" onclick="getHistory(' . $docs->id . ')" title="Histórico" class="btn m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-eye"></i></button></div>';
+                return '<div align="center"><a data-toggle="modal" href="#modal" onclick="getHistory(' . $docs->id . ')" title="Histórico" class="btn m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></button></div>';
             })
             ->editColumn('created_at', function ($docs) {
                 return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
