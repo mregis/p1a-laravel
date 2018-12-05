@@ -479,6 +479,4 @@ function active(id_user) {
     var url = $("#active").val() + "/" + id_user;
     actionAjax(url, "get");
     $('#datatable').DataTable().ajax.reload();
-    // window.setInterval("reload()", 2000);
-
 }
