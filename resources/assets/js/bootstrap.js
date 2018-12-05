@@ -1,5 +1,4 @@
-
-window._ = require('lodash');
+﻿window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
 /**
@@ -9,10 +8,60 @@ window.Popper = require('popper.js').default;
  */
 
 try {
-    window.$ = window.jQuery = require('jquery');
-
+    require('@fortawesome/fontawesome-free');
+        
+    // window.$ = window.jQuery = require('jquery');
+	global.$ = global.jQuery = require('jquery');
     require('bootstrap');
-} catch (e) {}
+    require('js-cookie');
+    require('wnumb');
+    require('jquery.input');
+    require('jquery-form');
+    require('malihu-custom-scrollbar-plugin')(window, $);
+    require('blockui');
+    require('daterangepicker')(window, $);
+    require('bootstrap-touchspin');
+    require('bootstrap-maxlength');
+    require('bootstrap-select');
+    require('select2')(window, $);
+    require('typeahead.js');
+    var Inputmask = require('inputmask');
+    require('nouislider');
+    require('autosize');
+    require('clipboard');
+    require('ion-rangeslider');
+    require('dropzone')(window, $);
+    require('summernote');
+    require('jquery-validation');
+    require('toastr');
+    require('jstree');
+    require('raphael');
+    require('chartist');
+    require('chart.js');
+    require('fullcalendar');
+    require('jquery-mask-plugin');
+    require('bootstrap-validator')(window, $);
+    require('jquery-easing');
+
+    var dt = require( 'datatables.net' )( window, $)
+    var dt = require('datatables.net-bs4')(window, $);
+    var buttons = require('datatables.net-buttons-bs4')(window, $);
+    var buttons = require( 'datatables.net-buttons' )( window, $ );
+    require('datatables.net-select-bs4')(window, $);
+    require('datatables.net-buttons/js/buttons.colVis.js')();
+    require('datatables.net-buttons/js/buttons.html5.js')();
+    require('datatables.net-buttons/js/buttons.flash.js')();
+    require('datatables.net-buttons/js/buttons.print.js')();
+
+    require('tether');
+    require('markdown');
+
+    // ### For Datatables pdf export
+    // require('pdfmake');
+    // pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

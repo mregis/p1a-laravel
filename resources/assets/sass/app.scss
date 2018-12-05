@@ -1,103 +1,68 @@
+$icon-font-path: "~@fortawesome/fontawesome-free/webfonts/";
+
+// set if you're also including font-awesome
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
+
 $enable-gradients: true;
 
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+$web-font-path: 'https://fonts.googleapis.com/css?family=Poppins|Roboto';
 
 // Variables
 @import "variables";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+// Bootswatch Bootstrap Theme
+@import 'bootswatch';
 
-// Bootswatch
-@import 'bootswatch.scss';
+// From old <style> entries
+@import '~fullcalendar/dist/fullcalendar.css';
+@import '~malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
+@import '~tether/src/css/tether.sass';
+@import '~daterangepicker/daterangepicker.css';
+@import '~bootstrap-touchspin/src/jquery.bootstrap-touchspin.css';
+@import '~bootstrap-select/sass/bootstrap-select.scss';
+@import '~select2/src/scss/core.scss';
+@import '~nouislider/distribute/nouislider.css';
+@import '~ion-rangeslider/css/ion.rangeSlider.css';
+@import '~ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
+@import '~dropzone/dist/dropzone.css';
+@import '~summernote/src/less/summernote-bs4.scss';
+@import '~bootstrap-markdown/css/bootstrap-markdown.min.css';
+@import '~animate.css/animate.css';
+@import '~toastr/toastr.scss';
+@import '~chartist/dist/scss/chartist.scss';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
+// Social Icon Fonts
+@import '~socicon/css/socicon.css';
+// Font Awesome Fonts
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+// Flaticon Fonts
+@import '../fonts/flaticon/flaticon.css';
+// Metronic Fonts
+@import '../fonts/metronic/metronic.css';
 
-.input-error {
-  border-color: #DC143C;
-}
+@import '~sweetalert2/src/sweetalert2.scss';
 
-.block {
-  display: block;
-}
+@import '~normalize.css/normalize.css';
 
-.disabled {
-  pointer-events: none;
-  opacity: 0.4;
-}
+// Metronic
+@import 'metronic';
 
-.hidden {
-  display: none;
-}
+// Line-Awesome fonts
+$la-css-prefix: la !default;
+@import '~line-awesome';
 
-.container {
-  margin-top: 20px;
-}
+@import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+@import '~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css';
 
-.image-preview-input {
-  position: relative;
-  overflow: hidden;
-  margin: 0;
-  color: #333;
-  background-color: #fff;
-  border-color: #ccc;
-}
-
-.image-preview-input input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: 0;
-  filter: alpha(opacity=0);
-}
-
-.image-preview-input-title {
-  margin-left: 2px;
-}
-
-#div_white {
-  color: #FFFFFF;
-}
-
-.modal {
-  text-align: center;
-  padding: 0 !important;
-}
-
-.modal:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -4px;
-}
-
-.modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-  width: 60%;
-}
-
-.select2-results span[onlyslave="True"] {
-  color: red;
-}
-
-/*div.dataTables_wrapper {*/
-/*width: 800px;*/
-/*margin: 0 auto;*/
-/*}*/
-#imageList {
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-#imageList:hover {opacity: 0.7;}
+/*!
+ * Custom elements for Specific App
+ * Autor: Marcos Regis
+ * App: Address Rastreamento
+ */
+@import 'remain.css';
