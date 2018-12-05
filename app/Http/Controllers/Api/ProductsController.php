@@ -18,7 +18,7 @@ class ProductsController extends BaseController
         $Products = Products::all();
         return Datatables::of($Products)
             ->addColumn('action', function ($Products) {
-                return '<div align="center"><a href="edit/' . $Products->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $Products->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
+                return '<div align="center"><a href="edit/' . $Products->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fa fas fa-edit"></i></a><button onclick="modalDelete(' . $Products->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fa fa-trash"></i></button></div>';
             })
             ->editColumn('created_at', function ($Products) {
                 return $Products->created_at ? with(new Carbon($Products->created_at))->format('d/m/Y') : '';

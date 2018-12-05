@@ -21,7 +21,7 @@ class UsersController extends BaseController
                 return '<div align="center"><a href="edit/' . $users->id .
                     '" data-toggle="tooltip" title="Editar" ' .
                     'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                    '<i class="fa fa-pencil-square"></i></a><button onclick="modalDelete(' . $users->id . ')"' .
+                    '<i class="fa fas fa-edit"></i></a><button onclick="modalDelete(' . $users->id . ')"' .
                     'data-toggle="tooltip" title="Excluir" ' .
                     'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
                     '<i class="fa fa-trash"></i></button></div>';
