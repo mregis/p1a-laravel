@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en">
 <!-- begin::Head -->
@@ -10,32 +10,14 @@
     <meta name="description" content="Latest updates and statistic charts">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!--begin::Web font -->
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-    <script>
-        WebFont.load({
-            google: {"families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]},
-            active: function () {
-                sessionStorage.fonts = true;
-            }
-        });
-    </script>
-    <!--end::Web font -->
-    <!--begin::Base Styles -->
-    <!--begin::Page Vendors -->
-    <link href="{{url('assets/vendors/custom/fullcalendar/fullcalendar.bundle.css')}}" rel="stylesheet"
-          type="text/css"/>
-    <!--end::Page Vendors -->
-    <link href="{{url('assets/vendors/base/vendors.bundle.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{url('assets/demo/default/base/style.bundle.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{url('assets/app/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
-    <link href="{{url('css/app.css')}}" rel="stylesheet" type="text/css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{url('assets/demo/default/media/img/logo/favicon.ico')}}"/>
+    <link href="{{ mix('css/appfill.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ mix('css/appmain.css')}}" rel="stylesheet" type="text/css">
+    <!--end::Base Styles -->
+
     @yield('styles')
 
-            <!--end::Base Styles -->
-    <link rel="shortcut icon" href="{{url('assets/demo/default/media/img/logo/favicon.ico')}}"/>
 </head>
 <!-- end::Head -->
 <!-- end::Body -->
@@ -1050,87 +1032,80 @@
             </div>
         </div>
     </div>
-</div>
-<!-- end::Quick Sidebar -->
-<!-- begin::Scroll Top -->
-<div class="m-scroll-top m-scroll-top--skin-top" data-toggle="m-scroll-top" data-scroll-offset="500"
-     data-scroll-speed="300">
-    <i class="la la-arrow-up"></i>
-</div>
+    <!-- end::Quick Sidebar -->
+    <!-- begin::Scroll Top -->
+    <div class="m-scroll-top m-scroll-top--skin-top" data-toggle="m-scroll-top" data-scroll-offset="500"
+         data-scroll-speed="300">
+        <i class="la la-arrow-up"></i>
+    </div>
 
-<div class="modal fade show" id="on_error" tabindex="-1" role="dialog" aria-labelledby="on_errorModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{__('titles.error')}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="description_error"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="clear" class="btn btn-secondary"
-                        data-dismiss="modal">{{__('buttons.close')}}</button>
+    <div class="modal fade show" id="on_error" tabindex="-1" role="dialog" aria-labelledby="on_errorModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{__('titles.error')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="description_error"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="clear" class="btn btn-secondary"
+                            data-dismiss="modal">{{__('buttons.close')}}</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade show" id="on_done_data" tabindex="-1" role="dialog" aria-labelledby="on_done_dataModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{__('labels.success')}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Cadastrado com sucesso</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="redirect()"
-                        data-dismiss="modal">{{__('buttons.close')}}</button>
+    <div class="modal fade show" id="on_done_data" tabindex="-1" role="dialog" aria-labelledby="on_done_dataModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{__('labels.success')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Cadastrado com sucesso</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="redirect()"
+                            data-dismiss="modal">{{__('buttons.close')}}</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<input type="hidden" id="basepath" value="{{url('/')}}">
+    <input type="hidden" id="basepath" value="{{url('/')}}">
+    <!-- Only to avoid Vue #app not found error -->
+    <div id="app"></div>
 
-<!-- end::Scroll Top -->            <!-- begin::Quick Nav -->
+    <!-- end::Scroll Top -->
 
-<!-- begin::Quick Nav -->
-<!--begin::Base Scripts -->
-<script src="{{url('assets/vendors/base/vendors.bundle.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/demo/default/base/scripts.bundle.js')}}" type="text/javascript"></script>
-<!--end::Base Scripts -->
-<!--begin::Page Vendors -->
-<script src="{{url('assets/vendors/custom/fullcalendar/fullcalendar.bundle.js')}}" type="text/javascript"></script>
-<!--end::Page Vendors -->
-<!--begin::Page Snippets -->
-<script src="{{url('assets/app/js/jquery.mask.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/jquery.maskMoney.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/dashboard.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/validator.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/bootstrapValidator.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/form.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/functions.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/custom.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/app/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>
-<script src="{{url('assets/demo/default/custom/components/forms/widgets/select2.js')}}" type="text/javascript"></script>
-{{--<script src="{{url('assets/demo/default/custom/components/forms/widgets/._select2.js')}}"--}}
-{{--type="text/javascript"></script>--}}
-<script src="{{url('assets/demo/default/custom/components/forms/widgets/bootstrap-select.js')}}"
-        type="text/javascript"></script>
-{{--<script src="{{url('assets/demo/default/custom/components/forms/widgets/._bootstrap-select.js')}}"--}}
-{{--type="text/javascript"></script>--}}
+    <!-- begin::Footer -->
+    <footer class="m-grid__item m-footer footer">
+        <div class="m-container m-container--fluid m-container--full-height m-page__container">
+            <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
+                <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
+                    <span class="m-footer__copyright">2018 &copy; ADDRESS</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- end::Footer -->
 
-@yield('scripts')
+    <!--begin::Base Scripts -->
+    <script src="{{ mix('/js/manifest.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/vendor.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/noCommonJS.libs.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/custom.scripts.js') }}" type="text/javascript"></script>
+
+    @yield('scripts')
 
         <!--end::Page Snippets -->
-
 </body>
 <!-- end::Body -->
 </html>

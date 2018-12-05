@@ -1,5 +1,6 @@
 @extends('layout')
 @section('title', __('Receber Envelope'))
+@section('styles')
 <style type="text/css">
     .m-body .m-content {
         background-color: #f0f0f0
@@ -9,6 +10,7 @@
         display: none
     }
 </style>
+@stop
 @section('content')
     <div class="row">
         <div class="col-md-12">
