@@ -276,16 +276,22 @@ class ReceiveController extends BaseController
 
         }
         return Datatables::of($query)
+            ->filter(function ($query) use ($request) {
+                if ($request->has('constante')) {
+                    $query->where('files.constante', '=', "{$request->get('constante')}");
+                }
+            })
             ->addColumn('action', function ($doc) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
                 'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
-            ->editColumn('content', function($doc) {
+            ->addColumn('view', function($doc) {
                 return '<a data-toggle="modal" href="#modal" onclick="getHistory(' . $doc->id . ')" ' .
-                'title="Histórico" class="btn btn-primary m-btn m-btn--icon">' . $doc->content .
+                'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                 '</a>';
             })
+
             ->editColumn('constante', function ($doc) {
                 $doc->content = trim($doc->content);
                 return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");

@@ -37,5 +37,5 @@ return [
     'option' => 'Ações',
     'desc' => 'Descrição',
     'created_at' => 'Inserido em',
-    'updated_at' => 'Atualizado em',
+    'updated_at' => 'Última Atualização',
 ];

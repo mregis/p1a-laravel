@@ -19,9 +19,6 @@ Route::any('/auth/logout', 'Auth\AuthController@logout')->name('auth.logout');
 
 
 Route::get('/dashboard', 'Dashboard\DashboardController@index');
-// Route::get('/users/add', 'Users\UserController@create')->name('users.users_add');
-// Route::get('/users/list', 'Users\UserController@index')->name('users.users_index');
-// Route::get('/users/edit/{id}', 'Users\UserController@edit')->name('users.users_edit');
 
 Route::get('/users/add', 'Api\UsersController@create')->name('users.users_add');
 Route::get('/users/list', 'Api\UsersController@index')->name('users.users_index');
