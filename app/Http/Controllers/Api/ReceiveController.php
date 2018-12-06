@@ -276,6 +276,11 @@ class ReceiveController extends BaseController
 
         }
         return Datatables::of($query)
+            ->filter(function ($query) use ($request) {
+                if ($request->has('constante')) {
+                    $query->where('files.constante', '=', "{$request->get('constante')}");
+                }
+            })
             ->addColumn('action', function ($doc) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
                 'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
