@@ -276,10 +276,8 @@ class ReceiveController extends BaseController
 
         }
         return Datatables::of($query)
-            ->filter(function ($query) use ($request) {
-                if ($request->has('constante')) {
-                    $query->where('files.constante', '=', "{$request->get('constante')}");
-                }
+            ->filterColumn('constante', function($query, $keyword) {
+                $query->where('files.constante', '=', $keyword);
             })
             ->addColumn('action', function ($doc) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .

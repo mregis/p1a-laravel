@@ -271,10 +271,8 @@ class UploadController extends Controller
             ;
         }
         return Datatables::of($query)
-            ->filter(function ($query) use ($request) {
-                if ($request->has('constante')) {
-                    $query->where('files.constante', '=', "{$request->get('constante')}");
-                }
+            ->filterColumn('constante', function($query, $keyword) {
+                $query->where('files.constante', '=', $keyword);
             })
 
             ->addColumn('action', function ($doc) {
