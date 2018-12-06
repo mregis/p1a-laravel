@@ -10,6 +10,7 @@ use App\Models\Docs;
 use App\Models\DocsHistory;
 use App\Models\Seal;
 use App\Models\SealGroup;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -246,19 +247,64 @@ class UploadController extends Controller
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        $dcs = Docs::where('status', 'pendente')->get();
-        $docs = array();
-        foreach ($dcs as &$d) {
-            $d->content = trim($d->content);
-            if (Auth::user()->profile == 'ADMINISTRADOR') {
-                $docs[] = $d;
-            } else {
-                if (substr($d->content, 0, 4) == Auth::user()->juncao) {
-                    $docs[] = $d;
-                }
-            }
+        return view('upload.upload_register', compact('menus'));
+    }
+
+    public function capaLoteList(Request $request, $user_id)
+    {
+        if (!$user = User::find($user_id)) {
+            $this->sendError('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
         }
-        return view('upload.upload_register', compact('menus', 'docs'));
+        $query = Docs::query()
+            ->select("docs.*", "files.constante as constante")
+            ->join("files", "docs.file_id", "=", "files.id")
+            ->where(function ($query) {
+                $query->whereIn('docs.status', ['pendente'])
+                    ->orWhere('docs.status', '=', null);
+            })
+        ;
+        if ($user->profile != 'ADMINISTRADOR') {
+            $juncao = $user->juncao;
+            $query->where([
+                        ['docs.content', 'like', sprintf("%04d", $juncao) . '%']
+                    ])
+            ;
+        }
+        return Datatables::of($query)
+            ->filter(function ($query) use ($request) {
+                if ($request->has('constante')) {
+                    $query->where('files.constante', '=', "{$request->get('constante')}");
+                }
+            })
+
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                'value="'. $doc->id.'">';
+            })
+            ->editColumn('constante', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
+            })
+            ->addColumn('origem', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? "<b>4510</b>" : substr($doc->content, 0, 4));
+            })
+            ->addColumn('destino', function ($doc) {
+                $doc->content = trim($doc->content);
+                return ($doc->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
+            })
+            ->addColumn('status', function($doc) {
+                return $doc->status ? $doc->status : '-';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
+            })
+            ->escapeColumns([])
+            ->make(true);
     }
 
     public function register(Request $request)

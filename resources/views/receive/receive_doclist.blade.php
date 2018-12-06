@@ -1,15 +1,15 @@
 @extends('layout')
 @section('title', __('Receber Envelope'))
 @section('styles')
-<style type="text/css">
-    .m-body .m-content {
-        background-color: #f0f0f0
-    }
+    <style type="text/css">
+        .m-body .m-content {
+            background-color: #f0f0f0
+        }
 
-    .details-control {
-        display: none
-    }
-</style>
+        .details-control {
+            display: none
+        }
+    </style>
 @stop
 @section('content')
     <div class="row">
@@ -21,11 +21,13 @@
                             <span class="m-portlet__head-icon m--hide">
 						        <i class="la la-gear"></i>
 						    </span>
+
                             <h3 class="m-portlet__head-text">{{__('Listagem')}}</h3>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,constante,origem,destino,created_at,updated_at,status">
+                <input type="hidden" id="columns"
+                       value="action,content,constante,origem,destino,created_at,updated_at,status,view">
                 @if(Auth::user()->juncao)
                     <input type="hidden" id="baseurl"
                            value="{{URL::to('/api/receber-todos/')}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
@@ -38,19 +40,21 @@
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
                         <table class="table table-striped"
-                               id="datatable">
+                               id="datatable" data-column-defs='[{"targets": [1],"orderable": false}]'>
                             <thead class="thead-dark">
-                                <tr>
-                                    <th></th>
-                                    <th style="width:20px"></th>
-                                    <th>{{__('Capa Lote')}}</th>
-                                    <th>{{__('Tipo')}}</th>
-                                    <th>{{__('Origem')}}</th>
-                                    <th>{{__('Destino')}}</th>
-                                    <th>{{__('Movimento')}}</th>
-                                    <th>{{__('Ultima Atualização')}}</th>
-                                    <th>{{__('Status')}}</th>
-                                </tr>
+                            <tr>
+                                <th></th>
+                                <th><input type="checkbox" name="all_lote" class="form-control m-input"
+                                           onclick="allCheck(this);" id="all_lote"></th>
+                                <th>{{__('Capa Lote')}}</th>
+                                <th>{{__('Tipo')}}</th>
+                                <th>{{__('Origem')}}</th>
+                                <th>{{__('Destino')}}</th>
+                                <th>{{__('Movimento')}}</th>
+                                <th>{{__('Ultima Atualização')}}</th>
+                                <th>{{__('Status')}}</th>
+                                <th>{{__('Action')}}</th>
+                            </tr>
                             </thead>
                         </table>
                         <script id="details-template" type="text/x-handlebars-template">
@@ -103,19 +107,17 @@
 
                 </table>
             </div>
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal-dialog -->
-    </div>
+@stop
 
+@section('scripts')
     <script type="text/javascript">
         function allCheck(elem) {
-            if ($('#all_lote').prop('checked') == true) {
-                $('.input-doc').prop('checked', true);
-            } else {
-                $('.input-doc').prop('checked', false);
-            }
+            var t = $('#all_lote').prop('checked') == true;
+            $('.input-doc').prop('checked', t);
         }
         function save() {
             if (confirm('Deseja receber ' + $('.input-doc:checked').length + ' capas de lote?')) {
@@ -133,37 +135,37 @@
             });
         }
 
-        function getHistory(id){
+        function getHistory(id) {
             $('#history tbody').html('');
-            $.get("/doc/history/"+id, function(r) {
+            $.get("/doc/history/" + id, function (r) {
                 var html = "";
                 var created_at = "";
                 var unidade = "";
-                for(var i in r) {
+                for (var i in r) {
                     unidade = "";
                     html += "<tr>";
-                    html += "<td>"+r[i]['content']+"</td>";
-                    html += "<td>"+r[i]['origin']+"</td>";
-                    html += "<td>"+r[i]['dest']+"</td>";
-                    html += "<td>"+r[i]['register']+"</td>";
-                    created_at = r[i]['created_at'].split(" ")[0].split("-")[2]+"/"+r[i]['created_at'].split(" ")[0].split("-")[1]+"/"+r[i]['created_at'].split(" ")[0].split("-")[0]+" "+r[i]['created_at'].split(" ")[1];
-                    html += "<td>"+created_at+"</td>";
-                    html += "<td>"+r[i]['user']['name']+"</td>";
-                    html += "<td>"+r[i]['user']['profile']+"</td>";
+                    html += "<td>" + r[i]['content'] + "</td>";
+                    html += "<td>" + r[i]['origin'] + "</td>";
+                    html += "<td>" + r[i]['dest'] + "</td>";
+                    html += "<td>" + r[i]['register'] + "</td>";
+                    created_at = r[i]['created_at'].split(" ")[0].split("-")[2] + "/" + r[i]['created_at'].split(" ")[0].split("-")[1] + "/" + r[i]['created_at'].split(" ")[0].split("-")[0] + " " + r[i]['created_at'].split(" ")[1];
+                    html += "<td>" + created_at + "</td>";
+                    html += "<td>" + r[i]['user']['name'] + "</td>";
+                    html += "<td>" + r[i]['user']['profile'] + "</td>";
                     unidade = r[i]['user']['unidade'] ? r[i]['user']['unidade'] : r[i]['user']['juncao'];
-                    html += "<td>"+unidade+"</td>";
+                    html += "<td>" + unidade + "</td>";
                     html += "</tr>";
                 }
 
                 $('#history tbody').html(html);
-            }, 'json').fail(function(r){
+            }, 'json').fail(function (r) {
                 alert('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
 
             });
             activate();
         }
-        function activate(){
-            $("#btnExport").click(function(e) {
+        function activate() {
+            $("#btnExport").click(function (e) {
                 var a = document.createElement('a');
                 var data_type = 'data:application/vnd.ms-excel';
                 var table_div = document.getElementById('history');
@@ -173,11 +175,11 @@
                 a.click();
                 e.preventDefault();
             });
-            $("#btnPdf").click(function(e) {
+            $("#btnPdf").click(function (e) {
                 printBy('#history');
             });
         }
-        function printBy(selector){
+        function printBy(selector) {
             var $print = $(selector).clone().addClass('print').prependTo('body');
             $('.m-page').hide();
             $('.modal-backdrop').hide();
