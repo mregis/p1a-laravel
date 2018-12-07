@@ -1,10 +1,12 @@
 @extends('layout')
 
 @section('title',  __('Upload de arquivos'))
-@section('content')
+@section('styles')
 <style type="text/css">
 .m-body .m-content {background-color:#f0f0f0}
 </style>
+@stop
+@section('content')
 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
 	<li class="m-nav__item m-nav__item--home">
 		<a href="/dashboard" class="m-nav__link m-nav__link--icon">
