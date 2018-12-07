@@ -8105,7 +8105,7 @@ $.notifyDefaults({
     '</div>'
 });
 //== Set defaults
-swal.setDefaults({
+swal.mixin({
     width: 400,
     padding: '2.5rem',
     buttonsStyling: false,

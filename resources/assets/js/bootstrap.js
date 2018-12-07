@@ -43,10 +43,13 @@ try {
     require('bootstrap-validator')(window, $);
     require('jquery-easing');
 
-    var dt = require( 'datatables.net' )( window, $)
-    var dt = require('datatables.net-bs4')(window, $);
-    var buttons = require('datatables.net-buttons-bs4')(window, $);
-    var buttons = require( 'datatables.net-buttons' )( window, $ );
+    require('datatables.net')( window, $)
+    require('datatables.net-bs4')(window, $);
+    require('datatables.net-responsive')(window, $);
+    require('datatables.net-responsive-bs4')(window, $);
+    require('datatables.net-buttons')(window, $);
+    require('datatables.net-buttons-bs4')(window, $);
+    require('datatables.net-select')(window, $);
     require('datatables.net-select-bs4')(window, $);
     require('datatables.net-buttons/js/buttons.colVis.js')();
     require('datatables.net-buttons/js/buttons.html5.js')();

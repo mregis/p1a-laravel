@@ -46,7 +46,7 @@ mix
         'datatables.net-buttons-bs4', 'datatables.net-select-bs4',
         'select2', 'inputmask', 'blockui', 'bootstrap-validator',
         'dropzone', 'malihu-custom-scrollbar-plugin',        
-        'jquery-form', 'daterangepicker', 'bootstrap-touchspin', 'bootstrap-switch',
+        'jquery-form', 'daterangepicker', 'bootstrap-touchspin',
         'bootstrap-select', 'typeahead.js', 'autosize', 'clipboard',
         'ion-rangeslider', 'summernote', 'jquery-validation',
         'jstree', 'raphael', 'chartist', 'chart.js',
