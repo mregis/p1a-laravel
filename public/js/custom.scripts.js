@@ -11366,8 +11366,10 @@ jQuery(document).ready(function () {
     var value_type_assistent = $("#value_type_assistent").val();
     changeSelect('type_assistent', value_type_assistent);
     try {
-        var doc = $("#input_cpf_cnpj").val();
-        validdocument(doc);
+        if ($("#input_cpf_cnpj").lenght > 0) {
+            var doc = $("#input_cpf_cnpj").val();
+            validaCpf(doc) || validaCNPJ(doc);
+        }
     } catch (e) {
         console.log(e);
     }

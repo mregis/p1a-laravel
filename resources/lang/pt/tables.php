@@ -38,4 +38,8 @@ return [
     'desc' => 'Descrição',
     'created_at' => 'Inserido em',
     'updated_at' => 'Última Atualização',
+    'action' => 'Ações',
+    'total' => 'Total',
+    'pendentes' => 'Pendentes',
+    'details' => 'Detalhes',
 ];

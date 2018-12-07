@@ -39,13 +39,13 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table table-striped"
-                               id="datatable" data-column-defs='[{"targets": [1],"orderable": false}]'>
+                        <table class="table datatable table-striped table-bordered dt-responsive nowrap hasdetails"
+                                   id="datatable" data-column-defs='[{"targets":[1,9],"orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
                                 <th><input type="checkbox" name="all_lote" class="form-control m-input"
-                                           onclick="allCheck(this);" id="all_lote"></th>
+                                           onclick="allCheck(this);" id="all_lote" style="width: 20px"></th>
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Tipo')}}</th>
                                 <th>{{__('Origem')}}</th>
@@ -53,7 +53,7 @@
                                 <th>{{__('Movimento')}}</th>
                                 <th>{{__('Ultima Atualização')}}</th>
                                 <th>{{__('Status')}}</th>
-                                <th>{{__('Action')}}</th>
+                                <th>{{__('tables.action')}}</th>
                             </tr>
                             </thead>
                         </table>
@@ -77,7 +77,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal" tabindex="-1" role="modal" aria-hidden="true">
+    <div class="modal fade" id="capaLoteHistoryModal" tabindex="-1" role="modal" aria-hidden="true">
         <div class="modal-dialog" style="max-width:95%">
             <div class="modal-content">
                 <div class="modal-header">
@@ -92,19 +92,16 @@
 
                 <table class="table table-bordered table-striped table-compact" id="history">
                     <thead class="table-dark">
-                    <th>#CAPA</th>
-                    <th>ORIGEM</th>
-                    <th>DESTINO</th>
-                    <th>REGISTRO</th>
-                    <th>DATA</th>
-                    <th>USUÁRIO</th>
-                    <th>PERFIL</th>
-                    <th>LOCAL</th>
+                        <th>CAPA LOTE</th>
+                        <th>ORIGEM</th>
+                        <th>DESTINO</th>
+                        <th>REGISTRO</th>
+                        <th>DATA</th>
+                        <th>USUÁRIO</th>
+                        <th>PERFIL</th>
+                        <th>LOCAL</th>
                     </thead>
-                    <tbody>
-
-                    </tbody>
-
+                    <tbody></tbody>
                 </table>
             </div>
             <!-- /.modal-content -->
@@ -130,8 +127,20 @@
                     doc[c++] = $(this).val();
                 }
             });
+
             $.post('/api/receber/registrar', {doc: doc, user: user}, function (r) {
-                location.reload();
+                // Close all opened modals
+                $('.modal').modal('hide');
+                var successmodal = $("#on_done_data").modal();
+                successmodal.find('.modal-body').find('p').text(r);
+                successmodal.show();
+                $('#datatable').DataTable().ajax.reload();
+            }).fail(function(f) {
+                // Close all opened modals
+                $('.modal').modal('hide');
+                var errormodal = $("#on_error").modal();
+                errormodal.find('.modal-body').find('p').text(f.responseText);
+                errormodal.show();
             });
         }
 

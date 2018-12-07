@@ -1,10 +1,14 @@
 @extends('layout')
 
 @section('title',  __('Receber Lotes'))
-@section('content')
+
+@section('styles')
 <style type="text/css">
-.m-body .m-content {background-color:#f0f0f0}
+    .m-body .m-content {background-color:#f0f0f0}
 </style>
+@stop
+
+@section('content')
 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
 	<li class="m-nav__item m-nav__item--home">
 		<a href="/dashboard" class="m-nav__link m-nav__link--icon">
@@ -24,31 +28,23 @@
 		<div class="m-portlet m-portlet--tabs">
 			<div class="m-portlet__head"><br><h3>Recebimento</h3></div>
 			<div class="m-portlet__body">
-				<div class="form-group m-form__group row">
-					<table class="table table-striped">
+                <input type="hidden" id="columns" value="name,total,pendentes,created_at,view">
+                <input type="hidden" id="baseurl" value="{{ URL::to('/api/arquivos/receber/')}}/{{Auth::user()->id}}">
+                <div class="table-responsive-xl">
+					<table class="table table-striped table-bordered dt-responsive nowrap" id="datatable"
+                           data-column-defs='[{"targets":[4],"orderable":false}]' data-order='[[3, "desc"],[2, "desc"]]'>
 						<thead class="thead-dark">
 							<tr>
-								<th>Nome</th>
-								<th>Total</th>
-								<th>Pendentes</th>
-								<th>Data Upload</th>
-								<th>Ações</th>
+								<th>{{ __('tables.name') }}</th>
+								<th>{{ __('tables.total') }}</th>
+								<th>{{ __('tables.pendentes') }}</th>
+								<th>{{ __('tables.created_at') }}</th>
+								<th>{{ __('tables.details') }}</th>
 							</tr>
 						</thead>
-						<tbody>
-							@foreach($files as &$f)
-							<tr>
-								<td>{{$f->name}}</td>
-								<td>{{$f->total}}</td>
-								<td>{{$f->pendentes}}</td>
-								<td>{{\Carbon\Carbon::parse($f->updated_at)->format('d/m/Y H:i:s')}}</td>
-								<td><a href="/receber/{{$f->id}}" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></a></td>
-							</tr>
-							@endforeach
-						</tbody>
+						<tbody></tbody>
 					</table>
 				</div>
-
 			</div>
 		</div>
 	</div>

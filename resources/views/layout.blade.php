@@ -1031,7 +1031,7 @@
     <div class="modal fade show" id="on_error" tabindex="-1" role="dialog" aria-labelledby="on_errorModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-danger">
                     <h5 class="modal-title" id="exampleModalLabel">{{__('titles.error')}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
@@ -1041,7 +1041,7 @@
                     <p id="description_error"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="clear" class="btn btn-secondary"
+                    <button type="button" id="clear" class="btn btn-danger"
                             data-dismiss="modal">{{__('buttons.close')}}</button>
                 </div>
             </div>
@@ -1051,7 +1051,7 @@
     <div class="modal fade show" id="on_done_data" tabindex="-1" role="dialog" aria-labelledby="on_done_dataModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-success">
                     <h5 class="modal-title">{{__('labels.success')}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
@@ -1061,7 +1061,7 @@
                     <p>Cadastrado com sucesso</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="redirect()"
+                    <button type="button" class="btn btn-success" onclick="redirect()"
                             data-dismiss="modal">{{__('buttons.close')}}</button>
                 </div>
             </div>

@@ -1,8 +1,12 @@
 @extends('layout')
 @section('title', __('Arquivos'))
+
+@section('styles')
 <style type="text/css">
 .m-body .m-content {background-color:#f0f0f0}
 </style>
+@stop
+
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -19,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="id,content,status,action">
+                <input type="hidden" id="columns" value="id,content,status">
                 @if(Auth::user()->juncao)
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
                 @else
@@ -27,7 +31,7 @@
                 @endif
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table"
+                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
                                id="datatable">
                             <thead class="thead-dark">
                             <tr>
@@ -35,7 +39,6 @@
                                 <th>{{__('tables.id')}}</th>
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Status')}}</th>
-                                <th>{{__('tables.options')}}</th>
                             </tr>
                             </thead>
                         </table>
@@ -44,16 +47,12 @@
                                 <tr>
                                     <td>{{__('ID do Arquivo')}}:</td>
                                     <td>@{{file_id}}</td>
-                                </tr>
-                                <tr>
                                     <td>{{__('Capa Lote')}}:</td>
                                     <td>@{{content}}</td>
                                 </tr>
                                 <tr>
                                     <td>{{__('Adicionado em')}}:</td>
                                     <td>@{{created_at}}</td>
-                                </tr>
-                                <tr>
                                     <td>{{__('Alterado em')}}:</td>
                                     <td>@{{updated_at}}</td>
                                 </tr>
