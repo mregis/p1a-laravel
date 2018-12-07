@@ -22,8 +22,8 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table"
-                               id="datatable">
+                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
+                               id="datatable" data-column-defs='[{"targets":[0,4], "orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
@@ -39,16 +39,12 @@
                                 <tr>
                                     <td>{{__('labels.name')}}:</td>
                                     <td>@{{name}}</td>
-                                </tr>
-                                <tr>
                                     <td>{{__('Total')}}:</td>
                                     <td>@{{total}}</td>
                                 </tr>
                                 <tr>
                                     <td>{{__('Adicionado em')}}:</td>
                                     <td>@{{created_at}}</td>
-                                </tr>
-                                <tr>
                                     <td>{{__('Alterado em')}}:</td>
                                     <td>@{{updated_at}}</td>
                                 </tr>
