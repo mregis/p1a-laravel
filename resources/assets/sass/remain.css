@@ -121,3 +121,21 @@ body > .container {
 code {
     font-size: 80%;
 }
+
+.dz-success-mark svg g g{
+    fill: green;
+}
+.dz-error-mark svg g,
+.dz-error-mark svg g g {
+    fill: red;
+}
+
+td.details-control {
+    background: url('../img/details_open.png') no-repeat center center;
+    cursor: pointer;
+    width: 18px;
+}
+
+tr.shown td.details-control {
+    background: url('../img/details_close.png') no-repeat center center;
+}

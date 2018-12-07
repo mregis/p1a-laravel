@@ -11005,6 +11005,25 @@ body > .container {
 
 code {
   font-size: 80%;
+}
+
+.dz-success-mark svg g g {
+  fill: green;
+}
+
+.dz-error-mark svg g,
+.dz-error-mark svg g g {
+  fill: red;
+}
+
+td.details-control {
+  background: url(/images/details_open.png?ed1324976fd1dcb0d747a7ca5fc3ccc7) no-repeat center center;
+  cursor: pointer;
+  width: 18px;
+}
+
+tr.shown td.details-control {
+  background: url(/images/details_close.png?cdb0ad00d71eff5be6ca7305cff83ce9) no-repeat center center;
 }@charset "UTF-8";
 
 /*!
