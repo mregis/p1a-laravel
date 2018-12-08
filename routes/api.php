@@ -67,3 +67,5 @@ Route::post('/perfil/', 'Api\ProfileController@store');
 Route::get('/receber-todos/{profile}/{juncao}', 'Api\ReceiveController@doclisting');
 Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
 Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
+
+Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList');

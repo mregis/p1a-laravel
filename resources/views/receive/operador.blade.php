@@ -1,8 +1,12 @@
 @extends('layout')
 @section('title', __('Recebimento'))
+
+@section('styles')
 <style type="text/css">
 .div-malote{clear:both;height:40px}
 </style>
+@stop
+
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -39,6 +43,9 @@
             </div>
         </div>
     </div>
+@stop
+
+@section('scripts')
 <script type="text/javascript">
 function addCapa(elem){
 	var bloco = $(elem).parent().clone();
@@ -58,8 +65,8 @@ function saveCapa(){
 			if($(this).val().length > 0)
 			doc[c++] = $(this).val();
 		});
-		$.post('/api/receber/registraroperador',{lacre:lacre,doc:doc,user:user},function(r){
-			location.reload();
+		$.post('/api/receber/registraroperador', {lacre:lacre,doc:doc,user:user}, function(r) {
+            $('#datatable').DataTable().ajax.reload();
 		});
 	}
 }

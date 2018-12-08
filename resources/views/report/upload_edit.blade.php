@@ -1,8 +1,10 @@
 @extends('layout')
 @section('title', __('Arquivos'))
+@section('styles')
 <style type="text/css">
-.m-body .m-content {background-color:#f0f0f0}
+    .m-body .m-content {background-color:#f0f0f0}
 </style>
+@stop
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -24,11 +26,11 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table"
-                               id="datatable">
+                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
+                               id="datatable" data-column-defs='[{"targets":[4], "orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
-                                <th></th>
+                                <th>#</th>
                                 <th>{{__('tables.id')}}</th>
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Status')}}</th>
@@ -41,16 +43,12 @@
                                 <tr>
                                     <td>{{__('ID do Arquivo')}}:</td>
                                     <td>@{{file_id}}</td>
-                                </tr>
-                                <tr>
                                     <td>{{__('Capa Lote')}}:</td>
                                     <td>@{{content}}</td>
                                 </tr>
                                 <tr>
                                     <td>{{__('Adicionado em')}}:</td>
                                     <td>@{{created_at}}</td>
-                                </tr>
-                                <tr>
                                     <td>{{__('Alterado em')}}:</td>
                                     <td>@{{updated_at}}</td>
                                 </tr>

@@ -29,26 +29,51 @@ class ReceiveController extends BaseController
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        $files = Files::all();
-        foreach($files as &$file){
-                $pendentes = 0;
-                $dcs = Docs::where('file_id', $file->id)->get();
-                $docs = array();
-                foreach($dcs as &$d){
-                    if(Auth::user()->profile == 'ADMINISTRADOR') {
-                        $docs[] = $d;
-                    } else {
-                        if(substr($d->content,0,4) == Auth::user()->juncao) {
-                            $docs[] = $d;
-                        }
-                    }
-            if($d->status == 'pendente') {
-                        $pendentes++;
-            }
-                }
-                $file->pendentes = $pendentes;
+        return view('receive.receive', compact('menus'));
+    }
+
+    public function fileList(Request $request, $user_id) {
+
+        if (!$user = Users::find($user_id)) {
+            return response()->json('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
         }
-        return view('receive.receive', compact('menus', 'files'));
+        $query = Files::query()
+            ->select(
+                [
+                    "files.id", "files.name", "files.total", "files.created_at",
+                    DB::raw('count(pendentes.id) as pendentes'),
+                ] )
+            ->leftJoin("docs as pendentes",
+                function ($join) use ($user) {
+                    $join->on("files.id", '=', "pendentes.file_id")
+                        ->where("pendentes.status", "=", "pendente");
+                    if ($user->profile != 'ADMINISTRADOR') {
+                        $join->where("pendentes.content", "like", sprintf("%04d", $user->juncao) . '%');
+                    }
+                }
+            )
+            ->groupBy(["files.id", "files.name", "files.total", "files.created_at"])
+        ;
+
+        if($user->profile != 'ADMINISTRADOR') {
+            $query->join("docs", "files.id", "=", "docs.file_id")
+            ->where("docs.content", "like", sprintf("%04d", $user->juncao) . '%');
+        }
+
+        return Datatables::of($query)
+            ->filterColumn('pendentes', function($query, $keyword) {
+                $query->where('pendentes', '=', $keyword);
+            })
+            ->addColumn('view', function($file) {
+                return '<a href="/receber/' . $file->id .'" title="Exibir detalhes" ' .
+                'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></a>';
+            })
+            ->editColumn('created_at', function ($file) {
+                return $file->created_at? with(new Carbon($file->created_at))->format('d/m/Y') : '';
+            })
+            ->escapeColumns([])
+            ->make(true);
     }
 
     public function list(Request $request, $id)
@@ -80,36 +105,38 @@ class ReceiveController extends BaseController
 
     public function docs(Request $request, $id , $profile , $juncao = false)
     {
-	 $params = array('file_id'=> $id);
-        $file = Files::where('id', $id)->first();
+
+        if (!$file = Files::find($id)) {
+            return response()->json('Não foi possível recuperar as informações requisitadas', 400);
+        }
+
         $query = Docs::query()
-            ->where($params)->orderBy('created_at', 'desc');
+            ->select("docs.*", "files.constante as constante")
+            ->join("files", "docs.file_id", "=", "files.id")
+            ->where("files.id", "=", $id)
+            ->where(function ($query) {
+                $query->whereNotIn('status', ['recebido'])
+                    ->orWhere('status', '=', null);
+                }
+            )
+        ;
+
         if ($profile != 'ADMINISTRADOR') {
-            if ($file->constante == "DM") {
-                $query = Docs::query()
-                    ->where([
-                        ['file_id', '=', $id],
-                        ['content', 'like', sprintf("%04d", $juncao) . '%'],
-                    ])
-                    ->orWhere(function ($query) {
-                        $query->whereNotIn('status', ['pendente','recebido'])
-                            ->whereNull('status');
+            $query->where(
+                function ($query) use ($juncao) {
+                    $query->orWhere(function ($query) use ($juncao) {
+                        $query->where([
+                            ['files.constante', '=', 'DM'],
+                            ['content', 'like', sprintf("%04d", $juncao) . '%']
+                        ]);
                     })
-                    ->orderBy('created_at', 'desc')
-                ;
-            } else {
-                $query = Docs::query()
-                    ->where([
-                        ['file_id', '=', $id],
-                        ['content', 'like', '%' . sprintf("%04d", $juncao)],
-                    ])
-                    ->orWhere(function ($query) {
-                        $query->whereNotIn('status', ['pendente','recebido'])
-                            ->whereNull('status');
-                    })
-                    ->orderBy('created_at', 'desc')
-                ;
-            }
+                        ->orWhere(function ($query) use ($juncao) {
+                            $query->where([
+                                ['files.constante', '<>', 'DM'],
+                                ['content', 'like', '%' . sprintf("%04d", $juncao)]
+                            ]);
+                        });
+                });
         }
 
         return Datatables::of($query)
@@ -130,10 +157,10 @@ class ReceiveController extends BaseController
                 return $doc->status ? $doc->status : '-';
             })
             ->editColumn('created_at', function ($doc) {
-                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
             })
             ->editColumn('updated_at', function ($doc) {
-                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
             })
             ->make(true);
     }
@@ -151,13 +178,13 @@ class ReceiveController extends BaseController
             return $this->sendError('Informação não encontrada', 404);
         }
 
-	$file->status = 'concluido';
-	$file->user_id = Auth::user()->id;
+        $file->status = 'concluido';
+        $file->user_id = Auth::user()->id;
 
-	$file->save();
-
+        $file->save();
         return $this->sendResponse($file->toArray(), 'Informação atualizada com sucesso');
     }
+
     public function registrar(Request $request)
     {
         $menu = new Menu();
@@ -166,21 +193,29 @@ class ReceiveController extends BaseController
     }
     public function register(Request $request)
     {
+        if (!$user = Users::find($request->get('user'))) {
+            return response()->json('Ocorreu um erro ao verificar permissão', 404);
+        }
+
         $params = $request->all();
 
-        foreach($params['doc'] as &$doc){
-                if($docs = Docs::where('id',$doc)->first()){
-                        $docs->status = 'recebido';
-                        $docs->user_id = $params['user'];
-                        $docs->save();
-                        $docsHistory = new DocsHistory();
-                        $docsHistory->doc_id = $doc;
-                        $docsHistory->description = "Capa recebida";
-                        $docsHistory->user_id = $params['user'];
-                        $docsHistory->save();                        
-
-                }
+        $regs = 0;
+        foreach ($params['doc'] as &$doc) {
+            if ($docs = Docs::find($doc)) {
+                $docs->status = 'recebido';
+                $docs->user_id = $user->id;
+                $docs->save();
+                $docsHistory = new DocsHistory();
+                $docsHistory->doc_id = $doc;
+                $docsHistory->description = "Capa recebida";
+                $docsHistory->user_id = $params['user'];
+                $docsHistory->save();
+                $regs++;
+            }
         }
+        return response()->json(
+            sprintf('%s Capa%s Recebida%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 0 ? 's':''), 200
+        );
     }
     public function registeroperador(Request $request)
     {
@@ -285,7 +320,7 @@ class ReceiveController extends BaseController
                 'value="'. $doc->id.'">';
             })
             ->addColumn('view', function($doc) {
-                return '<a data-toggle="modal" href="#modal" onclick="getHistory(' . $doc->id . ')" ' .
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id . ')" ' .
                 'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                 '</a>';
             })

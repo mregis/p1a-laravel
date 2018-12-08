@@ -46,27 +46,24 @@
 
 <script type="text/javascript">
 function allCheck(elem){
-	if($('#all_lote').prop('checked') == true){
-		$('.input-doc').prop('checked',true);
-	}else{
-		$('.input-doc').prop('checked',false);
-	}
+	var t = $('#all_lote').prop('checked') == true;
+	$('.input-doc').prop('checked', t);
 }
 function save(){
-if(confirm('Deseja registrar a remessa ?')){
-	var lacre = $('#lacre').val().toUpperCase();
-	var doc = [];
-	var c = 0;
-	var user = {{{ Auth::user()->id }}};
-	$('.input-doc').each(function(){
-		if($(this).prop('checked') == true){
-			doc[c++] = $(this).val();
-		}
-	});
-	$.post('/api/remessa/registrar',{lacre:lacre,doc:doc,user:user},function(r){
-		location.reload();
-	});
-}
+	if (confirm('Deseja registrar a remessa ?')) {
+		var lacre = $('#lacre').val().toUpperCase();
+		var doc = [];
+		var c = 0;
+		var user = {{ Auth::user()->id }};
+		$('.input-doc').each(function(){
+			if($(this).prop('checked') == true){
+				doc[c++] = $(this).val();
+			}
+		});
+		$.post('/api/remessa/registrar',{lacre:lacre,doc:doc,user:user},function(r){
+			$('#datatable').DataTable().ajax.reload();
+		});
+	}
 }
 </script>
 @stop

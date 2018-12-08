@@ -84,7 +84,7 @@ class UploadController extends Controller
                                 [
                                     'file_id' => $oFile->id,
                                     'content' => $r,
-                                    'status' => ($oFile->constante == 'DM' ? 'enviado' : null),
+                                    'status' => ($oFile->constante == 'DM' ? 'enviado' : 'pendente'),
                                     'user_id' => $user_id,
                                 ]
                             );
@@ -94,7 +94,6 @@ class UploadController extends Controller
                                         'doc_id' => $oDoc->id,
                                         'description' => "Upload do Arquivo",
                                         'user_id' => $user_id,
-
                                     ]
                                 );
                                 if ($oHistory->save()) {
@@ -219,7 +218,7 @@ class UploadController extends Controller
         }
         return Datatables::of($docs)
             ->addColumn('action', function ($docs) {
-                return '<div align="center"><a data-toggle="modal" href="#modal" onclick="getHistory(' . $docs->id . ')" title="Histórico" class="btn m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></button></div>';
+                return '<div align="center"><a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $docs->id . ')" title="Histórico" class="btn m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></button></div>';
             })
             ->editColumn('created_at', function ($docs) {
                 return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
@@ -301,32 +300,39 @@ class UploadController extends Controller
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
             })
+            ->addColumn('view', function($doc) {
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id . ')" ' .
+                'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
+                '</a>';
+            })
             ->escapeColumns([])
             ->make(true);
     }
 
     public function register(Request $request)
     {
+        if (!$user = Users::find($request->get('user'))) {
+            return response()->json('Ocorreu um erro ao verificar permissão', 404);
+        }
+
         $params = $request->all();
 
         if ($seal = Seal::where('content', $params['lacre'])->first()) {
             $id = $seal->id;
         } else {
             $seal = new Seal();
-            $seal->user_id = $params['user'];
+            $seal->user_id = $user->id;
             $seal->content = $params['lacre'];
             $seal->save();
             $id = $seal->id;
         }
+        $regs = 0;
         foreach ($params['doc'] as &$doc) {
-            if ($sealGroup = SealGroup::where('doc_id', $doc)->first()) {
-                $idGroup = $sealGroup->id;
-            } else {
+            if (!$sealGroup = SealGroup::where('doc_id', $doc)->first()) {
                 $sealGroup = new SealGroup();
                 $sealGroup->seal_id = $id;
                 $sealGroup->doc_id = $doc;
                 $sealGroup->save();
-                $idGroup = $sealGroup->id;
             }
             if ($docs = Docs::where('id', $doc)->first()) {
                 $docs->status = 'enviado';
@@ -334,10 +340,14 @@ class UploadController extends Controller
                 $docsHistory = new DocsHistory();
                 $docsHistory->doc_id = $doc;
                 $docsHistory->description = "Capa enviada";
-                $docsHistory->user_id = $params['user'];
+                $docsHistory->user_id = $user->id;
                 $docsHistory->save();
+                $regs++;
             }
         }
+        return response()->json(
+            sprintf('%s Remessa%s Registrada%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 0 ? 's':''), 200
+        );
     }
 
     public function contingencia(Request $request)
