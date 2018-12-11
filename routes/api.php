@@ -55,7 +55,7 @@ Route::get('/receive/docs/{id}/{profile}', 'Api\ReceiveController@docs');
 
 Route::post('/remessa/registrar', 'Api\UploadController@register');
 Route::post('/receber/registrar', 'Api\ReceiveController@register');
-Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperador');
+Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperador')->name('receive.register-capa-lote');
 
 Route::get('/report/list', 'Api\ReportController@list');
 Route::get('/report/docs/{id}', 'Api\ReportController@docs');
@@ -69,3 +69,5 @@ Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
 Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
 
 Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList');
+
+Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');

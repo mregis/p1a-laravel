@@ -217,44 +217,53 @@ class ReceiveController extends BaseController
             sprintf('%s Capa%s Recebida%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 0 ? 's':''), 200
         );
     }
+
     public function registeroperador(Request $request)
     {
         $params = $request->all();
-
-        if($seal = Seal::where('content',$params['lacre'])->first()){
-                $id = $seal->id;
-        }else{
-		$seal = new Seal();
-		$seal->user_id = $params['user'];
-		$seal->content = $params['lacre'];
-		$seal->save();
-		$id = $seal->id;
+        $user_id = $params['user'];
+        if (!$user = Users::find($user_id)) {
+            return response()->json('Erro ao verificar permissões.', 400);
         }
-        foreach($params['doc'] as &$d){
-            $doc = Docs::where('content','like','%'.trim($d).'%')->first();
-	    if($doc->id){
+        if (!in_array($user->profile, ['OPERADOR', 'ADMINISTRADOR'])) {
+            return response()->json('Você não tem permissão para executar esta operação.', 400);
+        }
+
+        if (!$seal = Seal::where('content', $params['lacre'])->first()) {
+            $seal = new Seal();
+            $seal->user_id = $user_id;
+            $seal->content = $params['lacre'];
+            $seal->save();
+        }
+        $notfound = [];
+        foreach ($params['doc'] as $capaLote) {
+            if ($doc = Docs::where('content', 'like', '%' . trim($capaLote) . '%')->first()) {
                 $doc->status = 'em trânsito';
-                $doc->user_id = $params['user'];
+                $doc->user_id = $user_id;
                 $doc->save();
 
                 $docsHistory = new DocsHistory();
                 $docsHistory->doc_id = $doc->id;
                 $docsHistory->description = "Capa em trânsito";
-                $docsHistory->user_id = $params['user'];
-                $docsHistory->save();                        
-                if($sealGroup = SealGroup::where('doc_id',$doc->id)->first()){
-                    $idGroup = $sealGroup->id;
-                } else {
+                $docsHistory->user_id = $user_id;
+                $docsHistory->save();
+                if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
                     $sealGroup = new SealGroup();
-                    $sealGroup->seal_id = $id;
+                    $sealGroup->seal_id = $seal->id;
                     $sealGroup->doc_id = $doc->id;
                     $sealGroup->save();
-                    $idGroup = $sealGroup->id;
                 }
+            } else {
+                $notfound[] = $capaLote;
             }
         }
-        return $this->sendResponse($idGroup, 'Informação atualizada com sucesso');
+        ($msg = "Informação atualizada com sucesso!") &&
+        (count($notfound) > 0) && ($msg .= "\n\nAtenção!\n" .
+        "As seguintes Capas de Lote não foram encontradas:\n[" . implode("]-[", $notfound) ."]");
+
+        return response()->json($msg, 200);
     }
+
     public function operador(Request $request)
     {
         $menu = new Menu();
@@ -350,4 +359,12 @@ class ReceiveController extends BaseController
             ->make(true);
     }
 
+    public function checkCapaLote(Request $request) {
+        $capaLote = $request->get('capaLote');
+        if ($doc = Docs::where('content', '=', $capaLote)->first()) {
+            return response()->json('Capa de Lote encontrada', 200);
+        } else {
+            return response()->json( sprintf('Capa de Lote inexistente [%s]', $capaLote), 400);
+        }
+    }
 }
