@@ -18,6 +18,7 @@ mix
     .scripts([
         'resources/assets/js/bootstrap-multiselectsplitter.js',
         'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
+        'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
         'node_modules/handlebars/dist/handlebars.js',
         'node_modules/sweetalert2/dist/sweetalert2.js',
         'node_modules/morris.js/morris.js',
