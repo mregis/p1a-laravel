@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="id,content,status">
+                <input type="hidden" id="columns" value="id,content,status,action">
                 @if(Auth::user()->juncao)
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/report/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
                 @else
@@ -55,6 +55,7 @@
                                 <th>{{__('tables.id')}}</th>
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Status')}}</th>
+                                <th>{{__('tables.options')}}</th>
                             </tr>
                             </thead>
                         </table>
@@ -79,8 +80,8 @@
             </div>
         </div>
     </div>
-<div class="modal fade" id="modal" tabindex="-1" role="modal" aria-hidden="true" style="min-width:1400px">
-    <div class="modal-dialog modal-dialog-centered" style="max-width:95%">
+    <div class="modal fade" id="capaLoteHistoryModal" tabindex="-1" role="modal" aria-hidden="true" style="min-width:1400px">
+    <div class="modal-dialog" style="max-width:95%">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="m-widget14__title">Histórico da Capa</h4>
