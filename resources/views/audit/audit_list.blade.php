@@ -22,7 +22,7 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table table-striped" id="datatable">
+                        <table class="table table-striped hasdetails" id="datatable">
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>

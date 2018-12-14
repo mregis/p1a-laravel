@@ -35,7 +35,6 @@ Route::group(['prefix' => 'cadastros'], function() {
 	Route::get('produtos', 'Cadastros\CadastrosController@produtos');
 	Route::get('produto/remove/{id}', 'Cadastros\CadastrosController@produto_remove');
 	Route::get('produto/edit/{id}', 'Cadastros\CadastrosController@produto_edit');
-	Route::get('contingencia', 'Cadastros\CadastrosController@contingencia');
 
 	Route::get('perfil', 'Cadastros\CadastrosController@perfis');
 	Route::get('perfil/remove/{id}', 'Cadastros\CadastrosController@perfil_remove');
@@ -65,3 +64,10 @@ Route::get('/receber-operador','Api\ReceiveController@operador');
 Route::get('/doc/history/{id}','Api\UploadController@history');
 
 Route::get('/receber-todos/','Api\ReceiveController@docListingIndex');
+
+Route::group(['prefix' => 'capalote'], function() {
+	Route::get('ver', 'CapaLote\CapaLoteController@show')->name('capalote.show');
+    Route::get('contingencia', 'CapaLote\CapaLoteController@index')->name('capalote.index');
+    Route::post('contingencia', 'CapaLote\CapaLoteController@_new')->name('capalote.new');
+	Route::get('contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
+});

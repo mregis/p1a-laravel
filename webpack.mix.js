@@ -33,6 +33,7 @@ mix
         'node_modules/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
         'node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
         'node_modules/bootstrap-notify/bootstrap-notify.js',
+        'node_modules/jsbarcode/dist/barcodes/JsBarcode.code128.min.js',
     ], 'public/js/noCommonJS.libs.js')
     .scripts([
         'resources/assets/js/custom.initializers.js',

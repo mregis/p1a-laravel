@@ -111,4 +111,5 @@ return [
     'profile'=> 'Perfil',
     'profiles'=> 'Perfis',
     'add_profile'=> 'Cadastrar Perfil',
+    'add_capalote' => 'Criar Capa de Lote'
 ];

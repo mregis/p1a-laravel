@@ -25,4 +25,8 @@ class Files extends BaseModel
     ];
 
     protected $table = 'files';
+
+    public function docs(){
+        return $this->hasMany(Docs::class);
+    }
 }

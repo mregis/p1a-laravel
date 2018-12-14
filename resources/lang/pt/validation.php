@@ -104,6 +104,21 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'destino' => [
+            'digits' => 'Código de Agência de Destino deve ter 4 digitos',
+            'not_in' => 'Valor inválido para Código de Agência de Destino',
+        ],
+        'origem' => [
+            'digits' => 'Código de Agência de Origem deve ter 4 digitos',
+            'not_in' => 'Valor inválido para Código de Agência de Origem',
+        ],
+        'tipo_documento' => [
+            'required' => 'É necessário escolher o Tipo de Documento'
+        ],
+        'qtdedocs' => [
+            'gt' => 'Valor de Quantidade de Documentos deve ser maior que 0',
+            'lt' => 'Valor de Quantidade de Documentos deve ser menor que 100',
+        ]
     ],
 
     /*

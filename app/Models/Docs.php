@@ -12,11 +12,32 @@ class Docs extends BaseModel
         'content',
         'status',
         'user_id',
-        'type'
+        'type',
+        'from_agency',
+        'to_agency',
+        'qtde_docs'
     ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'status' => 'pendente',
+    ];
+
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     protected $table = 'docs';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function file() {
+        return $this->belongsTo('App\Models\Files');
+    }
+
 }

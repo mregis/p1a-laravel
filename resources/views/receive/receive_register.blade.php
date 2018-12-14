@@ -23,14 +23,14 @@
 				<div class="col-md-6 col-xl-6">
 					<h3 class="m-portlet__head-text">Capa de Lote #</h3><hr>
 					<div class="row">
-						<label style="font-size:22px;min-width: 200px;padding:0 0 0 20px"><span style="float:left;width:150px">Todos</span> <input style="float:left;width:20px;margin: 11px 0 0 0;" type="checkbox" name="lote[]" class="form-control m-input"></label>
+						<label><span>Todos</span> <input type="checkbox" name="lote[]" class="form-control m-input"></label>
 					</div>
 				</div>
-				<div class="col-md-6 col-xl-6" style="padding:20px">
+				<div class="col-md-6 col-xl-6">
 					<h3 class="m-portlet__head-text"> Lacre Malote</h3><br>
-					<input type="text" name="lacre" class="form-control m-input" id="lacre" style="max-width:150px"><br>
+					<input type="text" name="lacre" class="form-control m-input" id="lacre"><br>
 					<div class="m-form__actions">
-						<input class="btn btn-success" type="submit" value="Registrar" style="width:100%;max-width:150px">
+						<input class="btn btn-success btn-lg" type="submit" value="Registrar">
 					</div>
 				</div>
 			</div>

@@ -71,3 +71,5 @@ Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
 Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList');
 
 Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');
+Route::post('/capalote/contingencia', 'Api\CapaLoteController@_new')->name('capalote.api-new');
+Route::get('/capalote/contingencia/{user_id}', 'Api\CapaLoteController@index')->name('capalote.api-index');
