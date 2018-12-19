@@ -16,6 +16,9 @@ mix
     .sass('resources/assets/sass/app.scss', 'public/css/appmain.css')
     .js('resources/assets/js/app.js', 'public/js')
     .scripts([
+        'node_modules/promise-polyfill/dist/polyfill.min.js',
+        ], 'public/js/polyfill.min.js')
+    .scripts([
         'resources/assets/js/bootstrap-multiselectsplitter.js',
         'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
         'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',

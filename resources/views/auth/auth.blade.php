@@ -38,11 +38,11 @@
                     </div>
                     <form class="m-login__form m-form" action="{{url('auth/login')}}" method="post">
                         {{ csrf_field() }}
-                        <div class="form-group m-form__group">
-                            <input class="form-control m-input" type="text" placeholder="Preencha seu email" name="username" autocomplete="off">
+                        <div class="form-group">
+                            <input class="form-control m-input form-control-lg" type="text" placeholder="Preencha seu email" name="username" autocomplete="off">
                         </div>
-                        <div class="form-group m-form__group">
-                            <input class="form-control m-input m-login__form-input--last" type="password" placeholder="Preencha sua senha" name="password">
+                        <div class="form-group">
+                            <input class="form-control form-control-lg m-input m-login__form-input--last" type="password" placeholder="Preencha sua senha" name="password">
                         </div>
                         <div class="row m-login__form-sub">
 
@@ -69,19 +69,19 @@
                         </div>
                     </div>
                     <form class="m-login__form m-form" action="">
-                        <div class="form-group m-form__group">
+                        <div class="form-group">
                             <input class="form-control m-input" type="text" placeholder="Fullname" name="fullname">
                         </div>
-                        <div class="form-group m-form__group">
+                        <div class="form-group">
                             <input class="form-control m-input" type="text" placeholder="Email" name="username" autocomplete="off">
                         </div>
-                        <div class="form-group m-form__group">
+                        <div class="form-group">
                             <input class="form-control m-input" type="password" placeholder="Password" name="password">
                         </div>
-                        <div class="form-group m-form__group">
+                        <div class="form-group">
                             <input class="form-control m-input m-login__form-input--last" type="password" placeholder="Confirm Password" name="rpassword">
                         </div>
-                        <div class="row form-group m-form__group m-login__form-sub">
+                        <div class="row form-group m-login__form-sub">
                             <div class="col m--align-left">
                                 <label class="m-checkbox m-checkbox--light">
                                     <input type="checkbox" name="agree">
@@ -117,7 +117,7 @@
                     </div>
                     <form class="m-login__form m-form" action="">
                         <div class="form-group m-form__group">
-                            <input class="form-control m-input" type="text" placeholder="Preencha seu email" name="email" id="m_email" autocomplete="off">
+                            <input class="form-control m-input form-control-lg" type="text" placeholder="Preencha seu email" name="email" id="m_email" autocomplete="off">
                         </div>
                         <div class="m-login__form-action">
                             <button id="m_login_forget_password_submit" class="btn m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary">
@@ -137,6 +137,7 @@
 </div>
 <!-- end:: Page -->
 <!--begin::Base Scripts -->
+<script src="{{ mix('/js/polyfill.min.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/manifest.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/vendor.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
