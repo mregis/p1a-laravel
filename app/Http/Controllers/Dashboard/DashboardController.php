@@ -16,7 +16,5 @@ class DashboardController extends Controller
         $menus = $menu->menu();
         return view('dashboard.index', compact('menus'));
     }
-
-                        }
-
+    
 }
