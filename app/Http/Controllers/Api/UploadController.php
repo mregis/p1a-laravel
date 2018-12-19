@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users;
-use App\Models\Audit;
 use App\Models\Files;
 use App\Models\Docs;
 use App\Models\DocsHistory;
@@ -13,7 +12,6 @@ use App\Models\SealGroup;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
@@ -69,9 +67,7 @@ class UploadController extends Controller
                         'constante' => substr($name, 0, 2),
                         'file_hash' => $file_hash,
                         'codigo' => substr($name, 2, 3),
-                        'dia' => substr($name, 5, 2),
-                        'mes' => substr($name, 7, 2),
-                        'ano' => substr($name, 10, 2),
+                        'movimento' => \DateTime::createFromFormat('dm.y', substr($name, 5, 7)),
                         'sequencial' => substr($name, 12, 1),
                         'user_id' => $user_id,
                     ]
@@ -85,9 +81,12 @@ class UploadController extends Controller
                                     'file_id' => $oFile->id,
                                     'content' => $r,
                                     'status' => ($oFile->constante == 'DM' ? 'enviado' : 'pendente'),
+                                    'from_agency' => ($oFile->constante == 'DM' ? '4510' : substr($r, 0, 4)),
+                                    'to_agency' => ($oFile->constante == 'DM' ? substr($r, 0, 4) : substr($r, -4, 4)),
                                     'user_id' => $user_id,
                                 ]
                             );
+
                             if ($oDoc->save()) {
                                 $oHistory = new DocsHistory(
                                     [
@@ -249,26 +248,36 @@ class UploadController extends Controller
         return view('upload.upload_register', compact('menus'));
     }
 
+    /**
+     * @param Request $request
+     * @param $user_id
+     * @return mixed
+     */
     public function capaLoteList(Request $request, $user_id)
     {
         if (!$user = User::find($user_id)) {
             $this->sendError('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
         }
-        $query = Docs::query()
-            ->select("docs.*", "files.constante as constante")
-            ->join("files", "docs.file_id", "=", "files.id")
+        $query = Files::query()
+            ->select([
+                "files.constante as constante",
+                "docs.content", "docs.status", "docs.from_agency",
+                "docs.to_agency", "docs.updated_at", "docs.created_at",
+                "docs.id"
+            ])
+            ->join("docs", "files.id", "=", "docs.file_id")
             ->where(function ($query) {
                 $query->whereIn('docs.status', ['pendente'])
                     ->orWhere('docs.status', '=', null);
-            })
-        ;
+            });
+
         if ($user->profile != 'ADMINISTRADOR') {
             $juncao = $user->juncao;
             $query->where([
-                        ['docs.content', 'like', sprintf("%04d", $juncao) . '%']
-                    ])
-            ;
+                        ['docs.from_agency', '=', sprintf("%04d", $juncao)]
+                    ]);
         }
+
         return Datatables::of($query)
             ->filterColumn('constante', function($query, $keyword) {
                 $query->where('files.constante', '=', $keyword);
@@ -280,19 +289,10 @@ class UploadController extends Controller
                 'value="'. $doc->id.'">';
             })
             ->editColumn('constante', function ($doc) {
-                $doc->content = trim($doc->content);
-                return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
+                return __('labels.' . $doc->constante);
             })
-            ->addColumn('origem', function ($doc) {
-                $doc->content = trim($doc->content);
-                return ($doc->constante == "DM" ? "<b>4510</b>" : substr($doc->content, 0, 4));
-            })
-            ->addColumn('destino', function ($doc) {
-                $doc->content = trim($doc->content);
-                return ($doc->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
-            })
-            ->addColumn('status', function($doc) {
-                return $doc->status ? $doc->status : '-';
+            ->editColumn('status', function($doc) {
+                return $doc->status ? $doc->status : 'pendente';
             })
             ->editColumn('updated_at', function ($doc) {
                 return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
@@ -309,6 +309,10 @@ class UploadController extends Controller
             ->make(true);
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function register(Request $request)
     {
         if (!$user = Users::find($request->get('user'))) {
@@ -357,52 +361,60 @@ class UploadController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
     public function history(Request $request, $id)
     {
-        if( !$doc = Docs::where('id', $id)->first()) {
-            return response()->json('Capa de Lote inexistente', 400);
-        }
-        $content = trim($doc->content);
-
-        if (!$file = Files::find($doc->file_id)) {
-            return response()->json('Arquivo não encontrado', 400);
-        }
-
-        if ($file->constante == "DM") {
-            $doc->dest = substr($content, 0, 4);
-            $doc->origin = "DM";
-        } else {
-            $doc->origin = substr($content, 0, 4);
-            $doc->dest = substr($content, strlen($content) - 4, 4);
-        }
-
-
-        $doc->register = "Upload do Arquivo";
-
-        $user = Users::where('id', $doc->user_id)->first();
-        $doc->user = $user;
-        $doc->unidade = strlen($user->juncao) > 0 ? $user->juncao : $user->unidade;
-
-
-        $history = DocsHistory::where('doc_id', $id)->get();
-        foreach ($history as &$h) {
-            $h->content = $doc->content;
-            if ($file->constante == "DM") {
-                $h->dest = substr($content, 0, 4);
-                $h->origin = "DM";
-            } else {
-                $h->origin = substr($content, 0, 4);
-                $h->dest = substr($content, strlen($content) - 4, 4);
+        try {
+            $res = [];
+            if (!$doc = Docs::find($id)) {
+                throw new Exception('Capa de Lote inexistente');
             }
-            $user = Users::where('id', $h->user_id)->first();
-            $user->juncao = ($user->juncao == null ? '-' : $user->juncao);
-            $h->user = $user;
-            $h->register = $h->description;
-            $h->unidade = (int)$h->juncao > 0 ? $h->juncao : ($h->unidade != null ? $h->unidade : '-' );
-            $docs[] = $h;
+            if (!$file = $doc->file) {
+                throw new Exception('Arquivo não encontrado');
+            }
+            if ($file->constante == "DM") {
+                $doc->dest = $doc->from_agency;
+                $doc->origin = "DM";
+            } else {
+                $doc->origin = $doc->from_agency;
+                $doc->dest = $doc->to_agency;
+            }
+            $doc->register = "Upload do Arquivo";
+
+            if (!$user = $doc->user) {
+                throw new Exception('Erro ao buscar informações de usuário de capa de lote');
+            }
+            $doc->unidade = strlen($user->juncao) > 0 ? $user->juncao : $user->unidade;
+
+            foreach ($doc->history as $h) {
+                $h->content = $doc->content;
+                if ($file->constante == "DM") {
+                    $h->dest = $doc->from_agency;
+                    $h->origin = "DM";
+                } else {
+                    $h->origin = $doc->from_agency;
+                    $h->dest = $doc->to_agency;
+                }
+                if (!$user = $h->user) {
+                    throw new Exception('Erro ao buscar informações de usuário de histórico');
+                }
+                $user->juncao = ($user->juncao == null ? '-' : $user->juncao);
+
+                $h->register = $h->description;
+                $h->unidade = (int)$h->juncao > 0 ? $h->juncao : ($h->unidade != null ? $h->unidade : '-');
+                $res[] = $h;
+            }
+
+            echo json_encode($res);
+
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 400);
         }
 
-        echo json_encode($docs);
     }
 
 }

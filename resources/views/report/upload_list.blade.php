@@ -17,18 +17,20 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="id,name,total,action">
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/report/list')}}">
+                <input type="hidden" id="columns" value="name,constante,movimento,total,action">
+                <input type="hidden" id="baseurl" value="{{route('report.list', Auth::user()->id)}}">
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
                         <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
-                               id="datatable" data-column-defs='[{"targets":[4], "orderable":false}]'>
+                               id="datatable" data-column-defs='[{"targets":[0,5],"orderable":false}]'
+                               data-order='[[3, "desc"]]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
-                                <th>{{__('tables.id')}}</th>
                                 <th>{{__('tables.name')}}</th>
+                                <th>{{__('tables.constante')}}</th>
+                                <th>{{__('tables.movimento')}}</th>
                                 <th>{{__('total')}}</th>
                                 <th>{{__('tables.options')}}</th>
                             </tr>

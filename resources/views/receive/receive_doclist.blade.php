@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="columns"
-                       value="action,content,constante,origem,destino,created_at,updated_at,status,view">
+                       value="action,content,constante,from_agency,to_agency,created_at,updated_at,status,view">
                 @if(Auth::user()->juncao)
                     <input type="hidden" id="baseurl"
                            value="{{URL::to('/api/receber-todos/')}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
@@ -40,7 +40,8 @@
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
                         <table class="table datatable table-striped table-bordered dt-responsive nowrap hasdetails"
-                                   id="datatable" data-column-defs='[{"targets":[1,9],"orderable":false}]'>
+                                   id="datatable" data-column-defs='[{"targets":[1,9],"orderable":false}]'
+                               data-order='[[6,"asc"]]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>

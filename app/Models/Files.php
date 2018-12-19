@@ -14,9 +14,7 @@ class Files extends BaseModel
         'user_id',
         'constante',
         'codigo',
-        'dia',
-        'mes',
-        'ano',
+        'movimento',
         'sequencial',
         'file_hash'
     ];
@@ -28,5 +26,12 @@ class Files extends BaseModel
 
     public function docs(){
         return $this->hasMany(Docs::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user() {
+        return $this->belongsTo(Users::class, 'user_id');
     }
 }

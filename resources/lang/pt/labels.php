@@ -116,4 +116,7 @@ return [
     'alert-warning' => '<i class="fas exclamation-triangle"></i> Atenção!',
     'alert-info' => '<i class="fas fa-info"></i> Informação',
     'alert-success' => '<i class="fas fa-check-circle"></i> Sucesso',
+    'DM' => 'Devolução Matriz',
+    'DA' => 'Devolução Agência',
+    'RA' => 'Reenvio Agência'
 ];
