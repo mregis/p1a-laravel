@@ -49159,7 +49159,7 @@ var app = new Vue({
 /***/ "./resources/assets/js/bootstrap.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(__webpack_provided_window_dot_jQuery, global) {window._ = __webpack_require__("./node_modules/lodash/lodash.js");
+/* WEBPACK VAR INJECTION */(function(global, __webpack_provided_window_dot_jQuery) {window._ = __webpack_require__("./node_modules/lodash/lodash.js");
 window.Popper = __webpack_require__("./node_modules/popper.js/dist/esm/popper.js").default;
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -49172,10 +49172,10 @@ try {
 
   var $ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
 
-  __webpack_provided_window_dot_jQuery = $;
-  window.$ = $; // window.$ = window.jQuery = require('jquery');
+  global.$ = global.jQuery = $; //    window.jQuery = $;
+  //    window.$ = $;
 
-  global.$ = global.jQuery = $;
+  window.$ = __webpack_provided_window_dot_jQuery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
 
   __webpack_require__("./node_modules/bootstrap/dist/js/bootstrap.js");
 
@@ -49303,7 +49303,7 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js"), __webpack_require__("./node_modules/webpack/buildin/global.js")))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js"), __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 

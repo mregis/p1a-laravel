@@ -11,11 +11,12 @@ try {
     require('@fortawesome/fontawesome-free');
 
     var $ = require('jquery');
-    window.jQuery = $;
-    window.$ = $;
+    global.$ = global.jQuery = $;
 
-    // window.$ = window.jQuery = require('jquery');
-	global.$ = global.jQuery = $;
+//    window.jQuery = $;
+//    window.$ = $;
+
+    window.$ = window.jQuery = require('jquery');
     require('bootstrap');
     require('js-cookie');
     require('wnumb');
