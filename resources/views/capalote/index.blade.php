@@ -26,7 +26,6 @@
 
     <div class="row">
         <div class="col-md-12">
-
             <div class="m-portlet__head">
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
@@ -140,17 +139,22 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
+                            {{ Form::open(array('url' => route('capalote.imprimir-multiplo'),
+                            'target' => '_blank', 'id' => 'formprint-capalote')) }}
                             <div class="table-responsive-xl">
                                 <input type="hidden" id="columns"
-                                       value="content,origem,destino,created_at,status,action">
+                                       value="action,content,from_agency,to_agency,created_at,status,print">
 
                                 <input type="hidden" id="baseurl"
                                            value="{{ route('capalote.api-index', Auth::user()->id) }}">
                                 <table class="table table-striped table-bordered dt-responsive nowrap"
-                                       id="datatable" data-column-defs='[{"targets":[1,5],"orderable":false}]'>
+                                       id="datatable" data-column-defs='[{"targets":[0,6],"orderable":false}]'
+                                       data-order='[[ 4, "desc" ]]'>
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th></th>
                                             <th>{{__('Capa Lote')}}</th>
                                             <th>{{__('Origem')}}</th>
                                             <th>{{__('Destino')}}</th>
@@ -161,6 +165,15 @@
                                     </thead>
                                 </table>
                             </div>
+                            <div class="m-portlet__foot m-portlet__foot--fit">
+                                <div class="m-form__actions">
+                                    <button type="submit" class="btn btn-success btn-lg">
+                                        <i class="fas fa-print" aria-hidden="true"></i> {{__('IMPRIMIR CAPA DE LOTE')}}
+                                    </button>
+                                </div>
+                            </div>
+                            @csrf
+                            {{ Form::close() }}
                         </div>
                     </div>
                 </div>
@@ -182,12 +195,18 @@
                 }
             });
             $(".is-invalid").change(function(){$(this).removeClass('is-invalid');});
-
+            $('#formprint-capalote').on('submit', function() {
+                if ($('[name="capalote[]"]:checked').length < 1) {
+                    alert('É necessário marcar ao menos 1 capa de lote para impressão.');
+                    return false;
+                };
+            });
         });
         // Impressão de Capa de Lote
         function view(docid) {
-            console.log(docid);
-            window.location.href=("{{route('capalote.imprimir', '%ID%')}}").replace("%ID%", docid);
+            $('[name="capalote[]"]').attr('checked', false);
+            $('#capalote-' + docid).attr('checked', true);
+            $('#formprint-capalote').submit();
         };
     </script>
 @stop

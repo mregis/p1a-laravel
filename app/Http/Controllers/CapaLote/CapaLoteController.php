@@ -10,18 +10,18 @@ namespace app\Http\Controllers\CapaLote;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCapaLote;
 use App\Models\Agencia;
 use App\Models\Docs;
 use App\Models\DocsHistory;
 use App\Models\Files;
 use App\Models\Menu;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Validation\Validator;
 
 use Validator;
+use PDF;
 
 class CapaLoteController extends Controller
 {
@@ -92,9 +92,7 @@ class CapaLoteController extends Controller
                 'constante' => 'RA',
                 'file_hash' => hash('crc32b', 'RA237' . date('dm.y') . '1' . date('YmdHis')),
                 'codigo' => '237',
-                'dia' => date('d'),
-                'mes' => date('m'),
-                'ano' => date('Y'),
+                'movimento' => new \DateTime(),
                 'sequencial' => 1,
                 'user_id' => Auth::user()->id,
             ]
@@ -146,16 +144,37 @@ class CapaLoteController extends Controller
 
     /**
      * @param Request $request
-     * @param $docs_id
+     * @param $doc_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showPDF(Request $request, $doc_id) {
+    public function showPDF(Request $request, array $doc_id) {
         $menu = new Menu();
         $menus = $menu->menu();
-
-        $doc = Docs::find($doc_id);
-        $doc->destino = Agencia::where("codigo", "=", $doc->to_agency)->first();
-        $doc->origem = Agencia::where("codigo", "=", $doc->from_agency)->first();
-        return view('capalote.show', compact('menus', 'doc'));
+        if ($doc = Docs::find($doc_id)) {
+            $doc->destino = Agencia::where("codigo", "=", $doc->to_agency)->first();
+            $doc->origem = Agencia::where("codigo", "=", $doc->from_agency)->first();
+            return view('capalote.show', compact('menus', 'doc'));
+        }
+        $request->session()->flash('alert-danger', 'Erro ao recuperar informações. ' .
+            'Tente novamente. Se o problema persistir informe ao Administrador do Sistema');
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function showPDFMultiple(Request $request) {
+        $docs_id = $request->get('capalote');
+        $docs = [];
+        foreach ($docs_id as $doc_id) {
+            if ($doc = Docs::find($doc_id)) {
+                $doc->destino = Agencia::where("codigo", "=", $doc->to_agency)->first();
+                $doc->origem = Agencia::where("codigo", "=", $doc->from_agency)->first();
+                $docs[] = $doc;
+            }
+        }
+        $pdf = PDF::loadView('capalote.pdf', compact('docs'));
+        return $pdf->stream(sprintf('capalote%s.pdf', date('Ymd_Hi')));
+    }
+
 }

@@ -70,4 +70,5 @@ Route::group(['prefix' => 'capalote'], function() {
     Route::get('contingencia', 'CapaLote\CapaLoteController@index')->name('capalote.index');
     Route::post('contingencia', 'CapaLote\CapaLoteController@_new')->name('capalote.new');
 	Route::get('contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
+	Route::post('contingencia/imprimir/', 'CapaLote\CapaLoteController@showPDFMultiple')->name('capalote.imprimir-multiplo');
 });

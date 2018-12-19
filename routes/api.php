@@ -57,7 +57,7 @@ Route::post('/remessa/registrar', 'Api\UploadController@register');
 Route::post('/receber/registrar', 'Api\ReceiveController@register');
 Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperador')->name('receive.register-capa-lote');
 
-Route::get('/report/list', 'Api\ReportController@list');
+Route::get('/report/list/{user_id}', 'Api\ReportController@list')->name('report.list');
 Route::get('/report/docs/{id}', 'Api\ReportController@docs');
 
 Route::post('/contingencia', 'Api\UploadController@contingencia');
@@ -68,8 +68,12 @@ Route::get('/receber-todos/{profile}/{juncao}', 'Api\ReceiveController@doclistin
 Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
 Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
 
-Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList');
-
 Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');
 Route::post('/capalote/contingencia', 'Api\CapaLoteController@_new')->name('capalote.api-new');
 Route::get('/capalote/contingencia/{user_id}', 'Api\CapaLoteController@index')->name('capalote.api-index');
+
+Route::get('/dashboard/envios/{user_id}', 'Api\DashboardController@toAgencyReport')->name('dashboard.envios');
+Route::get('/dashboard/recebimentos/{user_id}', 'Api\DashboardController@fromAgencyReport')->name('dashboard.recebimentos');
+Route::get('/dashboard/devolucoes/{user_id}', 'Api\DashboardController@returnAgencyReport')->name('dashboard.devolucoes');
+Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList')->name('receive.lista-arquivos');
+Route::get('/report/{file_id}/{user_id}/', 'Api\ReportController@fileContent')->name('report.arquivo');

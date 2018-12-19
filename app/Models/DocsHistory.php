@@ -17,4 +17,19 @@ class DocsHistory extends BaseModel
     ];
 
     protected $table = 'docs_history';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function doc() {
+        return $this->belongsTo(Docs::class, 'doc_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user() {
+        return $this->belongsTo(Users::class, 'user_id');
+    }
+
 }

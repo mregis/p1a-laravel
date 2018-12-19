@@ -39,21 +39,19 @@ class CapaLoteController extends BaseController
             ]);
         }
         return Datatables::of($query)
-            ->addColumn('action', function ($docs) {
+
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                'type="checkbox" name="capalote[]" class="form-control m-input input-doc" ' .
+                'value="' . $doc->id . '" id="capalote-' . $doc->id . '">';
+            })
+            ->addColumn('print', function ($docs) {
                 return '<div align="center"><button class="btn m-btn m-btn--icon m-btn--icon-only print-capalote" ' .
                 'onclick="view(' . $docs->id . ')" title="Imprimir">' .
                 '<i class="fas fa-print"></i></button></div>';
             })
-            ->addColumn('origem', function ($doc) {
-                $doc->content = trim($doc->content);
-                return substr($doc->content, 0, 4);
-            })
-            ->addColumn('destino', function ($doc) {
-                $doc->content = trim($doc->content);
-                return (substr($doc->content, -4, 4));
-            })
             ->addColumn('status', function($doc) {
-                return $doc->status ? $doc->status : '-';
+                return $doc->status ? $doc->status : 'pendente';
             })
             ->editColumn('updated_at', function ($doc) {
                 return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';

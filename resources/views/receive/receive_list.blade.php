@@ -3,7 +3,7 @@
 
 @section('styles')
 <style type="text/css">
-    .m-body .m-content {background-color:#f0f0f0}
+    .m-body .m-content {background-color:#f0f0f0;}
     .details-control {display:none}
 </style>
 @stop
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,origem,destino,created_at,status">
+                <input type="hidden" id="columns" value="action,content,from_agency,to_agency,created_at,status">
                 @if(Auth::user()->juncao)
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/receive/docs/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
                 @else
@@ -34,7 +34,8 @@
                     <div class="table-responsive-xl">
                         <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
                                id="datatable"
-                               data-column-defs='[{"targets":[1],"orderable":false}]' data-order='[[5, "desc"],[2, "asc"]]'>
+                               data-column-defs='[{"targets":[1],"orderable":false}]'
+                               data-order='[[5, "desc"],[2, "asc"]]'>
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>

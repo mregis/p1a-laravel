@@ -37,7 +37,20 @@ class Docs extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function file() {
-        return $this->belongsTo('App\Models\Files');
+        return $this->belongsTo(Files::class, 'file_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function history() {
+        return $this->hasMany(DocsHistory::class, 'doc_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user() {
+        return $this->belongsTo(Users::class, 'user_id');
+    }
 }

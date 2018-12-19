@@ -42,4 +42,6 @@ return [
     'total' => 'Total',
     'pendentes' => 'Pendentes',
     'details' => 'Detalhes',
+    'movimento' => 'Movimento',
+    'constante' => 'Tipo'
 ];

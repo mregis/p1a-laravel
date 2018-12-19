@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
 use App\Models\Users;
-use App\Models\Audit;
 use App\Models\Files;
 use App\Models\Docs;
 use App\Models\DocsHistory;
@@ -15,7 +14,6 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 use Auth;
 class ReceiveController extends BaseController
@@ -32,6 +30,11 @@ class ReceiveController extends BaseController
         return view('receive.receive', compact('menus'));
     }
 
+    /**
+     * @param Request $request
+     * @param $user_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fileList(Request $request, $user_id) {
 
         if (!$user = Users::find($user_id)) {
@@ -48,7 +51,7 @@ class ReceiveController extends BaseController
                     $join->on("files.id", '=', "pendentes.file_id")
                         ->where("pendentes.status", "=", "pendente");
                     if ($user->profile != 'ADMINISTRADOR') {
-                        $join->where("pendentes.content", "like", sprintf("%04d", $user->juncao) . '%');
+                        $join->where("pendentes.to_agency", "=", sprintf("%04d", $user->juncao));
                     }
                 }
             )
@@ -57,7 +60,7 @@ class ReceiveController extends BaseController
 
         if($user->profile != 'ADMINISTRADOR') {
             $query->join("docs", "files.id", "=", "docs.file_id")
-            ->where("docs.content", "like", sprintf("%04d", $user->juncao) . '%');
+            ->where("docs.to_agency", "=", sprintf("%04d", $user->juncao));
         }
 
         return Datatables::of($query)
@@ -105,7 +108,6 @@ class ReceiveController extends BaseController
 
     public function docs(Request $request, $id , $profile , $juncao = false)
     {
-
         if (!$file = Files::find($id)) {
             return response()->json('Não foi possível recuperar as informações requisitadas', 400);
         }
@@ -115,11 +117,10 @@ class ReceiveController extends BaseController
             ->join("files", "docs.file_id", "=", "files.id")
             ->where("files.id", "=", $id)
             ->where(function ($query) {
-                $query->whereNotIn('status', ['recebido'])
-                    ->orWhere('status', '=', null);
+                $query->whereNotIn('docs.status', ['recebido'])
+                    ->orWhere('docs.status', '=', null);
                 }
-            )
-        ;
+            );
 
         if ($profile != 'ADMINISTRADOR') {
             $query->where(
@@ -127,13 +128,13 @@ class ReceiveController extends BaseController
                     $query->orWhere(function ($query) use ($juncao) {
                         $query->where([
                             ['files.constante', '=', 'DM'],
-                            ['content', 'like', sprintf("%04d", $juncao) . '%']
+                            ['docs.to_agency', '=', sprintf("%04d", $juncao)]
                         ]);
                     })
                         ->orWhere(function ($query) use ($juncao) {
                             $query->where([
                                 ['files.constante', '<>', 'DM'],
-                                ['content', 'like', '%' . sprintf("%04d", $juncao)]
+                                ['docs.from_agency', '=', sprintf("%04d", $juncao)]
                             ]);
                         });
                 });
@@ -300,7 +301,7 @@ class ReceiveController extends BaseController
                     ->orWhere(function ($query) use ($juncao) {
                         $query->where([
                             ['files.constante', '=', 'DM'],
-                            ['content', 'like', sprintf("%04d", $juncao) . '%']
+                            ['docs.from_agency', '=', sprintf("%04d", $juncao)]
                         ])
                             ->where(function ($query) {
                                 $query->whereNotIn('status', ['recebido'])
@@ -310,7 +311,7 @@ class ReceiveController extends BaseController
                     ->orWhere(function ($query) use ($juncao) {
                         $query->where([
                             ['files.constante', '<>', 'DM'],
-                            ['content', 'like', '%' . sprintf("%04d", $juncao)]
+                            ['docs.to_agency', '=', sprintf("%04d", $juncao)]
                         ])
                             ->where(function ($query) {
                                 $query->whereNotIn('status', ['recebido'])
@@ -338,14 +339,7 @@ class ReceiveController extends BaseController
                 $doc->content = trim($doc->content);
                 return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
             })
-            ->addColumn('origem', function ($doc) {
-                $doc->content = trim($doc->content);
-                return ($doc->constante == "DM" ? "<b>4510</b>" : substr($doc->content, 0, 4));
-            })
-            ->addColumn('destino', function ($doc) {
-                $doc->content = trim($doc->content);
-                return ($doc->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
-            })
+
             ->addColumn('status', function($doc) {
                 return $doc->status ? $doc->status : '-';
             })
