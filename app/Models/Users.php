@@ -17,4 +17,10 @@ class Users extends BaseModel
 
     protected $table = 'users';
 
+    protected $hidden = ['password', 'remember_token'];
+
+    public function agencia() {
+        return $this->belongsTo(Agencia::class, 'juncao', 'codigo');
+    }
+
 }

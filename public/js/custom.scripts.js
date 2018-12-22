@@ -279,11 +279,6 @@ var Select2 = function() {
     };
 }();
 
-//== Initialization
-jQuery(document).ready(function() {
-    Select2.init();
-});
-
 //== Class definition
 var BootstrapSelect = function () {
     //== Private functions
@@ -299,9 +294,82 @@ var BootstrapSelect = function () {
     };
 }();
 
-jQuery(document).ready(function() {
-    BootstrapSelect.init();
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
 });
+
+$(document).ajaxComplete(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+var historytable = null;
+function getHistory(id, url, u) {
+    $("span.capalote-placeholder").text('');
+
+    $("#capaLoteHistoryModal").modal();
+    $('#capaLoteHistoryModal').on('hidden.bs.modal', function (e) {
+        historytable.clear().draw();
+    });
+    if (typeof(historytable) == "undefined" || historytable == null) {
+        historytable = $('#history').DataTable({
+            dom: "<'row'<'col-10'r>>" +
+            "<'row'<'col-sm-12'B>><'row'<'col-sm-12't>>",
+            buttons: {
+                dom: {
+                    button: {
+                        tag: 'button',
+                        className: 'btn btn-sm'
+                    }
+                },
+                buttons: [
+                    {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
+                    {
+                        extend: "excelHtml5",
+                        text: "<i class='far fa-file-excel'></i> Salvar Excel",
+                        title: "CapaLote_{{ date('Y-m-d') }}",
+                        className: 'btn-primary'
+                    },
+                    {
+                        extend: "pdfHtml5",
+                        text: "<i class='far fa-file-pdf'></i> Salvar PDF",
+                        title: "CapaLote_{{ date('Y-m-d') }}",
+                        className: 'btn-primary'
+                    },
+                ],
+            },
+            language: lang,
+            ordering: false,
+            columnDefs: [ { targets: [0,1,2,3,4], visible: false } ]
+        });
+    }
+    $.post(url, {id: id, u: u},
+        function (r) {
+            $("span.capalote-placeholder").text(r.content);
+            for (var i in r.history) {
+                var hd = new Date(r.history[i].created_at);
+                historytable.row.add([
+                    r.content,
+                    r.from_agency + ': ' + r.origin.nome,
+                    r.to_agency + ': ' + r.destin.nome,
+                    (new Date(r.file.movimento)).toLocaleDateString(),
+                    (new Date(r.created_at)).toLocaleDateString(),
+                    r.history[i].description,
+                    hd.toLocaleDateString() + ' ' + hd.toLocaleTimeString(),
+                    r.history[i].user.name,
+                    r.history[i].user.profile,
+                    (r.history[i].local || '-')
+                ]).draw();
+            }
+            // historytable.draw();
+
+        }, 'json').fail(function (r) {
+            alert('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
+        });
+}
+
 /**
  * @class mApp  Metronic App class
  */
@@ -11018,9 +11086,6 @@ function actionAjax(url, type) {
     $.ajax({
         type: type,
         url: url,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
         dataType: "json",
     }).done(function (data) {
         var modal = $("#on_done_data");
@@ -11029,39 +11094,43 @@ function actionAjax(url, type) {
             modal.find('.modal-header').find('h5').text("Sucesso");
             modal.find('.modal-body').find('p').text(data.message);
             modal.modal('show');
-        } else {
-            modal.find('.modal-body').find('p').text(data.message);
-            modal.modal('show');
         }
+        $('.modal').modal('hide');
+        var successmodal = $("#on_done_data").modal();
+		console.log(data.message);
+		console.log(data);
+        successmodal.find('.modal-body').find('p').text(data.message || data);
+        successmodal.show(); 
+		$('#datatable').DataTable().ajax.reload();		
+    }).fail(function(f) {
+        // Close all opened modals
+        $('.modal').modal('hide');
+        var errormodal = $("#on_error").modal();		
+        errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText);
+        errormodal.show();
     });
 }
 
-function deleteData(id) {
-    //var url = $('#delete_url').val() + "/" + id;
+function deleteData(id) {    
     var url = "delete/" + id;
     actionAjax(url, "delete");
-    $('#fullCalModal').modal('hide');
-    // $('.modal-backdrop').css('display', 'block');
-    $('#datatable').DataTable().ajax.reload();
+    $('#fullCalModal').modal('hide');        
 }
 
 function checkItem(id) {
     var url = $('#check_url').val() + "/" + id;
     actionAjax(url, "delete");
-    $('#datatable').DataTable().ajax.reload();
+    
 }
 
 function disable(id_user) {
     var url = $("#disable").val() + "/" + id_user;
     actionAjax(url, "get");
-    $('#datatable').DataTable().ajax.reload();
-    // window.setInterval("reload()", 2000);
 }
 
 function active(id_user) {
     var url = $("#active").val() + "/" + id_user;
     actionAjax(url, "get");
-    $('#datatable').DataTable().ajax.reload();
 }
 
 
@@ -11081,8 +11150,6 @@ function pf_pj(selectObject) {
         document.getElementById('pj').style.display = '';
         document.getElementById('social_name').style.display = '';
         document.getElementById('name').style.display = '';
-        // document.getElementById('name').removeAttribute("data-validation");
-
     }
     else if (type === 'cpf') {
         document.getElementById('pf').style.display = '';
@@ -11454,6 +11521,9 @@ jQuery(document).ready(function () {
         autoclose: true,
         endDate: dateToday()
     });
+
+    Select2.init();
+    BootstrapSelect.init();
 });
 
 //== Class definition
@@ -11638,8 +11708,3 @@ var Select2 = function() {
         }
     };
 }();
-
-//== Initialization
-jQuery(document).ready(function() {
-    Select2.init();
-});

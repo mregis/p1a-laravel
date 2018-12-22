@@ -13,9 +13,6 @@ try {
     var $ = require('jquery');
     global.$ = global.jQuery = $;
 
-//    window.jQuery = $;
-//    window.$ = $;
-
     window.$ = window.jQuery = require('jquery');
     require('bootstrap');
     require('js-cookie');
@@ -48,25 +45,21 @@ try {
     require('bootstrap-validator')(window, $);
     require('jquery-easing');
 
-    require('datatables.net')( window, $)
-    require('datatables.net-bs4')(window, $);
+    // ### Datatables
+    var dt = require('datatables.net')( window, $);
+
     require('datatables.net-responsive')(window, $);
-    require('datatables.net-responsive-bs4')(window, $);
     require('datatables.net-buttons')(window, $);
-    require('datatables.net-buttons-bs4')(window, $);
-    require('datatables.net-select')(window, $);
-    require('datatables.net-select-bs4')(window, $);
+
+    require('datatables.net-bs4')();
+    require('datatables.net-buttons-bs4')();
+    require('datatables.net-responsive-bs4')();
     require('datatables.net-buttons/js/buttons.colVis.js')();
     require('datatables.net-buttons/js/buttons.html5.js')();
-    require('datatables.net-buttons/js/buttons.flash.js')();
     require('datatables.net-buttons/js/buttons.print.js')();
 
     require('tether');
     require('markdown');
-
-    // ### For Datatables pdf export
-    // require('pdfmake');
-    // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 } catch (e) {
 }

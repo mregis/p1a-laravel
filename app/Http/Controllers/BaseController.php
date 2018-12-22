@@ -51,6 +51,8 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
+    protected $redirectTo = '/';
+
     public function sendResponse($result, $message, $ret = false)
     {
         if (is_null($result)) {

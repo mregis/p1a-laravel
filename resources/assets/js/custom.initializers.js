@@ -279,11 +279,6 @@ var Select2 = function() {
     };
 }();
 
-//== Initialization
-jQuery(document).ready(function() {
-    Select2.init();
-});
-
 //== Class definition
 var BootstrapSelect = function () {
     //== Private functions
@@ -299,6 +294,78 @@ var BootstrapSelect = function () {
     };
 }();
 
-jQuery(document).ready(function() {
-    BootstrapSelect.init();
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
 });
+
+$(document).ajaxComplete(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+var historytable = null;
+function getHistory(id, url, u) {
+    $("span.capalote-placeholder").text('');
+
+    $("#capaLoteHistoryModal").modal();
+    $('#capaLoteHistoryModal').on('hidden.bs.modal', function (e) {
+        historytable.clear().draw();
+    });
+    if (typeof(historytable) == "undefined" || historytable == null) {
+        historytable = $('#history').DataTable({
+            dom: "<'row'<'col-10'r>>" +
+            "<'row'<'col-sm-12'B>><'row'<'col-sm-12't>>",
+            buttons: {
+                dom: {
+                    button: {
+                        tag: 'button',
+                        className: 'btn btn-sm'
+                    }
+                },
+                buttons: [
+                    {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
+                    {
+                        extend: "excelHtml5",
+                        text: "<i class='far fa-file-excel'></i> Salvar Excel",
+                        title: "CapaLote_{{ date('Y-m-d') }}",
+                        className: 'btn-primary'
+                    },
+                    {
+                        extend: "pdfHtml5",
+                        text: "<i class='far fa-file-pdf'></i> Salvar PDF",
+                        title: "CapaLote_{{ date('Y-m-d') }}",
+                        className: 'btn-primary'
+                    },
+                ],
+            },
+            language: lang,
+            ordering: false,
+            columnDefs: [ { targets: [0,1,2,3,4], visible: false } ]
+        });
+    }
+    $.post(url, {id: id, u: u},
+        function (r) {
+            $("span.capalote-placeholder").text(r.content);
+            for (var i in r.history) {
+                var hd = new Date(r.history[i].created_at);
+                historytable.row.add([
+                    r.content,
+                    r.from_agency + ': ' + r.origin.nome,
+                    r.to_agency + ': ' + r.destin.nome,
+                    (new Date(r.file.movimento)).toLocaleDateString(),
+                    (new Date(r.created_at)).toLocaleDateString(),
+                    r.history[i].description,
+                    hd.toLocaleDateString() + ' ' + hd.toLocaleTimeString(),
+                    r.history[i].user.name,
+                    r.history[i].user.profile,
+                    (r.history[i].local || '-')
+                ]).draw();
+            }
+            // historytable.draw();
+
+        }, 'json').fail(function (r) {
+            alert('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
+        });
+}

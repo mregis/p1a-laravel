@@ -295,7 +295,8 @@ function modalDelete(id) {
     modal.find('#remove').remove();
     modal.find('.modal-header').find('h5').text("Apagar");
     modal.find('.modal-body').find('p').text("Deseja realmente excluir ?");
-    modal.find('.modal-footer').append('<button id="buttonModal" onclick="deleteData(' + id + ')" class="btn btn-danger">Sim</button>');
+    modal.find('.modal-footer').append('<button id="buttonModal" onclick="deleteData(' + id + ')" ' +
+        'class="btn btn-danger">Sim</button>');
     modal.modal('show');
 
 }
@@ -314,9 +315,6 @@ function actionAjax(url, type) {
     $.ajax({
         type: type,
         url: url,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
         dataType: "json",
     }).done(function (data) {
         var modal = $("#on_done_data");
@@ -325,39 +323,40 @@ function actionAjax(url, type) {
             modal.find('.modal-header').find('h5').text("Sucesso");
             modal.find('.modal-body').find('p').text(data.message);
             modal.modal('show');
-        } else {
-            modal.find('.modal-body').find('p').text(data.message);
-            modal.modal('show');
         }
+        $('.modal').modal('hide');
+        var successmodal = $("#on_done_data").modal();
+        successmodal.find('.modal-body').find('p').text(data.message || data);
+        successmodal.show();
+        $('#datatable').DataTable().ajax.reload();
+    }).fail(function(f) {
+        // Close all opened modals
+        $('.modal').modal('hide');
+        var errormodal = $("#on_error").modal();
+        errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText);
+        errormodal.show();
     });
 }
 
 function deleteData(id) {
-    //var url = $('#delete_url').val() + "/" + id;
     var url = "delete/" + id;
     actionAjax(url, "delete");
     $('#fullCalModal').modal('hide');
-    // $('.modal-backdrop').css('display', 'block');
-    $('#datatable').DataTable().ajax.reload();
 }
 
 function checkItem(id) {
     var url = $('#check_url').val() + "/" + id;
     actionAjax(url, "delete");
-    $('#datatable').DataTable().ajax.reload();
 }
 
 function disable(id_user) {
     var url = $("#disable").val() + "/" + id_user;
     actionAjax(url, "get");
-    $('#datatable').DataTable().ajax.reload();
-    // window.setInterval("reload()", 2000);
 }
 
 function active(id_user) {
     var url = $("#active").val() + "/" + id_user;
     actionAjax(url, "get");
-    $('#datatable').DataTable().ajax.reload();
 }
 
 
@@ -377,15 +376,12 @@ function pf_pj(selectObject) {
         document.getElementById('pj').style.display = '';
         document.getElementById('social_name').style.display = '';
         document.getElementById('name').style.display = '';
-        // document.getElementById('name').removeAttribute("data-validation");
-
     }
     else if (type === 'cpf') {
         document.getElementById('pf').style.display = '';
         document.getElementById('pj').style.display = 'none';
         document.getElementById('social_name').style.display = 'none';
         document.getElementById('name').style.display = '';
-        // document.getElementById('name').setAttribute("data-validation", "notempty($(this))");
     }
 
 };
@@ -750,4 +746,7 @@ jQuery(document).ready(function () {
         autoclose: true,
         endDate: dateToday()
     });
+
+    Select2.init();
+    BootstrapSelect.init();
 });
