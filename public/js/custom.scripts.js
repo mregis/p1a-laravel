@@ -315,8 +315,6 @@ function getHistory(id, url, u) {
     });
     if (typeof(historytable) == "undefined" || historytable == null) {
         historytable = $('#history').DataTable({
-            dom: "<'row'<'col-10'r>>" +
-            "<'row'<'col-sm-12'B>><'row'<'col-sm-12't>>",
             buttons: {
                 dom: {
                     button: {
@@ -368,6 +366,39 @@ function getHistory(id, url, u) {
         }, 'json').fail(function (r) {
             alert('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
         });
+}
+
+var autodt = null; // Automatic Datatables
+
+if (typeof(autodt) == "undefined" || autodt == null) {
+
+    autodt = $('table.auto-dt').DataTable({
+        dom: "<'row'<'col-10'r>><'row'<'col-5'l><'col-7 text-right'f>>" +
+        "<'row'<'col-sm-12'B>><'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
+        buttons: {
+            dom: {
+                button: {
+                    tag: 'button',
+                    className: 'btn btn-sm'
+                }
+            },
+            buttons: [
+                {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
+                {
+                    extend: "excelHtml5",
+                    text: "<i class='far fa-file-excel'></i> Salvar Excel",
+                    className: 'btn-primary'
+                },
+                {
+                    extend: "pdfHtml5",
+                    text: "<i class='far fa-file-pdf'></i> Salvar PDF",
+                    className: 'btn-primary'
+                },
+            ],
+        },
+        language: lang,
+        order: [[1, "asc"]]
+    });
 }
 
 /**
@@ -11067,7 +11098,8 @@ function modalDelete(id) {
     modal.find('#remove').remove();
     modal.find('.modal-header').find('h5').text("Apagar");
     modal.find('.modal-body').find('p').text("Deseja realmente excluir ?");
-    modal.find('.modal-footer').append('<button id="buttonModal" onclick="deleteData(' + id + ')" class="btn btn-danger">Sim</button>');
+    modal.find('.modal-footer').append('<button id="buttonModal" onclick="deleteData(' + id + ')" ' +
+        'class="btn btn-danger">Sim</button>');
     modal.modal('show');
 
 }
@@ -11097,30 +11129,27 @@ function actionAjax(url, type) {
         }
         $('.modal').modal('hide');
         var successmodal = $("#on_done_data").modal();
-		console.log(data.message);
-		console.log(data);
         successmodal.find('.modal-body').find('p').text(data.message || data);
-        successmodal.show(); 
-		$('#datatable').DataTable().ajax.reload();		
+        successmodal.show();
+        $('#datatable').DataTable().ajax.reload();
     }).fail(function(f) {
         // Close all opened modals
         $('.modal').modal('hide');
-        var errormodal = $("#on_error").modal();		
+        var errormodal = $("#on_error").modal();
         errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText);
         errormodal.show();
     });
 }
 
-function deleteData(id) {    
+function deleteData(id) {
     var url = "delete/" + id;
     actionAjax(url, "delete");
-    $('#fullCalModal').modal('hide');        
+    $('#fullCalModal').modal('hide');
 }
 
 function checkItem(id) {
     var url = $('#check_url').val() + "/" + id;
     actionAjax(url, "delete");
-    
 }
 
 function disable(id_user) {
@@ -11156,7 +11185,6 @@ function pf_pj(selectObject) {
         document.getElementById('pj').style.display = 'none';
         document.getElementById('social_name').style.display = 'none';
         document.getElementById('name').style.display = '';
-        // document.getElementById('name').setAttribute("data-validation", "notempty($(this))");
     }
 
 };

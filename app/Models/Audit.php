@@ -8,11 +8,19 @@ class Audit extends BaseModel
     use SoftDeletes;
 
     protected $fillable = [
-        'desc',
+        'description', 'user_id'
     ];
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     protected $table = 'audit';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(Users::class, 'user_id');
+    }
 }

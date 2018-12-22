@@ -80,92 +80,9 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="capaLoteHistoryModal" tabindex="-1" role="modal" aria-hidden="true" style="min-width:1400px">
-    <div class="modal-dialog" style="max-width:95%">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="m-widget14__title">Histórico da Capa</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div style="background-color:#fff;width:100%;text-align:right;padding:10px">
-            Exportar: 
-            <a href="javacript:void(0)" id="btnExport"><i class="fa far fa-file-excel"></i></a>
-            <a href="javacript:void(0)" id="btnPdf"><i class="fa far fa-file-pdf"></i></a>
-            </div>
- 
-           <table class="table table-bordered" id="history">
-                <thead class="table-dark">
-                    <th>#CAPA</th>
-                    <th>ORIGEM</th>
-                    <th>DESTINO</th>
-                    <th>REGISTRO</th>
-                    <th>DATA</th>
-                    <th>USUÁRIO</th>
-                    <th>PERFIL</th>
-                    <th>LOCAL</th>
-                </thead>
-                <tbody>
-                                                
-                </tbody>
-                                            
-            </table>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+
+    @component('dochistory')
+    @endcomponent
 </div>
 @stop
 
-@section('scripts')
-<script type="text/javascript">
-    function getHistory(id){
-        $.get("/doc/history/"+id,function(r){
-            var html = "";
-            var created_at = "";
-            var unidade = "";
-            for(var i in r){
-                unidade = "";
-                html += "<tr>";
-                html += "<td>"+r[i]['content']+"</td>";            
-                html += "<td>"+r[i]['origin']+"</td>";
-                html += "<td>"+r[i]['dest']+"</td>";
-                html += "<td>"+r[i]['register']+"</td>";
-                created_at = r[i]['created_at'].split(" ")[0].split("-")[2]+"/"+r[i]['created_at'].split(" ")[0].split("-")[1]+"/"+r[i]['created_at'].split(" ")[0].split("-")[0]+" "+r[i]['created_at'].split(" ")[1];
-                html += "<td>"+created_at+"</td>";
-                html += "<td>"+r[i]['user']['name']+"</td>";
-                html += "<td>"+r[i]['user']['profile']+"</td>";
-                unidade = r[i]['user']['unidade'] ? r[i]['user']['unidade'] : r[i]['user']['juncao'];
-                html += "<td>"+unidade+"</td>";
-                html += "</tr>";            
-            }
-            
-            $('#history tbody').html(html);
-        },'json');
-        activate();
-    }
-    function activate(){
-    $("#btnExport").click(function(e) {
-        var a = document.createElement('a');
-        var data_type = 'data:application/vnd.ms-excel';
-        var table_div = document.getElementById('history');
-        var table_html = table_div.outerHTML.replace(/ /g, '%20');
-        a.href = data_type + ', ' + table_html;
-        a.download = 'filename.xls';
-        a.click();
-        e.preventDefault();
-    });
-    $("#btnPdf").click(function(e) {
-        printBy('#history');
-    });
-    }
-    function printBy(selector){
-        var $print = $(selector).clone().addClass('print').prependTo('body');
-        $('.m-page').hide();
-        $('.modal-backdrop').hide();
-        window.print();
-        $print.remove();
-        $('.m-page').show();
-        $('.modal-backdrop').show();
-    }
-</script>
-@stop
