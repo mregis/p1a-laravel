@@ -53,4 +53,18 @@ class Docs extends BaseModel
     public function user() {
         return $this->belongsTo(Users::class, 'user_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function origin() {
+        return $this->belongsTo(Agencia::class, 'from_agency', 'codigo');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function destin() {
+        return $this->belongsTo(Agencia::class, 'to_agency', 'codigo');
+    }
 }

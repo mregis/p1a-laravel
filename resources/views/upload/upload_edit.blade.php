@@ -31,7 +31,7 @@
                 @endif
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
+                        <table class="table table-striped table-bordered dt-responsive hasdetails"
                                id="datatable">
                             <thead class="thead-dark">
                             <tr>

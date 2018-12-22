@@ -32,7 +32,7 @@
                 @endif
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
+                        <table class="table table-striped table-bordered dt-responsive hasdetails"
                                id="datatable"
                                data-column-defs='[{"targets":[1],"orderable":false}]'
                                data-order='[[5, "desc"],[2, "asc"]]'>

@@ -334,7 +334,22 @@ class ReceiveController extends BaseController
                 'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                 '</a>';
             })
-
+            ->addColumn('origin', function ($doc) {
+                if ($doc->origin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+                    $doc->from_agency . '</a>';
+                } else {
+                    return $doc->from_agency;
+                }
+            })
+            ->addColumn('destin', function ($doc) {
+                if ($doc->destin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+                    $doc->to_agency . '</a>';
+                } else {
+                    return $doc->to_agency;
+                }
+            })
             ->editColumn('constante', function ($doc) {
                 $doc->content = trim($doc->content);
                 return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
@@ -359,6 +374,91 @@ class ReceiveController extends BaseController
             return response()->json('Capa de Lote encontrada', 200);
         } else {
             return response()->json( sprintf('Capa de Lote inexistente [%s]', $capaLote), 400);
+        }
+    }
+
+    /**
+     * @param $user_id
+     * @return mixed
+     */
+    public function getNotReceived($user_id)
+    {
+        try {
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception('Erro ao verificar permissões.');
+            }
+
+        $query = Docs::query()
+            ->select("docs.*", "files.constante as constante")
+            ->join("files", "docs.file_id", "=", "files.id")
+            ->whereNotIn('status', ['recebido'])
+        ;
+        if ($user->profile != 'ADMINISTRADOR') {
+            $query
+                ->orWhere(function ($query) use ($user) {
+                    $query->where([
+                        ['files.constante', '=', 'DM'],
+                        ['docs.from_agency', '=', sprintf("%04d", $user->juncao)]
+                    ])
+                    ;
+                })
+                ->orWhere(function ($query) use ($user) {
+                    $query->where([
+                        ['files.constante', '<>', 'DM'],
+                        ['docs.to_agency', '=', sprintf("%04d", $user->juncao)]
+                    ])
+                    ;
+                });
+
+        }
+        return Datatables::of($query)
+            ->filterColumn('constante', function($query, $keyword) {
+                $query->where('files.constante', '=', $keyword);
+            })
+            ->addColumn('action', function ($doc) {
+                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                'value="'. $doc->id.'">';
+            })
+            ->addColumn('view', function($doc) use ($user) {
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
+                    'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
+                    '</a>';
+            })
+            ->addColumn('origin', function ($doc) {
+                if ($doc->origin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+                    $doc->from_agency . '</a>';
+                } else {
+                    return $doc->from_agency;
+                }
+            })
+            ->addColumn('destin', function ($doc) {
+                if ($doc->destin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+                    $doc->to_agency . '</a>';
+                } else {
+                    return $doc->to_agency;
+                }
+            })
+            ->editColumn('constante', function ($doc) {
+                return __('labels.' . $doc->constante);
+            })
+
+            ->addColumn('status', function($doc) {
+                return $doc->status ? $doc->status : '-';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
+            })
+            ->escapeColumns([])
+            ->make(true);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 400);
         }
     }
 }

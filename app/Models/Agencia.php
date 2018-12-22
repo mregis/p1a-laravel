@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Agencia extends Model
+class Agencia extends BaseModel
 {
     use SoftDeletes;
 
@@ -25,4 +25,9 @@ class Agencia extends Model
     ];
 
     protected $table = 'agencia';
+
+    public function __toString()
+    {
+        return $this->codigo . ": " . $this->nome;
+    }
 }

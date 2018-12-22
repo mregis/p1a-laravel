@@ -14,6 +14,7 @@
 
 Auth::routes();
 Route::any('/', 'Auth\AuthController@index');
+
 Route::any('/auth/login', 'Auth\AuthController@login')->name('auth.login');
 Route::any('/auth/logout', 'Auth\AuthController@logout')->name('auth.logout');
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Users;
 use App\Models\Files;
 use App\Models\Docs;
@@ -14,12 +14,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Auth;
+use DB;
 
 
-class UploadController extends Controller
+class UploadController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -28,14 +26,17 @@ class UploadController extends Controller
      */
     public function index(Request $request, $user_id = false)
     {
+
         if ($request->hasFile('file')) {
+            try {
+                $in_transaction = false;
             if ($file = $request->file('file')->isValid()) {
                 $name = $request->file->getClientOriginalName();
 
                 $file_hash = hash_file('crc32b', $request->file->getPathName());
                 $f = Files::where('file_hash', '=', $file_hash)->first();
                 if ($f) {
-                    return response()->json('Arquivo já carregado anteriormente', 400);
+                    throw new \Exception('Arquivo já carregado anteriormente');
                 }
                 if (($handle = fopen($request->file->getPathName(), 'r')) !== FALSE) {
                     $i = 1;
@@ -45,8 +46,9 @@ class UploadController extends Controller
                         if ($r == '') continue; // Evitar linhas em branco
                         if (strlen($r) < 6) { // Linhas com menos de 6 caracteres são considerados erros
                             fclose($handle);
-                            return response()->json(
-                                sprintf('Registro [%s] da linha %d é inválido. Processo abortado', $r, $i), 400);
+                            throw new \Exception(
+                                sprintf('Registro [%s] da linha %d é inválido. Processo abortado', $r, $i)
+                            );
                         }
 
                         $rows[] = $r;
@@ -54,12 +56,14 @@ class UploadController extends Controller
                     }
                     fclose($handle);
                 } else {
-                    return response()->json('Erro ao ler arquivo.', 400);
+                    throw new \Exception('Erro ao ler arquivo.');
                 }
                 if (count($rows) < 1) {
-                    return response()->json('Arquivo não contém registros', 400);
+                    throw new \Exception('Arquivo não contém registros');
                 }
-                // Criando o registro do Arquivo
+                DB::beginTransaction(); // Iniciando uma transação para evitar problemas com o banco
+                $in_transaction = true;
+                    // Criando o registro do Arquivo
                 $oFile = new Files(
                     [
                         'name' => $name,
@@ -100,28 +104,34 @@ class UploadController extends Controller
                                 } else {
                                     $oDoc->delete();
                                     $oFile->delete();
-                                    return response()->json('Erro ao criar entrada de historico.', 400);
+                                    throw new \Exception('Erro ao criar entrada de historico.');
                                 }
                             } else {
                                 $oFile->delete();
-                                return response()->json('Erro ao criar entrada de registro.', 400);
+                                throw new \Exception('Erro ao criar entrada de registro.');
                             }
                         }
                     }
                     $oFile->total = $cntr;
                     $oFile->save();
                 } else {
-                    return response()->json('Erro ao carregar arquivo.', 400);
+                    throw new \Exception('Erro ao carregar arquivo.');
                 }
                 (($cntr == 0) && ($msg = ' Nenhum registro novo inserido')) ||
                 (($cntr == 1) && ($msg = ' 1 registro novo inserido')) ||
                 (($cntr > 1) && ($msg = sprintf(' %d registros novos inserido', $cntr)));
 
+                DB::commit();
                 return response()->json('Arquivo carregado.' . $msg, 200);
             }
             return response()->json('Arquivo não carregado', 400);// Somente com erro chega aqui
+            } catch (\Exception $e) {
+                if ($in_transaction == true) {
+                    DB::rollback();
+                }
+                return response()->json($e->getMessage(), 400);
+            }
         }
-
 
         $menu = new Menu();
         $menus = $menu->menu();
@@ -132,7 +142,11 @@ class UploadController extends Controller
     {
         return Datatables::of(Files::query())
             ->addColumn('action', function ($files) {
-                return '<div align="center"><a href="/arquivo/' . $files->id . '" data-toggle="tooltip" title="Ver" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-trash-alt"></i></button></div>';
+                return '<div align="center"><a href="/arquivo/' . $files->id .
+                '" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" ' .
+                'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-trash-alt"></i></button></div>';
             })->editColumn('created_at', function ($files) {
                 return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '-';
             })->editColumn('updated_at', function ($files) {
@@ -228,16 +242,13 @@ class UploadController extends Controller
             ->make(true);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        $files = Files::where('id', $id)->first();
-
-        if (is_null($files)) {
+        if (!$file = Files::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
-        $files->delete();
-
+        $file->delete();
         return $this->sendResponse(null, 'Informação excluída com sucesso');
     }
 
@@ -249,11 +260,10 @@ class UploadController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param $user_id
      * @return mixed
      */
-    public function capaLoteList(Request $request, $user_id)
+    public function capaLoteList($user_id)
     {
         if (!$user = User::find($user_id)) {
             $this->sendError('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
@@ -263,9 +273,11 @@ class UploadController extends Controller
                 "files.constante as constante",
                 "docs.content", "docs.status", "docs.from_agency",
                 "docs.to_agency", "docs.updated_at", "docs.created_at",
-                "docs.id"
+                "docs.id", "origin.nome as origin", "destin.nome as destin"
             ])
             ->join("docs", "files.id", "=", "docs.file_id")
+            ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
+            ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
             ->where(function ($query) {
                 $query->whereIn('docs.status', ['pendente'])
                     ->orWhere('docs.status', '=', null);
@@ -288,11 +300,24 @@ class UploadController extends Controller
                 'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
+            ->addColumn('origin', function ($doc) {
+                if ($doc->origin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+                    $doc->from_agency . '</a>';
+                } else {
+                    return $doc->from_agency;
+                }
+            })
+            ->addColumn('destin', function ($doc) {
+                if ($doc->destin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+                    $doc->to_agency . '</a>';
+                } else {
+                    return $doc->to_agency;
+                }
+            })
             ->editColumn('constante', function ($doc) {
                 return __('labels.' . $doc->constante);
-            })
-            ->editColumn('status', function($doc) {
-                return $doc->status ? $doc->status : 'pendente';
             })
             ->editColumn('updated_at', function ($doc) {
                 return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
@@ -300,8 +325,9 @@ class UploadController extends Controller
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
             })
-            ->addColumn('view', function($doc) {
-                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id . ')" ' .
+            ->addColumn('view', function($doc) use ($user) {
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
                 'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                 '</a>';
             })
@@ -315,39 +341,51 @@ class UploadController extends Controller
      */
     public function register(Request $request)
     {
-        if (!$user = Users::find($request->get('user'))) {
-            return response()->json('Ocorreu um erro ao verificar permissão', 404);
-        }
-
-        $params = $request->all();
-
-        if ($seal = Seal::where('content', $params['lacre'])->first()) {
-            $id = $seal->id;
-        } else {
-            $seal = new Seal();
-            $seal->user_id = $user->id;
-            $seal->content = $params['lacre'];
-            $seal->save();
-            $id = $seal->id;
-        }
-        $regs = 0;
-        foreach ($params['doc'] as &$doc) {
-            if (!$sealGroup = SealGroup::where('doc_id', $doc)->first()) {
-                $sealGroup = new SealGroup();
-                $sealGroup->seal_id = $id;
-                $sealGroup->doc_id = $doc;
-                $sealGroup->save();
+        try {
+            if (!$user = Users::find($request->get('user'))) {
+                throw new \Exception('Ocorreu um erro ao verificar permissão');
             }
-            if ($docs = Docs::where('id', $doc)->first()) {
-                $docs->status = 'enviado';
-                $docs->save();
-                $docsHistory = new DocsHistory();
-                $docsHistory->doc_id = $doc;
-                $docsHistory->description = "Capa enviada";
-                $docsHistory->user_id = $user->id;
-                $docsHistory->save();
-                $regs++;
+
+            $params = $request->all();
+
+            // Iniciando transaction
+            DB::beginTransaction();
+            $in_transaction = true;
+            if (!$seal = Seal::where('content', $params['lacre'])->first()) {
+                $seal = new Seal();
+                $seal->user_id = $user->id;
+                $seal->content = $params['lacre'];
+                $seal->save();
             }
+            $regs = 0;
+            foreach ($params['doc'] as $doc_id) {
+                if (!$sealGroup = SealGroup::where('doc_id', $doc_id)->first()) {
+                    $sealGroup = new SealGroup();
+                    $sealGroup->seal_id = $seal->id;
+                    $sealGroup->doc_id = $doc_id;
+                    $sealGroup->save();
+                }
+                if ($doc = Docs::find($doc_id)) {
+                    $doc->status = 'enviado';
+                    $doc->save();
+                    $docHistory = new DocsHistory(
+                        [
+                            'doc_id' => $doc_id,
+                            'description' => "Capa enviada",
+                            'user_id' => $user->id,
+                        ]
+                    );
+
+                    $docHistory->save();
+                    $regs++;
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            if ($in_transaction == true) {
+                DB::rollback();
+            }
+            return response()->json($e->getMessage(), 400);
         }
         return response()->json(
             sprintf('%s Remessa%s Registrada%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 0 ? 's':''), 200

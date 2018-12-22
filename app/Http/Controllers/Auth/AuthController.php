@@ -24,30 +24,34 @@ class AuthController extends Controller
 
     public function index(Request $request)
     {
-	if($request->email){
-		$pass = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9);
-		$dados = array('pass' => $pass);
+        if ($request->email) {
+            $pass = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9);
+            $dados = array('pass' => $pass);
 
-		$user = Users::where('email', Input::get('email'))->first();
-		if (is_null($user)) {
-			return $this->sendError('Informação não encontrada', 404);
-		}
+            $user = Users::where('email', Input::get('email'))->first();
+            if (is_null($user)) {
+                return $this->sendError('Informação não encontrada', 404);
+            }
 
-		$input['password'] = Hash::make($pass);
-		$user->fill($input)->save();
+            $input['password'] = Hash::make($pass);
+            $user->fill($input)->save();
 
-		\Mail::send('emails.recuperar-senha',$dados, function ($message)use($request){
-		$message
-                ->to(Input::get('email'))
-                ->subject('Resgate de Senha');
-		});
+            \Mail::send('emails.recuperar-senha',$dados, function ($message)use($request){
+            $message
+                    ->to(Input::get('email'))
+                    ->subject('Resgate de Senha');
+            });
 
 
-		Audit::create(array('desc'=>'Forgot Password - '.Input::get('email')));
-	}else{
-	        return view('auth/auth');
-	}
+            Audit::create(array('desc'=>'Forgot Password - '.Input::get('email')));
+        }
+        if (Auth::user()) {
+            return redirect('/dashboard');
+        }
+        return view('auth/auth');
+
     }
+
     public function login(){
 
         $username = Input::get('username');

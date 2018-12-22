@@ -77,3 +77,6 @@ Route::get('/dashboard/recebimentos/{user_id}', 'Api\DashboardController@fromAge
 Route::get('/dashboard/devolucoes/{user_id}', 'Api\DashboardController@returnAgencyReport')->name('dashboard.devolucoes');
 Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList')->name('receive.lista-arquivos');
 Route::get('/report/{file_id}/{user_id}/', 'Api\ReportController@fileContent')->name('report.arquivo');
+Route::get('/recebimento/{user_id}', 'Api\ReceiveController@getNotReceived')->name('receive.get-not-received');
+Route::post('/doc/history/','Api\DocsHistoryController@getDocsHistory')->name('docshistory.get-doc-history');
+

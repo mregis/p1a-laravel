@@ -180,8 +180,3 @@ var Select2 = function() {
         }
     };
 }();
-
-//== Initialization
-jQuery(document).ready(function() {
-    Select2.init();
-});

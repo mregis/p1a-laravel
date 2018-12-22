@@ -36,7 +36,8 @@ mix
         'node_modules/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
         'node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
         'node_modules/bootstrap-notify/bootstrap-notify.js',
-        'node_modules/jsbarcode/dist/barcodes/JsBarcode.code128.min.js',
+        'node_modules/jszip/dist/jszip.min.js',
+        'node_modules/pdfmake/build/pdfmake.min.js',
     ], 'public/js/noCommonJS.libs.js')
     .scripts([
         'resources/assets/js/custom.initializers.js',
@@ -48,7 +49,11 @@ mix
     .extract(['jquery', 'bootstrap', 'vue',        
         'js-cookie', 'wnumb', 'jquery.input',
         'datatables.net', 'datatables.net-bs4',
-        'datatables.net-buttons-bs4', 'datatables.net-select-bs4',
+        'datatables.net-responsive', 'datatables.net-buttons',
+        'datatables.net-buttons-bs4', 'datatables.net-responsive-bs4',
+        'datatables.net-buttons/js/buttons.colVis.js',
+        'datatables.net-buttons/js/buttons.html5.js',
+        'datatables.net-buttons/js/buttons.print.js',
         'select2', 'inputmask', 'blockui', 'bootstrap-validator',
         'dropzone', 'malihu-custom-scrollbar-plugin',        
         'jquery-form', 'daterangepicker', 'bootstrap-touchspin',
@@ -60,4 +65,9 @@ mix
         jquery: ['$', 'window.jQuery', 'jQuery'],
     })
     .version()
+    .webpackConfig({
+        node: {
+            fs: "empty"
+        }
+    })
 ;
