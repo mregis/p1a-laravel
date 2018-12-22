@@ -17,29 +17,25 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="id,desc,created_at">
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/audit/list')}}">
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table table-striped hasdetails" id="datatable">
+                        <table class="table table-striped auto-dt"
+                               data-buttons='{"dom":{"button":{"tag": "button","className":"btn btn-sm"}},"buttons":[{"extend": "print", "text": "<i class=\"fas fa-print\"></i> Imprimir", "className": "btn-primary"}]}'
+                               data-columns='[{"data": "description"}, {"data": "name"}, {"data": "email"}, {"data": "profile"}, {"data": "created_at"}]'
+                               data-server-side="true" data-ajax="{{URL::to('/api/audit/list')}}"
+                               data-order='[[4, "desc"]]'
+                               >
                             <thead class="thead-dark">
                             <tr>
-                                <th></th>
-                                <th>{{__('tables.id')}}</th>
                                 <th>{{__('tables.description')}}</th>
-                                <th>{{__('tables.created_at')}}</th>
+                                <th>{{__('tables.name')}}</th>
+                                <th>{{__('tables.email')}}</th>
+                                <th>{{__('labels.profile')}}:</th>
+                                <th>{{__('labels.date')}}</th>
                             </tr>
                             </thead>
                         </table>
-                        <script id="details-template" type="text/x-handlebars-template">
-                            <table class="table" id="check_details">
-                                <tr>
-                                    <td>{{__('labels.description')}}:</td>
-                                    <td>@{{desc}}</td>
-                                </tr>
-                            </table>
-                        </script>
                     </div>
                 </div>
             </div>

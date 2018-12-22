@@ -16,7 +16,12 @@ class AuditController extends BaseController
 {
     public function list()
     {
-        return Datatables::of(Audit::query())
+        $query = Audit::query()
+            ->select([
+                "audit.description", "audit.created_at",
+                "users.name as name", "users.email as email", "users.profile as profile"])
+            ->leftJoin("users", "audit.user_id", "=", "users.id");
+        return Datatables::of($query)
             ->editColumn('created_at', function ($audit) {
                 return $audit->created_at ? with(new Carbon($audit->created_at))->format('d/m/Y H:i:s') : '';
             })
