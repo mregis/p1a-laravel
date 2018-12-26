@@ -270,7 +270,7 @@ class UploadController extends BaseController
         }
         $query = Files::query()
             ->select([
-                "files.constante as constante",
+                "files.constante as constante", "files.movimento as movimento",
                 "docs.content", "docs.status", "docs.from_agency",
                 "docs.to_agency", "docs.updated_at", "docs.created_at",
                 "docs.id", "origin.nome as origin", "destin.nome as destin"

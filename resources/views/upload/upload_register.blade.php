@@ -25,7 +25,7 @@
 					<div class="table-responsive-xl">
 						<table class="table table-striped table-bordered dt-responsive"
                                id="datatable"
-                               data-order='[[4, "asc"], [6, "asc"]]'
+                               data-order='[[4, "asc"], [5, "asc"]]'
                                data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>
 							<thead class="thead-dark">
 							<tr>

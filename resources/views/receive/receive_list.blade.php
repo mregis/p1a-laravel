@@ -24,18 +24,14 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="columns" value="action,content,from_agency,to_agency,created_at,status">
-                @if(Auth::user()->juncao)
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/receive/docs/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
-                @else
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/receive/docs/')}}/{{$id}}/{{Auth::user()->profile}}">
-                @endif
+                <input type="hidden" id="columns" value="action,content,origin,destin,movimento,status">
+                <input type="hidden" id="baseurl" value="{{ route('capalote.get-not-received-by-file', [Auth::id(), $id])}}">
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered dt-responsive hasdetails"
+                    <div class="table-responsive-sm table-responsive-xl">
+                        <table class="table table-striped table-bordered hasdetails table-hover"
                                id="datatable"
                                data-column-defs='[{"targets":[1],"orderable":false}]'
-                               data-order='[[5, "desc"],[2, "asc"]]'>
+                               data-order='[[3, "asc"],[5, "asc"]]'>
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>
@@ -44,7 +40,7 @@
                                     <th>{{__('Capa Lote')}}</th>
                                     <th>{{__('Origem')}}</th>
                                     <th>{{__('Destino')}}</th>
-                                    <th>{{__('Inserido em')}}</th>
+                                    <th>{{__('Movimento')}}</th>
                                     <th>{{__('Status')}}</th>
                                 </tr>
                             </thead>

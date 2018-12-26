@@ -31,11 +31,10 @@ class ReceiveController extends BaseController
     }
 
     /**
-     * @param Request $request
      * @param $user_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fileList(Request $request, $user_id) {
+    public function fileList($user_id) {
 
         if (!$user = Users::find($user_id)) {
             return response()->json('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
@@ -43,10 +42,12 @@ class ReceiveController extends BaseController
         $query = Files::query()
             ->select(
                 [
-                    "files.id", "files.name", "files.total", "files.created_at",
-                    DB::raw('count(pendentes.id) as pendentes'),
+                    "files.id", "files.name", "files.created_at", "files.movimento",
+                    DB::raw('count(DISTINCT pendentes.id) as pendentes'),
+                    DB::raw('count(DISTINCT docs.id) as total'),
                 ] )
-            ->leftJoin("docs as pendentes",
+            ->where("docs.status", "=", "pendente")
+            ->join("docs as pendentes",
                 function ($join) use ($user) {
                     $join->on("files.id", '=', "pendentes.file_id")
                         ->where("pendentes.status", "=", "pendente");
@@ -55,7 +56,7 @@ class ReceiveController extends BaseController
                     }
                 }
             )
-            ->groupBy(["files.id", "files.name", "files.total", "files.created_at"])
+            ->groupBy(["files.id", "files.name", "files.created_at", "files.movimento"])
         ;
 
         if($user->profile != 'ADMINISTRADOR') {
@@ -64,9 +65,6 @@ class ReceiveController extends BaseController
         }
 
         return Datatables::of($query)
-            ->filterColumn('pendentes', function($query, $keyword) {
-                $query->where('pendentes', '=', $keyword);
-            })
             ->addColumn('view', function($file) {
                 return '<a href="/receber/' . $file->id .'" title="Exibir detalhes" ' .
                 'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
@@ -74,6 +72,9 @@ class ReceiveController extends BaseController
             })
             ->editColumn('created_at', function ($file) {
                 return $file->created_at? with(new Carbon($file->created_at))->format('d/m/Y') : '';
+            })
+            ->editColumn('movimento', function ($file) {
+                return with(new Carbon($file->movimento))->format('d/m/Y');
             })
             ->escapeColumns([])
             ->make(true);
@@ -106,7 +107,13 @@ class ReceiveController extends BaseController
 //        return view('upload.upload_list', compact('menus'));
     }
 
-    public function docs(Request $request, $id , $profile , $juncao = false)
+    /**
+     * @param $id
+     * @param $profile
+     * @param bool|false $juncao
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function docs($id , $profile , $juncao = false)
     {
         if (!$file = Files::find($id)) {
             return response()->json('Não foi possível recuperar as informações requisitadas', 400);
@@ -290,7 +297,12 @@ class ReceiveController extends BaseController
         return view('receive.receive_doclist', compact('menus', 'id'));
     }
 
-    public function doclisting(Request $request, $profile , $juncao = false)
+    /**
+     * @param $profile
+     * @param null|int $juncao
+     * @return mixed
+     */
+    public function doclisting($profile , $juncao = null)
     {
         $query = Docs::query()
             ->select("docs.*", "files.constante as constante")
@@ -377,88 +389,4 @@ class ReceiveController extends BaseController
         }
     }
 
-    /**
-     * @param $user_id
-     * @return mixed
-     */
-    public function getNotReceived($user_id)
-    {
-        try {
-            if (!$user = Users::find($user_id)) {
-                throw new \Exception('Erro ao verificar permissões.');
-            }
-
-        $query = Docs::query()
-            ->select("docs.*", "files.constante as constante")
-            ->join("files", "docs.file_id", "=", "files.id")
-            ->whereNotIn('status', ['recebido'])
-        ;
-        if ($user->profile != 'ADMINISTRADOR') {
-            $query
-                ->orWhere(function ($query) use ($user) {
-                    $query->where([
-                        ['files.constante', '=', 'DM'],
-                        ['docs.from_agency', '=', sprintf("%04d", $user->juncao)]
-                    ])
-                    ;
-                })
-                ->orWhere(function ($query) use ($user) {
-                    $query->where([
-                        ['files.constante', '<>', 'DM'],
-                        ['docs.to_agency', '=', sprintf("%04d", $user->juncao)]
-                    ])
-                    ;
-                });
-
-        }
-        return Datatables::of($query)
-            ->filterColumn('constante', function($query, $keyword) {
-                $query->where('files.constante', '=', $keyword);
-            })
-            ->addColumn('action', function ($doc) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
-                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
-                'value="'. $doc->id.'">';
-            })
-            ->addColumn('view', function($doc) use ($user) {
-                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
-                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                    'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
-                    '</a>';
-            })
-            ->addColumn('origin', function ($doc) {
-                if ($doc->origin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
-                    $doc->from_agency . '</a>';
-                } else {
-                    return $doc->from_agency;
-                }
-            })
-            ->addColumn('destin', function ($doc) {
-                if ($doc->destin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
-                    $doc->to_agency . '</a>';
-                } else {
-                    return $doc->to_agency;
-                }
-            })
-            ->editColumn('constante', function ($doc) {
-                return __('labels.' . $doc->constante);
-            })
-
-            ->addColumn('status', function($doc) {
-                return $doc->status ? $doc->status : '-';
-            })
-            ->editColumn('updated_at', function ($doc) {
-                return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
-            })
-            ->editColumn('created_at', function ($doc) {
-                return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
-            })
-            ->escapeColumns([])
-            ->make(true);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 400);
-        }
-    }
 }
