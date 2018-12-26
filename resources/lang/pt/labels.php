@@ -111,6 +111,8 @@ return [
     'city_service' => 'Vara / Cidade',
     'product_name' => 'Nome do Produto',
     'juncao' => 'Junção',
+    'unidade' => 'Unidade',
+    'last_login' => 'Ultimo login',
     'qtdedocs' => 'Quantidade Documentos',
     'alert-danger' => '<i class="fas fa-times-circle"></i> Erro',
     'alert-warning' => '<i class="fas exclamation-triangle"></i> Atenção!',

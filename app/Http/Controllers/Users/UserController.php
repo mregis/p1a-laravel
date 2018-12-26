@@ -66,7 +66,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $menu = new Menu();
-        $user = User::where('id', $id)->first();
+        $user = User::find($id);
         $menus = $menu->menu();
 
         return view('users.users_edit', compact('user', 'menus'));
