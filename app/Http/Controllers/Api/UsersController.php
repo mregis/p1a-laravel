@@ -25,11 +25,17 @@ class UsersController extends BaseController
                     'data-toggle="tooltip" title="Excluir" ' .
                     'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
                     '<i class="fas fa-trash-alt"></i></button></div>';
-            })->editColumn('created_at', function ($users) {
+            })
+            ->editColumn('last_login', function ($users) {
+                return $users->last_login ? with(new Carbon($users->last_login))->format('d/m/Y H:i:s') : 'Nunca';
+            })
+            ->editColumn('created_at', function ($users) {
                 return $users->created_at ? with(new Carbon($users->created_at))->format('d/m/Y H:i:s') : null;
-            })->editColumn('updated_at', function ($users) {
+            })
+            ->editColumn('updated_at', function ($users) {
                 return $users->updated_at ? with(new Carbon($users->updated_at))->format('d/m/Y H:i:s') : '';
-            })->make(true);
+            })
+            ->make(true);
     }
 
     /**
@@ -70,9 +76,7 @@ class UsersController extends BaseController
     public function show($id)
     {
 
-        $user = Users::where('id', $id)->first();
-
-        if (is_null($user)) {
+        if (!$user = Users::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
@@ -89,7 +93,7 @@ class UsersController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $user = Users::where('id', $id)->first();
+        $user = Users::find($id);
 
         if (is_null($user)) {
             return $this->sendError('Informação não encontrada', 404);
@@ -100,10 +104,8 @@ class UsersController extends BaseController
             return $this->sendError('As senhas estão divergentes', 404);
         }
 
-	$input['password'] = Hash::make($input['password']);
-
+	    $input['password'] = Hash::make($input['password']);
         $user->fill($input)->save();
-
         return $this->sendResponse($user->toArray(), 'Informação atualizada com sucesso');
     }
 
@@ -115,7 +117,7 @@ class UsersController extends BaseController
      */
     public function destroy($id)
     {
-        $user = Users::where('id', $id)->first();
+        $user = Users::find($id);
 
         if (is_null($user)) {
             return $this->sendError('Informação não encontrada', 404);
@@ -136,10 +138,12 @@ class UsersController extends BaseController
     public function edit($id)
     {
         $menu = new Menu();
-        $user = Users::where('id', $id)->first();
+        $user = Users::find($id);
         $menus = $menu->menu();
-
-        $permissao = $this->getEnum();
+        $permissao = [];
+        foreach (Profile::all() as $profile) {
+            $permissao[] = $profile->nome;
+        }
 
         return view('users.users_edit', compact('user', 'menus','permissao'));
     }

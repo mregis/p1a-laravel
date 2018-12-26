@@ -34,8 +34,8 @@
                 <input type="hidden" id="check_url" value="{{URL::to('/arquivo/recebe')}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered hasdetails"
+                    <div class="table-responsive-sm table-responsive-xl">
+                        <table class="table table-striped table-bordered hasdetails table-hover"
                                    id="datatable"
                                data-column-defs='[{"targets":[1,8,9],"orderable":false}]'
                                data-order='[[ 4, "asc" ], [ 5, "asc"]]'

@@ -21,8 +21,12 @@
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/users/list')}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
-                        <table class="table" id="datatable">
+                    <div class="table-responsive-xl table-responsive-sm">
+                        <table class="table table-striped table-bordered table-hover hasdetails"
+                               id="datatable"
+                               data-column-defs='[{"targets":[1,5],"orderable":false}]'
+                               data-order='[[ 2, "asc" ]]'
+                                >
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
@@ -41,6 +45,12 @@
                                     <td>@{{created_at}}</td>
                                     <td class="header">{{__('labels.juncao')}}:</td>
                                     <td>@{{juncao}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="header">{{__('labels.unidade')}}:</td>
+                                    <td>@{{unidade}}</td>
+                                    <td class="header">{{__('labels.last_login')}}:</td>
+                                    <td>@{{last_login}}</td>
                                 </tr>
                             </table>
                         </script>
