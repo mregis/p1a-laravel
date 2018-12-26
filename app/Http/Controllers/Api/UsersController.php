@@ -147,8 +147,6 @@ class UsersController extends BaseController
         $user = Users::find($id);
         $menus = $menu->menu();
         $permissao = [];
-        $juncao = $user->agencia;
-        $unidade = $user->unidade;
         foreach (Profile::all() as $profile) {
             $permissao[] = $profile->nome;
         }
