@@ -49,7 +49,7 @@ class DocsHistoryController extends BaseController
                 if (!$user = $h->user) {
                     throw new Exception('Erro ao buscar informações de usuário de histórico');
                 }
-                $h->local = ($h->user->agencia == null ? $h->user->local : (string)$h->user->agencia);
+                $h->local = ($h->user->agencia == null ? $h->user->unidade : (string)$h->user->agencia);
             }
 
             return response()->json($doc, 200);
