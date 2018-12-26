@@ -13308,7 +13308,7 @@ pre code {
 }
 
 .table-hover tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(212, 117, 0, 0.2);
 }
 
 .table-primary,
@@ -13434,16 +13434,16 @@ pre code {
 .table-active,
 .table-active > th,
 .table-active > td {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(212, 117, 0, 0.2);
 }
 
 .table-hover .table-active:hover {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(187, 103, 0, 0.2);
 }
 
 .table-hover .table-active:hover > td,
 .table-hover .table-active:hover > th {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(187, 103, 0, 0.2);
 }
 
 .table .thead-dark th {
