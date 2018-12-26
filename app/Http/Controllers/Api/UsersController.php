@@ -35,6 +35,12 @@ class UsersController extends BaseController
             ->editColumn('updated_at', function ($users) {
                 return $users->updated_at ? with(new Carbon($users->updated_at))->format('d/m/Y H:i:s') : '';
             })
+            ->editColumn('juncao', function ($user) {
+                if ($agencia = $user->agencia) {
+                    return (string) $agencia;
+                }
+                return '-';
+            })
             ->make(true);
     }
 
@@ -141,11 +147,13 @@ class UsersController extends BaseController
         $user = Users::find($id);
         $menus = $menu->menu();
         $permissao = [];
+        $juncao = $user->agencia;
+        $unidade = $user->unidade;
         foreach (Profile::all() as $profile) {
             $permissao[] = $profile->nome;
         }
 
-        return view('users.users_edit', compact('user', 'menus','permissao'));
+        return view('users.users_edit', compact('user', 'menus', 'permissao'));
     }
 
 
@@ -165,7 +173,7 @@ class UsersController extends BaseController
             $permissao[] = $profile->nome;
         }
 
-        return view('users.users_add', compact('menus','permissao'));
+        return view('users.users_add', compact('menus', 'permissao'));
     }
 
 }
