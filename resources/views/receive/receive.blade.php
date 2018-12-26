@@ -28,17 +28,20 @@
 		<div class="m-portlet m-portlet--tabs">
 			<div class="m-portlet__head"><br><h3>Recebimento</h3></div>
 			<div class="m-portlet__body">
-                <input type="hidden" id="columns" value="name,total,pendentes,created_at,view">
-                <input type="hidden" id="baseurl" value="{{ URL::to('/api/arquivos/receber/')}}/{{Auth::user()->id}}">
-                <div class="table-responsive-xl">
-					<table class="table table-striped table-bordered dt-responsive nowrap" id="datatable"
-                           data-column-defs='[{"targets":[4],"orderable":false}]' data-order='[[3, "desc"],[2, "desc"]]'>
+                <input type="hidden" id="columns" value="name,total,pendentes,movimento,view">
+                <input type="hidden" id="baseurl" value="{{ route('receive.lista-arquivos',Auth::user()->id)}}">
+                <div class="table-responsive-sm table-responsive-xl">
+					<table class="table table-striped table-bordered table-hover"
+						   id="datatable"
+                           data-column-defs='[{"targets":[4],"orderable":false}]'
+						   data-order='[[3, "asc"],[2, "desc"]]'
+							>
 						<thead class="thead-dark">
 							<tr>
 								<th>{{ __('tables.name') }}</th>
 								<th>{{ __('tables.total') }}</th>
 								<th>{{ __('tables.pendentes') }}</th>
-								<th>{{ __('tables.created_at') }}</th>
+								<th>{{ __('tables.movimento') }}</th>
 								<th>{{ __('tables.details') }}</th>
 							</tr>
 						</thead>

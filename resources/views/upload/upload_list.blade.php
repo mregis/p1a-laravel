@@ -23,7 +23,7 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
+                        <table class="table table-striped table-bordered hasdetails"
                                id="datatable" data-column-defs='[{"targets":[4],"orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>

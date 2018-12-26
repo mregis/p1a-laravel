@@ -11,22 +11,21 @@ namespace app\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
 use App\Models\Docs;
+use App\Models\Files;
 use App\Models\Users;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class CapaLoteController extends BaseController
 {
 
     /**
-     * @param Request $request
      * @param $user_id
      * @return mixed
      */
-    public function index(Request $request, $user_id) {
+    public function index($user_id) {
         if (!$user = Users::find($user_id)) {
-            $this->sendError('Ocorreu um erro ao validar o acesso ao conte�do.', 400);
+            $this->sendError('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
         }
         $query = Docs::query()
             ->select("docs.*")
@@ -63,17 +62,101 @@ class CapaLoteController extends BaseController
             ->make(true);
     }
 
-    public function _new(Request $request) {
-        // Check the user
-        $validatedData = $request->validate([
-            'title' => 'required|unique:posts|max:255',
-            'body' => 'required',
-        ]);
+    /**
+     * @param $user_id
+     * @param null $file_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNotReceived($user_id, $file_id = null)
+    {
+        try {
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception('Erro ao verificar permissões.');
+            }
 
+            $query = Files::query()
+                ->select([
+                    "files.constante as constante", "files.movimento as movimento",
+                    "docs.content", "docs.status", "docs.from_agency",
+                    "docs.to_agency", "docs.updated_at", "docs.created_at",
+                    "docs.id", "origin.nome as origin", "destin.nome as destin"
+                ])
+                ->join("docs", "files.id", "=", "docs.file_id")
+                ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
+                ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
+                ->whereNotIn('status', ['recebido'])
+            ;
+            if ($file_id > 0) {
+                $query->where("files.id", "=", $file_id);
+            }
+            if ($user->profile != 'ADMINISTRADOR') {
+                $query->where(function ($query) use ($user) {
+                    $query
+                        ->orWhere(function ($query) use ($user) {
+                            $query->where([
+                                ['files.constante', '=', 'DM'],
+                                ['docs.from_agency', '=', sprintf("%04d", $user->juncao)]
+                            ])
+                            ;
+                        })
+                        ->orWhere(function ($query) use ($user) {
+                            $query->where([
+                                ['files.constante', '<>', 'DM'],
+                                ['docs.to_agency', '=', sprintf("%04d", $user->juncao)]
+                            ])
+                            ;
+                        });
+                });
+            }
+            
+            return Datatables::of($query)
+                ->filterColumn('constante', function($query, $keyword) {
+                    $query->where('files.constante', '=', $keyword);
+                })
+                ->addColumn('action', function ($doc) {
+                    return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
+                    'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                    'value="'. $doc->id.'">';
+                })
+                ->addColumn('view', function($doc) use ($user) {
+                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
+                    'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
+                    '</a>';
+                })
+                ->addColumn('origin', function ($doc) {
+                    if ($doc->origin != null) {
+                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+                        $doc->from_agency . '</a>';
+                    } else {
+                        return $doc->from_agency;
+                    }
+                })
+                ->addColumn('destin', function ($doc) {
+                    if ($doc->destin != null) {
+                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+                        $doc->to_agency . '</a>';
+                    } else {
+                        return $doc->to_agency;
+                    }
+                })
+                ->editColumn('constante', function ($doc) {
+                    return __('labels.' . $doc->constante);
+                })
+                ->editColumn('movimento', function($doc) {
+                    return with(new Carbon($doc->movimento))->format('d/m/Y');
+                })
+                ->editColumn('updated_at', function ($doc) {
+                    return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
+                })
+                ->editColumn('created_at', function ($doc) {
+                    return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
-    public function downloadCapaLotePDF(Request $request, $doc_id) {
-
-
-    }
 }
