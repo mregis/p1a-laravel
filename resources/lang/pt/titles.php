@@ -116,4 +116,9 @@ return [
     'add_agencia' => 'Cadastro de Agência',
     'edit_agencia' => 'Editar Agência',
     'list_agencias' => 'Lista  de Agências',
+    'unidades' => 'Unidades',
+    'unidade' => 'Unidade',
+    'list_unidades' => 'Lista  de Unidades',
+    'add_unidade' => 'Cadastro de Unidade',
+    'edit_unidade' => 'Editar Unidade',
 ];

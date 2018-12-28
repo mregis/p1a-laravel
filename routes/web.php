@@ -77,3 +77,10 @@ Route::group(['prefix' => 'capalote'], function() {
 	Route::get('contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
 	Route::post('contingencia/imprimir/', 'CapaLote\CapaLoteController@showPDFMultiple')->name('capalote.imprimir-multiplo');
 });
+
+Route::group(['prefix' => 'cadastros/unidades'], function() {
+    Route::get('/', 'Unidade\UnidadeController@index')->name('unidades.index');
+    Route::get('/adicionar', 'Unidade\UnidadeController@_new')->name('unidade.novo');
+    Route::get('/editar/{agencia_id}', 'Unidade\UnidadeController@edit')->name('unidade.editar');
+    Route::post('/', 'Unidade\UnidadeController@store')->name('unidade.adicionar');
+});
