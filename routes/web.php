@@ -40,6 +40,10 @@ Route::group(['prefix' => 'cadastros'], function() {
 	Route::get('perfil', 'Cadastros\CadastrosController@perfis');
 	Route::get('perfil/remove/{id}', 'Cadastros\CadastrosController@perfil_remove');
 	Route::get('perfil/edit/{id}', 'Cadastros\CadastrosController@perfil_edit');
+
+    Route::get('/agencias/', 'Agencias\AgenciasController@index')->name('agencias.index');
+    Route::get('/agencias/adicionar', 'Agencias\AgenciasController@_new')->name('agencias.novo');
+    Route::get('/agencias/editar/{agencia_id}', 'Agencias\AgenciasController@edit')->name('agencias.editar');
 });
 
 Route::group(['prefix' => 'ocorrencias'], function() {

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'clients' => 'Clientes',
     'client' => 'Cliente',
     'contact' => 'Contato',
@@ -111,5 +110,10 @@ return [
     'profile'=> 'Perfil',
     'profiles'=> 'Perfis',
     'add_profile'=> 'Cadastrar Perfil',
-    'add_capalote' => 'Criar Capa de Lote'
+    'add_capalote' => 'Criar Capa de Lote',
+    'agencias' => 'Agências',
+    'agencia' => 'Agência',
+    'add_agencia' => 'Cadastro de Agência',
+    'edit_agencia' => 'Editar Agência',
+    'list_agencias' => 'Lista  de Agências',
 ];

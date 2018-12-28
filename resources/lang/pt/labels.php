@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'social_name' => 'Razão social',
     'fantasy_name' => 'Nome fantasia',
     'email' => 'Email',
@@ -120,5 +119,10 @@ return [
     'alert-success' => '<i class="fas fa-check-circle"></i> Sucesso',
     'DM' => 'Devolução Matriz',
     'DA' => 'Devolução Agência',
-    'RA' => 'Reenvio Agência'
+    'RA' => 'Reenvio Agência',
+    'code' => 'Código',
+    'add' => 'Adicionar',
+    'address' => 'Endereço',
+    'cd' => 'CD',
+    'village' => 'Bairro',
 ];
