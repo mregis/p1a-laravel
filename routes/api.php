@@ -88,3 +88,11 @@ Route::group(['prefix' => '/agencias'], function () {
     Route::put('/{id}', 'Api\AgenciasController@update')->name('agencias.api-atualizar');
     Route::delete('/{id}', 'Api\AgenciasController@destroy')->name('agencias.api-remover');
 });
+
+// Unidades
+Route::group(['prefix' => '/unidades'], function () {
+    Route::get('/listar', 'Api\UnidadeController@_list')->name('unidades.api-listar');
+    Route::post('/', 'Api\UnidadeController@store')->name('unidade.api-adicionar');
+    Route::put('/{id}', 'Api\UnidadeController@update')->name('unidade.api-atualizar');
+    Route::delete('/{id}', 'Api\UnidadeController@destroy')->name('unidade.api-remover');
+});

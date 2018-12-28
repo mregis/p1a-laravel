@@ -99,9 +99,7 @@ class UsersController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $user = Users::find($id);
-
-        if (is_null($user)) {
+        if (!$user = Users::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
@@ -123,15 +121,15 @@ class UsersController extends BaseController
      */
     public function destroy($id)
     {
-        $user = Users::find($id);
-
-        if (is_null($user)) {
+        if (!$user = Users::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
-        $user->delete();
+        if (!$user->delete()) {
+            return $this->sendError('Erro ao excluir cadastro', 400);
+        }
 
-        return $this->sendResponse(null, 'Informação excluída com sucesso');
+        return $this->sendResponse(null, 'Exclusão efetuada com sucesso');
     }
 
 
@@ -150,7 +148,6 @@ class UsersController extends BaseController
         foreach (Profile::all() as $profile) {
             $permissao[] = $profile->nome;
         }
-
         return view('users.users_edit', compact('user', 'menus', 'permissao'));
     }
 

@@ -19,7 +19,7 @@ Route::any('/auth/login', 'Auth\AuthController@login')->name('auth.login');
 Route::any('/auth/logout', 'Auth\AuthController@logout')->name('auth.logout');
 
 
-Route::get('/dashboard', 'Dashboard\DashboardController@index');
+Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('home');
 
 Route::get('/users/add', 'Api\UsersController@create')->name('users.users_add');
 Route::get('/users/list', 'Api\UsersController@index')->name('users.users_index');
@@ -76,4 +76,11 @@ Route::group(['prefix' => 'capalote'], function() {
     Route::post('contingencia', 'CapaLote\CapaLoteController@_new')->name('capalote.new');
 	Route::get('contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
 	Route::post('contingencia/imprimir/', 'CapaLote\CapaLoteController@showPDFMultiple')->name('capalote.imprimir-multiplo');
+});
+
+Route::group(['prefix' => 'cadastros/unidades'], function() {
+    Route::get('/', 'Unidade\UnidadeController@index')->name('unidades.index');
+    Route::get('/adicionar', 'Unidade\UnidadeController@_new')->name('unidade.novo');
+    Route::get('/editar/{agencia_id}', 'Unidade\UnidadeController@edit')->name('unidade.editar');
+    Route::post('/', 'Unidade\UnidadeController@store')->name('unidade.adicionar');
 });

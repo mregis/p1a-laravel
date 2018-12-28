@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agencia;
 use App\Models\Menu;
+use App\Models\Profile;
+use App\Models\Unidade;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 use Yajra\Datatables\Datatables;
 
 

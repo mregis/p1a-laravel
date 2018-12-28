@@ -6,11 +6,11 @@
  * Time: 23:37
  */
 
-namespace app\Http\Controllers\Agencias;
+namespace app\Http\Controllers\Unidade;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Agencia;
+use App\Models\Unidade;
 use App\Models\Menu;
 
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use PDF;
 
-class AgenciasController extends Controller
+class UnidadeController extends Controller
 {
 
     /**
@@ -30,7 +30,7 @@ class AgenciasController extends Controller
     public function index(Request $request) {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('agencia.index', compact('menus'));
+        return view('unidade.index', compact('menus'));
     }
 
     /**
@@ -41,24 +41,24 @@ class AgenciasController extends Controller
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        $agencia = new Agencia();
-        return view('agencia.new', compact('menus', 'agencia'));
+        $unidade = new Unidade();
+        return view('unidade.new', compact('menus', 'unidade'));
     }
 
     /**
      * @param Request $request
-     * @param $agencia_id
+     * @param $unidade_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Request $request, $agencia_id)
+    public function edit(Request $request, $unidade_id)
     {
-        if (!$agencia = Agencia::find($agencia_id)) {
+        if (!$unidade = Unidade::find($unidade_id)) {
             $request->session()->flash('alert-danger', 'Não foi possível encontrar o cadastro!');
-            return redirect(route('agencias.index'));
+            return redirect(route('unidades.index'));
         }
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('agencia.edit', compact('menus', 'agencia'));
+        return view('unidade.edit', compact('menus', 'unidade'));
     }
 
     /**
@@ -68,29 +68,23 @@ class AgenciasController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'codigo' => 'required|digits:4|not_in:0000',
-            'nome' => 'required|between:5,100',
-            'cd' => 'required',
-            'cep' => 'required|between:8,9|not_in:00000000,00000-000',
-            'endereco' => 'required|between:5,100',
-            'uf' => 'required|in:SP,RJ,MG,RS,AC,AL,AM,AP,BA,CE,DF,ES,GO,MA,MT,MS,PA,PB,PR,PE,PI,RN,RO,RR,SC,SE,TO',
-            'cidade' => 'required|between:5,100',
-            'bairro' => 'nullable|between:5,100',
+            'nome' => 'required|between:5,20',
+            'descricao' => 'required|between:5,100',
         ]);
 
         if ($validator->fails()) {
             $request->session()->flash('alert-danger', 'Erros encontrados. Verifique as informações e tente novamente!');
-            return redirect(route('agencias.novo'))
+            return redirect(route('unidade.novo'))
                 ->withErrors($validator)
                 ->withInput();
         }
 
-        if ($agencia = Agencia::create($request->all())) {
+        if ($unidade = Unidade::create($request->all())) {
             $request->session()->flash('alert-success', 'Cadastro criado com sucesso!');
         } else {
             $request->session()->flash('alert-danger', 'Ocorreu um erro ao tentar criar o cadastro!');
         }
 
-        return redirect(route('agencias.index'));
+        return redirect(route('unidades.index'));
     }
 }
