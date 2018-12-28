@@ -45,13 +45,6 @@ class AgenciasController extends Controller
         return view('agencia.new', compact('menus', 'agencia'));
     }
 
-    public function show()
-    {
-        $menu = new Menu();
-        $menus = $menu->menu();
-        return view('agencia.show', compact('menus'));
-    }
-
     /**
      * @param Request $request
      * @param $agencia_id

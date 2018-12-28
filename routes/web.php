@@ -19,7 +19,7 @@ Route::any('/auth/login', 'Auth\AuthController@login')->name('auth.login');
 Route::any('/auth/logout', 'Auth\AuthController@logout')->name('auth.logout');
 
 
-Route::get('/dashboard', 'Dashboard\DashboardController@index');
+Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('home');
 
 Route::get('/users/add', 'Api\UsersController@create')->name('users.users_add');
 Route::get('/users/list', 'Api\UsersController@index')->name('users.users_index');
