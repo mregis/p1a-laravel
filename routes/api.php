@@ -81,3 +81,10 @@ Route::get('/recebimento/{user_id}', 'Api\CapaLoteController@getNotReceived')->n
 Route::get('/recebimento/{user_id}/{file_id}', 'Api\CapaLoteController@getNotReceived')->name('capalote.get-not-received-by-file');
 Route::post('/doc/history/','Api\DocsHistoryController@getDocsHistory')->name('docshistory.get-doc-history');
 
+// Agências
+Route::group(['prefix' => '/agencias'], function () {
+    Route::get('/listar', 'Api\AgenciasController@_list')->name('agencias.api-listar');
+    Route::post('/', 'Api\AgenciasController@store')->name('agencias.api-adicionar');
+    Route::put('/{id}', 'Api\AgenciasController@update')->name('agencias.api-atualizar');
+    Route::delete('/{id}', 'Api\AgenciasController@destroy')->name('agencias.api-remover');
+});

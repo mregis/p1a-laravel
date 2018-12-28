@@ -10815,6 +10815,7 @@ function submitAjaxForm(form) {
         processData: false,
         contentType: false,
     }).done(function (data) {
+        $('.modal').hide();
         var modal = $("#on_done_data");
         if (data.success) {
             if (name == "add_client") {
@@ -10837,6 +10838,11 @@ function submitAjaxForm(form) {
             modal.modal('show');
 
         }
+    }).fail(function (data) {
+        $('.modal').hide();
+        var modal = $("#on_error");
+        modal.find('.modal-body').find('p').text(data.responseJSON.message);
+        modal.modal('show');
     });
 }
 

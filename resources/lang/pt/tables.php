@@ -43,5 +43,11 @@ return [
     'pendentes' => 'Pendentes',
     'details' => 'Detalhes',
     'movimento' => 'Movimento',
-    'constante' => 'Tipo'
+    'constante' => 'Tipo',
+    'code' => 'Código',
+    'cidade_uf' => 'Cidade/UF',
+    'cd' => 'CD',
+    'address' => 'Endereço',
+    'zipcode' => 'CEP',
+    'village' => 'Bairro',
 ];
