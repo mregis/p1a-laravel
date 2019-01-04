@@ -19,7 +19,8 @@ Route::any('/auth/login', 'Auth\AuthController@login')->name('auth.login');
 Route::any('/auth/logout', 'Auth\AuthController@logout')->name('auth.logout');
 
 
-Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('home');
+Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('dashboard.index');
+Route::get('/home', 'Dashboard\DashboardController@index')->name('home');
 
 Route::group(['prefix' => 'users'], function() {
 	Route::get('/add', 'Users\UserController@create')->name('users.users_add');

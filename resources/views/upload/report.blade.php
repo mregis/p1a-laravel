@@ -40,15 +40,11 @@
                     </div>
                 </div>
                 <input type="hidden" id="columns" value="id,content,status,action">
-                @if(Auth::user()->juncao)
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/report/')}}/{{$id}}/{{Auth::user()->profile}}/{{Auth::user()->juncao}}">
-                @else
-                <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/report/')}}/{{$id}}/{{Auth::user()->profile}}">
-                @endif
+                <input type="hidden" id="baseurl" value="{{ route('capalote.file_report', [Auth::id(), $id]) }}">
                 <div class="m-portlet__body">
                     <div class="table-responsive-xl">
                         <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
-                               id="datatable" data-column-defs='[{"targets":[0], "orderable":false}]'>
+                               id="datatable" data-column-defs='[{"targets":[0,4], "orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>

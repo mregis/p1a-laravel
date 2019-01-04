@@ -315,6 +315,7 @@ function getHistory(id, url, u) {
     });
     if (typeof(historytable) == "undefined" || historytable == null) {
         historytable = $('#history').DataTable({
+            dom: 'B',
             buttons: {
                 dom: {
                     button: {
@@ -11133,24 +11134,17 @@ function actionAjax(url, type) {
             modal.find('.modal-body').find('p').text(data.message);
             modal.modal('show');
         }
-        $('.modal').modal('hide');
-        var successmodal = $("#on_done_data").modal();
-        successmodal.find('.modal-body').find('p').text(data.message || data);
-        successmodal.show();
         $('#datatable').DataTable().ajax.reload();
     }).fail(function(f) {
-        // Close all opened modals
-        $('.modal').modal('hide');
         var errormodal = $("#on_error").modal();
         errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText);
         errormodal.show();
     });
 }
 
-function deleteData(id) {
-    var url = "delete/" + id;
-    actionAjax(url, "delete");
-    $('#fullCalModal').modal('hide');
+function deleteData(id, url) {
+    var _url = (typeof url == "undefined" ? "delete/" : url) + id;
+    actionAjax(_url, "delete");
 }
 
 function checkItem(id) {

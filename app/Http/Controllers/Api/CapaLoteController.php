@@ -159,4 +159,50 @@ class CapaLoteController extends BaseController
         }
     }
 
+    /**
+     * @param $user_id
+     * @param bool|false $file_id
+     * @return mixed
+     */
+    public function report($user_id, $file_id = false)
+    {
+        if(!$user = Users::find($user_id)) {
+            $this->sendError('Erro ao verificar permissões', 400);
+        }
+
+        $query = Docs::query()
+            ->select([
+                'docs.id',
+                'docs.content',
+                'docs.status',
+                'docs.created_at',
+                'docs.updated_at',
+                'docs.file_id'
+            ])
+            ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
+            ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
+        ;
+        if ($file_id > 0) {
+            $query->where("docs.file_id", $file_id);
+        }
+        if ($user->profile == 'AGÊNCIA') {
+            $query->where('docs.from_agency', '=', sprintf("%04d", $user->juncao))
+                ->orWhere('docs.to_agency', '=', sprintf("%04d", $user->juncao));
+        }
+
+        return Datatables::of($query)
+            ->addColumn('action', function($doc) use ($user) {
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
+                'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
+                '</a>';
+            })
+            ->editColumn('created_at', function ($docs) {
+                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->editColumn('updated_at', function ($docs) {
+                return $docs->updated_at ? with(new Carbon($docs->updated_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->make(true);
+    }
 }

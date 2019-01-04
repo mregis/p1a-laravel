@@ -97,3 +97,5 @@ Route::group(['prefix' => '/unidades'], function () {
     Route::put('/{id}', 'Api\UnidadeController@update')->name('unidade.api-atualizar');
     Route::delete('/{id}', 'Api\UnidadeController@destroy')->name('unidade.api-remover');
 });
+
+Route::get('/capalote/arquivo/{user_id}/{file_id}', 'Api\CapaLoteController@report')->name('capalote.file_report');
