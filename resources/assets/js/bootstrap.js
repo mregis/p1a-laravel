@@ -26,7 +26,6 @@ try {
     require('bootstrap-maxlength');
     require('bootstrap-select');
     require('select2')(window, $);
-    require('typeahead.js');
     var Inputmask = require('inputmask');
     require('nouislider');
     require('autosize');

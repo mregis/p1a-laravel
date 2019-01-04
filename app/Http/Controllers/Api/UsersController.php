@@ -3,14 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Agencia;
 use App\Models\Profile;
+use App\Models\Unidade;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Hash;
+use Validator;
+use Auth;
+use App\Models\Audit;
 
 class UsersController extends BaseController
 {
@@ -45,18 +50,6 @@ class UsersController extends BaseController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $menu = new Menu();
-        $menus = $menu->menu();
-        return view('users.users_list', compact('menus'));
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -72,7 +65,6 @@ class UsersController extends BaseController
 
     }
 
-
     /**
      * Display the specified resource.
      *
@@ -81,13 +73,10 @@ class UsersController extends BaseController
      */
     public function show($id)
     {
-
         if (!$user = Users::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
-
         return $this->sendResponse($user->toArray(), 'Informação recuperada com sucesso');
-        //
     }
 
     /**
@@ -103,14 +92,59 @@ class UsersController extends BaseController
             return $this->sendError('Informação não encontrada', 404);
         }
 
-        $input = $request->all();
-        if ($input['password'] != $input['confirm_password']) {
-            return $this->sendError('As senhas estão divergentes', 404);
+
+        $user_data = $request->all();
+        $validator = Validator::make($user_data, [
+            'name' => 'required|between:5,100',
+            'password' => 'nullable|confirmed',
+            'profile' => 'required',
+        ]);
+
+        $validator->after(function ($validator) use (&$user_data) {
+            // check Profile
+            if (!$profile = Profile::where('nome', $user_data['profile'])->first()
+            ) {
+                $validator->errors()->add('profile',
+                    'Perfil inválido! Verifique as informações. Persistindo o problema contate o Administrador');
+            }
+            // If the user has profile is AGÊNCIA
+            if ($profile->nome == 'AGÊNCIA') {
+                $juncao = preg_replace('#^(\d+):.*?$#', '$1', $user_data['juncao']);
+                if (!$agencia = Agencia::where('codigo', $juncao)->first()) {
+                    $validator->errors()->add('juncao', 'Obrigatório indicar uma Agência válida para o perfil indicado!');
+                }
+                $user_data['juncao'] = $juncao;
+                $user_data['unidade'] = null;
+            } elseif ($profile->nome == 'OPERADOR') { // If the user has profile is OPERADOR
+                if (!$unidade = Unidade::where('nome', $user_data['unidade'])->first()) {
+                    $validator->errors()->add('unidade', 'Obrigatório indicar uma Unidade válida para o perfil indicado!');
+                }
+                $user_data['juncao'] = null;
+            }
+
+        });
+
+        if ($validator->fails()) {
+            $request->session()->flash('alert-danger', 'Erros encontrados. Verifique as informações e tente novamente!');
+            return redirect(route('users.users_save'))
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
+        if ($user_data['password'] == null) {
+            unset($user_data['password']);
+        } else {
+            $user_data['password'] = Hash::make($user_data['password']);
         }
 
-	    $input['password'] = Hash::make($input['password']);
-        $user->fill($input)->save();
-        return $this->sendResponse($user->toArray(), 'Informação atualizada com sucesso');
+        if ($user->fill($user_data)->save()) {
+            Audit::create([
+                'description' => sprintf('Cadastro do Usuario [%s] atualizado', $user->name),
+                'user_id' => Auth::id()
+            ]);
+        } else {
+            return $this->sendError('Erro ao excluir cadastro', 400);
+        }
+        return $this->sendResponse(null, 'Informação atualizada com sucesso');
     }
 
     /**
@@ -125,50 +159,15 @@ class UsersController extends BaseController
             return $this->sendError('Informação não encontrada', 404);
         }
 
-        if (!$user->delete()) {
+        if ($user->delete()) {
+            Audit::create([
+                'description' => sprintf('Usuario [%s] removido', $user->name),
+                'user_id' => Auth::id()
+            ]);
+        } else {
             return $this->sendError('Erro ao excluir cadastro', 400);
         }
-
         return $this->sendResponse(null, 'Exclusão efetuada com sucesso');
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $menu = new Menu();
-        $user = Users::find($id);
-        $menus = $menu->menu();
-        $permissao = [];
-        foreach (Profile::all() as $profile) {
-            $permissao[] = $profile->nome;
-        }
-        return view('users.users_edit', compact('user', 'menus', 'permissao'));
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $menu = new Menu();
-        $menus = $menu->menu();
-
-        $permissao = [];
-        foreach(Profile::all() as $profile)
-        {
-            $permissao[] = $profile->nome;
-        }
-
-        return view('users.users_add', compact('menus', 'permissao'));
     }
 
 }

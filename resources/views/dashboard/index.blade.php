@@ -77,7 +77,7 @@
                                         <table class="table table-striped table-bordered auto-dt"
                                                data-columns='[{"data":"movimento"},{"data":"pendente"},{"data":"concluido"}]'
                                                data-ajax='{{ route('dashboard.devolucoes', Auth::user()->id) }}'
-                                               data-order='[[1,"desc"],[0,"desc"]]'>
+                                               data-order='[[1,"desc"],[0,"desc"]]' style="width: 100%">
                                             <thead class="table-dark">
                                                 <th>Data</th>
                                                 <th>Pendente</th>

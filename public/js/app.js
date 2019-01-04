@@ -44335,8 +44335,6 @@ try {
 
   __webpack_require__("./node_modules/select2/dist/js/select2.js")(window, $);
 
-  __webpack_require__("./node_modules/typeahead.js/dist/typeahead.bundle.js");
-
   var Inputmask = __webpack_require__("./node_modules/inputmask/index.js");
 
   __webpack_require__("./node_modules/nouislider/distribute/nouislider.js");

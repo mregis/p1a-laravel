@@ -114,4 +114,22 @@ class AgenciasController extends BaseController
 
         return $this->sendResponse(null, 'Exclusão efetuada com sucesso');
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function prefetchList(Request $request)
+    {
+        $agencias = [];
+        if ($request->get('q') != null) {
+            $limit = max((int)$request->get('l', 10), 1);
+            $agencias = Agencia::query()
+                ->where('codigo', '=', $request->get('q'))
+                ->orWhere('nome', '=', $request->get('q'))
+                ->limit($limit)
+                ->get();
+        }
+        return response()->json($agencias, 200);
+    }
 }
