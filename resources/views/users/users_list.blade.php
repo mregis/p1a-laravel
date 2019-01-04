@@ -24,7 +24,7 @@
                     <div class="table-responsive-xl table-responsive-sm">
                         <table class="table table-striped table-bordered table-hover hasdetails"
                                id="datatable"
-                               data-column-defs='[{"targets":[1,5],"orderable":false}]'
+                               data-column-defs='[{"targets":[5],"orderable":false}]'
                                data-order='[[ 2, "asc" ]]'
                                 >
                             <thead class="thead-dark">

@@ -21,11 +21,14 @@ Route::any('/auth/logout', 'Auth\AuthController@logout')->name('auth.logout');
 
 Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('home');
 
-Route::get('/users/add', 'Api\UsersController@create')->name('users.users_add');
-Route::get('/users/list', 'Api\UsersController@index')->name('users.users_index');
-Route::get('/users/edit/{id}', 'Api\UsersController@edit')->name('users.users_edit');
-Route::any('/users/update/{id}', 'Api\UsersController@update')->name('users.users_list');
-Route::any('/users/delete/{id}', 'Api\UsersController@destroy')->name('users.users_delete');
+Route::group(['prefix' => 'users'], function() {
+	Route::get('/add', 'Users\UserController@create')->name('users.users_add');
+	Route::get('/list', 'Users\UserController@index')->name('users.users_index');
+	Route::get('/edit/{id}', 'Users\UserController@edit')->name('users.users_edit');
+	Route::any('/update/{id}', 'Api\UsersController@update')->name('users.users_list');
+	Route::any('/delete/{id}', 'Api\UsersController@destroy')->name('users.users_delete');
+    Route::post('/add', 'Users\UserController@store')->name('users.users_save');
+});
 
 Route::get('/auditoria', 'Api\AuditController@index')->name('audit.audit_list');
 Route::get('/upload','Api\UploadController@index');

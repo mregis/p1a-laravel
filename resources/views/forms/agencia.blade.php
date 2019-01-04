@@ -95,3 +95,5 @@
     </div>
 
 </div>
+
+<input type="hidden" name="_u" value="{{Auth::id()}}" />

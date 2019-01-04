@@ -38,6 +38,7 @@ mix
         'node_modules/bootstrap-notify/bootstrap-notify.js',
         'node_modules/jszip/dist/jszip.min.js',
         'node_modules/pdfmake/build/pdfmake.min.js',
+        'node_modules/typeahead.js/dist/typeahead.bundle.min.js',
     ], 'public/js/noCommonJS.libs.js')
     .scripts([
         'resources/assets/js/custom.initializers.js',
@@ -57,7 +58,7 @@ mix
         'select2', 'inputmask', 'blockui', 'bootstrap-validator',
         'dropzone', 'malihu-custom-scrollbar-plugin',        
         'jquery-form', 'daterangepicker', 'bootstrap-touchspin',
-        'bootstrap-select', 'typeahead.js', 'autosize', 'clipboard',
+        'bootstrap-select', 'autosize', 'clipboard',
         'ion-rangeslider', 'summernote', 'jquery-validation',
         'jstree', 'raphael', 'chartist', 'chart.js',
     ])

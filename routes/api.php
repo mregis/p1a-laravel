@@ -21,9 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => '/users'], function () {
     Route::get('/', 'Api\UsersController@index');
     Route::get('/list', 'Api\UsersController@list');
-    Route::post('/', 'Api\UsersController@store');
+    Route::post('/', 'Api\UsersController@store')->name('users.api-store');
     Route::get('/{id}', 'Api\UsersController@show');
-    Route::put('/{id}', 'Api\UsersController@update');
+    Route::put('/{id}', 'Api\UsersController@update')->name('users.users_update');
     Route::delete('/{id}', 'Api\UsersController@destroy');
 });
 
@@ -84,6 +84,7 @@ Route::post('/doc/history/','Api\DocsHistoryController@getDocsHistory')->name('d
 // Agências
 Route::group(['prefix' => '/agencias'], function () {
     Route::get('/listar', 'Api\AgenciasController@_list')->name('agencias.api-listar');
+    Route::get('/search', 'Api\AgenciasController@prefetchList')->name('agencias.api-buscar');
     Route::post('/', 'Api\AgenciasController@store')->name('agencias.api-adicionar');
     Route::put('/{id}', 'Api\AgenciasController@update')->name('agencias.api-atualizar');
     Route::delete('/{id}', 'Api\AgenciasController@destroy')->name('agencias.api-remover');

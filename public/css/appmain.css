@@ -14932,7 +14932,9 @@ input[type="button"].btn-block {
   margin-left: 0;
 }
 
-.dropdown-menu {
+.dropdown-menu,
+span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .tt-dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;
@@ -14957,7 +14959,11 @@ input[type="button"].btn-block {
   left: auto;
 }
 
-.dropup .dropdown-menu {
+.dropup .dropdown-menu,
+.dropup span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .dropup .tt-menu,
+.dropup span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .dropup .tt-dropdown-menu {
   top: auto;
   bottom: 100%;
   margin-top: 0;
@@ -14981,7 +14987,11 @@ input[type="button"].btn-block {
   margin-left: 0;
 }
 
-.dropright .dropdown-menu {
+.dropright .dropdown-menu,
+.dropright span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .dropright .tt-menu,
+.dropright span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .dropright .tt-dropdown-menu {
   top: 0;
   right: auto;
   left: 100%;
@@ -15010,7 +15020,11 @@ input[type="button"].btn-block {
   vertical-align: 0;
 }
 
-.dropleft .dropdown-menu {
+.dropleft .dropdown-menu,
+.dropleft span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .dropleft .tt-menu,
+.dropleft span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .dropleft .tt-dropdown-menu {
   top: 0;
   right: 100%;
   left: auto;
@@ -15052,9 +15066,17 @@ input[type="button"].btn-block {
 }
 
 .dropdown-menu[x-placement^="top"],
+span.twitter-typeahead .tt-menu[x-placement^="top"],
+span.twitter-typeahead .tt-dropdown-menu[x-placement^="top"],
 .dropdown-menu[x-placement^="right"],
+span.twitter-typeahead .tt-menu[x-placement^="right"],
+span.twitter-typeahead .tt-dropdown-menu[x-placement^="right"],
 .dropdown-menu[x-placement^="bottom"],
-.dropdown-menu[x-placement^="left"] {
+span.twitter-typeahead .tt-menu[x-placement^="bottom"],
+span.twitter-typeahead .tt-dropdown-menu[x-placement^="bottom"],
+.dropdown-menu[x-placement^="left"],
+span.twitter-typeahead .tt-menu[x-placement^="left"],
+span.twitter-typeahead .tt-dropdown-menu[x-placement^="left"] {
   right: auto;
   bottom: auto;
 }
@@ -15066,7 +15088,8 @@ input[type="button"].btn-block {
   border-top: 1px solid #eee;
 }
 
-.dropdown-item {
+.dropdown-item,
+span.twitter-typeahead .tt-suggestion {
   display: block;
   width: 100%;
   padding: 0.25rem 1.5rem;
@@ -15080,7 +15103,9 @@ input[type="button"].btn-block {
 }
 
 .dropdown-item:hover,
-.dropdown-item:focus {
+span.twitter-typeahead .tt-suggestion:hover,
+.dropdown-item:focus,
+span.twitter-typeahead .tt-suggestion:focus {
   color: #202020;
   text-decoration: none;
   background: #f8f9fa -webkit-gradient(linear, left top, left bottom, from(#f8f9fa), to(#f8f9fa)) repeat-x;
@@ -15088,7 +15113,10 @@ input[type="button"].btn-block {
 }
 
 .dropdown-item.active,
-.dropdown-item:active {
+span.twitter-typeahead .active.tt-suggestion,
+span.twitter-typeahead .tt-suggestion.tt-cursor,
+.dropdown-item:active,
+span.twitter-typeahead .tt-suggestion:active {
   color: #fff;
   text-decoration: none;
   background: #446E9B -webkit-gradient(linear, left top, left bottom, from(#5f83a9), to(#446E9B)) repeat-x;
@@ -15096,13 +15124,17 @@ input[type="button"].btn-block {
 }
 
 .dropdown-item.disabled,
-.dropdown-item:disabled {
+span.twitter-typeahead .disabled.tt-suggestion,
+.dropdown-item:disabled,
+span.twitter-typeahead .tt-suggestion:disabled {
   color: #777;
   background-color: transparent;
   background-image: none;
 }
 
-.dropdown-menu.show {
+.dropdown-menu.show,
+span.twitter-typeahead .show.tt-menu,
+span.twitter-typeahead .show.tt-dropdown-menu {
   display: block;
 }
 
@@ -15930,7 +15962,11 @@ input[type="button"].btn-block {
   border-color: #dee2e6 #dee2e6 #f5f8fa;
 }
 
-.nav-tabs .dropdown-menu {
+.nav-tabs .dropdown-menu,
+.nav-tabs span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .nav-tabs .tt-menu,
+.nav-tabs span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .nav-tabs .tt-dropdown-menu {
   margin-top: -1px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -16034,7 +16070,11 @@ input[type="button"].btn-block {
   padding-left: 0;
 }
 
-.navbar-nav .dropdown-menu {
+.navbar-nav .dropdown-menu,
+.navbar-nav span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .navbar-nav .tt-menu,
+.navbar-nav span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .navbar-nav .tt-dropdown-menu {
   position: static;
   float: none;
 }
@@ -16110,7 +16150,11 @@ input[type="button"].btn-block {
             flex-direction: row;
   }
 
-  .navbar-expand-sm .navbar-nav .dropdown-menu {
+  .navbar-expand-sm .navbar-nav .dropdown-menu,
+  .navbar-expand-sm .navbar-nav span.twitter-typeahead .tt-menu,
+  span.twitter-typeahead .navbar-expand-sm .navbar-nav .tt-menu,
+  .navbar-expand-sm .navbar-nav span.twitter-typeahead .tt-dropdown-menu,
+  span.twitter-typeahead .navbar-expand-sm .navbar-nav .tt-dropdown-menu {
     position: absolute;
   }
 
@@ -16164,7 +16208,11 @@ input[type="button"].btn-block {
             flex-direction: row;
   }
 
-  .navbar-expand-md .navbar-nav .dropdown-menu {
+  .navbar-expand-md .navbar-nav .dropdown-menu,
+  .navbar-expand-md .navbar-nav span.twitter-typeahead .tt-menu,
+  span.twitter-typeahead .navbar-expand-md .navbar-nav .tt-menu,
+  .navbar-expand-md .navbar-nav span.twitter-typeahead .tt-dropdown-menu,
+  span.twitter-typeahead .navbar-expand-md .navbar-nav .tt-dropdown-menu {
     position: absolute;
   }
 
@@ -16218,7 +16266,11 @@ input[type="button"].btn-block {
             flex-direction: row;
   }
 
-  .navbar-expand-lg .navbar-nav .dropdown-menu {
+  .navbar-expand-lg .navbar-nav .dropdown-menu,
+  .navbar-expand-lg .navbar-nav span.twitter-typeahead .tt-menu,
+  span.twitter-typeahead .navbar-expand-lg .navbar-nav .tt-menu,
+  .navbar-expand-lg .navbar-nav span.twitter-typeahead .tt-dropdown-menu,
+  span.twitter-typeahead .navbar-expand-lg .navbar-nav .tt-dropdown-menu {
     position: absolute;
   }
 
@@ -16272,7 +16324,11 @@ input[type="button"].btn-block {
             flex-direction: row;
   }
 
-  .navbar-expand-xl .navbar-nav .dropdown-menu {
+  .navbar-expand-xl .navbar-nav .dropdown-menu,
+  .navbar-expand-xl .navbar-nav span.twitter-typeahead .tt-menu,
+  span.twitter-typeahead .navbar-expand-xl .navbar-nav .tt-menu,
+  .navbar-expand-xl .navbar-nav span.twitter-typeahead .tt-dropdown-menu,
+  span.twitter-typeahead .navbar-expand-xl .navbar-nav .tt-dropdown-menu {
     position: absolute;
   }
 
@@ -16323,7 +16379,11 @@ input[type="button"].btn-block {
           flex-direction: row;
 }
 
-.navbar-expand .navbar-nav .dropdown-menu {
+.navbar-expand .navbar-nav .dropdown-menu,
+.navbar-expand .navbar-nav span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .navbar-expand .navbar-nav .tt-menu,
+.navbar-expand .navbar-nav span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .navbar-expand .navbar-nav .tt-dropdown-menu {
   position: absolute;
 }
 
@@ -22330,7 +22390,11 @@ select.selectpicker {
   padding: 0 !important;
 }
 
-.bootstrap-select.bs-container .dropdown-menu {
+.bootstrap-select.bs-container .dropdown-menu,
+.bootstrap-select.bs-container span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .bootstrap-select.bs-container .tt-menu,
+.bootstrap-select.bs-container span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .bootstrap-select.bs-container .tt-dropdown-menu {
   z-index: 1060;
 }
 
@@ -22376,17 +22440,29 @@ select.selectpicker {
   width: 100%;
 }
 
-.bootstrap-select .dropdown-menu {
+.bootstrap-select .dropdown-menu,
+.bootstrap-select span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .bootstrap-select .tt-menu,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu {
   min-width: 100%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-.bootstrap-select .dropdown-menu > .inner:focus {
+.bootstrap-select .dropdown-menu > .inner:focus,
+.bootstrap-select span.twitter-typeahead .tt-menu > .inner:focus,
+span.twitter-typeahead .bootstrap-select .tt-menu > .inner:focus,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu > .inner:focus,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu > .inner:focus {
   outline: none !important;
 }
 
-.bootstrap-select .dropdown-menu.inner {
+.bootstrap-select .dropdown-menu.inner,
+.bootstrap-select span.twitter-typeahead .inner.tt-menu,
+span.twitter-typeahead .bootstrap-select .inner.tt-menu,
+.bootstrap-select span.twitter-typeahead .inner.tt-dropdown-menu,
+span.twitter-typeahead .bootstrap-select .inner.tt-dropdown-menu {
   position: static;
   float: none;
   border: 0;
@@ -22397,19 +22473,35 @@ select.selectpicker {
           box-shadow: none;
 }
 
-.bootstrap-select .dropdown-menu li {
+.bootstrap-select .dropdown-menu li,
+.bootstrap-select span.twitter-typeahead .tt-menu li,
+span.twitter-typeahead .bootstrap-select .tt-menu li,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li {
   position: relative;
 }
 
-.bootstrap-select .dropdown-menu li.active small {
+.bootstrap-select .dropdown-menu li.active small,
+.bootstrap-select span.twitter-typeahead .tt-menu li.active small,
+span.twitter-typeahead .bootstrap-select .tt-menu li.active small,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li.active small,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li.active small {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
-.bootstrap-select .dropdown-menu li.disabled a {
+.bootstrap-select .dropdown-menu li.disabled a,
+.bootstrap-select span.twitter-typeahead .tt-menu li.disabled a,
+span.twitter-typeahead .bootstrap-select .tt-menu li.disabled a,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li.disabled a,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li.disabled a {
   cursor: not-allowed;
 }
 
-.bootstrap-select .dropdown-menu li a {
+.bootstrap-select .dropdown-menu li a,
+.bootstrap-select span.twitter-typeahead .tt-menu li a,
+span.twitter-typeahead .bootstrap-select .tt-menu li a,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li a,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li a {
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -22417,24 +22509,44 @@ select.selectpicker {
           user-select: none;
 }
 
-.bootstrap-select .dropdown-menu li a.opt {
+.bootstrap-select .dropdown-menu li a.opt,
+.bootstrap-select span.twitter-typeahead .tt-menu li a.opt,
+span.twitter-typeahead .bootstrap-select .tt-menu li a.opt,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li a.opt,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li a.opt {
   position: relative;
   padding-left: 2.25em;
 }
 
-.bootstrap-select .dropdown-menu li a span.check-mark {
+.bootstrap-select .dropdown-menu li a span.check-mark,
+.bootstrap-select span.twitter-typeahead .tt-menu li a span.check-mark,
+span.twitter-typeahead .bootstrap-select .tt-menu li a span.check-mark,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li a span.check-mark,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li a span.check-mark {
   display: none;
 }
 
-.bootstrap-select .dropdown-menu li a span.text {
+.bootstrap-select .dropdown-menu li a span.text,
+.bootstrap-select span.twitter-typeahead .tt-menu li a span.text,
+span.twitter-typeahead .bootstrap-select .tt-menu li a span.text,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li a span.text,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li a span.text {
   display: inline-block;
 }
 
-.bootstrap-select .dropdown-menu li small {
+.bootstrap-select .dropdown-menu li small,
+.bootstrap-select span.twitter-typeahead .tt-menu li small,
+span.twitter-typeahead .bootstrap-select .tt-menu li small,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu li small,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu li small {
   padding-left: 0.5em;
 }
 
-.bootstrap-select .dropdown-menu .notify {
+.bootstrap-select .dropdown-menu .notify,
+.bootstrap-select span.twitter-typeahead .tt-menu .notify,
+span.twitter-typeahead .bootstrap-select .tt-menu .notify,
+.bootstrap-select span.twitter-typeahead .tt-dropdown-menu .notify,
+span.twitter-typeahead .bootstrap-select .tt-dropdown-menu .notify {
   position: absolute;
   bottom: 5px;
   width: 96%;
@@ -22475,14 +22587,22 @@ select.selectpicker {
   margin-top: -1px;
 }
 
-.bootstrap-select.show-tick .dropdown-menu .selected span.check-mark {
+.bootstrap-select.show-tick .dropdown-menu .selected span.check-mark,
+.bootstrap-select.show-tick span.twitter-typeahead .tt-menu .selected span.check-mark,
+span.twitter-typeahead .bootstrap-select.show-tick .tt-menu .selected span.check-mark,
+.bootstrap-select.show-tick span.twitter-typeahead .tt-dropdown-menu .selected span.check-mark,
+span.twitter-typeahead .bootstrap-select.show-tick .tt-dropdown-menu .selected span.check-mark {
   position: absolute;
   display: inline-block;
   right: 15px;
   top: 5px;
 }
 
-.bootstrap-select.show-tick .dropdown-menu li a span.text {
+.bootstrap-select.show-tick .dropdown-menu li a span.text,
+.bootstrap-select.show-tick span.twitter-typeahead .tt-menu li a span.text,
+span.twitter-typeahead .bootstrap-select.show-tick .tt-menu li a span.text,
+.bootstrap-select.show-tick span.twitter-typeahead .tt-dropdown-menu li a span.text,
+span.twitter-typeahead .bootstrap-select.show-tick .tt-dropdown-menu li a span.text {
   margin-right: 34px;
 }
 
@@ -23590,7 +23710,15 @@ select.selectpicker {
 }
 
 .note-popover .popover-content .note-color-all .dropdown-menu,
-.card-header.note-toolbar .note-color-all .dropdown-menu {
+.note-popover .popover-content .note-color-all span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .note-popover .popover-content .note-color-all .tt-menu,
+.note-popover .popover-content .note-color-all span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .note-popover .popover-content .note-color-all .tt-dropdown-menu,
+.card-header.note-toolbar .note-color-all .dropdown-menu,
+.card-header.note-toolbar .note-color-all span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .card-header.note-toolbar .note-color-all .tt-menu,
+.card-header.note-toolbar .note-color-all span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .card-header.note-toolbar .note-color-all .tt-dropdown-menu {
   min-width: 337px;
 }
 
@@ -23601,17 +23729,41 @@ select.selectpicker {
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group {
   margin: 0;
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group:first-child,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group:first-child {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group:first-child,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group:first-child,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group:first-child,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group:first-child,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group:first-child,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group:first-child,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group:first-child,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group:first-child,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group:first-child {
   margin: 0 5px;
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-palette-title,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-palette-title {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-palette-title,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-palette-title,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-palette-title,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-palette-title,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-palette-title,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-palette-title,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-palette-title,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-palette-title,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-palette-title {
   font-size: 12px;
   margin: 2px 7px;
   text-align: center;
@@ -23619,9 +23771,25 @@ select.selectpicker {
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-reset,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-reset,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-color-reset,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-reset,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-color-reset,
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-select,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-select,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-color-select,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-select,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-color-select,
 .card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-reset,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-select {
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-reset,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-color-reset,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-reset,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-color-reset,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-select,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-select,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-color-select,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-select,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-color-select {
   font-size: 11px;
   margin: 3px;
   padding: 0 3px;
@@ -23630,38 +23798,94 @@ select.selectpicker {
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-row,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-row {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-row,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-color-row,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-row,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-color-row,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-row,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-row,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-color-row,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-row,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-color-row {
   height: 20px;
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-reset:hover,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-reset:hover {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-reset:hover,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-color-reset:hover,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-reset:hover,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-color-reset:hover,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-reset:hover,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-reset:hover,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-color-reset:hover,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-reset:hover,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-color-reset:hover {
   background: #eee;
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-select-btn,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-select-btn {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-select-btn,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-color-select-btn,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-select-btn,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-color-select-btn,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-color-select-btn,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-color-select-btn,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-color-select-btn,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-color-select-btn,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-color-select-btn {
   display: none;
 }
 
 .note-popover .popover-content .note-color .dropdown-menu .btn-group .note-holder-custom .note-color-btn,
-.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-holder-custom .note-color-btn {
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-menu .btn-group .note-holder-custom .note-color-btn,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-menu .btn-group .note-holder-custom .note-color-btn,
+.note-popover .popover-content .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-holder-custom .note-color-btn,
+span.twitter-typeahead .note-popover .popover-content .note-color .tt-dropdown-menu .btn-group .note-holder-custom .note-color-btn,
+.card-header.note-toolbar .note-color .dropdown-menu .btn-group .note-holder-custom .note-color-btn,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-menu .btn-group .note-holder-custom .note-color-btn,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-menu .btn-group .note-holder-custom .note-color-btn,
+.card-header.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu .btn-group .note-holder-custom .note-color-btn,
+span.twitter-typeahead .card-header.note-toolbar .note-color .tt-dropdown-menu .btn-group .note-holder-custom .note-color-btn {
   border: 1px solid #eee;
 }
 
 .note-popover .popover-content .note-para .dropdown-menu,
-.card-header.note-toolbar .note-para .dropdown-menu {
+.note-popover .popover-content .note-para span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .note-popover .popover-content .note-para .tt-menu,
+.note-popover .popover-content .note-para span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .note-popover .popover-content .note-para .tt-dropdown-menu,
+.card-header.note-toolbar .note-para .dropdown-menu,
+.card-header.note-toolbar .note-para span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .card-header.note-toolbar .note-para .tt-menu,
+.card-header.note-toolbar .note-para span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .card-header.note-toolbar .note-para .tt-dropdown-menu {
   min-width: 216px;
   padding: 5px;
 }
 
 .note-popover .popover-content .note-para .dropdown-menu > div:first-child,
-.card-header.note-toolbar .note-para .dropdown-menu > div:first-child {
+.note-popover .popover-content .note-para span.twitter-typeahead .tt-menu > div:first-child,
+span.twitter-typeahead .note-popover .popover-content .note-para .tt-menu > div:first-child,
+.note-popover .popover-content .note-para span.twitter-typeahead .tt-dropdown-menu > div:first-child,
+span.twitter-typeahead .note-popover .popover-content .note-para .tt-dropdown-menu > div:first-child,
+.card-header.note-toolbar .note-para .dropdown-menu > div:first-child,
+.card-header.note-toolbar .note-para span.twitter-typeahead .tt-menu > div:first-child,
+span.twitter-typeahead .card-header.note-toolbar .note-para .tt-menu > div:first-child,
+.card-header.note-toolbar .note-para span.twitter-typeahead .tt-dropdown-menu > div:first-child,
+span.twitter-typeahead .card-header.note-toolbar .note-para .tt-dropdown-menu > div:first-child {
   margin-right: 5px;
 }
 
 .note-popover .popover-content .dropdown-menu,
-.card-header.note-toolbar .dropdown-menu {
+.note-popover .popover-content span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .note-popover .popover-content .tt-menu,
+.note-popover .popover-content span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .note-popover .popover-content .tt-dropdown-menu,
+.card-header.note-toolbar .dropdown-menu,
+.card-header.note-toolbar span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .card-header.note-toolbar .tt-menu,
+.card-header.note-toolbar span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .card-header.note-toolbar .tt-dropdown-menu {
   min-width: 90px;
   /* dropdown-menu right position */
   /* http://forrst.com/posts/Bootstrap_right_positioned_dropdown-2KB */
@@ -23669,31 +23893,71 @@ select.selectpicker {
 }
 
 .note-popover .popover-content .dropdown-menu.right,
-.card-header.note-toolbar .dropdown-menu.right {
+.note-popover .popover-content span.twitter-typeahead .right.tt-menu,
+span.twitter-typeahead .note-popover .popover-content .right.tt-menu,
+.note-popover .popover-content span.twitter-typeahead .right.tt-dropdown-menu,
+span.twitter-typeahead .note-popover .popover-content .right.tt-dropdown-menu,
+.card-header.note-toolbar .dropdown-menu.right,
+.card-header.note-toolbar span.twitter-typeahead .right.tt-menu,
+span.twitter-typeahead .card-header.note-toolbar .right.tt-menu,
+.card-header.note-toolbar span.twitter-typeahead .right.tt-dropdown-menu,
+span.twitter-typeahead .card-header.note-toolbar .right.tt-dropdown-menu {
   right: 0;
   left: auto;
 }
 
 .note-popover .popover-content .dropdown-menu.right::before,
-.card-header.note-toolbar .dropdown-menu.right::before {
+.note-popover .popover-content span.twitter-typeahead .right.tt-menu::before,
+span.twitter-typeahead .note-popover .popover-content .right.tt-menu::before,
+.note-popover .popover-content span.twitter-typeahead .right.tt-dropdown-menu::before,
+span.twitter-typeahead .note-popover .popover-content .right.tt-dropdown-menu::before,
+.card-header.note-toolbar .dropdown-menu.right::before,
+.card-header.note-toolbar span.twitter-typeahead .right.tt-menu::before,
+span.twitter-typeahead .card-header.note-toolbar .right.tt-menu::before,
+.card-header.note-toolbar span.twitter-typeahead .right.tt-dropdown-menu::before,
+span.twitter-typeahead .card-header.note-toolbar .right.tt-dropdown-menu::before {
   right: 9px;
   left: auto !important;
 }
 
 .note-popover .popover-content .dropdown-menu.right::after,
-.card-header.note-toolbar .dropdown-menu.right::after {
+.note-popover .popover-content span.twitter-typeahead .right.tt-menu::after,
+span.twitter-typeahead .note-popover .popover-content .right.tt-menu::after,
+.note-popover .popover-content span.twitter-typeahead .right.tt-dropdown-menu::after,
+span.twitter-typeahead .note-popover .popover-content .right.tt-dropdown-menu::after,
+.card-header.note-toolbar .dropdown-menu.right::after,
+.card-header.note-toolbar span.twitter-typeahead .right.tt-menu::after,
+span.twitter-typeahead .card-header.note-toolbar .right.tt-menu::after,
+.card-header.note-toolbar span.twitter-typeahead .right.tt-dropdown-menu::after,
+span.twitter-typeahead .card-header.note-toolbar .right.tt-dropdown-menu::after {
   right: 10px;
   left: auto !important;
 }
 
 .note-popover .popover-content .dropdown-menu.note-check li a i,
-.card-header.note-toolbar .dropdown-menu.note-check li a i {
+.note-popover .popover-content span.twitter-typeahead .note-check.tt-menu li a i,
+span.twitter-typeahead .note-popover .popover-content .note-check.tt-menu li a i,
+.note-popover .popover-content span.twitter-typeahead .note-check.tt-dropdown-menu li a i,
+span.twitter-typeahead .note-popover .popover-content .note-check.tt-dropdown-menu li a i,
+.card-header.note-toolbar .dropdown-menu.note-check li a i,
+.card-header.note-toolbar span.twitter-typeahead .note-check.tt-menu li a i,
+span.twitter-typeahead .card-header.note-toolbar .note-check.tt-menu li a i,
+.card-header.note-toolbar span.twitter-typeahead .note-check.tt-dropdown-menu li a i,
+span.twitter-typeahead .card-header.note-toolbar .note-check.tt-dropdown-menu li a i {
   color: deepskyblue;
   visibility: hidden;
 }
 
 .note-popover .popover-content .dropdown-menu.note-check li a.checked i,
-.card-header.note-toolbar .dropdown-menu.note-check li a.checked i {
+.note-popover .popover-content span.twitter-typeahead .note-check.tt-menu li a.checked i,
+span.twitter-typeahead .note-popover .popover-content .note-check.tt-menu li a.checked i,
+.note-popover .popover-content span.twitter-typeahead .note-check.tt-dropdown-menu li a.checked i,
+span.twitter-typeahead .note-popover .popover-content .note-check.tt-dropdown-menu li a.checked i,
+.card-header.note-toolbar .dropdown-menu.note-check li a.checked i,
+.card-header.note-toolbar span.twitter-typeahead .note-check.tt-menu li a.checked i,
+span.twitter-typeahead .card-header.note-toolbar .note-check.tt-menu li a.checked i,
+.card-header.note-toolbar span.twitter-typeahead .note-check.tt-dropdown-menu li a.checked i,
+span.twitter-typeahead .card-header.note-toolbar .note-check.tt-dropdown-menu li a.checked i {
   visibility: visible;
 }
 
@@ -32125,6 +32389,26 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
   }
 }
 
+span.twitter-typeahead {
+  width: 100%;
+}
+
+.input-group span.twitter-typeahead {
+  display: block !important;
+}
+
+.input-group span.twitter-typeahead .tt-dropdown-menu {
+  top: 32px !important;
+}
+
+.input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
+  top: 44px !important;
+}
+
+.input-group.input-group-sm span.twitter-typeahead .tt-dropdown-menu {
+  top: 28px !important;
+}
+
 /*!
  * Metronic
  * Demo Default Theme
@@ -32454,7 +32738,9 @@ xl: 1200px
   color: #9093ac;
 }
 
-.dropdown-menu {
+.dropdown-menu,
+span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .tt-dropdown-menu {
   border: 0;
   margin: 0;
   border-radius: 0;
@@ -32462,39 +32748,99 @@ xl: 1200px
 }
 
 .dropdown-menu:before,
-.dropdown-menu:after {
+span.twitter-typeahead .tt-menu:before,
+span.twitter-typeahead .tt-dropdown-menu:before,
+.dropdown-menu:after,
+span.twitter-typeahead .tt-menu:after,
+span.twitter-typeahead .tt-dropdown-menu:after {
   display: none !important;
 }
 
 .dropdown-menu > li > a,
-.dropdown-menu > .dropdown-item {
+span.twitter-typeahead .tt-menu > li > a,
+span.twitter-typeahead .tt-dropdown-menu > li > a,
+.dropdown-menu > .dropdown-item,
+span.twitter-typeahead .tt-menu > .dropdown-item,
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item,
+span.twitter-typeahead .dropdown-menu > .tt-suggestion,
+span.twitter-typeahead .tt-menu > .tt-suggestion,
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion {
   display: block;
   padding: 0.7rem 1.2rem;
 }
 
 .dropdown-menu > li > a [class^="la-"],
+span.twitter-typeahead .tt-menu > li > a [class^="la-"],
+span.twitter-typeahead .tt-dropdown-menu > li > a [class^="la-"],
 .dropdown-menu > li > a [class*=" la-"],
+span.twitter-typeahead .tt-menu > li > a [class*=" la-"],
+span.twitter-typeahead .tt-dropdown-menu > li > a [class*=" la-"],
 .dropdown-menu > .dropdown-item [class^="la-"],
-.dropdown-menu > .dropdown-item [class*=" la-"] {
+span.twitter-typeahead .tt-menu > .dropdown-item [class^="la-"],
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item [class^="la-"],
+span.twitter-typeahead .dropdown-menu > .tt-suggestion [class^="la-"],
+span.twitter-typeahead .tt-menu > .tt-suggestion [class^="la-"],
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion [class^="la-"],
+.dropdown-menu > .dropdown-item [class*=" la-"],
+span.twitter-typeahead .tt-menu > .dropdown-item [class*=" la-"],
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item [class*=" la-"],
+span.twitter-typeahead .dropdown-menu > .tt-suggestion [class*=" la-"],
+span.twitter-typeahead .tt-menu > .tt-suggestion [class*=" la-"],
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion [class*=" la-"] {
   font-size: 1.3rem;
 }
 
 .dropdown-menu > li > a [class^="fa-"],
+span.twitter-typeahead .tt-menu > li > a [class^="fa-"],
+span.twitter-typeahead .tt-dropdown-menu > li > a [class^="fa-"],
 .dropdown-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .tt-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .tt-dropdown-menu > li > a [class*=" fa-"],
 .dropdown-menu > .dropdown-item [class^="fa-"],
-.dropdown-menu > .dropdown-item [class*=" fa-"] {
+span.twitter-typeahead .tt-menu > .dropdown-item [class^="fa-"],
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item [class^="fa-"],
+span.twitter-typeahead .dropdown-menu > .tt-suggestion [class^="fa-"],
+span.twitter-typeahead .tt-menu > .tt-suggestion [class^="fa-"],
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion [class^="fa-"],
+.dropdown-menu > .dropdown-item [class*=" fa-"],
+span.twitter-typeahead .tt-menu > .dropdown-item [class*=" fa-"],
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item [class*=" fa-"],
+span.twitter-typeahead .dropdown-menu > .tt-suggestion [class*=" fa-"],
+span.twitter-typeahead .tt-menu > .tt-suggestion [class*=" fa-"],
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion [class*=" fa-"] {
   font-size: 1.1rem;
 }
 
 .dropdown-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .tt-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .tt-dropdown-menu > li > a [class^="flaticon-"],
 .dropdown-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .tt-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .tt-dropdown-menu > li > a [class*=" flaticon-"],
 .dropdown-menu > .dropdown-item [class^="flaticon-"],
-.dropdown-menu > .dropdown-item [class*=" flaticon-"] {
+span.twitter-typeahead .tt-menu > .dropdown-item [class^="flaticon-"],
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item [class^="flaticon-"],
+span.twitter-typeahead .dropdown-menu > .tt-suggestion [class^="flaticon-"],
+span.twitter-typeahead .tt-menu > .tt-suggestion [class^="flaticon-"],
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion [class^="flaticon-"],
+.dropdown-menu > .dropdown-item [class*=" flaticon-"],
+span.twitter-typeahead .tt-menu > .dropdown-item [class*=" flaticon-"],
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item [class*=" flaticon-"],
+span.twitter-typeahead .dropdown-menu > .tt-suggestion [class*=" flaticon-"],
+span.twitter-typeahead .tt-menu > .tt-suggestion [class*=" flaticon-"],
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion [class*=" flaticon-"] {
   font-size: 1.3rem;
 }
 
 .dropdown-menu > li > a > i,
-.dropdown-menu > .dropdown-item > i {
+span.twitter-typeahead .tt-menu > li > a > i,
+span.twitter-typeahead .tt-dropdown-menu > li > a > i,
+.dropdown-menu > .dropdown-item > i,
+span.twitter-typeahead .tt-menu > .dropdown-item > i,
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item > i,
+span.twitter-typeahead .dropdown-menu > .tt-suggestion > i,
+span.twitter-typeahead .tt-menu > .tt-suggestion > i,
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion > i {
   display: inline-block;
   line-height: 0;
   vertical-align: middle;
@@ -32571,30 +32917,63 @@ xl: 1200px
   padding-left: 0.8rem;
 }
 
-.dropdown-menu {
+.dropdown-menu,
+span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .tt-dropdown-menu {
   border: 0;
   -webkit-box-shadow: 0px 0px 15px 1px rgba(69, 65, 78, 0.2);
   box-shadow: 0px 0px 15px 1px rgba(69, 65, 78, 0.2);
 }
 
 .dropdown-menu > li > a,
-.dropdown-menu > .dropdown-item {
+span.twitter-typeahead .tt-menu > li > a,
+span.twitter-typeahead .tt-dropdown-menu > li > a,
+.dropdown-menu > .dropdown-item,
+span.twitter-typeahead .tt-menu > .dropdown-item,
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item,
+span.twitter-typeahead .dropdown-menu > .tt-suggestion,
+span.twitter-typeahead .tt-menu > .tt-suggestion,
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion {
   color: #575962;
 }
 
 .dropdown-menu > li > a > i,
-.dropdown-menu > .dropdown-item > i {
+span.twitter-typeahead .tt-menu > li > a > i,
+span.twitter-typeahead .tt-dropdown-menu > li > a > i,
+.dropdown-menu > .dropdown-item > i,
+span.twitter-typeahead .tt-menu > .dropdown-item > i,
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item > i,
+span.twitter-typeahead .dropdown-menu > .tt-suggestion > i,
+span.twitter-typeahead .tt-menu > .tt-suggestion > i,
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion > i {
   color: #b2b1c5;
 }
 
 .dropdown-menu > li > a:hover,
-.dropdown-menu > .dropdown-item:hover {
+span.twitter-typeahead .tt-menu > li > a:hover,
+span.twitter-typeahead .tt-dropdown-menu > li > a:hover,
+.dropdown-menu > .dropdown-item:hover,
+span.twitter-typeahead .tt-menu > .dropdown-item:hover,
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item:hover,
+span.twitter-typeahead .dropdown-menu > .tt-suggestion:hover,
+span.twitter-typeahead .tt-menu > .tt-suggestion:hover,
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion:hover {
   background: #f4f5f8;
   text-decoration: none;
 }
 
 .dropdown-menu > li > a.active,
-.dropdown-menu > .dropdown-item.active {
+span.twitter-typeahead .tt-menu > li > a.active,
+span.twitter-typeahead .tt-dropdown-menu > li > a.active,
+.dropdown-menu > .dropdown-item.active,
+span.twitter-typeahead .tt-menu > .dropdown-item.active,
+span.twitter-typeahead .tt-dropdown-menu > .dropdown-item.active,
+span.twitter-typeahead .dropdown-menu > .active.tt-suggestion,
+span.twitter-typeahead .tt-menu > .active.tt-suggestion,
+span.twitter-typeahead .tt-dropdown-menu > .active.tt-suggestion,
+span.twitter-typeahead .dropdown-menu > .tt-suggestion.tt-cursor,
+span.twitter-typeahead .tt-menu > .tt-suggestion.tt-cursor,
+span.twitter-typeahead .tt-dropdown-menu > .tt-suggestion.tt-cursor {
   background: #5867dd;
   color: #ffffff;
   text-decoration: none;
@@ -39000,27 +39379,75 @@ strong {
 }
 
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .tt-dropdown-menu,
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu,
-.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu {
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .tt-dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .tt-dropdown-menu {
   margin-top: 0.5rem;
 }
 
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown.dropup .dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown.dropup span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown.dropup .tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown.dropup span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown.dropup .tt-dropdown-menu,
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown.dropup .dropdown-menu,
-.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown.dropup .dropdown-menu {
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown.dropup span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown.dropup .tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown.dropup span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown.dropup .tt-dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown.dropup .dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown.dropup span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown.dropup .tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown.dropup span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown.dropup .tt-dropdown-menu {
   margin-top: auto;
   margin-bottom: 0.5rem;
 }
 
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-right,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-right.tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-right.tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-right.tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-right.tt-dropdown-menu,
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-right,
-.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-right {
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-right.tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-right.tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-right.tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-right.tt-dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-right,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-right.tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-right.tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-right.tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-right.tt-dropdown-menu {
   margin-right: -0.8rem;
 }
 
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-left,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-left.tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-left.tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-left.tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__head .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-left.tt-dropdown-menu,
 .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-left,
-.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-left {
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-left.tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-left.tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-left.tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__body .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-left.tt-dropdown-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu.dropdown-menu-left,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-left.tt-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-left.tt-menu,
+.m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown span.twitter-typeahead .dropdown-menu-left.tt-dropdown-menu,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__table > .m-datatable__foot .m-datatable__row > .m-datatable__cell .dropdown .dropdown-menu-left.tt-dropdown-menu {
   margin-left: -0.8rem;
 }
 
@@ -39259,7 +39686,11 @@ strong {
   padding: 0.45rem 1rem;
 }
 
-.m-datatable.m-datatable--default > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .dropdown-menu.inner > li.selected > a span.check-mark {
+.m-datatable.m-datatable--default > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .dropdown-menu.inner > li.selected > a span.check-mark,
+.m-datatable.m-datatable--default > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size span.twitter-typeahead .inner.tt-menu > li.selected > a span.check-mark,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .inner.tt-menu > li.selected > a span.check-mark,
+.m-datatable.m-datatable--default > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a span.check-mark,
+span.twitter-typeahead .m-datatable.m-datatable--default > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .inner.tt-dropdown-menu > li.selected > a span.check-mark {
   margin-top: -0.6rem;
 }
 
@@ -39408,11 +39839,19 @@ strong {
   color: #ffffff;
 }
 
-.m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .dropdown-menu {
+.m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .dropdown-menu,
+.m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .tt-menu,
+.m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .tt-dropdown-menu {
   z-index: 100;
 }
 
-.modal .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .dropdown-menu {
+.modal .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .dropdown-menu,
+.modal .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .modal .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .tt-menu,
+.modal .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .modal .m-datatable > .m-datatable__pager > .m-datatable__pager-info .m-datatable__pager-size .tt-dropdown-menu {
   z-index: 1051;
 }
 
@@ -61601,46 +62040,110 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   display: inline-block;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner {
+.bootstrap-select.btn-group .dropdown-menu.inner,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu {
   display: block;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a {
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a {
   display: block;
   position: relative;
   outline: none !important;
   padding: 10px 15px;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a:hover {
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a:hover,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a:hover,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a:hover,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a:hover,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a:hover {
   text-decoration: none;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="la-"],
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" la-"] {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="la-"],
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" la-"] {
   font-size: 1.2rem;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="fa-"],
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" fa-"] {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="fa-"],
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" fa-"] {
   font-size: 1.2rem;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="flaticon-"],
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" flaticon-"] {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="flaticon-"],
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" flaticon-"] {
   font-size: 1.1rem;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="la-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" la-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="fa-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" fa-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="flaticon-"],
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" flaticon-"] {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="flaticon-"],
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" flaticon-"] {
   vertical-align: middle;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a span.check-mark {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.selected > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.selected > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.selected > a span.check-mark {
   font-family: "LineAwesome";
   text-decoration: inherit;
   text-rendering: optimizeLegibility;
@@ -61656,19 +62159,35 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   display: inline-block;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a span.check-mark:before {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a span.check-mark:before,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.selected > a span.check-mark:before,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.selected > a span.check-mark:before,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a span.check-mark:before,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.selected > a span.check-mark:before {
   content: "\F17B";
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.divider {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.divider,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.divider,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.divider,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.divider,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.divider {
   margin: 10px 0;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.hidden {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.hidden,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.hidden,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.hidden,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.hidden,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.hidden {
   display: none;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.no-results {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.no-results,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.no-results,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.no-results,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.no-results,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.no-results {
   padding: 10px 15px;
 }
 
@@ -61864,56 +62383,132 @@ select.m-bootstrap-select {
   background-color: transparent;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a .text {
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a .text,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a .text,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a .text,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a .text,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a .text {
   color: #3f4047;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a .text small {
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a .text small,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a .text small,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a .text small,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a .text small,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a .text small {
   color: #6f727d;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a span.check-mark {
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a span.check-mark {
   color: #575962;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="la-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" la-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" la-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" la-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="fa-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" fa-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" fa-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" fa-"],
 .bootstrap-select.btn-group .dropdown-menu.inner > li > a [class^="flaticon-"],
-.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" flaticon-"] {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class^="flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class^="flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class^="flaticon-"],
+.bootstrap-select.btn-group .dropdown-menu.inner > li > a [class*=" flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li > a [class*=" flaticon-"],
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li > a [class*=" flaticon-"],
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li > a [class*=" flaticon-"] {
   color: #575962;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a,
-.bootstrap-select.btn-group .dropdown-menu.inner > li:hover > a {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.selected > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.selected > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.selected > a,
+.bootstrap-select.btn-group .dropdown-menu.inner > li:hover > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li:hover > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li:hover > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li:hover > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li:hover > a {
   background: #f4f5f8;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a .text,
-.bootstrap-select.btn-group .dropdown-menu.inner > li:hover > a .text {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.selected > a .text,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.selected > a .text,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a .text,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.selected > a .text,
+.bootstrap-select.btn-group .dropdown-menu.inner > li:hover > a .text,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li:hover > a .text,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li:hover > a .text,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li:hover > a .text,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li:hover > a .text {
   color: #3f4047;
 }
 
 .bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a span.check-mark,
-.bootstrap-select.btn-group .dropdown-menu.inner > li:hover > a span.check-mark {
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.selected > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.selected > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.selected > a span.check-mark,
+.bootstrap-select.btn-group .dropdown-menu.inner > li:hover > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li:hover > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li:hover > a span.check-mark,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li:hover > a span.check-mark,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li:hover > a span.check-mark {
   color: #3f4047;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.selected > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.selected > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.selected > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.selected > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.selected > a {
   background: #f7f8fa;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.disabled > a {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.disabled > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.disabled > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.disabled > a,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.disabled > a,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.disabled > a {
   opacity: 0.6;
   filter: alpha(opacity=60);
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.divider {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.divider,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.divider,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.divider,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.divider,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.divider {
   border-bottom: 1px solid #f4f5f8;
 }
 
-.bootstrap-select.btn-group .dropdown-menu.inner > li.no-results {
+.bootstrap-select.btn-group .dropdown-menu.inner > li.no-results,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-menu > li.no-results,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-menu > li.no-results,
+.bootstrap-select.btn-group span.twitter-typeahead .inner.tt-dropdown-menu > li.no-results,
+span.twitter-typeahead .bootstrap-select.btn-group .inner.tt-dropdown-menu > li.no-results {
   color: #575962;
 }
 
@@ -61922,7 +62517,11 @@ select.m-bootstrap-select {
   border: 0;
 }
 
-.bootstrap-select.btn-group .dropdown-menu {
+.bootstrap-select.btn-group .dropdown-menu,
+.bootstrap-select.btn-group span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .bootstrap-select.btn-group .tt-menu,
+.bootstrap-select.btn-group span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .bootstrap-select.btn-group .tt-dropdown-menu {
   margin-top: 1px;
 }
 
@@ -62659,33 +63258,61 @@ select.m-select2 {
   outline: none !important;
 }
 
-.note-editor .panel-heading.note-toolbar .dropdown-menu {
+.note-editor .panel-heading.note-toolbar .dropdown-menu,
+.note-editor .panel-heading.note-toolbar span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .tt-menu,
+.note-editor .panel-heading.note-toolbar span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .tt-dropdown-menu {
   min-width: 185px;
 }
 
-.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu {
+.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-menu,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-dropdown-menu {
   min-width: 350px;
   padding: 10px;
 }
 
-.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li {
+.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-menu > li,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-menu > li,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu > li,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-dropdown-menu > li {
   display: table;
   table-layout: fixed;
 }
 
-.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group {
+.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-menu > li > .btn-group,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-menu > li > .btn-group,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu > li > .btn-group,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-dropdown-menu > li > .btn-group {
   display: table-cell !important;
 }
 
-.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group:first-child {
+.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group:first-child,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-menu > li > .btn-group:first-child,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-menu > li > .btn-group:first-child,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu > li > .btn-group:first-child,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-dropdown-menu > li > .btn-group:first-child {
   padding-right: 10px;
 }
 
-.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group .note-color-reset {
+.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group .note-color-reset,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-menu > li > .btn-group .note-color-reset,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-menu > li > .btn-group .note-color-reset,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu > li > .btn-group .note-color-reset,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-dropdown-menu > li > .btn-group .note-color-reset {
   margin: 5px 0 10px 0;
 }
 
-.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group .note-palette-title {
+.note-editor .panel-heading.note-toolbar .note-color .dropdown-menu > li > .btn-group .note-palette-title,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-menu > li > .btn-group .note-palette-title,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-menu > li > .btn-group .note-palette-title,
+.note-editor .panel-heading.note-toolbar .note-color span.twitter-typeahead .tt-dropdown-menu > li > .btn-group .note-palette-title,
+span.twitter-typeahead .note-editor .panel-heading.note-toolbar .note-color .tt-dropdown-menu > li > .btn-group .note-palette-title {
   margin: 5px 0;
   text-align: left;
   border: 0;

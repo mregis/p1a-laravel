@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\BaseModel;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Users extends BaseModel
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name', 'email', 'password', 'remember_token', 'city', 'profile', 'last_login', 'juncao', 'unidade'
     ];
@@ -23,4 +23,8 @@ class Users extends BaseModel
         return $this->belongsTo(Agencia::class, 'juncao', 'codigo');
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

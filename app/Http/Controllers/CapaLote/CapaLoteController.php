@@ -11,6 +11,7 @@ namespace app\Http\Controllers\CapaLote;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agencia;
+use App\Models\Audit;
 use App\Models\Docs;
 use App\Models\DocsHistory;
 use App\Models\Files;
@@ -131,6 +132,10 @@ class CapaLoteController extends Controller
 
                 }
             }
+            Audit::create([
+                'description' => sprintf('Capa de Lote [%s] criada - Contingenciamento', $oDoc->content),
+                'user_id' => Auth::id()
+            ]);
             $request->session()->flash('alert-success', 'Capa de Lote criada com Sucesso!');
         }
         return redirect(route('capalote.index'));

@@ -60,6 +60,12 @@ class AgenciasController extends BaseController
         if (!$agencia = Agencia::find($agencia_id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
+        if ($request->get('_u') == null || !$user = Users::find($request->get('_u'))) {
+            return $this->sendError('Erro ao verificar permissão', 404);
+        }
+        if ($user->profile != 'ADMINISTRADOR' && $user->profile != 'DEPARTAMENTO') {
+            return $this->sendError('Sem permissão para executar operação', 404);
+        }
 
         $validator = Validator::make($request->all(), [
             'codigo' => 'required|digits:4|not_in:0000',
@@ -78,9 +84,16 @@ class AgenciasController extends BaseController
                 'tente novamente! Detalhes: [' . $errors . ']', 400);
         }
 
-        if (!$agencia->fill($request->all())->save()) {
-            return $this->sendError('Erro ao atualizar informações do cadastro', 400);
+
+        if ($agencia->fill($request->all())->save()) {
+            Audit::create([
+                'description' => sprintf('Cadastro Agencia [%s] atualizado', $agencia->codigo),
+                'user_id' => $user->id
+            ]);
+        } else {
+            return $this->sendError('Erro ao excluir cadastro', 400);
         }
+
         return $this->sendResponse($agencia->toArray(), 'Informação atualizada com sucesso');
     }
 
@@ -113,5 +126,23 @@ class AgenciasController extends BaseController
         }
 
         return $this->sendResponse(null, 'Exclusão efetuada com sucesso');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function prefetchList(Request $request)
+    {
+        $agencias = [];
+        if ($request->get('q') != null) {
+            $limit = max((int)$request->get('l', 10), 1);
+            $agencias = Agencia::query()
+                ->where('codigo', '=', $request->get('q'))
+                ->orWhere('nome', '=', $request->get('q'))
+                ->limit($limit)
+                ->get();
+        }
+        return response()->json($agencias, 200);
     }
 }
