@@ -72,9 +72,14 @@ Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')
 Route::post('/capalote/contingencia', 'Api\CapaLoteController@_new')->name('capalote.api-new');
 Route::get('/capalote/contingencia/{user_id}', 'Api\CapaLoteController@index')->name('capalote.api-index');
 
-Route::get('/dashboard/envios/{user_id}', 'Api\DashboardController@toAgencyReport')->name('dashboard.envios');
-Route::get('/dashboard/recebimentos/{user_id}', 'Api\DashboardController@fromAgencyReport')->name('dashboard.recebimentos');
-Route::get('/dashboard/devolucoes/{user_id}', 'Api\DashboardController@returnAgencyReport')->name('dashboard.devolucoes');
+// Dashboard
+Route::group(['prefix' => '/dashboard'], function () {
+    Route::get('/envios/{user_id}', 'Api\DashboardController@toAgencyReport')->name('dashboard.envios');
+    Route::get('/recebimentos/{user_id}', 'Api\DashboardController@fromAgencyReport')->name('dashboard.recebimentos');
+    Route::get('/devolucoes/{user_id}', 'Api\DashboardController@returnAgencyReport')->name('dashboard.devolucoes');
+    Route::get('/report/{user_id}', 'Api\DashboardController@report')->name('dashboard.report');
+});
+
 Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList')->name('receive.lista-arquivos');
 Route::get('/report/{file_id}/{user_id}/', 'Api\ReportController@fileContent')->name('report.arquivo');
 Route::get('/recebimento/{user_id}', 'Api\CapaLoteController@getNotReceived')->name('capalote.get-not-received');

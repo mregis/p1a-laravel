@@ -369,35 +369,4 @@ function getHistory(id, url, u) {
         });
 }
 
-var autodt = null; // Automatic Datatables
 
-if (typeof(autodt) == "undefined" || autodt == null) {
-
-    autodt = $('table.auto-dt').DataTable({
-        dom: "<'row'<'col-10'r>><'row'<'col-5'l><'col-7 text-right'f>>" +
-        "<'row'<'col-sm-12'B>><'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
-        buttons: {
-            dom: {
-                button: {
-                    tag: 'button',
-                    className: 'btn btn-sm'
-                }
-            },
-            buttons: [
-                {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
-                {
-                    extend: "excelHtml5",
-                    text: "<i class='far fa-file-excel'></i> Salvar Excel",
-                    className: 'btn-primary'
-                },
-                {
-                    extend: "pdfHtml5",
-                    text: "<i class='far fa-file-pdf'></i> Salvar PDF",
-                    className: 'btn-primary'
-                },
-            ],
-        },
-        language: lang,
-        order: [[1, "asc"]]
-    });
-}
