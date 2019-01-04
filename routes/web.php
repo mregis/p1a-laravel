@@ -23,7 +23,7 @@ Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('home');
 
 Route::group(['prefix' => 'users'], function() {
 	Route::get('/add', 'Users\UserController@create')->name('users.users_add');
-	Route::get('/list', 'Api\UsersController@index')->name('users.users_index');
+	Route::get('/list', 'Users\UserController@index')->name('users.users_index');
 	Route::get('/edit/{id}', 'Users\UserController@edit')->name('users.users_edit');
 	Route::any('/update/{id}', 'Api\UsersController@update')->name('users.users_list');
 	Route::any('/delete/{id}', 'Api\UsersController@destroy')->name('users.users_delete');
