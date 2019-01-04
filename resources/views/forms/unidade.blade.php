@@ -26,3 +26,4 @@
                required="required" value="{{$unidade->descricao}}">
     </div>
 </div>
+<input type="hidden" name="_u" value="{{Auth::id()}}" />

@@ -103,7 +103,7 @@
         </select>
     </div>
 </div>
-
+<input type="hidden" name="_u" value="{{Auth::id()}}" />
 @section('scripts')
     <script type="text/javascript">
         $(function() {

@@ -10,7 +10,9 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\BaseController;
+use App\Models\Audit;
 use App\Models\Unidade;
+use App\Models\Users;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
 use Yajra\DataTables\DataTables;
@@ -56,6 +58,14 @@ class UnidadeController extends BaseController
             return $this->sendError('Informação não encontrada', 404);
         }
 
+        if ($request->get('_u') == null || !$auth = Users::find($request->get('_u'))) {
+            return $this->sendError('Erro ao verificar permissão', 404);
+        }
+
+        if ($auth->profile != 'ADMINISTRADOR') {
+            return $this->sendError('Sem permissão para executar operação', 404);
+        }
+
         $validator = Validator::make($request->all(), [
             'nome' => 'required|between:5,20',
             'descricao' => 'required|between:5,100',
@@ -67,10 +77,16 @@ class UnidadeController extends BaseController
                 'tente novamente! Detalhes: [' . $errors . ']', 400);
         }
 
-        if (!$unidade->fill($request->all())->save()) {
-            return $this->sendError('Erro ao atualizar informações do cadastro', 400);
+        if ($unidade->fill($request->all())->save()) {
+            Audit::create([
+                'description' => sprintf('Cadastro Unidade [%s] atualizado', $unidade->nome),
+                'user_id' => $unidade->id
+            ]);
+        } else {
+            return $this->sendError('Erro ao excluir cadastro', 400);
         }
-        return $this->sendResponse($unidade->toArray(), 'Informação atualizada com sucesso');
+
+        return $this->sendResponse(null, 'Informação atualizada com sucesso');
     }
 
     /**

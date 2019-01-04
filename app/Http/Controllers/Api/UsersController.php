@@ -92,6 +92,13 @@ class UsersController extends BaseController
             return $this->sendError('Informação não encontrada', 404);
         }
 
+        if ($request->get('_u') == null || !$auth = Users::find($request->get('_u'))) {
+            return $this->sendError('Erro ao verificar permissão', 404);
+        }
+
+        if ($auth->profile != 'ADMINISTRADOR' && $auth->profile != 'DEPARTAMENTO') {
+            return $this->sendError('Sem permissão para executar operação', 404);
+        }
 
         $user_data = $request->all();
         $validator = Validator::make($user_data, [
@@ -121,14 +128,12 @@ class UsersController extends BaseController
                 }
                 $user_data['juncao'] = null;
             }
-
         });
 
         if ($validator->fails()) {
-            $request->session()->flash('alert-danger', 'Erros encontrados. Verifique as informações e tente novamente!');
-            return redirect(route('users.users_save'))
-                ->withErrors($validator)
-                ->withInput($request->all());
+            $errors = implode(', ', $validator->errors()->all());
+            return $this->sendError('Erros encontrados. Verifique as informações e ' .
+                'tente novamente! Detalhes: [' . $errors . ']', 400);
         }
         if ($user_data['password'] == null) {
             unset($user_data['password']);
@@ -138,8 +143,8 @@ class UsersController extends BaseController
 
         if ($user->fill($user_data)->save()) {
             Audit::create([
-                'description' => sprintf('Cadastro do Usuario [%s] atualizado', $user->name),
-                'user_id' => Auth::id()
+                'description' => sprintf('Cadastro Usuario [%s] atualizado', $user->name),
+                'user_id' => $auth->id
             ]);
         } else {
             return $this->sendError('Erro ao excluir cadastro', 400);

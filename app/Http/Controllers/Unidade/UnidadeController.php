@@ -10,6 +10,7 @@ namespace app\Http\Controllers\Unidade;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Audit;
 use App\Models\Unidade;
 use App\Models\Menu;
 
@@ -81,6 +82,10 @@ class UnidadeController extends Controller
 
         if ($unidade = Unidade::create($request->all())) {
             $request->session()->flash('alert-success', 'Cadastro criado com sucesso!');
+            Audit::create([
+                'description' => sprintf('Cadastro Unidade [%s] criado', $unidade->nome),
+                'user_id' => $unidade->id
+            ]);
         } else {
             $request->session()->flash('alert-danger', 'Ocorreu um erro ao tentar criar o cadastro!');
         }
