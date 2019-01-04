@@ -315,6 +315,7 @@ function getHistory(id, url, u) {
     });
     if (typeof(historytable) == "undefined" || historytable == null) {
         historytable = $('#history').DataTable({
+            dom: 'B',
             buttons: {
                 dom: {
                     button: {
