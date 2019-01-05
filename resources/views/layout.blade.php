@@ -282,112 +282,110 @@
                                 @if((Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO"))
                                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
                                         m-menu-submenu-toggle="hover">
-                                        @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
+                                    @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
                                         <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                                            @else
-                                                <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
-                                                    @endif
-                                                    <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
-                                                       data-placement="top"
-                                                       title="{{$menu->name}}"></i>
-                                                    <span class="m-menu__link-text">{{$menu->name}}</span>
-                                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
-                                                    <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                                    @endif
-                                                </a>
-                                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
-                                                @foreach($menu->sub_menus as $sub_menu)
-                                                    @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
-                                                        @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
-                                                            <div class="m-menu__submenu "><span
-                                                                        class="m-menu__arrow"></span>
-                                                                <ul class="m-menu__subnav">
-                                                                    <li class="m-menu__item " aria-haspopup="true">
-                                                                        <a href="{{$menu->url.$sub_menu->url}}"
-                                                                           class="m-menu__link ">
-                                                                            <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                                <span></span>
-                                                                            </i>
-                                                                            <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                                        </a>
-                                                                </ul>
-                                                            </div>
-                                                        @endif
-                                                    @else
-
-                                                        <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                                            <ul class="m-menu__subnav">
-                                                                <li class="m-menu__item " aria-haspopup="true">
-                                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                                       class="m-menu__link ">
-                                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                            <span></span>
-                                                                        </i>
-                                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                                    </a>
-                                                            </ul>
-                                                        </div>
-                                                    @endif
-
-                                                @endforeach
-                                            @endif
+                                    @else
+                                        <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
+                                    @endif
+                                            <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
+                                                       data-placement="top" title="{{$menu->name}}">
+                                            </i>
+                                            <span class="m-menu__link-text">{{$menu->name}}</span>
+                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
+                                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                    @endif
                                         </a>
+                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
+                                        @foreach($menu->sub_menus as $sub_menu)
+                                            @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
+                                                @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
+                                                    <div class="m-menu__submenu ">
+                                                        <span class="m-menu__arrow"></span>
+                                                        <ul class="m-menu__subnav">
+                                                            <li class="m-menu__item " aria-haspopup="true">
+                                                                <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                    <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <div class="m-menu__submenu ">
+                                                    <span class="m-menu__arrow"></span>
+                                                    <ul class="m-menu__subnav">
+                                                        <li class="m-menu__item " aria-haspopup="true">
+                                                            <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                    <span></span>
+                                                                </i>
+                                                                <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            @endif
+
+                                        @endforeach
+                                    @endif
+                                            </a>
                                 @endif
                             @else
                                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
-                                    m-menu-submenu-toggle="hover"
-                                    @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
-                                    @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
+                                    m-menu-submenu-toggle="hover" @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
+                                @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
                                     <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                                        @else
-                                            <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
-                                                @endif
-                                                <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
-                                                   data-placement="top"
-                                                   title="{{$menu->name}}"></i>
-                                                <span class="m-menu__link-text">{{$menu->name}}</span>
-                                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
-                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                                @endif
-                                            </a>
-                                            @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
-                                            @foreach($menu->sub_menus as $sub_menu)
-                                                @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
-                                                    @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
-                                                        <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                                            <ul class="m-menu__subnav">
-                                                                <li class="m-menu__item " aria-haspopup="true">
-                                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                                       class="m-menu__link ">
-                                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                            <span></span>
-                                                                        </i>
-                                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                                    </a>
-                                                            </ul>
-                                                        </div>
-                                                    @endif
-                                                @else
-                                                    @if(Auth::user()->profile == "AGÊNCIA" && $sub_menu->name == "Operador" || Auth::user()->profile == "OPERADOR" && $sub_menu->name == "Agência")
-                                                    @else
-                                                        <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                                                            <ul class="m-menu__subnav">
-                                                                <li class="m-menu__item " aria-haspopup="true">
-                                                                    <a href="{{$menu->url.$sub_menu->url}}"
-                                                                       class="m-menu__link ">
-                                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                            <span></span>
-                                                                        </i>
-                                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                                    </a>
-                                                            </ul>
-                                                        </div>
-                                                    @endif
-                                                @endif
-
-                                            @endforeach
-                                        @endif
+                                @else
+                                    <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
+                                @endif
+                                        <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
+                                                   data-placement="top" title="{{$menu->name}}"></i>
+                                        <span class="m-menu__link-text">{{$menu->name}}</span>
+                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
+                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                @endif
                                     </a>
+                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
+                                    @foreach($menu->sub_menus as $sub_menu)
+                                        @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
+                                            @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
+                                                <div class="m-menu__submenu">
+                                                    <span class="m-menu__arrow"></span>
+                                                    <ul class="m-menu__subnav">
+                                                        <li class="m-menu__item " aria-haspopup="true">
+                                                            <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                    <span></span>
+                                                                </i>
+                                                                <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if(Auth::user()->profile == "AGÊNCIA" && $sub_menu->name == "Operador" || Auth::user()->profile == "OPERADOR" && $sub_menu->name == "Agência")
+                                            @else
+                                                <div class="m-menu__submenu ">
+                                                    <span class="m-menu__arrow"></span>
+                                                    <ul class="m-menu__subnav">
+                                                        <li class="m-menu__item " aria-haspopup="true">
+                                                            <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                    <span></span>
+                                                                </i>
+                                                                <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                @endif
                             @endif
                         @endforeach
                     </ul>
@@ -1072,6 +1070,7 @@
     <div id="app"></div>
     <!-- end::Scroll Top -->
 
+    @yield('aftercontent')
 
     <!-- begin .flash-message -->
     @foreach (['danger', 'warning', 'success', 'info'] as $k => $msgtype)

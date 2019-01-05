@@ -11328,6 +11328,13 @@ td.details-control {
 
 tr.shown td.details-control {
   background: url(/images/details_close.png?cdb0ad00d71eff5be6ca7305cff83ce9) no-repeat center center;
+}
+
+/* IE Fix */
+
+input[type='radio'],
+input[type='checkbox'] {
+  background-color: transparent;
 }@charset "UTF-8";
 
 /*!
