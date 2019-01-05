@@ -23,7 +23,7 @@
                 <input type="hidden" id="check_url" value="{{URL::to('/remessa/registrar')}}">
 				<div class="m-portlet__body">
 					<div class="table-responsive-xl">
-						<table class="table table-striped table-bordered dt-responsive"
+						<table class="table table-striped table-bordered table-compact"
                                id="datatable"
                                data-order='[[4, "asc"], [5, "asc"]]'
                                data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>
@@ -68,11 +68,11 @@
         <div class="modal-dialog" style="max-width:95%">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="m-widget14__title">Confirmar Registro</h4>
+                    <h4 class="m-widget14__title">Confirmar Envio</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
-                    <h3 class="m-portlet__head-text"> Lacre Malote</h3><br>
+                    <h3 class="m-portlet__head-text">Informar Lacre (Opcional)</h3><br>
                     <input type="text" name="lacre" class="form-control m-input" id="lacre" style="max-width:150px;text-transform:uppercase"><br>
                     <div class="m-form__actions">
                         <button class="btn btn-success btn-lg" onclick="save()">Registrar</button>

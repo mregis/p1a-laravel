@@ -308,7 +308,6 @@ $(document).ajaxComplete(function() {
 var historytable = null;
 function getHistory(id, url, u) {
     $("span.capalote-placeholder").text('');
-
     $("#capaLoteHistoryModal").modal();
     $('#capaLoteHistoryModal').on('hidden.bs.modal', function (e) {
         historytable.clear().draw();
@@ -328,13 +327,13 @@ function getHistory(id, url, u) {
                     {
                         extend: "excelHtml5",
                         text: "<i class='far fa-file-excel'></i> Salvar Excel",
-                        title: "CapaLote_{{ date('Y-m-d') }}",
+                        title: function(){ return "CapaLote_" + $("span.capalote-placeholder").text();},
                         className: 'btn-primary'
                     },
                     {
                         extend: "pdfHtml5",
                         text: "<i class='far fa-file-pdf'></i> Salvar PDF",
-                        title: "CapaLote_{{ date('Y-m-d') }}",
+                        title: function(){ return "CapaLote_" + $("span.capalote-placeholder").text();},
                         className: 'btn-primary'
                     },
                 ],
@@ -348,15 +347,15 @@ function getHistory(id, url, u) {
         function (r) {
             $("span.capalote-placeholder").text(r.content);
             for (var i in r.history) {
-                var hd = new Date(r.history[i].created_at);
+                var hd = new Date((r.history[i].created_at).replace(' ', 'T'));
                 historytable.row.add([
                     r.content,
                     r.from_agency + ': ' + r.origin.nome,
                     r.to_agency + ': ' + r.destin.nome,
                     (new Date(r.file.movimento)).toLocaleDateString(),
-                    (new Date(r.created_at)).toLocaleDateString(),
+                    (new Date((r.created_at).replace(' ', 'T'))).toLocaleDateString(),
                     r.history[i].description,
-                    hd.toLocaleDateString() + ' ' + hd.toLocaleTimeString(),
+                    (hd.toLocaleDateString() + ' ' + hd.toLocaleTimeString()),
                     r.history[i].user.name,
                     r.history[i].user.profile,
                     (r.history[i].local || '-')
