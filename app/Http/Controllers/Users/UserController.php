@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Agencia;
 use App\Models\Audit;
 use App\Models\Menu;
@@ -15,7 +15,7 @@ use Validator;
 use Auth;
 use Hash;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
      * Display a listing of the resource.

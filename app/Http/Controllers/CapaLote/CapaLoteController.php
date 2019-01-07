@@ -9,7 +9,7 @@
 namespace app\Http\Controllers\CapaLote;
 
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Agencia;
 use App\Models\Audit;
 use App\Models\Docs;
@@ -19,12 +19,12 @@ use App\Models\Menu;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 use Validator;
 use PDF;
 
-class CapaLoteController extends Controller
+class CapaLoteController extends BaseController
 {
 
     private $doc_types = [1 => 'CHEQUE DEVOLVIDO', 'CHEQUE CUSTODIA', 'CHEQUE PAGO', 'CHEQUE COMPENSADO'];

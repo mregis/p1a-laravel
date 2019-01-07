@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 /**
  * @author Matheus Marques <matheus.marques@thricein.com.br>
  */
@@ -34,8 +32,9 @@ use Illuminate\Http\Request;
  *   }
  * )
  */
+use Illuminate\Support\Facades\Route;
 
- /**
+/**
  *  @SWG\Definition(
  *   definition="Código HTTP 400",
  *   type="object",
@@ -51,7 +50,16 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-    protected $redirectTo = '/';
+    protected $redirectTo = '/dashboard';
+
+
+    public function __construct()
+    {
+        $route = Route::current()->uri();
+        if (strpos($route, 'api/') === false) {
+            $this->middleware('auth');
+        }
+    }
 
     public function sendResponse($result, $message, $ret = false)
     {

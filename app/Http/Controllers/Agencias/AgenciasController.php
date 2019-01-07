@@ -9,18 +9,17 @@
 namespace app\Http\Controllers\Agencias;
 
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Agencia;
 use App\Models\Menu;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-
+use Auth;
 use Validator;
 use PDF;
 
-class AgenciasController extends Controller
+class AgenciasController extends BaseController
 {
 
     /**

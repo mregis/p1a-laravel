@@ -9,19 +9,18 @@
 namespace app\Http\Controllers\Unidade;
 
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Audit;
 use App\Models\Unidade;
 use App\Models\Menu;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-
+use Auth;
 use Validator;
 use PDF;
 
-class UnidadeController extends Controller
+class UnidadeController extends BaseController
 {
 
     /**

@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Agencia;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Yajra\DataTables\DataTables;
 use DB;
 use Validator;
 
-class AgenciasController extends BaseController
+class AgenciasController extends Controller
 {
 
     public function _list() 
@@ -58,13 +58,13 @@ class AgenciasController extends BaseController
     public function update(Request $request, $agencia_id)
     {
         if (!$agencia = Agencia::find($agencia_id)) {
-            return $this->sendError('Informação não encontrada', 404);
+            return response()->json('Informação não encontrada', 404);
         }
         if ($request->get('_u') == null || !$user = Users::find($request->get('_u'))) {
-            return $this->sendError('Erro ao verificar permissão', 404);
+            return response()->json('Erro ao verificar permissão', 404);
         }
         if ($user->profile != 'ADMINISTRADOR' && $user->profile != 'DEPARTAMENTO') {
-            return $this->sendError('Sem permissão para executar operação', 404);
+            return response()->json('Sem permissão para executar operação', 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -80,7 +80,7 @@ class AgenciasController extends BaseController
 
         if ($validator->fails()) {
             $errors = implode(', ', $validator->errors()->all());
-            return $this->sendError('Erros encontrados. Verifique as informações e ' .
+            return response()->json('Erros encontrados. Verifique as informações e ' .
                 'tente novamente! Detalhes: [' . $errors . ']', 400);
         }
 
@@ -91,10 +91,10 @@ class AgenciasController extends BaseController
                 'user_id' => $user->id
             ]);
         } else {
-            return $this->sendError('Erro ao excluir cadastro', 400);
+            return response()->json('Erro ao excluir cadastro', 400);
         }
 
-        return $this->sendResponse($agencia->toArray(), 'Informação atualizada com sucesso');
+        return response()->json('Informação atualizada com sucesso', 200);
     }
 
     /**
@@ -105,8 +105,7 @@ class AgenciasController extends BaseController
     {
         $input = $request->all();
         $agencia = Agencia::create($input);
-        $ret = route("agencias.editar", $agencia->id);
-        return $this->sendResponse(null, 'Cadastrado criado com sucesso', $ret);
+        return response()->json('Cadastrado criado com sucesso', 200);
     }
 
     /**
@@ -118,14 +117,14 @@ class AgenciasController extends BaseController
     public function destroy($agencia_id)
     {
         if (!$agencia = Agencia::find($agencia_id)) {
-            return $this->sendError('Informação não encontrada', 404);
+            return response()->json('Informação não encontrada', 404);
         }
 
         if (!$agencia->delete()) {
-            return $this->sendError('Erro ao excluir cadastro', 400);
+            return response()->json('Erro ao excluir cadastro', 400);
         }
 
-        return $this->sendResponse(null, 'Exclusão efetuada com sucesso');
+        return response()->json('Exclusão efetuada!', 200);
     }
 
     /**

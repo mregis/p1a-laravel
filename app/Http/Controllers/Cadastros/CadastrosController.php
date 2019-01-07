@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Cadastros;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Menu;
 use App\Models\Profile;
 use App\User;
@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Auth;
 
-class CadastrosController extends Controller
+class CadastrosController extends BaseController
 {
     /**
      * Display a listing of the resource.
