@@ -9,7 +9,7 @@
 namespace app\Http\Controllers\CapaLote;
 
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Agencia;
 use App\Models\Audit;
 use App\Models\Docs;
@@ -19,12 +19,12 @@ use App\Models\Menu;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 use Validator;
 use PDF;
 
-class CapaLoteController extends Controller
+class CapaLoteController extends BaseController
 {
 
     private $doc_types = [1 => 'CHEQUE DEVOLVIDO', 'CHEQUE CUSTODIA', 'CHEQUE PAGO', 'CHEQUE COMPENSADO'];
@@ -173,8 +173,10 @@ class CapaLoteController extends Controller
         $docs = [];
         foreach ($docs_id as $doc_id) {
             if ($doc = Docs::find($doc_id)) {
-                $doc->destino = Agencia::where("codigo", "=", $doc->to_agency)->first();
-                $doc->origem = Agencia::where("codigo", "=", $doc->from_agency)->first();
+                (($doc->destino = $doc->destin) ||
+                    $doc->destino = new Agencia(['codigo' => $doc->to_agency, 'nome' => 'Agência sem cadastro']));
+                (($doc->origem = $doc->origin) ||
+                    $doc->origem = new Agencia(['codigo' => $doc->from_agency, 'nome' => 'Agência sem cadastro']));
                 $docs[] = $doc;
             }
         }

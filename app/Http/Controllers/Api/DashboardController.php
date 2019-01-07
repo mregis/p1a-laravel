@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Auth;
-use App\Models\Files;
 use App\Models\Docs;
+use Auth;
 use DataTables;
-use Illuminate\Support\Facades\DB;
+use DB;
 
 class DashboardController extends BaseController
 {

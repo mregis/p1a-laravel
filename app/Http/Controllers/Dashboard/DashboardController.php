@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Menu;
 use Auth;
 
-class DashboardController extends Controller
+class DashboardController extends BaseController
 {
     public function index() {
         $menu = new Menu();

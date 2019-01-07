@@ -36,35 +36,45 @@ class Docs extends BaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function file() {
+    public function file()
+    {
         return $this->belongsTo(Files::class, 'file_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function history() {
+    public function history()
+    {
         return $this->hasMany(DocsHistory::class, 'doc_id', 'id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(Users::class, 'user_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function origin() {
-        return $this->belongsTo(Agencia::class, 'from_agency', 'codigo');
+    public function origin()
+    {
+        return $this->belongsTo(Agencia::class, 'from_agency', 'codigo')->withDefault(
+            ['nome' => 'Agência sem cadastro', 'codigo' => $this->from_agency,]
+        );
+
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function destin() {
-        return $this->belongsTo(Agencia::class, 'to_agency', 'codigo');
+    public function destin()
+    {
+        return $this->belongsTo(Agencia::class, 'to_agency', 'codigo')->withDefault(
+            ['nome' => 'Agência sem cadastro', 'codigo' => $this->to_agency,]
+        );
     }
 }
