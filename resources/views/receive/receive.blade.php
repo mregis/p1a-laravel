@@ -2,12 +2,6 @@
 
 @section('title',  __('Receber Lotes'))
 
-@section('styles')
-<style type="text/css">
-    .m-body .m-content {background-color:#f0f0f0}
-</style>
-@stop
-
 @section('content')
 <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
 	<li class="m-nav__item m-nav__item--home">

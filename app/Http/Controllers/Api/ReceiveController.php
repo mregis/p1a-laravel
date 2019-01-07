@@ -43,26 +43,19 @@ class ReceiveController extends BaseController
             ->select(
                 [
                     "files.id", "files.name", "files.created_at", "files.movimento",
-                    DB::raw('count(DISTINCT pendentes.id) as pendentes'),
+                    DB::raw("sum(CASE WHEN docs.status = 'pendentes' THEN 1 ELSE 0 END) as pendentes"),
                     DB::raw('count(DISTINCT docs.id) as total'),
-                ] )
-            ->where("docs.status", "=", "pendente")
-            ->join("docs as pendentes",
+                ])
+            ->join("docs",
                 function ($join) use ($user) {
-                    $join->on("files.id", '=', "pendentes.file_id")
-                        ->where("pendentes.status", "=", "pendente");
-                    if ($user->profile != 'ADMINISTRADOR') {
-                        $join->where("pendentes.to_agency", "=", sprintf("%04d", $user->juncao));
+                    $join->on("files.id", '=', "docs.file_id");
+                    if (!in_array($user->profile, ['ADMINISTRADOR', 'DEPARTAMENTO'])) {
+                        $join->where("docs.to_agency", "=", sprintf("%04d", $user->juncao));
                     }
                 }
             )
             ->groupBy(["files.id", "files.name", "files.created_at", "files.movimento"])
         ;
-
-        if($user->profile != 'ADMINISTRADOR') {
-            $query->join("docs", "files.id", "=", "docs.file_id")
-            ->where("docs.to_agency", "=", sprintf("%04d", $user->juncao));
-        }
 
         return Datatables::of($query)
             ->addColumn('view', function($file) {

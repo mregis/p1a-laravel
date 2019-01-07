@@ -37,12 +37,12 @@ class DocsHistoryController extends BaseController
                 throw new Exception('Erro ao buscar informações de usuário de capa de lote');
             }
 
-            if (!$origin = $doc->origin) {
-                $doc->origin = new Agencia();
+            if ($doc->origin == null) {
+                $doc->origin()->associate(new Agencia(['codigo' => $doc->from_agency, 'nome' => 'Agência sem cadastro']));
             }
 
-            if (!$destin = $doc->destin) {
-                $doc->origin = new Agencia();
+            if ($doc->destin == null) {
+                $doc->destin()->associate(new Agencia(['codigo' => $doc->to_agency, 'nome' => 'Agência sem cadastro']));
             }
 
             foreach ($doc->history as $h) {

@@ -173,8 +173,10 @@ class CapaLoteController extends BaseController
         $docs = [];
         foreach ($docs_id as $doc_id) {
             if ($doc = Docs::find($doc_id)) {
-                $doc->destino = Agencia::where("codigo", "=", $doc->to_agency)->first();
-                $doc->origem = Agencia::where("codigo", "=", $doc->from_agency)->first();
+                (($doc->destino = $doc->destin) ||
+                    $doc->destino = new Agencia(['codigo' => $doc->to_agency, 'nome' => 'Agência sem cadastro']));
+                (($doc->origem = $doc->origin) ||
+                    $doc->origem = new Agencia(['codigo' => $doc->from_agency, 'nome' => 'Agência sem cadastro']));
                 $docs[] = $doc;
             }
         }
