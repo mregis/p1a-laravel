@@ -80,6 +80,15 @@
                             <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm">
                                 <i class="fas fa-home"></i> Autenticar-se</a>
                         </div>
+                        <div class="col m--align-center">
+                            {{ Form::open(array('url' => route('anon.print_capalote'),
+                            'target' => '_blank', 'id' => 'formprint-capalote')) }}
+                            <input name="capalote[]" type="hidden" value="{{$doc->id}}" />
+                            <button type="submit" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-print"></i> Ver capa</button>
+                            @csrf
+                            {{Form::close()}}
+                        </div>
                         <div class="col m--align-right">
                             <a href="{{ route('anon.check_capalote') }}" class="btn btn-outline-primary btn-sm">
                                 <i class="fas fa-search"></i> Nova Pesquisa</a>
