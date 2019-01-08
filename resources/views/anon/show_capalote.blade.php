@@ -40,7 +40,9 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover nowrap auto-dt" id="history"
                                 data-dom="B" data-ordering="false"
-                               data-column-defs='[{ "targets": [0,1,2,3,4], "visible": false} ]'>
+                                data-column-defs='[{ "targets": [0,1,2,3,4], "visible": false} ]'
+                                data-buttons='{"dom":{"button":{"tag":"button","className":"btn btn-sm"}},"buttons":[{"extend": "print", "text": "<i class=\\\"fas fa-print\\\"></i> Imprimir", "className": "btn-primary"},{"extend": "excelHtml5","text":"<i class=\\\"far fa-file-excel\\\"></i> Salvar Excel","title": "CapaLote_{{$doc->content}}","className": "btn-primary"},{"extend": "pdfHtml5","text": "<i class=\\\"far fa-file-pdf\\\"></i> Salvar PDF","title": "CapaLote_{{$doc->content}}","className": "btn-primary"}]}'
+                                >
                             <thead class="table-dark">
                             <tr>
                                 <th>CAPA LOTE</th>
