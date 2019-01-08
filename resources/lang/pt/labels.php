@@ -125,4 +125,6 @@ return [
     'address' => 'Endereço',
     'cd' => 'CD',
     'village' => 'Bairro',
+    'forgot_password' => 'Esqueci a senha',
+    'check_capalote' => 'Consultar Capa de Lote'
 ];
