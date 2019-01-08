@@ -88,3 +88,8 @@ Route::group(['prefix' => 'cadastros/unidades'], function() {
     Route::get('/editar/{agencia_id}', 'Unidade\UnidadeController@edit')->name('unidade.editar');
     Route::post('/', 'Unidade\UnidadeController@store')->name('unidade.adicionar');
 });
+
+Route::group(['prefix' => 'a'], function() {
+	Route::get('/consultar/capalote', 'Anon\AnonController@checkCapaLote')->name('anon.check_capalote');
+	Route::post('/ver/capalote', 'Anon\AnonController@showCapaLote')->name('anon.show_capalote');
+});

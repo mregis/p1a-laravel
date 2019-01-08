@@ -111,6 +111,8 @@ return [
     'profiles'=> 'Perfis',
     'add_profile'=> 'Cadastrar Perfil',
     'add_capalote' => 'Criar Capa de Lote',
+    'check_capalote' => 'Consultar Capa de Lote',
+    'show_capalote' => 'Exibindo informações da Capa de Lote :capalote',
     'agencias' => 'Agências',
     'agencia' => 'Agência',
     'add_agencia' => 'Cadastro de Agência',
