@@ -23,9 +23,8 @@
     <link href="{{ mix('css/appmain.css')}}" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="{{asset('assets/demo/default/media/img/logo/favicon.ico')}}" />
 </head>
-<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
-    <!-- Only to avoid Vue #app not found error -->
-    <div id="app"></div>
+<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default"
+      style="background: url('{{ asset('assets/app/media/img/bg/bg-1.png') }}') 0 0 #a3c3e9;">
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="card">
@@ -41,7 +40,9 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover nowrap auto-dt" id="history"
                                 data-dom="B" data-ordering="false"
-                               data-column-defs='[{ "targets": [0,1,2,3,4], "visible": false} ]'>
+                                data-column-defs='[{ "targets": [0,1,2,3,4], "visible": false} ]'
+                                data-buttons='{"dom":{"button":{"tag":"button","className":"btn btn-sm"}},"buttons":[{"extend": "print", "text": "<i class=\\\"fas fa-print\\\"></i> Imprimir", "className": "btn-primary"},{"extend": "excelHtml5","text":"<i class=\\\"far fa-file-excel\\\"></i> Salvar Excel","title": "CapaLote_{{$doc->content}}","className": "btn-primary"},{"extend": "pdfHtml5","text": "<i class=\\\"far fa-file-pdf\\\"></i> Salvar PDF","title": "CapaLote_{{$doc->content}}","className": "btn-primary"}]}'
+                                >
                             <thead class="table-dark">
                             <tr>
                                 <th>CAPA LOTE</th>
@@ -62,10 +63,10 @@
                                     <td>{{$h->doc->content}}</td>
                                     <td>{{$h->doc->origin}}</td>
                                     <td>{{$h->doc->destin}}</td>
-                                    <td>{{$h->doc->file->movimento}}</td>
-                                    <td>{{$h->doc->file->created_at}}</td>
+                                    <td>{{\Carbon\Carbon::parse($h->doc->file->movimento)->format('d/m/Y')}}</td>
+                                    <td>{{\Carbon\Carbon::parse($h->doc->file->created_at)->format('d/m/Y H:i')}}</td>
                                     <td>{{$h->description}}</td>
-                                    <td>{{$h->created_at}}</td>
+                                    <td>{{\Carbon\Carbon::parse($h->created_at)->format('d/m/Y H:i')}}</td>
                                     <td>{{$h->user->name}}</td>
                                     <td>{{$h->user->profile}}</td>
                                     <td>{{ ($h->user->agencia ? $h->user->agencia->name : $h->user->unidade) }}</td>
@@ -91,7 +92,8 @@
             </div>
         </div>
     </div>
-
+    <!-- Only to avoid Vue #app not found error -->
+    <div id="app"></div>
 </body>
 <!--begin::Base Scripts -->
 <script src="{{ mix('/js/polyfill.min.js') }}" type="text/javascript"></script>

@@ -1,28 +1,6 @@
 @extends('layout')
 @section('title', __('Arquivos'))
 
-@section('styles')
-<style type="text/css">
-.m-body .m-content {background-color:#f0f0f0}
-@media print {
-    html,body{
-        margin:0;
-        padding:0;
-        border:0;
-    }
-    #printable{
-        margin:0;
-        padding:0;
-        border:0;
-        font-size:14px;
-    }
-    #printable ~ *{
-        display:none;
-    }
-}
-</style>
-@stop
-
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -42,7 +20,7 @@
                 <input type="hidden" id="columns" value="id,content,status,action">
                 <input type="hidden" id="baseurl" value="{{ route('capalote.file_report', [Auth::id(), $id]) }}">
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
+                    <div class="table-responsive">
                         <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
                                id="datatable" data-column-defs='[{"targets":[0,4], "orderable":false}]'>
                             <thead class="thead-dark">
@@ -79,6 +57,5 @@
 
     @component('dochistory')
     @endcomponent
-</div>
 @stop
 
