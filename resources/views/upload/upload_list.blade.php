@@ -22,9 +22,9 @@
                 <input type="hidden" id="delete_url" value="{{URL::to('/arquivo/delete')}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
+                    <div class="table-responsive">
                         <table class="table table-striped table-bordered hasdetails"
-                               id="datatable" data-column-defs='[{"targets":[4],"orderable":false}]'>
+                               id="datatable" data-column-defs='[{"targets":[0,4],"orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
@@ -44,9 +44,9 @@
                                     <td>@{{total}}</td>
                                 </tr>
                                 <tr>
-                                    <td>{{__('Adicionado em')}}:</td>
+                                    <td>{{__('tables.created_at')}}:</td>
                                     <td>@{{created_at}}</td>
-                                    <td>{{__('Alterado em')}}:</td>
+                                    <td>{{__('tables.updated_at')}}:</td>
                                     <td>@{{updated_at}}</td>
                                 </tr>
                             </table>

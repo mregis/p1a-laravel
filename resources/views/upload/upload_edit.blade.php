@@ -2,10 +2,6 @@
 @section('title', __('Arquivos'))
 
 @section('styles')
-<style type="text/css">
-.m-body .m-content {background-color:#f0f0f0}
-</style>
-@stop
 
 @section('content')
     <div class="row">
@@ -30,9 +26,9 @@
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}/{{Auth::user()->profile}}">
                 @endif
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
+                    <div class="table-responsive">
                         <table class="table table-striped table-bordered dt-responsive hasdetails"
-                               id="datatable">
+                               id="datatable" data-column-defs='[{ "targets":[0], "orderable": false}]'>
                             <thead class="thead-dark">
                             <tr>
                                 <th></th>
