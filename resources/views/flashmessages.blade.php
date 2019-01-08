@@ -36,8 +36,8 @@
 @endforeach
 <!-- end .flash-message -->
 
-<script type="text/javascript">
-    $(function () {
-        $('[id^="flashmessage"]').modal('show');
-    });
-</script>
+        <script type="text/javascript">
+            $(function () {
+                $('[id^="flashmessage"]').modal('show');
+            });
+        </script>

@@ -1072,34 +1072,6 @@
 
     @yield('aftercontent')
 
-    <!-- begin .flash-message -->
-    @foreach (['danger', 'warning', 'success', 'info'] as $k => $msgtype)
-        @if(Session::has('alert-' . $msgtype))
-            <div class="modal fade show" id="flashmessage-{{ $k }}" tabindex="-1"
-                 role="dialog" aria-labelledby="flashmessage-{{ $k }}_dataModal">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-{{ $msgtype }}">
-                            <h5 class="modal-title">
-                                {!! __('labels.alert-'. $msgtype) !!}
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>{{ Session::get('alert-' . $msgtype) }}</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-{{ $msgtype }}"
-                                    data-dismiss="modal">{{__('buttons.close')}}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
-            @endforeach
-                    <!-- end .flash-message -->
 
     <!-- begin::Footer -->
     <footer class="m-grid__item m-footer footer">
@@ -1125,13 +1097,12 @@
     <script src="{{ mix('/js/custom.scripts.js') }}" type="text/javascript"></script>
 
     @yield('scripts')
+    <!--end::Page Snippets -->
 
-    <script type="text/javascript">
-        $(function() {
-            $('[id^="flashmessage"]').modal('show');
-        });
-    </script>
-        <!--end::Page Snippets -->
+    <!-- Flash Messages if exists -->
+    @component('flashmessages')
+    @endcomponent
+
 </body>
 <!-- end::Body -->
 </html>
