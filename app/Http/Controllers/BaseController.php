@@ -56,7 +56,7 @@ class BaseController extends Controller
     public function __construct()
     {
         $route = Route::current()->uri();
-        if (strpos($route, 'api/') === false) {
+        if (preg_match('#^a|api/#', $route) == false) {
             $this->middleware('auth');
         }
     }

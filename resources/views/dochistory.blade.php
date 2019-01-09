@@ -4,12 +4,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="m-widget14__title">Histórico Capa de Lote <span
-                                class="bagde badge-primary capalote-placeholder">#CAPALOTE#</span></h4>
+                                class="bagde badge-primary badge-pill capalote-placeholder">#CAPALOTE#</span></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover nowrap" id="history">
+                        <table class="table table-bordered table-striped table-hover nowrap text-center" id="history">
                             <thead class="table-dark">
                                 <tr>
                                     <th>CAPA LOTE</th>

@@ -209,34 +209,29 @@
                                                     <div class="m-dropdown__content">
                                                         <ul class="m-nav m-nav--skin-light">
                                                             <li class="m-nav__section m--hide">
-                                                                        <span class="m-nav__section-text">
-                                                                            Section
-                                                                        </span>
+                                                                <span class="m-nav__section-text">Section</span>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a href="header/profile.html" class="m-nav__link">
+                                                                <a href="javascript:;" class="m-nav__link">
                                                                     <i class="m-nav__link-icon flaticon-profile-1"></i>
                                                                     <span class="m-nav__link-title">
-                                                                                <span class="m-nav__link-wrap">
-                                                                                    <span class="m-nav__link-text">
-                                                                                        Meus dados
-                                                                                    </span>
-
-                                                                                </span>
+                                                                        <span class="m-nav__link-wrap">
+                                                                            <span class="m-nav__link-text">
+                                                                                Meus dados
                                                                             </span>
+
+                                                                        </span>
+                                                                    </span>
                                                                 </a>
                                                             </li>
 
                                                             <li class="m-nav__item">
-                                                                <a href="header/profile.html" class="m-nav__link">
+                                                                <a href="javascript:;" class="m-nav__link">
                                                                     <i class="m-nav__link-icon flaticon-chat-1"></i>
-                                                                    <span class="m-nav__link-text">
-                                                                                Mensagens
-                                                                            </span>
+                                                                    <span class="m-nav__link-text">Mensagens</span>
                                                                 </a>
                                                             </li>
                                                             <li class="m-nav__separator m-nav__separator--fit"></li>
-
 
                                                             <li class="m-nav__separator m-nav__separator--fit"></li>
                                                             <li class="m-nav__item">
@@ -251,7 +246,6 @@
                                             </div>
                                         </div>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
@@ -269,36 +263,45 @@
             </button>
             <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
                 <!-- BEGIN: Aside Menu -->
-                <div
-                        id="m_ver_menu"
-                        class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark "
+                <div id="m_ver_menu"
+                        class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark"
                         data-menu-vertical="true"
                         data-menu-scrollable="false" data-menu-dropdown-timeout="500">
-
                     {{--MENU LATERAL--}}
                     <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow">
                         @foreach($menus as $menu)
-                            @if($menu->name == "Cadastros" || $menu->name == "Usuários")
+                            @if(in_array($menu->name,["Cadastros","Usuários","Ocorrências","Relatórios","Auditoria"]))
                                 @if((Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO"))
                                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
                                         m-menu-submenu-toggle="hover">
-                                    @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                                    @else
-                                        <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
-                                    @endif
+                                        <a href="{{$menu->sub_menus != "[]" ? 'javascript:;' : $menu->url }}" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
                                                        data-placement="top" title="{{$menu->name}}">
                                             </i>
                                             <span class="m-menu__link-text">{{$menu->name}}</span>
-                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
-                                            <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                    @endif
+                                            @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o icone -->
+                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                            @endif
                                         </a>
-                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
-                                        @foreach($menu->sub_menus as $sub_menu)
-                                            @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
-                                                @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
+                                        @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
+                                            @foreach($menu->sub_menus as $sub_menu)
+                                                @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
+                                                    @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
+                                                        <div class="m-menu__submenu ">
+                                                            <span class="m-menu__arrow"></span>
+                                                            <ul class="m-menu__subnav">
+                                                                <li class="m-menu__item " aria-haspopup="true">
+                                                                    <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                        <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                            <span></span>
+                                                                        </i>
+                                                                        <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    @endif
+                                                @else
                                                     <div class="m-menu__submenu ">
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">
@@ -313,79 +316,61 @@
                                                         </ul>
                                                     </div>
                                                 @endif
-                                            @else
-                                                <div class="m-menu__submenu ">
-                                                    <span class="m-menu__arrow"></span>
-                                                    <ul class="m-menu__subnav">
-                                                        <li class="m-menu__item " aria-haspopup="true">
-                                                            <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
-                                                                <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                    <span></span>
-                                                                </i>
-                                                                <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            @endif
-
-                                        @endforeach
-                                    @endif
-                                            </a>
+                                            @endforeach
+                                        @endif
+                                    </li>
                                 @endif
                             @else
                                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
                                     m-menu-submenu-toggle="hover" @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
-                                @if($menu->sub_menus != "[]")  <!-- Caso não tenha sub menu é adicionado a url no hrf -->
-                                    <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                                @else
-                                    <a href="{{$menu->url}}" class="m-menu__link m-menu__toggle">
-                                @endif
+                                    <a href="{{$menu->sub_menus != "[]" ? 'javascript:;' : $menu->url }}"
+                                       class="m-menu__link m-menu__toggle">
                                         <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
                                                    data-placement="top" title="{{$menu->name}}"></i>
                                         <span class="m-menu__link-text">{{$menu->name}}</span>
-                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
-                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                @endif
-                                    </a>
-                                @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
-                                    @foreach($menu->sub_menus as $sub_menu)
-                                        @if($sub_menu->name == "Upload de Arquivos" || $sub_menu->name == "Gestão de Arquivos")
-                                            @if(Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO")
-                                                <div class="m-menu__submenu">
-                                                    <span class="m-menu__arrow"></span>
-                                                    <ul class="m-menu__subnav">
-                                                        <li class="m-menu__item " aria-haspopup="true">
-                                                            <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
-                                                                <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                    <span></span>
-                                                                </i>
-                                                                <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if(Auth::user()->profile == "AGÊNCIA" && $sub_menu->name == "Operador" || Auth::user()->profile == "OPERADOR" && $sub_menu->name == "Agência")
-                                            @else
-                                                <div class="m-menu__submenu ">
-                                                    <span class="m-menu__arrow"></span>
-                                                    <ul class="m-menu__subnav">
-                                                        <li class="m-menu__item " aria-haspopup="true">
-                                                            <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
-                                                                <i class="m-menu__link-bullet {{$sub_menu->icon}}">
-                                                                    <span></span>
-                                                                </i>
-                                                                <span class="m-menu__link-text">{{$sub_menu->name}}</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            @endif
+                                        @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado o incone -->
+                                            <i class="m-menu__ver-arrow la la-angle-right"></i>
                                         @endif
-                                    @endforeach
-                                @endif
+                                    </a>
+                                    @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
+                                        @foreach($menu->sub_menus as $sub_menu)
+                                            @if($sub_menu->name == "Upload de Arquivos" ||
+                                                $sub_menu->name == "Gestão de Arquivos")
+                                                @if(in_array(Auth::user()->profile, ["ADMINISTRADOR","DEPARTAMENTO"]))
+                                                    <div class="m-menu__submenu">
+                                                        <span class="m-menu__arrow"></span>
+                                                        <ul class="m-menu__subnav">
+                                                            <li class="m-menu__item " aria-haspopup="true">
+                                                                <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                    <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                            @else
+                                                @if(! ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA'))
+                                                    <div class="m-menu__submenu ">
+                                                        <span class="m-menu__arrow"></span>
+                                                        <ul class="m-menu__subnav">
+                                                            <li class="m-menu__item " aria-haspopup="true">
+                                                                <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                    <i class="m-menu__link-bullet {{$sub_menu->icon}}">
+                                                                        <span></span>
+                                                                    </i>
+                                                                    <span class="m-menu__link-text">{{$sub_menu->name}}</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </li>
                             @endif
                         @endforeach
                     </ul>
@@ -1074,13 +1059,9 @@
 
 
     <!-- begin::Footer -->
-    <footer class="m-grid__item m-footer footer">
-        <div class="m-container m-container--fluid m-container--full-height m-page__container">
-            <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
-                <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
-                    <span class="m-footer__copyright">2018 &copy; ADDRESS</span>
-                </div>
-            </div>
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">2018 &copy; ADDRESS</span>
         </div>
     </footer>
     <!-- end::Footer -->

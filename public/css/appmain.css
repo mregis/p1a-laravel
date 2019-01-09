@@ -11201,10 +11201,6 @@ div.dt-buttons a.btn.processing:after {
   display: none;
 }
 
-.container {
-  margin-top: 20px;
-}
-
 .image-preview-input {
   position: relative;
   overflow: hidden;
@@ -11287,8 +11283,8 @@ body {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px;
+  height: 40px;
+  line-height: 40px;
   /* Vertically center the text there */
   background-color: #f5f5f5;
 }
@@ -11333,8 +11329,33 @@ tr.shown td.details-control {
 /* IE Fix */
 
 input[type='radio'],
-input[type='checkbox'] {
+input[type='checkbox'],
+input[type='radio']:focus,
+input[type='checkbox']:focus {
   background-color: transparent;
+}
+
+@media (max-width: 993px) {
+  .m-subheader {
+    padding: 10px 10px 0 10px !important;
+  }
+
+  .m-portlet .m-portlet__head {
+    height: 3rem !important;
+  }
+
+  .m-portlet .m-portlet__body {
+    padding: 1.2rem !important;
+  }
+
+  .m-body .m-content {
+    padding: 10px 10px !important;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.38rem !important;
+  }
 }@charset "UTF-8";
 
 /*!
@@ -68651,7 +68672,7 @@ body.m-content--skin-light2 {
 }
 
 .m-aside-left.m-aside-left-offcanvas-default .m-aside-left {
-  top: !important;
+  top: 0 !important;
 }
 
 .m-aside-left.m-aside-left-offcanvas-default .m-body {

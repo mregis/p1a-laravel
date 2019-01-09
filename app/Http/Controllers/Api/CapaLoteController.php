@@ -113,6 +113,18 @@ class CapaLoteController extends BaseController
                 ->filterColumn('constante', function($query, $keyword) {
                     $query->where('files.constante', '=', $keyword);
                 })
+                ->filterColumn('content', function($query, $keyword) {
+                    $query->where('docs.content', '=', $keyword);
+                })
+                ->filterColumn('from_agency', function($query, $keyword) {
+                    $query->where('docs.from_agency', '=', $keyword);
+                })
+                ->filterColumn('to_agency', function($query, $keyword) {
+                    $query->where('docs.to_agency', '=', $keyword);
+                })
+                ->filterColumn('status', function($query, $keyword) {
+                    $query->where('docs.status', '=', $keyword);
+                })
                 ->addColumn('action', function ($doc) {
                     return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
                     'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
@@ -124,17 +136,17 @@ class CapaLoteController extends BaseController
                     'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                     '</a>';
                 })
-                ->addColumn('origin', function ($doc) {
+                ->editColumn('from_agency', function ($doc) {
                     if ($doc->origin != null) {
-                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
                         $doc->from_agency . '</a>';
                     } else {
                         return $doc->from_agency;
                     }
                 })
-                ->addColumn('destin', function ($doc) {
+                ->editColumn('to_agency', function ($doc) {
                     if ($doc->destin != null) {
-                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
                         $doc->to_agency . '</a>';
                     } else {
                         return $doc->to_agency;

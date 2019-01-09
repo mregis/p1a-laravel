@@ -18,12 +18,12 @@
                     </div>
                 </div>
 
-				<input type="hidden" id="columns" value='action,content,constante,origin,destin,created_at,updated_at,status,view'>
+				<input type="hidden" id="columns" value='action,content,constante,from_agency,to_agency,created_at,updated_at,status,view'>
 				<input type="hidden" id="baseurl" value="{{URL::to('/api/remessa/registrar/')}}/{{Auth::user()->id}}">
                 <input type="hidden" id="check_url" value="{{URL::to('/remessa/registrar')}}">
 				<div class="m-portlet__body">
-					<div class="table-responsive-xl">
-						<table class="table table-striped table-bordered table-compact"
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered"
                                id="datatable"
                                data-order='[[4, "asc"], [5, "asc"]]'
                                data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>

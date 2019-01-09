@@ -21,7 +21,7 @@
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/users/list')}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl table-responsive-sm">
+                    <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover hasdetails"
                                id="datatable"
                                data-column-defs='[{"targets":[5],"orderable":false}]'
