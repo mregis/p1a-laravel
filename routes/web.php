@@ -94,4 +94,5 @@ Route::group(['prefix' => 'a'], function() {
 	Route::post('/ver/capalote', 'Anon\AnonController@getCapaLoteHistory')->name('anon.get_capalote_history');
 	Route::get('/ver/capalote', 'Anon\AnonController@showCapaLoteHistory')->name('anon.show_capalote_history');
 	Route::post('/imprimir/capalote', 'CapaLote\CapaLoteController@showPDFMultiple')->name('anon.print_capalote');
+
 });

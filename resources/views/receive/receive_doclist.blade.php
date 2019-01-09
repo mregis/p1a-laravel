@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', __('Receber Envelope'))
+@section('title', __('Recebimento'))
 @section('styles')
     <style type="text/css">
         .m-body .m-content {
@@ -22,7 +22,7 @@
 						        <i class="la la-gear"></i>
 						    </span>
 
-                            <h3 class="m-portlet__head-text">{{__('Listagem')}}</h3>
+                            <h3 class="m-portlet__head-text">{{__('Receber Envelopes')}}</h3>
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
 
                 <div class="m-portlet__body">
                     <div class="table-responsive-sm table-responsive-xl">
-                        <table class="table table-striped table-bordered hasdetails table-hover"
+                        <table class="table table-striped table-bordered hasdetails table-hover text-center"
                                    id="datatable"
                                data-column-defs='[{"targets":[1,8,9],"orderable":false}]'
                                data-order='[[ 4, "asc" ], [ 5, "asc"]]'
