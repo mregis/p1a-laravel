@@ -144,18 +144,18 @@ input[type='radio']:focus, input[type='checkbox']:focus {
 
 @media (max-width: 993px) {
     .m-subheader {
-        padding: 10px 10px 0 10px;
+        padding: 10px 10px 0 10px !important;
     }
     .m-portlet .m-portlet__head {
-        height: 3rem;
+        height: 3rem !important;
     }
     .m-portlet .m-portlet__body {
-        padding: 1.2rem;
+        padding: 1.2rem !important;
     }
     .m-body .m-content {
-        padding: 10px 10px;
+        padding: 10px 10px !important;
     }
     .table th, .table td {
-        padding: 0.38rem;
+        padding: 0.38rem !important;
     }
 }
