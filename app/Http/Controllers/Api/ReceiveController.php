@@ -341,7 +341,7 @@ class ReceiveController extends BaseController
             })
             ->addColumn('origin', function ($doc) {
                 if ($doc->origin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
                     $doc->from_agency . '</a>';
                 } else {
                     return $doc->from_agency;
@@ -349,7 +349,7 @@ class ReceiveController extends BaseController
             })
             ->addColumn('destin', function ($doc) {
                 if ($doc->destin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
                     $doc->to_agency . '</a>';
                 } else {
                     return $doc->to_agency;
