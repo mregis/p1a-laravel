@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-				<input type="hidden" id="columns" value='action,content,constante,origin,destin,created_at,updated_at,status,view'>
+				<input type="hidden" id="columns" value='action,content,constante,from_agency,to_agency,created_at,updated_at,status,view'>
 				<input type="hidden" id="baseurl" value="{{URL::to('/api/remessa/registrar/')}}/{{Auth::user()->id}}">
                 <input type="hidden" id="check_url" value="{{URL::to('/remessa/registrar')}}">
 				<div class="m-portlet__body">

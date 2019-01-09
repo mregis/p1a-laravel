@@ -271,17 +271,15 @@ class UploadController extends BaseController
         $query = Files::query()
             ->select([
                 "files.constante as constante", "files.movimento as movimento",
-                "docs.content", "docs.status", "docs.from_agency",
+                "docs.content as content", "docs.status as status", "docs.from_agency",
                 "docs.to_agency", "docs.updated_at", "docs.created_at",
-                "docs.id", "origin.nome as origin", "destin.nome as destin"
+                "docs.id", "origin.nome as agencia_origin", "destin.nome as agencia_destin"
             ])
             ->join("docs", "files.id", "=", "docs.file_id")
             ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
             ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
-            ->where(function ($query) {
-                $query->whereIn('docs.status', ['pendente'])
-                    ->orWhere('docs.status', '=', null);
-            });
+            ->whereIn('docs.status', ['pendente'])
+            ;
 
         if ($user->profile != 'ADMINISTRADOR') {
             $juncao = $user->juncao;
@@ -294,23 +292,31 @@ class UploadController extends BaseController
             ->filterColumn('constante', function($query, $keyword) {
                 $query->where('files.constante', '=', $keyword);
             })
-
+            ->filterColumn('content', function($query, $keyword) {
+                $query->where('docs.content', '=', $keyword);
+            })
+            ->filterColumn('from_agency', function($query, $keyword) {
+                $query->where('docs.from_agency', '=', $keyword);
+            })
+            ->filterColumn('to_agency', function($query, $keyword) {
+                $query->where('docs.to_agency', '=', $keyword);
+            })
             ->addColumn('action', function ($doc) {
                 return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
                 'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
-            ->addColumn('origin', function ($doc) {
-                if ($doc->origin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip" data-trigger="click">' .
+            ->editColumn('from_agency', function ($doc) {
+                if ($doc->agencia_origin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->agencia_origin . '" data-toggle="tooltip">' .
                     $doc->from_agency . '</a>';
                 } else {
                     return $doc->from_agency;
                 }
             })
-            ->addColumn('destin', function ($doc) {
-                if ($doc->destin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip" data-trigger="click">' .
+            ->editColumn('to_agency', function ($doc) {
+                if ($doc->agencia_destin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->agencia_destin . '" data-toggle="tooltip">' .
                     $doc->to_agency . '</a>';
                 } else {
                     return $doc->to_agency;
@@ -388,7 +394,7 @@ class UploadController extends BaseController
             return response()->json($e->getMessage(), 400);
         }
         return response()->json(
-            sprintf('%s Remessa%s Registrada%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 0 ? 's':''), 200
+            sprintf('%s Remessa%s Registrada%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 1 ? 's':''), 200
         );
     }
 

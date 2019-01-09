@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="columns"
-                       value="action,content,constante,origin,destin,created_at,updated_at,status,view">
+                       value="action,content,constante,from_agency,to_agency,created_at,updated_at,status,view">
 
                     <input type="hidden" id="baseurl" value="{{ route('capalote.get-not-received', Auth::user()->id)}}" />
 
