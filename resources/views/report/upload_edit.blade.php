@@ -25,9 +25,8 @@
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/report/docs/')}}/{{$id}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered table-compact
-                        dt-responsive nowrap hasdetails text-center"
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered nowrap hasdetails text-center"
                                id="datatable" data-column-defs='[{"targets":[4], "orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
