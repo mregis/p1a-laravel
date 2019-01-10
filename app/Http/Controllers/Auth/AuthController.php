@@ -27,13 +27,13 @@ class AuthController extends Controller
     {
         if ($request->email) {
             $pass = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
-            $dados = array('pass' => $pass);
 
             Audit::create([
                 'description' => Input::get('email') . ' requisitou recuperação de senha'
             ]);
 
             if ($user = Users::where('email', Input::get('email'))->first()) {
+                $dados = array('pass' => $pass, 'username' => $user->name);
                 $input['password'] = Hash::make($pass);
                 $input['last_login'] = null;
                 $user->fill($input)->save();
