@@ -1,8 +1,4 @@
-<h2>Resgate de Senha</h2>
+<h2><small>Resgate de Senha</small> – Sistema de Rastreamento de Envelopes</h2>
 
-<p>
-Foi solicitada uma nova senha para sua conta Address
-</p>
-<p>
-Nova Senha: <?php echo $pass; ?>
-</p>
+<p>Foi solicitada uma nova senha para a conta <span style="color: #0077dd"><?php echo $username ?></span></p>
+<p>Nova Senha: <span style="color: #0077dd"><?php echo $pass; ?></span></p>

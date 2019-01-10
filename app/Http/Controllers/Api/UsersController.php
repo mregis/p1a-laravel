@@ -147,7 +147,7 @@ class UsersController extends BaseController
                 'user_id' => $auth->id
             ]);
         } else {
-            return $this->sendError('Erro ao excluir cadastro', 400);
+            return $this->sendError('Erro ao atualizar cadastro', 400);
         }
         return $this->sendResponse(null, 'Informação atualizada com sucesso');
     }
@@ -175,4 +175,43 @@ class UsersController extends BaseController
         return $this->sendResponse(null, 'Exclusão efetuada com sucesso');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function updateMyProfile(Request $request)
+    {
+        $user_data = $request->all();
+
+        $validator = Validator::make($user_data, [
+            'password' => 'nullable|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = implode(', ', $validator->errors()->all());
+            return $this->sendError('Erros encontrados. Verifique as informações e ' .
+                'tente novamente! Detalhes: [' . $errors . ']', 400);
+        }
+
+        if ($user_data['password'] == null) {
+            unset($user_data['password']);
+        } else {
+            $user_data['password'] = Hash::make($user_data['password']);
+        }
+
+        if (!$user = Users::find($user_data['_u'])) {
+            return $this->sendError('Informação não encontrada', 404);
+        }
+
+        if ($user->fill($user_data)->save()) {
+            Audit::create([
+                'description' => sprintf('Usuario [%s] atualizou senha', $user->name),
+                'user_id' => $user->id
+            ]);
+        } else {
+            return $this->sendError('Erro ao atualizar cadastro', 400);
+        }
+
+        return $this->sendResponse(null, 'Informação atualizada com sucesso');
+    }
 }

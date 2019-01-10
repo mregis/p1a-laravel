@@ -27,20 +27,21 @@ class AuthController extends Controller
     {
         if ($request->email) {
             $pass = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
-            $dados = array('pass' => $pass);
 
             Audit::create([
                 'description' => Input::get('email') . ' requisitou recuperação de senha'
             ]);
 
             if ($user = Users::where('email', Input::get('email'))->first()) {
+                $dados = array('pass' => $pass, 'username' => $user->name);
                 $input['password'] = Hash::make($pass);
+                $input['last_login'] = null;
                 $user->fill($input)->save();
 
                 Mail::send('emails.recuperar-senha', $dados, function ($message) use ($request) {
                     $message
                         ->to(Input::get('email'))
-                        ->subject('Resgate de Senha');
+                        ->subject('Resgate de Senha – Sistema de Rastreamento de Envelopes');
                 });
                 Audit::create([
                     'description' => 'Enviado email de recuperação de senha para ' . Input::get('email')
@@ -51,13 +52,13 @@ class AuthController extends Controller
                 'Verifique sua caixa de mensagens', 200);
         }
         if (Auth::check() == true) {
-            return redirect('/dashboard');
+            return redirect('/home');
         }
         return view('auth/auth');
 
     }
 
-    public function login()
+    public function login(Request $request)
     {
         $username = Input::get('username');
         $password = Input::get('password');
@@ -67,9 +68,14 @@ class AuthController extends Controller
             }
             if (Auth::attempt(['email' => $username, 'password' => $password])) {
                 $user = Users::find(Auth::user()->id);
-                $input = array();
-                $input['last_login'] = date("Y-m-d H:i:s");
-                $user->fill($input)->save();
+                if ($user->last_login != null) {
+                    $input = ['last_login' => date("Y-m-d H:i:s")];
+                    $user->fill($input)->save();
+                } else {
+                    $request->session()->flash('alert-warning',
+                        'Você deve alterar sua senha neste momento. Por favor preencha o formulário exibido.');
+                    $this->redirectTo = route('users.my_profile');
+                }
 
                 Audit::create([
                     'description' => 'Autenticou-se no sistema',

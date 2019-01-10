@@ -23,6 +23,7 @@ Route::group(['prefix' => '/users'], function () {
     Route::get('/list', 'Api\UsersController@list');
     Route::post('/', 'Api\UsersController@store')->name('users.api-store');
     Route::get('/{id}', 'Api\UsersController@show');
+    Route::put('/meus-dados', 'Api\UsersController@updateMyProfile')->name('users.profile_update');
     Route::put('/{id}', 'Api\UsersController@update')->name('users.users_update');
     Route::delete('/{id}', 'Api\UsersController@destroy');
 });

@@ -29,6 +29,7 @@ Route::group(['prefix' => 'users'], function() {
 	Route::any('/update/{id}', 'Api\UsersController@update')->name('users.users_list');
 	Route::any('/delete/{id}', 'Api\UsersController@destroy')->name('users.users_delete');
     Route::post('/add', 'Users\UserController@store')->name('users.users_save');
+	Route::get('/meus-dados', 'Users\UserController@myProfile')->name('users.my_profile');
 });
 
 Route::get('/auditoria', 'Api\AuditController@index')->name('audit.audit_list');

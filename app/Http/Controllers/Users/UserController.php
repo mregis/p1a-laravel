@@ -134,4 +134,21 @@ class UserController extends BaseController
         return view('users.edit', compact('menus', 'usuario', 'perfis', 'unidades'));
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse|View
+     */
+    public function myProfile(Request $request)
+    {
+        if (!$usuario = Users::find(Auth::id())) {
+            $request->session()->flash('alert-danger', 'Erro ao recuperar informações. ' .
+                'Tente novamente. Se o problema persistir informe ao Administrador do Sistema');
+            return redirect(route('home'));
+        }
+        // $agencia = $usuario->agencia();
+        $menu = new Menu();
+        $menus = $menu->menu();
+
+        return view('users.profile', compact('menus', 'usuario'));
+    }
 }

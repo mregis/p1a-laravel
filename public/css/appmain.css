@@ -11356,6 +11356,16 @@ input[type='checkbox']:focus {
   .table td {
     padding: 0.38rem !important;
   }
+}
+
+.m-topbar__notifications--img .m-dropdown__header {
+  background: url(/images/notification_bg.jpg?455728ef0755f2c2d9a0f8b54d5e3bee);
+  background-size: cover;
+}
+
+.m-topbar__user-profile .m-dropdown__header {
+  background: url(/images/user_profile_bg.jpg?7968daa76ac10a126bfd4f37f26fb289);
+  background-size: cover;
 }@charset "UTF-8";
 
 /*!
@@ -42649,21 +42659,6 @@ code {
 .m-btn--icon.btn-block > span {
   text-align: center;
   margin: 0 auto;
-}
-
-[class^="la-"],
-[class*=" la-"] {
-  font-size: 1.3rem;
-}
-
-[class^="fa-"],
-[class*=" fa-"] {
-  font-size: 1.1rem;
-}
-
-[class^="flaticon-"],
-[class*=" flaticon-"] {
-  font-size: 1.3rem;
 }
 
 .btn-sm [class^="la-"],
