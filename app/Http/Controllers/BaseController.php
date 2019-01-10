@@ -48,15 +48,15 @@ use Illuminate\Support\Facades\Route;
  * )
  */
 
+
 class BaseController extends Controller
 {
     protected $redirectTo = '/dashboard';
 
-
     public function __construct()
     {
         $route = Route::current()->uri();
-        if (preg_match('#^a|api/#', $route) == false) {
+        if (preg_match('#^(a|api)/#', $route) == false) {
             $this->middleware('auth');
         }
     }

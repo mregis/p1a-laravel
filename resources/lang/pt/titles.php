@@ -123,4 +123,5 @@ return [
     'list_unidades' => 'Lista  de Unidades',
     'add_unidade' => 'Cadastro de Unidade',
     'edit_unidade' => 'Editar Unidade',
+    'view_profile' => 'Meu Cadastro'
 ];
