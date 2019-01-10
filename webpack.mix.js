@@ -65,6 +65,8 @@ mix
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery'],
     })
+    .copy('resources/assets/icons/favicon.ico', 'public/favicon.ico')
+    .copyDirectory('resources/assets/img', 'public/images')
     .version()
     .webpackConfig({
         node: {

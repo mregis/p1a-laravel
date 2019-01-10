@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{url('assets/demo/default/media/img/logo/favicon.ico')}}"/>
+    <link rel="shortcut icon" href="{{ mix('favicon.ico') }}"/>
     <link href="{{ mix('css/appfill.css')}}" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/appmain.css')}}" rel="stylesheet" type="text/css">
     <!--end::Base Styles -->
@@ -35,7 +35,7 @@
                         <div class="m-stack m-stack--ver m-stack--general">
                             <div class="m-stack__item m-stack__item--middle m-brand__logo">
                                 <a href="/dashboard" class="m-brand__logo-wrapper">
-                                    <img alt="" src="{{url('assets/demo/default/media/img/logo/logo_default_dark.png')}}"/>
+                                    <img alt="" src="{{ asset('images/logo_default_dark.png')}}"/>
                                 </a>
                             </div>
                             <div class="m-stack__item m-stack__item--middle m-brand__tools">
@@ -63,20 +63,20 @@
                             <i class="la la-close"></i>
                         </button>
                         <div id="m_header_menu"
-                             class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
-
+                             class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas
+                             m-header-menu--skin-light m-header-menu--submenu-skin-light
+                             m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark">
                         </div>
                         <!-- END: Horizontal Menu -->                                <!-- BEGIN: Topbar -->
                         <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                             <div class="m-stack__item m-topbar__nav-wrapper">
-                                <ul class="m-topbar__nav m-nav m-nav--inline">
+                                <ul class="m-topbar_nav m-nav m-nav--inline">
                                     <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light"
                                         data-dropdown-toggle="click" data-dropdown-persistent="true" id="m_quicksearch"
                                         data-search-type="dropdown">
                                         <div class="m-dropdown__wrapper">
                                             <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
-
-                                            <div class="m-dropdown__inner ">
+                                            <div class="m-dropdown__inner">
                                                 <div class="m-dropdown__header">
                                                     <form class="m-list-search__form">
                                                         <div class="m-list-search__form-wrapper">
@@ -88,8 +88,8 @@
                                                                     </span>
                                                             <span class="m-list-search__form-icon-close"
                                                                   id="m_quicksearch_close">
-                                                                        <i class="la la-remove"></i>
-                                                                    </span>
+                                                                <i class="la la-remove"></i>
+                                                            </span>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -102,22 +102,20 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width"
+                                    <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img
+                                    m-dropdown m-dropdown--large m-dropdown--header-bg-fill
+                                    m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width"
                                         data-dropdown-toggle="click" data-dropdown-persistent="true">
-
                                         <div class="m-dropdown__wrapper">
                                             <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
-
                                             <div class="m-dropdown__inner">
-                                                <div class="m-dropdown__header m--align-center"
-                                                     style="background: url('{{ url('assets/app/media/img/misc/notification_bg.jpg') }}');
-                                                             background-size: cover;">
-                                                            <span class="m-dropdown__header-title">
-                                                                 Nenhuma notificação
-                                                            </span>
+                                                <div class="m-dropdown__header m--align-center">
+                                                    <span class="m-dropdown__header-title">
+                                                        Nenhuma notificação
+                                                    </span>
                                                     <span class="m-dropdown__header-subtitle">
-                                                                Notificações
-                                                            </span>
+                                                        Notificações
+                                                    </span>
                                                 </div>
                                                 <div class="m-dropdown__body">
                                                     <div class="m-dropdown__content">
@@ -144,25 +142,22 @@
                                                         </ul>
                                                         <div class="tab-content">
                                                             <div class="tab-pane active"
-                                                                 id="topbar_notifications_notifications" role="tabpanel">
-
-                                                            </div>
+                                                                 id="topbar_notifications_notifications"
+                                                                 role="tabpanel"></div>
                                                             <div class="tab-pane" id="topbar_notifications_events"
                                                                  role="tabpanel">
                                                                 <div class="m-scrollable" data-max-height="250"
                                                                      data-mobile-max-height="200">
-                                                                    <div class="m-list-timeline m-list-timeline--skin-light">
-
-                                                                    </div>
+                                                                    <div class="m-list-timeline
+                                                                    m-list-timeline--skin-light"></div>
                                                                 </div>
                                                             </div>
                                                             <div class="tab-pane" id="topbar_notifications_logs"
                                                                  role="tabpanel">
                                                                 <div class="m-stack m-stack--ver m-stack--general"
                                                                      style="min-height: 180px;">
-                                                                    <div class="m-stack__item m-stack__item--center m-stack__item--middle">
-
-                                                                    </div>
+                                                                    <div class="m-stack__item m-stack__item--center
+                                                                    m-stack__item--middle"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -172,36 +167,32 @@
                                         </div>
                                     </li>
 
-                                    <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"
-                                        data-dropdown-toggle="click">
-                                        <a href="#" class="m-nav__link m-dropdown__toggle">
-                                                    <span class="m-topbar__userpic">
-                                                        <img src="{{url('assets/app/media/img/users/user4.jpg')}}"
-                                                             class="m--img-rounded m--marginless m--img-centered" alt=""/>
-                                                    </span>
-                                            <span class="m-topbar__username m--hide">
-                                                        Nick
-                                                    </span>
+                                    <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img
+                                            m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill
+                                            m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light
+                                            pr-3" data-dropdown-toggle="click">
+                                        <a href="#" class="m-nav__link m-dropdown__toggle text-white">
+                                            <span class="m-topbar__username">
+                                                Usuário: {{ Auth::user()->name }} <i class="fas fa-user-cog fa-3x"></i>
+                                            </span>
                                         </a>
 
                                         <div class="m-dropdown__wrapper">
                                             <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
 
                                             <div class="m-dropdown__inner">
-                                                <div class="m-dropdown__header m--align-center"
-                                                     style="background: url('{{url('assets/app/media/img/misc/user_profile_bg.jpg')}}'); background-size: cover;">
+                                                <div class="m-dropdown__header m--align-center">
                                                     <div class="m-card-user m-card-user--skin-dark">
-                                                        <div class="m-card-user__pic">
-                                                            <img src="{{url('assets/app/media/img/users/user4.jpg')}}"
-                                                                 class="m--img-rounded m--marginless" alt=""/>
+                                                        <div class="m-card-user__pic text-white">
+                                                            <i class="fas fa-user-cog fa-4x"></i>
                                                         </div>
                                                         <div class="m-card-user__details">
-                                                                    <span class="m-card-user__name m--font-weight-500">
-                                                                        {{ Auth::user()->name }}
-                                                                    </span>
-                                                            <a href="" class="m-card-user__email m--font-weight-300 m-link">
+                                                            <span class="m-card-user__name m--font-weight-500">
+                                                                {{ Auth::user()->name }}
+                                                            </span>
+                                                            <span class="m-card-user__email m--font-weight-300 m-link">
                                                                 {{ Auth::user()->email }}
-                                                            </a>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>

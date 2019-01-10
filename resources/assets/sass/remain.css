@@ -159,3 +159,12 @@ input[type='radio']:focus, input[type='checkbox']:focus {
         padding: 0.38rem !important;
     }
 }
+
+.m-topbar__notifications--img .m-dropdown__header {
+    background: url('../img/notification_bg.jpg');
+    background-size: cover;
+}
+.m-topbar__user-profile .m-dropdown__header {
+    background: url('../img/user_profile_bg.jpg');
+    background-size: cover;
+}
