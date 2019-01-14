@@ -21,38 +21,37 @@
                 <input type="hidden" id="baseurl" value="{{route('report.list', Auth::user()->id)}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
-                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
-                               id="datatable" data-column-defs='[{"targets":[0,5],"orderable":false}]'
-                               data-order='[[3, "desc"]]'>
-                            <thead class="thead-dark">
+                    <table class="table table-striped table-bordered table-responsive compact
+                    nowrap hasdetails table-hover text-center"
+                           id="datatable" data-column-defs='[{"targets":[0,5],"orderable":false}]'
+                           data-order='[[3, "desc"]]'>
+                        <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>{{__('tables.name')}}</th>
+                            <th>{{__('tables.constante')}}</th>
+                            <th>{{__('tables.movimento')}}</th>
+                            <th>{{__('total')}}</th>
+                            <th>{{__('tables.options')}}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <script id="details-template" type="text/x-handlebars-template">
+                        <table class="table" id="check_details">
                             <tr>
-                                <th></th>
-                                <th>{{__('tables.name')}}</th>
-                                <th>{{__('tables.constante')}}</th>
-                                <th>{{__('tables.movimento')}}</th>
-                                <th>{{__('total')}}</th>
-                                <th>{{__('tables.options')}}</th>
+                                <td>{{__('labels.name')}}:</td>
+                                <td>@{{name}}</td>
+                                <td>{{__('labels.total')}}:</td>
+                                <td>@{{total}}</td>
                             </tr>
-                            </thead>
+                            <tr>
+                                <td>{{__('labels.created_at')}}:</td>
+                                <td>@{{created_at}}</td>
+                                <td>{{__('labels.updated_at')}}:</td>
+                                <td>@{{updated_at}}</td>
+                            </tr>
                         </table>
-                        <script id="details-template" type="text/x-handlebars-template">
-                            <table class="table" id="check_details">
-                                <tr>
-                                    <td>{{__('labels.name')}}:</td>
-                                    <td>@{{name}}</td>
-                                    <td>{{__('Total')}}:</td>
-                                    <td>@{{total}}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{__('Adicionado em')}}:</td>
-                                    <td>@{{created_at}}</td>
-                                    <td>{{__('Alterado em')}}:</td>
-                                    <td>@{{updated_at}}</td>
-                                </tr>
-                            </table>
-                        </script>
-                    </div>
+                    </script>
                 </div>
             </div>
         </div>

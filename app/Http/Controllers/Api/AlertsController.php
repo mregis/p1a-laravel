@@ -52,10 +52,8 @@ class AlertsController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-
-	$input["date_ref"] = explode("/",$input["date_ref"]);
-	$input["date_ref"] = $input["date_ref"][2]."-".$input["date_ref"][1]."-".$input["date_ref"][0];
-
+        $input['user_id'] = $input['_u'];
+        $input['product_id'] = $input['product'];
         $alert = Alerts::create($input);
 
         return $this->sendResponse(null, 'Cadastrado com sucesso', $alert);
@@ -72,13 +70,11 @@ class AlertsController extends BaseController
     public function show($id)
     {
 
-        $user = Alerts::where('id', $id)->first();
-
-        if (is_null($user)) {
+        if (!$alert = Alerts::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
-        return $this->sendResponse($user->toArray(), 'Informação recuperada com sucesso');
+        return $this->sendResponse($alert->toArray(), 'Informação recuperada com sucesso');
         //
     }
 
@@ -91,15 +87,13 @@ class AlertsController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $alert = Alerts::where('id', $id)->first();
-        if (is_null($alert)) {
+
+        if (!$alert = Alerts::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
         $input = $request->all();
-	$input['id'] = $id;
-	$input["date_ref"] = explode("/",$input["date_ref"]);
-	$input["date_ref"] = $input["date_ref"][2]."-".$input["date_ref"][1]."-".$input["date_ref"][0];
-        $alert->fill($input)->save();
+        $alert->description .= "\n[" . date('d-m-Y H:i') .'] ' . $input['description'];
+        $alert->save();
         return $this->sendResponse($alert->toArray(), 'Informação atualizada com sucesso');
     }
 
@@ -111,14 +105,11 @@ class AlertsController extends BaseController
      */
     public function destroy($id)
     {
-        $alert = Alerts::where('id', $id)->first();
-
-        if (is_null($alert)) {
+        if (!$alert = Alerts::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
         $alert->delete();
-
         return $this->sendResponse(null, 'Informação excluída com sucesso');
     }
 
@@ -131,13 +122,12 @@ class AlertsController extends BaseController
      */
     public function edit($id)
     {
+        if (!$alert =  Alerts::find($id)) {
+            return $this->sendError('Informação não encontrada', 404);
+        }
         $menu = new Menu();
-        $user = Alerts::where('id', $id)->first();
         $menus = $menu->menu();
-
-        $permissao = $this->getEnum();
-
-        return view('Alerts.Alerts_edit', compact('user', 'menus','permissao'));
+        return view('alerts.alerts_list', compact('alert', 'menus'));
     }
 
 
@@ -146,32 +136,12 @@ class AlertsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function create()
+    public function create()
     {
         $menu = new Menu();
         $menus = $menu->menu();
 
-        $permissao = $this->getEnum();
-
-        return view('Alerts.Alerts_add', compact('menus','permissao'));
+        return view('alerts.alerts_add', compact('menus','permissao'));
     }
 
-    /**
-     * Show enum values.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public
-    function getEnum()
-    {
-      $type = DB::select(DB::raw('SHOW COLUMNS FROM Alerts WHERE Field = "profile"'))[0]->Type;
-      preg_match('/^enum\((.*)\)$/', $type, $matches);
-      $values = array();
-
-      foreach(explode(',', $matches[1]) as $value){
-          $permissao[] = trim($value, "'");
-      }
-      return $permissao;
-    }
 }

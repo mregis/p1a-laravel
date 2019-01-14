@@ -50,4 +50,5 @@ return [
     'address' => 'Endereço',
     'zipcode' => 'CEP',
     'village' => 'Bairro',
+    'local' => 'Localidade',
 ];

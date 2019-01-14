@@ -40,12 +40,11 @@ class CapaLoteController extends BaseController
         return Datatables::of($query)
 
             ->addColumn('action', function ($doc) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
-                'type="checkbox" name="capalote[]" class="form-control m-input input-doc" ' .
+                return '<input type="checkbox" name="capalote[]" class="form-control form-control-sm m-input input-doc" ' .
                 'value="' . $doc->id . '" id="capalote-' . $doc->id . '">';
             })
             ->addColumn('print', function ($docs) {
-                return '<div align="center"><button class="btn m-btn m-btn--icon m-btn--icon-only print-capalote" ' .
+                return '<div align="center"><button class="btn btn-sm m-btn m-btn--icon m-btn--icon-only print-capalote" ' .
                 'onclick="view(' . $docs->id . ')" title="Imprimir">' .
                 '<i class="fas fa-print"></i></button></div>';
             })
@@ -126,14 +125,13 @@ class CapaLoteController extends BaseController
                     $query->where('docs.status', '=', $keyword);
                 })
                 ->addColumn('action', function ($doc) {
-                    return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
-                    'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                    return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
                     'value="'. $doc->id.'">';
                 })
                 ->addColumn('view', function($doc) use ($user) {
                     return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
                     ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                    'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
+                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                     '</a>';
                 })
                 ->editColumn('from_agency', function ($doc) {

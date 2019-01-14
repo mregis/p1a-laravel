@@ -199,6 +199,7 @@ class UsersController extends BaseController
             $user_data['password'] = Hash::make($user_data['password']);
         }
 
+        $user_data['last_login'] = new \DateTime();
         if (!$user = Users::find($user_data['_u'])) {
             return $this->sendError('Informação não encontrada', 404);
         }

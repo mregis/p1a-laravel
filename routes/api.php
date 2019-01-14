@@ -105,3 +105,7 @@ Route::group(['prefix' => '/unidades'], function () {
 });
 
 Route::get('/capalote/arquivo/{user_id}/{file_id}', 'Api\CapaLoteController@report')->name('capalote.file_report');
+
+Route::group(['prefix' => 'ocorrencias'], function() {
+    Route::put('/edit/{id}', 'Api\AlertsController@update')->name('alerts.api_edit_alert');
+});

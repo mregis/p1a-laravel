@@ -152,14 +152,14 @@ input[type='radio']:focus, input[type='checkbox']:focus {
     .m-portlet .m-portlet__body {
         padding: 1.2rem !important;
     }
-    .m-body .m-content {
-        padding: 10px 10px !important;
-    }
     .table th, .table td {
         padding: 0.38rem !important;
     }
 }
 
+.m-body .m-content {
+    padding: 0 !important;
+}
 .m-topbar__notifications--img .m-dropdown__header {
     background: url('../img/notification_bg.jpg');
     background-size: cover;
@@ -167,4 +167,10 @@ input[type='radio']:focus, input[type='checkbox']:focus {
 .m-topbar__user-profile .m-dropdown__header {
     background: url('../img/user_profile_bg.jpg');
     background-size: cover;
+}
+table.table.compact td {
+    padding: 0.25rem;
+}
+table.table.compact td:last-child {
+    min-width: 80px;
 }

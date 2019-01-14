@@ -176,7 +176,7 @@
                                             pr-3" data-dropdown-toggle="click">
                                         <a href="#" class="m-nav__link m-dropdown__toggle text-white">
                                             <span class="m-topbar__username">
-                                                Usuário: {{ Auth::user()->name }} <i class="fas fa-user-cog fa-3x"></i>
+                                                Usuário: {{ Auth::user()->name }} <i class="fas fa-user-circle fa-3x"></i>
                                             </span>
                                         </a>
 
@@ -188,7 +188,7 @@
                                                 <div class="m-dropdown__header m--align-center">
                                                     <div class="m-card-user m-card-user--skin-dark">
                                                         <div class="m-card-user__pic text-white">
-                                                            <i class="fas fa-user-cog fa-4x"></i>
+                                                            <i class="far fa-user-circle fa-4x"></i>
                                                         </div>
                                                         <div class="m-card-user__details">
                                                             <span class="m-card-user__name m--font-weight-500">
@@ -371,6 +371,7 @@
 
             <div class="m-grid__item m-grid__item--fluid m-wrapper">
 
+                {{--
                 <!-- BEGIN: Subheader -->
                 <div class="m-subheader ">
                     <div class="d-flex align-items-center">
@@ -380,6 +381,7 @@
                         <div></div>
                     </div>
                 </div>
+                --}}
                 <div class="m-content">
 
                     @yield('content')

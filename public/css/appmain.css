@@ -11335,26 +11335,9 @@ input[type='checkbox']:focus {
   background-color: transparent;
 }
 
-@media (max-width: 993px) {
+@media (max-width: 1025px) {
   .m-subheader {
     padding: 10px 10px 0 10px !important;
-  }
-
-  .m-portlet .m-portlet__head {
-    height: 3rem !important;
-  }
-
-  .m-portlet .m-portlet__body {
-    padding: 1.2rem !important;
-  }
-
-  .m-body .m-content {
-    padding: 10px 10px !important;
-  }
-
-  .table th,
-  .table td {
-    padding: 0.38rem !important;
   }
 }
 
@@ -13296,8 +13279,8 @@ pre code {
 }
 
 .table th,
-.table td {
-  padding: 0.75rem;
+.table .compact td {
+  padding: 0.50rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
 }
@@ -76996,3 +76979,22 @@ body.m-content--skin-light2 {
  * App: Address Rastreamento
  */
 
+.m-portlet .m-portlet__body {
+    padding: 1.2rem !important;
+}
+.m-portlet .m-portlet__head {
+    height: 3rem !important;
+}
+table.table.compact td {
+    padding: 0.25rem;	
+}
+table.table.compact td:last-child {
+    min-width: 80px;	
+}
+.m-body .m-content {
+    padding: 0 !important;
+}
+table.table.compact td, 
+table.table.compact th {
+    min-width: 0.8rem;
+}

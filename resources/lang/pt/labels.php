@@ -126,5 +126,6 @@ return [
     'cd' => 'CD',
     'village' => 'Bairro',
     'forgot_password' => 'Esqueci a senha',
-    'check_capalote' => 'Consultar Capa de Lote'
+    'check_capalote' => 'Consultar Capa de Lote',
+    'history' => 'Histórico',
 ];

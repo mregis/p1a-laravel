@@ -24,8 +24,8 @@
 			<div class="m-portlet__body">
                 <input type="hidden" id="columns" value="name,total,pendentes,movimento,view">
                 <input type="hidden" id="baseurl" value="{{ route('receive.lista-arquivos',Auth::user()->id)}}">
-                <div class="table-responsive-sm table-responsive-xl">
-					<table class="table table-striped table-bordered table-hover"
+					<table class="table table-striped table-bordered table-hover
+						table-responsive compact nowrap text-center"
 						   id="datatable"
                            data-column-defs='[{"targets":[4],"orderable":false}]'
 						   data-order='[[3, "asc"],[2, "desc"]]'
@@ -41,7 +41,6 @@
 						</thead>
 						<tbody></tbody>
 					</table>
-				</div>
 			</div>
 		</div>
 	</div>

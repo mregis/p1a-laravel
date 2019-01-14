@@ -27,16 +27,16 @@
                 <input type="hidden" id="columns" value="action,content,origin,destin,movimento,status">
                 <input type="hidden" id="baseurl" value="{{ route('capalote.get-not-received-by-file', [Auth::id(), $id])}}">
                 <div class="m-portlet__body">
-                    <div class="table-responsive-sm table-responsive-xl">
-                        <table class="table table-striped table-bordered hasdetails table-hover"
+                        <table class="table table-striped table-bordered hasdetails table-hover nowrap
+                                table-responsive compact text-center"
                                id="datatable"
                                data-column-defs='[{"targets":[1],"orderable":false}]'
                                data-order='[[3, "asc"],[5, "asc"]]'>
-                            <thead class="thead-dark">
+                            <thead class="thead-dark form-group">
                                 <tr>
                                     <th></th>
-                                    <th><input type="checkbox" name="all_lote" class="form-control m-input"
-                                               onclick="allCheck(this);" id="all_lote" style="width: 20px"></th>
+                                    <th><input type="checkbox" name="all_lote" class="form-control form-control-sm m-input"
+                                               onclick="allCheck(this);" id="all_lote"></th>
                                     <th>{{__('Capa Lote')}}</th>
                                     <th>{{__('Origem')}}</th>
                                     <th>{{__('Destino')}}</th>
@@ -44,6 +44,7 @@
                                     <th>{{__('Status')}}</th>
                                 </tr>
                             </thead>
+                            <tbody class="form-group"></tbody>
                         </table>
                         <script id="details-template" type="text/x-handlebars-template">
                             <table class="table" id="check_details">
@@ -53,10 +54,8 @@
                                 </tr>
                             </table>
                         </script>
-                    </div>
-                    <div class="row">
                         <div class="m-form__actions">
-                            <input class="btn btn-success" type="submit" onclick="save()" value="Receber" style="width:100%;max-width:150px;text-transform:uppercase">
+                            <button class="btn btn-lg btn-success" type="submit" onclick="save()">Receber</button>
                         </div>
                     </div>
                 </div>

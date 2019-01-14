@@ -27,4 +27,9 @@ class Users extends BaseModel
     {
         return $this->name;
     }
+
+    public function getLocal()
+    {
+        return ($this->juncao != null ? (string)$this->agencia() : ($this->unidade != null ? $this->unidade : '-'));
+    }
 }

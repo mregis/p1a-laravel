@@ -38,13 +38,13 @@ Route::get('/receber','Api\ReceiveController@index');
 Route::get('/receber/{id}','Api\ReceiveController@list');
 
 Route::group(['prefix' => 'cadastros'], function() {
-	Route::get('produtos', 'Cadastros\CadastrosController@produtos');
-	Route::get('produto/remove/{id}', 'Cadastros\CadastrosController@produto_remove');
-	Route::get('produto/edit/{id}', 'Cadastros\CadastrosController@produto_edit');
+	Route::get('/produtos', 'Cadastros\CadastrosController@produtos');
+	Route::get('/produto/remove/{id}', 'Cadastros\CadastrosController@produto_remove')->name('cadastros.delete_produto');
+	Route::get('/produto/edit/{id}', 'Cadastros\CadastrosController@produto_edit')->name('cadastros.edit_produto');
 
-	Route::get('perfil', 'Cadastros\CadastrosController@perfis');
-	Route::get('perfil/remove/{id}', 'Cadastros\CadastrosController@perfil_remove');
-	Route::get('perfil/edit/{id}', 'Cadastros\CadastrosController@perfil_edit');
+	Route::get('/perfil', 'Cadastros\CadastrosController@perfis');
+	Route::get('/perfil/remove/{id}', 'Cadastros\CadastrosController@perfil_remove')->name('cadastros.delete_profile');
+	Route::get('/perfil/edit/{id}', 'Cadastros\CadastrosController@perfil_edit')->name('cadastros.edit_profile');
 
     Route::get('/agencias/', 'Agencias\AgenciasController@index')->name('agencias.index');
     Route::get('/agencias/adicionar', 'Agencias\AgenciasController@_new')->name('agencias.novo');
@@ -52,16 +52,21 @@ Route::group(['prefix' => 'cadastros'], function() {
 });
 
 Route::group(['prefix' => 'ocorrencias'], function() {
-	Route::get('add', 'Cadastros\CadastrosController@alert_add');
-	Route::get('list', 'Cadastros\CadastrosController@alert_list');
-	Route::get('edit/{id}', 'Cadastros\CadastrosController@alert_edit');
-	Route::get('remove/{id}', 'Cadastros\CadastrosController@alert_remove');
+	Route::get('/add', 'Cadastros\CadastrosController@alert_add');
+	Route::get('/list', 'Cadastros\CadastrosController@alert_list')->name('cadastros.list_alert');
+	Route::get('/edit/{id}', 'Cadastros\CadastrosController@alert_edit')->name('cadastros.edit_alert');
+	Route::get('/remove/{id}', 'Cadastros\CadastrosController@alert_remove')->name('cadastros.delete_alert');;
 });
 
-Route::get('/arquivos', 'Api\UploadController@arquivos')->name('uploads.upload_index');
-Route::get('/arquivo/{id}', 'Api\UploadController@arquivo')->name('uploads.upload_edit');
-Route::any('/arquivo/delete/{id}', 'Api\UploadController@destroy')->name('uploads.upload_delete');
-Route::any('/arquivos/delete/{id}', 'Api\UploadController@destroy')->name('uploads.upload_delete');
+Route::group(['prefix' => 'arquivos'], function() {
+	Route::get('/', 'Api\UploadController@arquivos')->name('uploads.upload_index');
+	Route::any('/delete/{id}', 'Api\UploadController@destroy')->name('uploads.upload_delete');
+	Route::get('/edit/{id}', 'Api\UploadController@arquivo')->name('uploads.upload_edit');
+});
+
+Route::get('/arquivo/{id}', 'Api\UploadController@arquivo');
+Route::any('/arquivo/delete/{id}', 'Api\UploadController@destroy');
+
 Route::delete('/arquivo/recebe/{id}', 'Api\ReceiveController@check')->name('receive.receive_check');
 
 Route::get('/remessa/registrar', 'Api\UploadController@registrar')->name('uploads.upload_register');

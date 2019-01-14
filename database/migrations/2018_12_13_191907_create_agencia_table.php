@@ -24,6 +24,7 @@ class CreateAgenciaTable extends Migration
             $table->string("uf", 2);
             $table->string("cd", 3);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

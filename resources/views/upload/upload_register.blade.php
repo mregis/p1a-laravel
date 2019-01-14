@@ -22,8 +22,8 @@
 				<input type="hidden" id="baseurl" value="{{URL::to('/api/remessa/registrar/')}}/{{Auth::user()->id}}">
                 <input type="hidden" id="check_url" value="{{URL::to('/remessa/registrar')}}">
 				<div class="m-portlet__body">
-					<div class="table-responsive">
-						<table class="table table-striped table-bordered"
+                    <table class="table table-striped table-bordered nowrap
+                        nowrap table-responsive compact text-center"
                                id="datatable"
                                data-order='[[4, "asc"], [5, "asc"]]'
                                data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>
@@ -52,13 +52,10 @@
 								</tr>
 							</table>
 						</script>
-					</div>
-					<div class="row">
 						<div class="m-form__actions">
 							<button class="btn btn-lg btn-success" data-toggle="modal" data-target="#receberModal">
                                 <i class="fas fa-file-download"></i> Registrar</button>
 						</div>
-					</div>
 				</div>
             </div>
         </div>

@@ -1,16 +1,6 @@
 @extends('layout')
 @section('title', __('Recebimento'))
-@section('styles')
-    <style type="text/css">
-        .m-body .m-content {
-            background-color: #f0f0f0
-        }
 
-        .details-control {
-            display: none
-        }
-    </style>
-@stop
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -19,9 +9,8 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
+						        <i class="la la-envelope"></i>
 						    </span>
-
                             <h3 class="m-portlet__head-text">{{__('Receber Envelopes')}}</h3>
                         </div>
                     </div>
@@ -34,17 +23,16 @@
                 <input type="hidden" id="check_url" value="{{URL::to('/arquivo/recebe')}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-sm table-responsive-xl">
-                        <table class="table table-striped table-bordered hasdetails table-hover text-center"
+                        <table class="table table-striped table-bordered hasdetails table-hover
+                            table-responsive compact nowrap text-center"
                                    id="datatable"
                                data-column-defs='[{"targets":[1,8,9],"orderable":false}]'
-                               data-order='[[ 4, "asc" ], [ 5, "asc"]]'
-                                >
-                            <thead class="thead-dark">
+                               data-order='[[ 4, "asc" ], [ 5, "asc"]]'>
+                            <thead class="thead-dark form-group">
                             <tr>
                                 <th></th>
-                                <th><input type="checkbox" name="all_lote" class="form-control m-input"
-                                           onclick="allCheck(this);" id="all_lote" style="width: 20px"></th>
+                                <th><input type="checkbox" name="all_lote" class="form-control form-control-md m-input"
+                                           onclick="allCheck(this);" id="all_lote"></th>
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Tipo')}}</th>
                                 <th>{{__('Origem')}}</th>
@@ -55,6 +43,7 @@
                                 <th>{{__('tables.action')}}</th>
                             </tr>
                             </thead>
+                            <tbody class="form-group"></tbody>
                         </table>
                         <script id="details-template" type="text/x-handlebars-template">
                             <table class="table" id="check_details">
@@ -64,13 +53,10 @@
                                 </tr>
                             </table>
                         </script>
-                    </div>
-                    <div class="row">
                         <div class="m-form__actions">
                             <button class="btn btn-success btn-lg" onclick="save();">
                                 <i class="fas fa-file-download"></i> Receber</button>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

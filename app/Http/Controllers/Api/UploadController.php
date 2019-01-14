@@ -143,9 +143,9 @@ class UploadController extends BaseController
         return Datatables::of(Files::query())
             ->addColumn('action', function ($files) {
                 return '<div align="center"><a href="/arquivo/' . $files->id .
-                '" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
                 '<i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" ' .
-                'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
+                'class="btn btn-sm btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
                 '<i class="fas fa-trash-alt"></i></button></div>';
             })->editColumn('created_at', function ($files) {
                 return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '-';
@@ -302,8 +302,7 @@ class UploadController extends BaseController
                 $query->where('docs.to_agency', '=', $keyword);
             })
             ->addColumn('action', function ($doc) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
-                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                return '<input type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
             ->editColumn('from_agency', function ($doc) {

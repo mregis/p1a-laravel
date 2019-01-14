@@ -26,35 +26,34 @@
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}/{{Auth::user()->profile}}">
                 @endif
                 <div class="m-portlet__body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered dt-responsive hasdetails"
-                               id="datatable" data-column-defs='[{ "targets":[0], "orderable": false}]'>
-                            <thead class="thead-dark">
+                    <table class="table table-striped table-bordered table-responsive
+                        compact nowrap text-center hasdetails"
+                           id="datatable" data-column-defs='[{ "targets":[0], "orderable": false}]'>
+                        <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>{{__('tables.id')}}</th>
+                            <th>{{__('Capa Lote')}}</th>
+                            <th>{{__('Status')}}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <script id="details-template" type="text/x-handlebars-template">
+                        <table class="table" id="check_details">
                             <tr>
-                                <th></th>
-                                <th>{{__('tables.id')}}</th>
-                                <th>{{__('Capa Lote')}}</th>
-                                <th>{{__('Status')}}</th>
+                                <td>{{__('ID do Arquivo')}}:</td>
+                                <td>@{{file_id}}</td>
+                                <td>{{__('Capa Lote')}}:</td>
+                                <td>@{{content}}</td>
                             </tr>
-                            </thead>
+                            <tr>
+                                <td>{{__('labels.created_at')}}:</td>
+                                <td>@{{created_at}}</td>
+                                <td>{{__('labels.updated_at')}}:</td>
+                                <td>@{{updated_at}}</td>
+                            </tr>
                         </table>
-                        <script id="details-template" type="text/x-handlebars-template">
-                            <table class="table" id="check_details">
-                                <tr>
-                                    <td>{{__('ID do Arquivo')}}:</td>
-                                    <td>@{{file_id}}</td>
-                                    <td>{{__('Capa Lote')}}:</td>
-                                    <td>@{{content}}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{__('Adicionado em')}}:</td>
-                                    <td>@{{created_at}}</td>
-                                    <td>{{__('Alterado em')}}:</td>
-                                    <td>@{{updated_at}}</td>
-                                </tr>
-                            </table>
-                        </script>
-                    </div>
+                    </script>
                 </div>
             </div>
         </div>

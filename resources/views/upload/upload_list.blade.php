@@ -22,8 +22,8 @@
                 <input type="hidden" id="delete_url" value="{{URL::to('/arquivo/delete')}}">
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered hasdetails"
+                    <div class="container-fluid">
+                        <table class="table table-striped table-responsive table-bordered hasdetails compact text-center"
                                id="datatable" data-column-defs='[{"targets":[0,4],"orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>

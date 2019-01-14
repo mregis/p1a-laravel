@@ -21,7 +21,6 @@ class CadastrosController extends BaseController
      */
     public function index(Request $request)
     {
-        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         return view('users.users_list', compact('menus'));
@@ -34,7 +33,6 @@ class CadastrosController extends BaseController
      */
     public function create()
     {
-        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         return view('users.users_add', compact('menus'));
@@ -70,7 +68,6 @@ class CadastrosController extends BaseController
      */
     public function edit($id)
     {
-        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $user = User::where('id', $id)->first();
         $menus = $menu->menu();
@@ -104,16 +101,14 @@ class CadastrosController extends BaseController
 
     public function produtos()
     {
-        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
-        $produtos = Products::where('id', '>', 0)->get();
+        $produtos = Products::all();
         return view('cadastros.produtos', compact('menus', 'produtos'));
     }
 
     public function alert_add()
     {
-        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
         return view('cadastros.alerts', compact('menus'));
@@ -121,31 +116,51 @@ class CadastrosController extends BaseController
 
     public function alert_list()
     {
-        if (!Auth::user()) return redirect('/');
         $menu = new Menu();
         $menus = $menu->menu();
-        $alerts = Alerts::where('id', '>', 0)->get();
-        foreach ($alerts as &$a) {
-            $a->user = User::where('id', $a->user_id)->first();
+        $alerts = Alerts::with(['user','product'])->get();
+
+        // List of Basic Ocorrencia Types
+        $ocorrencia_types = [];
+        $reflectionClass = new \ReflectionClass(Alerts::class);
+        foreach ($reflectionClass->getReflectionConstants() as $constant) {
+            if (strpos($constant->getName(), 'TYPE_') > -1) {
+                $ocorrencia_types[] = $constant->getValue();
+            }
         }
 
-        return view('cadastros.alerts_list', compact('menus', 'alerts'));
+        // List of Products
+        $products = Products::all();
+        return view('cadastros.alerts_list', compact('menus', 'alerts', 'ocorrencia_types', 'products'));
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
     public function alert_edit(Request $request, $id)
     {
-        if (!Auth::user()) return redirect('/');
+        if (!$alert = Alerts::find($id)) {
+            $request->session()->flash('alert-danger', 'Informação não encontrada');
+            return redirect(route('cadastros.list_alert'));
+        }
+
         $menu = new Menu();
         $menus = $menu->menu();
-        $alert = Alerts::where('id', $id)->first();
+
         return view('cadastros.alerts_edit', compact('menus', 'alert'));
     }
 
     public function alert_remove(Request $request, $id)
     {
-        $alert = Alerts::where('id', $id)->first();
+        if(!$alert = Alerts::find($id)) {
+            $request->session()->flash('alert-danger', 'Informação não encontrada');
+            return redirect(route('cadastros.list_alert'));
+        }
         $alert->delete();
-        return $this->alert_list();
+        $request->session()->flash('alert-success', 'Ocorrência atualizada');
+        return redirect(route('cadastros.list_alert'));
     }
 
     public function produto_edit(Request $request, $id)
@@ -153,13 +168,16 @@ class CadastrosController extends BaseController
         $menu = new Menu();
         $menus = $menu->menu();
         $produtos = Products::where('id', '>', 0)->get();
-        $produto = Products::where('id', $id)->first();
+        $produto = Products::find($id);
         return view('cadastros.produtos', compact('menus', 'produtos', 'produto'));
     }
 
     public function produto_remove(Request $request, $id)
     {
-        $produtos = Products::where('id', $id)->first();
+        if (!$produtos = Products::find($id)) {
+            $request->session()->flash('alert-danger', 'Informação não encontrada');
+            return redirect('/cadastros/produtos');
+        }
         $produtos->delete();
         return $this->produtos();
     }
@@ -186,7 +204,7 @@ class CadastrosController extends BaseController
         $menu = new Menu();
         $menus = $menu->menu();
         $profiles = Profile::all();
-        $profile = Profile::where('id', $id)->first();
+        $profile = Profile::find($id);
         return view('cadastros.profiles', compact('menus', 'profiles', 'profile'));
     }
 
