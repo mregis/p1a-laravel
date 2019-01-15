@@ -155,14 +155,14 @@
                             <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
                                 {{ Form::open(array('url' => route('capalote.imprimir-multiplo'),
                                 'target' => '_blank', 'id' => 'formprint-capalote')) }}
-                                <div class="table-responsive-xl">
+
                                     <input type="hidden" id="columns"
                                            value="action,content,from_agency,to_agency,created_at,status,print">
 
                                     <input type="hidden" id="baseurl"
                                            value="{{ route('capalote.api-index', Auth::user()->id) }}">
                                     <table class="table table-striped
-                                    table-bordered nowrap compact"
+                                    table-bordered table-responsive nowrap compact"
                                            id="datatable" data-column-defs='[{"targets":[0,6],"orderable":false}]'
                                            data-order='[[ 4, "desc" ]]'>
                                         <thead class="thead-dark">
@@ -187,7 +187,6 @@
                                     </div>
                                     @csrf
                                     {{ Form::close() }}
-                                </div>
                             </div>
                         </div>
                     </div>

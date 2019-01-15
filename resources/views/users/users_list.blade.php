@@ -12,7 +12,7 @@
 						        <i class="la la-gear"></i>
 						    </span>
                             <h3 class="m-portlet__head-text">
-                                {{__('Listagem')}}
+                                {{__('Listagem de Usuários')}}
                             </h3>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                                data-column-defs='[{"targets":[5],"orderable":false}]'
                                data-order='[[ 2, "asc" ]]'
                                 >
-                            <thead class="thead-dark">
+                            <thead class="thead-dark text-center">
                             <tr>
                                 <th></th>
                                 <th>{{__('tables.id')}}</th>

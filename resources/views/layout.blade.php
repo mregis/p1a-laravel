@@ -313,7 +313,8 @@
                                 @endif
                             @else
                                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
-                                    m-menu-submenu-toggle="hover" @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
+                                    m-menu-submenu-toggle="hover"
+                                    @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
                                     <a href="{{$menu->sub_menus != "[]" ? 'javascript:;' : $menu->url }}"
                                        class="m-menu__link m-menu__toggle">
                                         <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
@@ -325,8 +326,7 @@
                                     </a>
                                     @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
                                         @foreach($menu->sub_menus as $sub_menu)
-                                            @if($sub_menu->name == "Upload de Arquivos" ||
-                                                $sub_menu->name == "Gestão de Arquivos")
+                                            @if(in_array($sub_menu->name, ["Upload de Arquivos","Gestão de Arquivos"]))
                                                 @if(in_array(Auth::user()->profile, ["ADMINISTRADOR","DEPARTAMENTO"]))
                                                     <div class="m-menu__submenu">
                                                         <span class="m-menu__arrow"></span>
@@ -343,7 +343,10 @@
                                                     </div>
                                                 @endif
                                             @else
-                                                @if(! ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA'))
+                                                @if( !(
+                                                    ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA') ||
+                                                    ($sub_menu->name == "Operador" && Auth::user()->profile == 'AGÊNCIA'))
+                                                    )
                                                     <div class="m-menu__submenu ">
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">

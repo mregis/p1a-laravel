@@ -14,19 +14,31 @@ use Illuminate\Support\Facades\Hash;
 
 class AlertsController extends BaseController
 {
-    public function list()
-    {
-        $Alerts = Alerts::all();
-        foreach($Alerts as &$a){
-            $a->user = Users::where('id', $a->user_id)->first();
-        }
 
-        return Datatables::of($Alerts)
-            ->addColumn('action', function ($Alerts) {
-                return '<div align="center"><a href="edit/' . $Alerts->id . '" data-toggle="tooltip" title="Editar" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-edit"></i></a><button onclick="modalDelete(' . $Alerts->id . ')" data-toggle="tooltip" title="Excluir" class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-trash-alt"></i></button></div>';
+    public function listAlerts(Request $request)
+    {
+        $query = Alerts::with(['user', 'product']);
+        return Datatables::of($query)
+            ->addColumn('action', function ($alert) {
+                return sprintf('<a href="%s" data-toggle="tooltip" title="Editar" ' .
+                    'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fas fa-edit"></i></a><button onclick="modalDelete(' . $alert->id . ')" ' .
+                    'data-toggle="tooltip" title="Excluir" ' .
+                    'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fas fa-trash-alt"></i></button>',
+                    route('cadastros.edit_alert', $alert->id));
             })
-            ->editColumn('birth_date', function ($Alerts) {
-                return $Alerts->created_at ? with(new Carbon($Alerts->birth_date))->format('d/m/Y') : '';
+            ->editColumn('created_at', function ($alert) {
+                return $alert->created_at ? with(new Carbon($alert->created_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('updated_at', function ($alert) {
+                return $alert->updated_at ? with(new Carbon($alert->updated_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('description', function($alert) {
+                return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', explode("\n", $alert->description)));
+            })
+            ->addColumn('user.local', function($alert) {
+                return $alert->user->getLocal();
             })
             ->make(true);
     }

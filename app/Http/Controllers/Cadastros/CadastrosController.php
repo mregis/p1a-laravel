@@ -167,7 +167,7 @@ class CadastrosController extends BaseController
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        $produtos = Products::where('id', '>', 0)->get();
+        $produtos = Products::all();
         $produto = Products::find($id);
         return view('cadastros.produtos', compact('menus', 'produtos', 'produto'));
     }

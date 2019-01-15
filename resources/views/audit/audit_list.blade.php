@@ -19,8 +19,8 @@
                 </div>
 
                 <div class="m-portlet__body">
-                    <div class="table-responsive-xl">
-                        <table class="table table-striped auto-dt"
+
+                        <table class="table table-striped auto-dt table-responsive compact nowrap"
                                data-buttons='{"dom":{"button":{"tag": "button","className":"btn btn-sm"}},"buttons":[{"extend": "print", "text": "<i class=\"fas fa-print\"></i> Imprimir", "className": "btn-primary"}]}'
                                data-columns='[{"data": "description"}, {"data": "name"}, {"data": "email"}, {"data": "profile"}, {"data": "created_at"}]'
                                data-server-side="true" data-ajax="{{URL::to('/api/audit/list')}}"
@@ -36,7 +36,7 @@
                             </tr>
                             </thead>
                         </table>
-                    </div>
+
                 </div>
             </div>
         </div>
