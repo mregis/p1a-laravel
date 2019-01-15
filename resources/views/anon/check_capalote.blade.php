@@ -34,7 +34,8 @@
                     <form method="post" action="{{ route('anon.get_capalote_history') }}">
                         <p class="">Entre com o número da Capa de Lote a ser pesquisada</p>
                         <div class="form-group">
-                            <input type="text" class="form-control form-control-lg" name="capalote" autocomplete="off" />
+                            <input type="text" class="form-control form-control-lg" name="capalote" autocomplete="off"
+                                    data-mask="9999999999999"  />
                         </div>
                         <div class="form-group row">
                             <div class="col m--align-left">
