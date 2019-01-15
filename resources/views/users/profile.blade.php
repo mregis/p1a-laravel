@@ -35,8 +35,8 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    {{ Form::model($usuario, array('url' => route('users.profile_update'),
-                        'method' => 'PUT', 'class'=>'m-form m-form--fit ajax-form')) }}
+                    {{ Form::model($usuario, array('url' => route('user.profile_update'),
+                        'method' => 'PUT', 'class'=>'m-form m-form--fit')) }}
                     <div class="form-group row">
                         <div class="col-2 text-right">
                             <label for="nome">{{__('labels.name')}}</label>
