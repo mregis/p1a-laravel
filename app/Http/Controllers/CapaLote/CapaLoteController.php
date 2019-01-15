@@ -82,7 +82,7 @@ class CapaLoteController extends BaseController
 
         // Criaando a nova Capa de Lote
 
-        $capalote = sprintf('%04d%04d%5d',
+        $capalote = sprintf('%04d%04d%05d',
             trim($request->get('origem')),
             trim($request->get('destino', '4510')),
             date('zy')
