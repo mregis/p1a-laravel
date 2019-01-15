@@ -30,6 +30,10 @@ class CapaLoteController extends BaseController
     private $doc_types = [1 => 'CHEQUE DEVOLVIDO', 'CHEQUE CUSTODIA', 'CHEQUE PAGO', 'CHEQUE COMPENSADO'];
 
     public function index(Request $request) {
+        if (Auth::user()->profile == 'OPERADOR') {
+            $request->session()->flash('alert-danger', 'Recurso não encontrado');
+            return redirect(route('home'));
+        }
         $menu = new Menu();
         $menus = $menu->menu();
         $doc_types = $this->doc_types;

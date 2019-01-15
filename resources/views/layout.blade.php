@@ -345,8 +345,9 @@
                                             @else
                                                 @if( !(
                                                     ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA') ||
-                                                    ($sub_menu->name == "Operador" && Auth::user()->profile == 'AGÊNCIA'))
-                                                    )
+                                                    ($sub_menu->name == "Operador" && Auth::user()->profile == 'AGÊNCIA') ||
+                                                    ($sub_menu->name == "Contingencia" && Auth::user()->profile == 'OPERADOR')
+                                                    ))
                                                     <div class="m-menu__submenu ">
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">
