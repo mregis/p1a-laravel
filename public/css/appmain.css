@@ -11322,6 +11322,10 @@ td.details-control {
   width: 18px;
 }
 
+table.table-responsive {
+  min-width: 60%;
+}
+
 tr.shown td.details-control {
   background: url(/images/details_close.png?cdb0ad00d71eff5be6ca7305cff83ce9) no-repeat center center;
 }

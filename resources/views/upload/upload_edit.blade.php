@@ -26,7 +26,7 @@
                 <input type="hidden" id="baseurl" value="{{URL::to('/api/upload/docs/')}}/{{$id}}/{{Auth::user()->profile}}">
                 @endif
                 <div class="m-portlet__body">
-                    <table class="table table-striped table-bordered table-responsive
+                    <table class="table table-striped table-hover table-responsive
                         compact nowrap text-center hasdetails"
                            id="datatable" data-column-defs='[{ "targets":[0], "orderable": false}]'>
                         <thead class="thead-dark">
@@ -41,15 +41,15 @@
                     <script id="details-template" type="text/x-handlebars-template">
                         <table class="table" id="check_details">
                             <tr>
-                                <td>{{__('ID do Arquivo')}}:</td>
+                                <th>{{__('ID do Arquivo')}}:</th>
                                 <td>@{{file_id}}</td>
-                                <td>{{__('Capa Lote')}}:</td>
+                                <th>{{__('Capa Lote')}}:</th>
                                 <td>@{{content}}</td>
                             </tr>
                             <tr>
-                                <td>{{__('labels.created_at')}}:</td>
+                                <th>{{__('labels.created_at')}}:</th>
                                 <td>@{{created_at}}</td>
-                                <td>{{__('labels.updated_at')}}:</td>
+                                <th>{{__('labels.updated_at')}}:</th>
                                 <td>@{{updated_at}}</td>
                             </tr>
                         </table>

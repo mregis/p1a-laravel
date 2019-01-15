@@ -131,7 +131,9 @@ td.details-control {
     cursor: pointer;
     width: 18px;
 }
-
+table.table-responsive {
+    min-width: 60%;
+}
 tr.shown td.details-control {
     background: url('../img/details_close.png') no-repeat center center;
 }

@@ -11296,13 +11296,11 @@ jQuery(document).ready(function () {
 
     $('.cep').add("#zipcode").mask('99999-999', options);
 
-    
+    $('#check_details th').each(function () {
+        var check = Array($(this).find("td").eq(1).html());
+    });
     if ($("#details-template").length > 0) {
-		$('table.checkdetails th').each(function () {
-			var check = Array($(this).find("td").eq(1).html());
-			console.log(check);
-		});        
-		template = Handlebars.compile($("#details-template").html());
+        template = Handlebars.compile($("#details-template").html());
     }
     var columns = Array();
     if ($('#columns').length > 0) {
@@ -11340,7 +11338,8 @@ jQuery(document).ready(function () {
             // Open this row
             $.each(row.data(), function (index, value) {
                 if (value == null) {
-                    row.data()[index] = "---";                    
+                    row.data()[index] = "---";
+                    console.log(value);
                 }
             });
             row.child(template(row.data())).show();
