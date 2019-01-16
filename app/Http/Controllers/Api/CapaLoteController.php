@@ -105,7 +105,7 @@ class CapaLoteController extends BaseController
                     return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
                     ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
                     'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                    '<i class="fas fa-eye"></i></a> <button class="btn btn-sm m-btn ' .
+                    '<i class="fas fa-eye"></i></a> <button type="reset" class="btn btn-sm m-btn btn-outline-default ' .
                     'm-btn--icon m-btn--icon-only print-capalote" ' .
                     'onclick="view(' . $doc->id . ')" title="Imprimir">' .
                     '<i class="fas fa-print"></i></button>';
@@ -154,7 +154,14 @@ class CapaLoteController extends BaseController
             $this->sendError('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
         }
         $query = Docs::query()
-            ->select("docs.*")
+            ->select([
+                "docs.id",
+                "docs.content",
+                "docs.from_agency",
+                "docs.to_agency",
+                "docs.created_at",
+                "docs.status",
+            ])
             ->join("files", "docs.file_id", "=", "files.id")
             ->where("files.constante", "=", "RA")
         ;
@@ -171,14 +178,24 @@ class CapaLoteController extends BaseController
             })
             ->addColumn('print', function ($docs) {
                 return '<div align="center"><button class="btn btn-sm m-btn m-btn--icon m-btn--icon-only print-capalote" ' .
-                'onclick="view(' . $docs->id . ')" title="Imprimir">' .
+                'onclick="view(' . $docs->id . ')" title="Imprimir" type="reset">' .
                 '<i class="fas fa-print"></i></button></div>';
             })
-            ->addColumn('status', function($doc) {
-                return $doc->status ? $doc->status : 'pendente';
+            ->editColumn('from_agency', function ($doc) {
+                if ($doc->origin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                    $doc->from_agency . '</a>';
+                } else {
+                    return $doc->from_agency;
+                }
             })
-            ->editColumn('updated_at', function ($doc) {
-                return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
+            ->editColumn('to_agency', function ($doc) {
+                if ($doc->destin != null) {
+                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                    $doc->to_agency . '</a>';
+                } else {
+                    return $doc->to_agency;
+                }
             })
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';

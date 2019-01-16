@@ -42,7 +42,7 @@
                                 <li class="nav-item m-tabs__item">
                                     <a class="nav-link m-tabs__link active" data-toggle="tab" href="#m_tabs_6_1"
                                        role="tab">
-                                        <i class="la la-plus-circle"></i> Adicionar
+                                        <i class="la la-plus-circle"></i> Criar Capa de Lote
                                     </a>
                                 </li>
                                 <li class="nav-item m-tabs__item">
@@ -59,20 +59,8 @@
                             <div class="tab-pane active" id="m_tabs_6_1" role="tabpanel">
                                 <div class="col-md-12">
                                     <div class="m-portlet m-portlet--tab">
-                                        <div class="m-portlet__head">
-                                            <div class="m-portlet__head-caption">
-                                                <div class="m-portlet__head-title">
-                                                <span class="m-portlet__head-icon m--hide">
-                                                    <i class="la la-plus-circle"></i>
-                                                </span>
-
-                                                    <h3 class="m-portlet__head-text">
-                                                        {{__('titles.add_capalote')}}
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {{ Form::open(array('url' => route('capalote.new'))) }}
+                                        {{ Form::open(array('url' => route('capalote.new'),
+                                            'class'=>'m-form m-form--fit m-form--label-align-right')) }}
                                         <div class="m-portlet__body">
                                             @if ($errors->any())
                                                 <div class="alert alert-danger">
@@ -90,7 +78,7 @@
                                                     <select class="form-control form-control-lg m-input m-input--square{{$errors->has('tipo_documento') ? ' is-invalid' : ''}}"
                                                             name="tipo_documento" id="tipo_documento"
                                                             required="required">
-                                                        <option disabled selected>{{__('labels.select')}}</option>
+                                                        <option>{{__('labels.select')}}</option>
                                                         @foreach($doc_types as $i => $t)
                                                             <option value="{{$i}}"{{old('tipo_documento') == $i ? ' selected="selected"' : ''}}>{{$t}}</option>
                                                         @endforeach
@@ -154,15 +142,14 @@
 
                             <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
                                 {{ Form::open(array('url' => route('capalote.imprimir-multiplo'),
-                                'target' => '_blank', 'id' => 'formprint-capalote')) }}
+                                'target' => '_blank', 'id' => 'formprint-capalote', )) }}
 
                                 <input type="hidden" id="columns"
-                                       value="action,content,from_agency,to_agency,movimento,status,print">
+                                       value="action,content,from_agency,to_agency,created_at,status,print">
 
                                 <input type="hidden" id="baseurl"
                                        value="{{ route('capalote.list_contingencia', Auth::user()->id) }}">
-                                <table class="table table-striped
-                                    table-bordered table-responsive nowrap compact"
+                                <table class="table table-striped table-bordered table-responsive nowrap compact text-center"
                                        id="datatable" data-column-defs='[{"targets":[0,6],"orderable":false}]'
                                        data-order='[[ 4, "desc" ]]'>
                                     <thead class="thead-dark">
@@ -173,8 +160,8 @@
                                         <th>{{__('Capa Lote')}}</th>
                                         <th>{{__('Origem')}}</th>
                                         <th>{{__('Destino')}}</th>
-                                        <th>{{__('Movimento')}}</th>
-                                        <th>{{__('Status')}}</th>
+                                        <th>{{__('labels.created_at')}}</th>
+                                        <th>{{__('labels.status')}}</th>
                                         <th>{{__('tables.action')}}</th>
                                     </tr>
                                     </thead>
