@@ -5,15 +5,32 @@
     <div class="row">
         <div class="col-md-12">
             <div class="m-portlet m-portlet--tab">
+
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <span class="m-portlet__head-icon m--hide">
 						        <i class="la la-gear"></i>
 						    </span>
-                            <h3 class="m-portlet__head-text">
-                                {{__('Registrar Remessa')}}
-                            </h3>
+                            <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                                <li class="m-nav__item m-nav__item--home">
+                                    <a href="{{ route('home') }}" class="m-nav__link m-nav__link--icon">
+                                        <i class="m-nav__link-icon la la-home"></i>
+                                    </a>
+                                </li>
+                                <li class="m-nav__separator">-</li>
+                                <li class="m-nav__item">
+                                    <a href="javascript:void(0)" class="m-nav__link">
+                                        <span class="m-nav__link-text">Remessa (Envio)</span>
+                                    </a>
+                                </li>
+                                <li class="m-nav__separator">-</li>
+                                <li class="m-nav__item">
+                                    <a href="javascript:void(0)" class="m-nav__link">
+                                        <h4 class="m-portlet__head-text">Registrar Remessa</h4>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -22,8 +39,7 @@
 				<input type="hidden" id="baseurl" value="{{URL::to('/api/remessa/registrar/')}}/{{Auth::user()->id}}">
                 <input type="hidden" id="check_url" value="{{URL::to('/remessa/registrar')}}">
 				<div class="m-portlet__body">
-                    <table class="table table-striped table-bordered nowrap
-                        nowrap table-responsive compact text-center"
+                    <table class="table table-striped table-bordered nowrap table-responsive compact text-center"
                                id="datatable"
                                data-order='[[4, "asc"], [5, "asc"]]'
                                data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>

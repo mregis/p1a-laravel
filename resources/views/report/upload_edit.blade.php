@@ -35,17 +35,17 @@
                         </thead>
                     </table>
                     <script id="details-template" type="text/x-handlebars-template">
-                        <table class="table" id="check_details">
+                        <table class="checkdetails">
                             <tr>
-                                <td>{{__('ID do Arquivo')}}:</td>
+                                <th>{{__('ID do Arquivo')}}:</th>
                                 <td>@{{file_id}}</td>
-                                <td>{{__('Capa Lote')}}:</td>
+                                <th>{{__('Capa Lote')}}:</th>
                                 <td>@{{content}}</td>
                             </tr>
                             <tr>
-                                <td>{{__('Adicionado em')}}:</td>
+                                <th>{{__('Adicionado em')}}:</th>
                                 <td>@{{created_at}}</td>
-                                <td>{{__('Alterado em')}}:</td>
+                                <th>{{__('Alterado em')}}:</th>
                                 <td>@{{updated_at}}</td>
                             </tr>
                         </table>

@@ -39,7 +39,7 @@
                         </thead>
                     </table>
                     <script id="details-template" type="text/x-handlebars-template">
-                        <table class="table" id="check_details">
+                        <table class="checkdetails">
                             <tr>
                                 <th>{{__('ID do Arquivo')}}:</th>
                                 <td>@{{file_id}}</td>

@@ -156,74 +156,80 @@
                                 {{ Form::open(array('url' => route('capalote.imprimir-multiplo'),
                                 'target' => '_blank', 'id' => 'formprint-capalote')) }}
 
-                                    <input type="hidden" id="columns"
-                                           value="action,content,from_agency,to_agency,created_at,status,print">
+                                <input type="hidden" id="columns"
+                                       value="action,content,from_agency,to_agency,movimento,status,print">
 
-                                    <input type="hidden" id="baseurl"
-                                           value="{{ route('capalote.api-index', Auth::user()->id) }}">
-                                    <table class="table table-striped
+                                <input type="hidden" id="baseurl"
+                                       value="{{ route('capalote.list_contingencia', Auth::user()->id) }}">
+                                <table class="table table-striped
                                     table-bordered table-responsive nowrap compact"
-                                           id="datatable" data-column-defs='[{"targets":[0,6],"orderable":false}]'
-                                           data-order='[[ 4, "desc" ]]'>
-                                        <thead class="thead-dark">
-                                        <tr>
-                                            <th></th>
-                                            <th>{{__('Capa Lote')}}</th>
-                                            <th>{{__('Origem')}}</th>
-                                            <th>{{__('Destino')}}</th>
-                                            <th>{{__('Movimento')}}</th>
-                                            <th>{{__('Status')}}</th>
-                                            <th>{{__('tables.action')}}</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                    <div class="m-portlet__foot m-portlet__foot--fit">
-                                        <div class="m-form__actions">
-                                            <button type="submit" class="btn btn-success btn-lg">
-                                                <i class="fas fa-print"
-                                                   aria-hidden="true"></i> {{__('IMPRIMIR CAPA DE LOTE')}}
-                                            </button>
-                                        </div>
+                                       id="datatable" data-column-defs='[{"targets":[0,6],"orderable":false}]'
+                                       data-order='[[ 4, "desc" ]]'>
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th><input type="checkbox" name="all_capalote" style="width: 20px"
+                                                   class="form-control form-control-sm"
+                                                   onclick="allCheck(this);" id="all_capalote"></th>
+                                        <th>{{__('Capa Lote')}}</th>
+                                        <th>{{__('Origem')}}</th>
+                                        <th>{{__('Destino')}}</th>
+                                        <th>{{__('Movimento')}}</th>
+                                        <th>{{__('Status')}}</th>
+                                        <th>{{__('tables.action')}}</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="m-portlet__foot m-portlet__foot--fit">
+                                    <div class="m-form__actions">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="fas fa-print"
+                                               aria-hidden="true"></i> {{__('IMPRIMIR CAPA DE LOTE')}}
+                                        </button>
                                     </div>
-                                    @csrf
-                                    {{ Form::close() }}
+                                </div>
+                                @csrf
+                                {{ Form::close() }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+@stop
 
-        @stop
-
-        @section('scripts')
-            <script type="text/javascript">
-                $(function () {
-                    $("#tipo_documento").change(function () {
-                        if ([{{implode(',', $automatic_types)}}]
-                                        .indexOf(parseInt($('#tipo_documento option:selected').val())) > -1) {
-                            $('#destino').val('4510').attr('readonly', true);
-                        } else {
-                            $('#destino').attr('readonly', false);
-                        }
-                    });
-                    $(".is-invalid").change(function () {
-                        $(this).removeClass('is-invalid');
-                    });
-                    $('#formprint-capalote').on('submit', function () {
-                        if ($('[name="capalote[]"]:checked').length < 1) {
-                            alert('É necessário marcar ao menos 1 capa de lote para impressão.');
-                            return false;
-                        }
-                        ;
-                    });
-                });
-                // Impressão de Capa de Lote
-                function view(docid) {
-                    $('[name="capalote[]"]').attr('checked', false);
-                    $('#capalote-' + docid).attr('checked', true);
-                    $('#formprint-capalote').submit();
+@section('scripts')
+    <script type="text/javascript">
+        $(function () {
+            $("#tipo_documento").change(function () {
+                if ([{{implode(',', $automatic_types)}}]
+                                .indexOf(parseInt($('#tipo_documento option:selected').val())) > -1) {
+                    $('#destino').val('4510').attr('readonly', true);
+                } else {
+                    $('#destino').attr('readonly', false);
+                }
+            });
+            $(".is-invalid").change(function () {
+                $(this).removeClass('is-invalid');
+            });
+            $('#formprint-capalote').on('submit', function () {
+                if ($('[name="capalote[]"]:checked').length < 1) {
+                    alert('É necessário marcar ao menos 1 capa de lote para impressão.');
+                    return false;
                 }
                 ;
-            </script>
+            });
+        });
+        // Impressão de Capa de Lote
+        function view(docid) {
+            $('[name="capalote[]"]').attr('checked', false);
+            $('#capalote-' + docid).attr('checked', true);
+            $('#formprint-capalote').submit();
+        }
+        ;
+        function allCheck(elem) {
+            var t = $('#all_capalote').prop('checked') == true;
+            $('.input-doc').prop('checked', t);
+        }
+    </script>
 @stop

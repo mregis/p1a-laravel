@@ -4,7 +4,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="m-portlet m-portlet--tabs">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -27,13 +27,7 @@
                                 <li class="m-nav__separator">-</li>
                                 <li class="m-nav__item">
                                     <a href="javascript:void(0)" class="m-nav__link">
-                                        <span class="m-nav__link-text">{{__('titles.profiles')}}</span>
-                                    </a>
-                                </li>
-                                <li class="m-nav__separator">-</li>
-                                <li class="m-nav__item">
-                                    <a href="javascript:void(0)" class="m-nav__link">
-                                        <h3 class="m-portlet__head-text">{{__('titles.add_profile')}}</h3>
+                                        <h3 class="m-portlet__head-text">{{__('titles.profiles')}}</h3>
                                     </a>
                                 </li>
                             </ul>

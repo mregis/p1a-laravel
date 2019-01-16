@@ -19,26 +19,27 @@
                 </div>
                 <input type="hidden" id="columns" value="id,content,status,action">
                 <input type="hidden" id="baseurl" value="{{ route('capalote.file_report', [Auth::id(), $id]) }}">
+
                 <div class="m-portlet__body">
                     <table class="table table-striped table-bordered
                                 table-responsive compact nowrap hasdetails text-center"
                            id="datatable" data-column-defs='[{"targets":[0,4], "orderable":false}]'>
                         <thead class="thead-dark">
-                        <tr>
-                            <th></th>
-                            <th>{{__('tables.id')}}</th>
-                            <th>{{__('Capa Lote')}}</th>
-                            <th>{{__('Status')}}</th>
-                            <th>{{__('tables.options')}}</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th>{{__('tables.id')}}</th>
+                                <th>{{__('Capa Lote')}}</th>
+                                <th>{{__('Status')}}</th>
+                                <th>{{__('tables.options')}}</th>
+                            </tr>
                         </thead>
                     </table>
                     <script id="details-template" type="text/x-handlebars-template">
-                        <table class="table" id="check_details">
+                        <table class="checkdetails">
                             <tr>
-                                <td>{{__('ID do Arquivo')}}:</td>
+                                <th>{{__('ID do Arquivo')}}:</th>
                                 <td>@{{file_id}}</td>
-                                <td>{{__('Capa Lote')}}:</td>
+                                <th>{{__('Capa Lote')}}:</th>
                                 <td>@{{content}}</td>
                             </tr>
                             <tr>

@@ -3,34 +3,42 @@
 
 @section('content')
 
-    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
-        <li class="m-nav__item m-nav__item--home">
-            <a href="{{ route('home') }}" class="m-nav__link m-nav__link--icon">
-                <i class="m-nav__link-icon fas fa-home"></i>
-            </a>
-        </li>
-        <li class="m-nav__separator">-</li>
-        <li class="m-nav__item">
-            <a href="javascript:void(0)" class="m-nav__link">
-                <span class="m-nav__link-text">Cadastros</span>
-            </a>
-        </li>
-        <li class="m-nav__separator">-</li>
-        <li class="m-nav__item">
-            <a href="javascript:void(0)" class="m-nav__link">
-                <span class="m-nav__link-text">{{__('titles.view_profile')}}</span>
-            </a>
-        </li>
-    </ul>
-
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon"><i class="fas fa-new"></i></span>
-                            <h3 class="m-portlet__head-text">Cadastro de <span class="badge badge-primary">{{ $usuario->name }}</span> </h3>
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                                <li class="m-nav__item m-nav__item--home">
+                                    <a href="{{route('home')}}" class="m-nav__link m-nav__link--icon">
+                                        <i class="m-nav__link-icon la la-home"></i>
+                                    </a>
+                                </li>
+                                <li class="m-nav__separator">-</li>
+                                <li class="m-nav__item">
+                                    <a href="javascript:void(0)" class="m-nav__link">
+                                        <span class="m-nav__link-text">Usuários</span>
+                                    </a>
+                                </li>
+                                <li class="m-nav__separator">-</li>
+                                <li class="m-nav__item">
+                                    <a href="javascript:void(0)" class="m-nav__link">
+                                        <h3 class="m-portlet__head-text">Meu Cadastro</h3>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon"><i class="fas fa-pencil"></i></span>
+                            <h3 class="m-portlet__head-text">Editar o Cadastro de <span class="badge badge-primary">{{ $usuario->name }}</span> </h3>
                         </div>
                     </div>
                 </div>
@@ -68,7 +76,8 @@
                             <label for="repassword">{{__('labels.confirm_password')}}</label>
                         </div>
                         <div class="col-3" title="Redigite a Senha" data-toggle="tooltip">
-                            <input type="password" class="form-control{{$errors->has('password_confirmation') ? ' is-invalid' : ''}}"
+                            <input type="password"
+                                   class="form-control{{$errors->has('password_confirmation') ? ' is-invalid' : ''}}"
                                    id="repassword" name="password_confirmation" required="required"
                                    placeholder="Redigite a Senha">
                         </div>
@@ -83,31 +92,32 @@
                         </div>
                     </div>
                     @if(Auth::user()->profile == 'AGÊNCIA')
-                    <div class="form-group row" id="agencia-block">
-                        <div class="col-2 text-right">
-                            <label for="agencia">{{__('labels.agencia')}}</label>
+                        <div class="form-group row" id="agencia-block">
+                            <div class="col-2 text-right">
+                                <label for="agencia">{{__('labels.agencia')}}</label>
+                            </div>
+                            <div class="col-5" title="Agencia" data-toggle="tooltip">
+                                <span class="form-control">{{ $usuario->agencia }}</span>
+                            </div>
                         </div>
-                        <div class="col-5" title="Agencia" data-toggle="tooltip">
-                            <span class="form-control">{{ $usuario->agencia }}</span>
-                        </div>
-                    </div>
                     @endif
 
                     @if(Auth::user()->profile == 'OPERADOR')
-                    <div class="form-group" id="unidade-block">
-                        <div class="col-2 text-right">
-                            <label for="unidade">{{__('labels.unidade')}}</label>
+                        <div class="form-group" id="unidade-block">
+                            <div class="col-2 text-right">
+                                <label for="unidade">{{__('labels.unidade')}}</label>
+                            </div>
+                            <div class="col-5" title="Unidade" data-toggle="tooltip">
+                                <span class="form-control">{{ $usuario->unidade }}</span>
+                            </div>
                         </div>
-                        <div class="col-5" title="Unidade" data-toggle="tooltip">
-                            <span class="form-control">{{ $usuario->unidade }}</span>
-                        </div>
-                    </div>
                     @endif
 
-                    <input type="hidden" name="_u" value="{{Auth::id()}}" />
+                    <input type="hidden" name="_u" value="{{Auth::id()}}"/>
+
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
-                            <a class="btn btn-primary btn-lg" href="{{route('users.users_index')}}">Cancelar</a>
+                            <a class="btn btn-outline-secondary btn-lg" href="{{route('users.users_index')}}">Cancelar</a>
                             {{ Form::submit(__('Atualizar Cadastro'), array('class' => 'btn btn-success btn-lg')) }}
                         </div>
                     </div>

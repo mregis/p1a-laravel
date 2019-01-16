@@ -2,6 +2,7 @@
 @section('title', __('Arquivos'))
 
 @section('content')
+
     <div class="row">
         <div class="col-md-12">
             <div class="m-portlet m-portlet--tab">
@@ -11,9 +12,25 @@
                             <span class="m-portlet__head-icon m--hide">
 						        <i class="la la-gear"></i>
 						    </span>
-                            <h3 class="m-portlet__head-text">
-                                {{__('Listagem')}}
-                            </h3>
+                            <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                                <li class="m-nav__item m-nav__item--home">
+                                    <a href="{{ route('home') }}" class="m-nav__link m-nav__link--icon">
+                                        <i class="m-nav__link-icon la la-home"></i>
+                                    </a>
+                                </li>
+                                <li class="m-nav__separator">-</li>
+                                <li class="m-nav__item">
+                                    <a href="javascript:void(0)" class="m-nav__link">
+                                        <span class="m-nav__link-text">Remessa (Envio)</span>
+                                    </a>
+                                </li>
+                                <li class="m-nav__separator">-</li>
+                                <li class="m-nav__item">
+                                    <a href="javascript:void(0)" class="m-nav__link">
+                                        <h4 class="m-portlet__head-text">Listagem</h4>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -23,7 +40,7 @@
 
                 <div class="m-portlet__body">
                     <div class="container-fluid">
-                        <table class="table table-striped table-responsive table-bordered hasdetails compact text-center"
+                        <table class="table table-striped table-responsive table-hover hasdetails compact text-center"
                                id="datatable" data-column-defs='[{"targets":[0,4],"orderable":false}]'>
                             <thead class="thead-dark">
                             <tr>
@@ -36,7 +53,7 @@
                             </thead>
                         </table>
                         <script id="details-template" type="text/x-handlebars-template">
-                            <table class="table" id="check_details">
+                            <table class="checkdetails">
                                 <tr>
                                     <td>{{__('labels.name')}}:</td>
                                     <td>@{{name}}</td>
