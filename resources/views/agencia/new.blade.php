@@ -39,22 +39,29 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <span class="m-portlet__head-icon"><i class="fas fa-plus-square"></i></span>
+
                             <h3 class="m-portlet__head-text">Adicionar Nova Agência </h3>
                         </div>
                     </div>
                 </div>
+
                 <div class="m-portlet__body">
                     {{ Form::model($agencia, array('url' => route('agencias.novo'),
-                        'method' => 'POST', 'id'=>'form_agencia', 'name'=>'form_agencia',
-                        )) }}
+                                                    'method' => 'POST', 'id'=>'form_agencia', 'name'=>'form_agencia',
+                                                    'class'=>'m-form m-form--fit'
+                                                    )) }}
+
                     @component('forms/agencia', ['agencia' => $agencia]);
                     @endcomponent
+
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
-                            <a class="btn btn-secondary-outline btn-lg" href="{{route('agencias.index')}}">Cancelar</a>
+                            <a class="btn btn-outline-secondary btn-lg"
+                               href="{{route('agencias.index')}}">Cancelar</a>
                             {{ Form::submit(__('Salvar'), array('class' => 'btn btn-success btn-lg')) }}
                         </div>
                     </div>
+
                     @csrf
                     {{ Form::close() }}
                 </div>

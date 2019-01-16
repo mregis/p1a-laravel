@@ -33,6 +33,7 @@ mix
         'node_modules/jquery-maskmoney/src/jquery.maskMoney.js',
         'resources/assets/js/bootstrapValidator.js',
         'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+        'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR.js',
         'node_modules/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
         'node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
         'node_modules/bootstrap-notify/bootstrap-notify.js',

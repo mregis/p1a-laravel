@@ -34,23 +34,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <h3 class="m-portlet__head-text">
+                            <i class="la la-pencil-square"></i> Atualizar Ocorrência</h3>
+                    </div>
+                </div>
 
                 {{ Form::open(array('url' => route('alerts.api_edit_alert', $alert->id),
                     'method' => 'put',
                     'class'=>'m-form m-form--fit m-form--label-align-right ajax-form')) }}
                 <div class="m-portlet m-portlet--tabs">
-                    <div class="m-portlet__head m-portlet__head-tools">
-                        <ul class="nav nav-tabs m-tabs-line m-tabs-line--primary m-tabs-line--2x"
-                            role="tablist">
-                            <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_1"
-                                   role="tab">
-                                <i class="la la-pencil-square"></i> Atualizar Ocorrência
-                                    </a>
-                            </li>
-                        </ul>
-                    </div>
-
                     <div class="m-portlet__body">
                         @if ($errors->any())
                             <div class="alert alert-danger">

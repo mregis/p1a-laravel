@@ -39,36 +39,34 @@
                 <input type="hidden" id="delete_url" value="{{URL::to('/arquivo/delete')}}">
 
                 <div class="m-portlet__body">
-                    <div class="container-fluid">
-                        <table class="table table-striped table-responsive table-hover hasdetails compact text-center"
-                               id="datatable" data-column-defs='[{"targets":[0,4],"orderable":false}]'>
-                            <thead class="thead-dark">
+                    <table class="table table-striped table-responsive table-hover hasdetails compact text-center"
+                           id="datatable" data-column-defs='[{"targets":[0,4],"orderable":false}]'>
+                        <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>{{__('tables.id')}}</th>
+                            <th>{{__('tables.name')}}</th>
+                            <th>{{__('total')}}</th>
+                            <th>{{__('tables.options')}}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <script id="details-template" type="text/x-handlebars-template">
+                        <table class="checkdetails">
                             <tr>
-                                <th></th>
-                                <th>{{__('tables.id')}}</th>
-                                <th>{{__('tables.name')}}</th>
-                                <th>{{__('total')}}</th>
-                                <th>{{__('tables.options')}}</th>
+                                <td>{{__('labels.name')}}:</td>
+                                <td>@{{name}}</td>
+                                <td>{{__('Total')}}:</td>
+                                <td>@{{total}}</td>
                             </tr>
-                            </thead>
+                            <tr>
+                                <td>{{__('tables.created_at')}}:</td>
+                                <td>@{{created_at}}</td>
+                                <td>{{__('tables.updated_at')}}:</td>
+                                <td>@{{updated_at}}</td>
+                            </tr>
                         </table>
-                        <script id="details-template" type="text/x-handlebars-template">
-                            <table class="checkdetails">
-                                <tr>
-                                    <td>{{__('labels.name')}}:</td>
-                                    <td>@{{name}}</td>
-                                    <td>{{__('Total')}}:</td>
-                                    <td>@{{total}}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{__('tables.created_at')}}:</td>
-                                    <td>@{{created_at}}</td>
-                                    <td>{{__('tables.updated_at')}}:</td>
-                                    <td>@{{updated_at}}</td>
-                                </tr>
-                            </table>
-                        </script>
-                    </div>
+                    </script>
                 </div>
             </div>
         </div>

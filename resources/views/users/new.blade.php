@@ -64,6 +64,7 @@
                 <div class="m-portlet__body">
                     {{ Form::model($usuario, array('url' => route('users.users_save'),
                         'method' => 'POST', 'id' => 'form_usuario', 'name' => 'form_usuario',
+                        'class'=>'m-form m-form--fit'
                         )) }}
                     @component('forms/users', [
                         'usuario' => $usuario, 'perfis' => $perfis, 'unidades' => $unidades,

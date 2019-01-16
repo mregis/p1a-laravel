@@ -34,17 +34,19 @@
                         </div>
                     </div>
                 </div>
-            <div class="m-portlet__body">
-                <div class="tab-content">
-                    <input type="hidden" id="columns" value="nome,descricao,created_at,action" />
-                    <input type="hidden" id="baseurl" value="{{ route('unidades.api-listar') }}" />
-                    <div class="row">
-                        <div class="col-12 text-right">
-                            <a href="{{ route('unidade.novo') }}" class="btn btn-md btn-success"><i class="fas fa-plus-circle"></i> {{ __('labels.add') }}</a>
+                <div class="m-portlet__body">
+                    <div class="tab-content">
+                        <input type="hidden" id="columns" value="nome,descricao,created_at,action"/>
+                        <input type="hidden" id="baseurl" value="{{ route('unidades.api-listar') }}"/>
+
+                        <div class="row">
+                            <div class="col-12 text-right mb-2">
+                                <a href="{{ route('unidade.novo') }}" class="btn btn-md btn-success"><i
+                                            class="fas fa-plus-circle"></i> {{ __('labels.add') }}</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <table class="table table-bordered table-hover table-striped compact nowrap"
+
+                        <table class="table table-bordered table-hover table-striped table-responsive compact nowrap"
                                id="datatable" data-column-defs='[{"targets":[3],"orderable":false}]'>
                             <thead class="table-dark">
                             <tr>
@@ -56,6 +58,7 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

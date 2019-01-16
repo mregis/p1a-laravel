@@ -37,10 +37,10 @@
             </div>
 
 			<div class="m-portlet__body">
-                <div class="row">
+
                 <input type="hidden" id="columns" value="name,total,pendentes,movimento,view">
                 <input type="hidden" id="baseurl" value="{{ route('receive.lista-arquivos',Auth::user()->id)}}">
-					<table class="table table-striped table-bordered table-hover text-center"
+					<table class="table table-striped table-hover text-center table-responsive compact nowrap"
 						   id="datatable"
                            data-column-defs='[{"targets":[4],"orderable":false}]'
 						   data-order='[[3, "asc"],[2, "desc"]]'
@@ -56,7 +56,7 @@
 						</thead>
 						<tbody></tbody>
 					</table>
-                </div>
+
 			</div>
 		</div>
 	</div>

@@ -29,7 +29,6 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <div class="row">
                         <table class="table table-striped auto-dt table-responsive compact nowrap"
                                data-buttons='{"dom":{"button":{"tag": "button","className":"btn btn-sm"}},"buttons":[{"extend": "print", "text": "<i class=\"fas fa-print\"></i> Imprimir", "className": "btn-primary"}]}'
                                data-columns='[{"data": "description"}, {"data": "name"}, {"data": "email"}, {"data": "profile"}, {"data": "created_at"}]'
@@ -41,12 +40,11 @@
                                 <th>{{__('tables.description')}}</th>
                                 <th>{{__('tables.name')}}</th>
                                 <th>{{__('tables.email')}}</th>
-                                <th>{{__('labels.profile')}}:</th>
+                                <th>{{__('labels.profile')}}</th>
                                 <th>{{__('labels.date')}}</th>
                             </tr>
                             </thead>
                         </table>
-                    </div>
                 </div>
             </div>
         </div>
