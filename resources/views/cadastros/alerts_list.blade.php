@@ -5,7 +5,7 @@
 
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-12">
 			<div class="m-portlet m-portlet--tabs">
 				<div class="m-portlet__head">
 					<div class="m-portlet__head-caption">
@@ -59,53 +59,34 @@
 					<div class="m-portlet__body">
 						<div class="tab-content">
                             <div class="tab-pane active" id="m_tabs_6_2" role="tabpanel">
-                                <table class="table table-bordered m-table
-                                    m-table--head-bg-brand text-center table-striped
-                                    table-responsive compact">
+                                <table class="table table-hover table-striped auto-dt table-responsive
+                                compact nowrap text-center hasdetails"
+                                       data-columns='[{"className": "details-control","orderable": false, "data":null,"defaultContent": ""},{"data": "created_at"}, {"data": "user.name"}, {"data": "user.profile"}, {"data": "user.local"}, {"data": "content"}, {"data": "updated_at"}, {"data": "action"}]'
+                                       data-server-side="true" data-ajax="{{ route('alerts.list')}}"
+                                       data-order='[[1, "desc"]]'
+                                        >
                                     <thead class="table-dark">
-                                    <tr>
-                                        <th scope="col">{{__('tables.created_at')}}</th>
-                                        <th scope="col">{{__('labels.user')}}</th>
-                                        <th scope="col">{{__('labels.profile')}}</th>
-                                        <th scope="col">{{__('tables.local')}}</th>
-                                        <th scope="col">{{__('labels.description')}}</th>
-                                        <th scope="col">{{__('labels.history')}}</th>
-                                        <th scope="col">{{__('tables.created_at')}}</th>
-                                        <th scope="col">{{__('tables.updated_at')}}</th>
-                                        <th scope="col">{{__('tables.action')}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($alerts as $i => $a)
-                                        <tr class="{{ ( $i % 2 == 0 ? 'even' : 'odd')}}">
-                                            <td scope="row">{{\Carbon\Carbon::parse($a->created_at)->format('d/m/Y H:i')}}</td>
-                                            <td scope="row">{{$a->user->name}}</td>
-                                            <td scope="row">{{$a->user->profile}}</td>
-                                            <td scope="row">{{$a->user->getLocal()}}</td>
-                                            <td scope="row">{{$a->description}}</td>
-                                            <td scope="row">{{$a->content}}</td>
-                                            <td scope="row">{{\Carbon\Carbon::parse($a->created_at)->format('d/m/Y H:i')}}</td>
-                                            <td scope="row">{{\Carbon\Carbon::parse($a->updated_at)->format('d/m/Y H:i')}}</td>
-                                            <td class="text-center">
-                                                <a href="{{ route('cadastros.edit_alert', $a->id) }}"
-                                                   data-toggle="tooltip"
-                                                   title="{{__('buttons.edit')}}"
-                                                   class="btn btn-outline-accent m-btn m-btn--icon m-btn--icon-only">
-                                                    <i class="fas fa-pencil-alt"></i>
-                                                </a>
-                                                <a href="{{ route('cadastros.delete_alert', $a->id) }}" data-toggle="tooltip"
-                                                   title="{{__('buttons.delete')}}"
-                                                   onclick="if(confirm('Deseja remover esse registro ?')){return true;}else{return false;}"
-                                                   class="btn btn-danger btn-outline-accent m-btn m-btn--icon m-btn--icon-only">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            </td>
+                                        <tr>
+                                            <th></th>
+                                            <th scope="col">{{__('tables.created_at')}}</th>
+                                            <th scope="col">{{__('labels.user')}}</th>
+                                            <th scope="col">{{__('labels.profile')}}</th>
+                                            <th scope="col">{{__('tables.local')}}</th>
+                                            <th scope="col">{{__('labels.description')}}</th>
+                                            <th scope="col">{{__('tables.updated_at')}}</th>
+                                            <th scope="col">{{__('tables.action')}}</th>
                                         </tr>
-                                    @endforeach
-                                    </tbody>
+                                    </thead>
                                 </table>
                             </div>
-
+                            <script id="details-template" type="text/x-handlebars-template">
+                                <table class="checkdetails">
+                                    <tr>
+                                        <th>{{__('titles.historic')}}:</th>
+                                        <td>@{{{description}}}</td>
+                                    </tr>
+                                </table>
+                            </script>
 							<div class="tab-pane" id="m_tabs_6_1" role="tabpanel">
 								<div class="col-md-12">
 									<div class="m-portlet m-portlet--tab">
