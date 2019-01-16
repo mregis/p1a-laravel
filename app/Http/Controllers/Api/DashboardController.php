@@ -147,6 +147,8 @@ class DashboardController extends BaseController
                     $join->where("docs.to_agency", "=", $user->juncao);
                 }
             })
+            ->whereIn("files.constante", ["DA","DM"])
+            ->where("files.movimento", '<>', null)
             ->groupBy(["files.movimento"])
         ;
 

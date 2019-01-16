@@ -19,11 +19,12 @@
                 </div>
                 <input type="hidden" id="columns" value="id,content,status,action">
                 <input type="hidden" id="baseurl" value="{{ route('capalote.file_report', [Auth::id(), $id]) }}">
+
                 <div class="m-portlet__body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered dt-responsive nowrap hasdetails"
-                               id="datatable" data-column-defs='[{"targets":[0,4], "orderable":false}]'>
-                            <thead class="thead-dark">
+                    <table class="table table-striped table-bordered
+                                table-responsive compact nowrap hasdetails text-center"
+                           id="datatable" data-column-defs='[{"targets":[0,4], "orderable":false}]'>
+                        <thead class="thead-dark">
                             <tr>
                                 <th></th>
                                 <th>{{__('tables.id')}}</th>
@@ -31,25 +32,24 @@
                                 <th>{{__('Status')}}</th>
                                 <th>{{__('tables.options')}}</th>
                             </tr>
-                            </thead>
+                        </thead>
+                    </table>
+                    <script id="details-template" type="text/x-handlebars-template">
+                        <table class="checkdetails">
+                            <tr>
+                                <th>{{__('ID do Arquivo')}}:</th>
+                                <td>@{{file_id}}</td>
+                                <th>{{__('Capa Lote')}}:</th>
+                                <td>@{{content}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{__('labels.created_at')}}:</td>
+                                <td>@{{created_at}}</td>
+                                <td>{{__('labels.updated_at')}}:</td>
+                                <td>@{{updated_at}}</td>
+                            </tr>
                         </table>
-                        <script id="details-template" type="text/x-handlebars-template">
-                            <table class="table" id="check_details">
-                                <tr>
-                                    <td>{{__('ID do Arquivo')}}:</td>
-                                    <td>@{{file_id}}</td>
-                                    <td>{{__('Capa Lote')}}:</td>
-                                    <td>@{{content}}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{__('Adicionado em')}}:</td>
-                                    <td>@{{created_at}}</td>
-                                    <td>{{__('Alterado em')}}:</td>
-                                    <td>@{{updated_at}}</td>
-                                </tr>
-                            </table>
-                        </script>
-                    </div>
+                    </script>
                 </div>
             </div>
         </div>

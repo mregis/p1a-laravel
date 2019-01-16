@@ -29,21 +29,34 @@ class CapaLoteController extends BaseController
 
     private $doc_types = [1 => 'CHEQUE DEVOLVIDO', 'CHEQUE CUSTODIA', 'CHEQUE PAGO', 'CHEQUE COMPENSADO'];
 
-    public function index(Request $request) {
+    public function index()
+    {
+        $menu = new Menu();
+        $menus = $menu->menu();
+        return view('capalote.index', compact('menus'));
+    }
+
+    public function contingencia(Request $request)
+    {
+        if (Auth::user()->profile == 'OPERADOR') {
+            $request->session()->flash('alert-danger', 'Recurso não encontrado');
+            return redirect(route('home'));
+        }
         $menu = new Menu();
         $menus = $menu->menu();
         $doc_types = $this->doc_types;
         $automatic_types = array_keys($doc_types);
         array_shift($automatic_types);
         // Tipo de Documento presente dentro da Capa de Lote
-        return view('capalote.index', compact('menus', 'doc_types', 'automatic_types'));
+        return view('capalote.contingencia', compact('menus', 'doc_types', 'automatic_types'));
     }
 
     /**
      * @param Request $request
      * @return Response
      */
-    public function _new(Request $request) {
+    public function _new(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'origem' => 'nullable|digits:4|not_in:0000',
@@ -63,14 +76,15 @@ class CapaLoteController extends BaseController
             $automatic_types = array_keys($this->doc_types);
             array_shift($automatic_types);
             if (in_array($request->get('tipo_documento'), $automatic_types) &&
-                trim($request->get('destino', '4510')) != '4510') {
+                trim($request->get('destino', '4510')) != '4510'
+            ) {
                 $validator->errors()->add('destino', 'Há uma divergência na Agência de Destino!');
             }
         });
 
         if ($validator->fails()) {
             $request->session()->flash('alert-danger', 'Erros encontrados. Verifique as informações e tente novamente!');
-            return redirect(route('capalote.index'))
+            return redirect(route('capalote.contingencia'))
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -78,7 +92,7 @@ class CapaLoteController extends BaseController
 
         // Criaando a nova Capa de Lote
 
-        $capalote = sprintf('%04d%04d%5d',
+        $capalote = sprintf('%04d%04d%05d',
             trim($request->get('origem')),
             trim($request->get('destino', '4510')),
             date('zy')
@@ -138,10 +152,11 @@ class CapaLoteController extends BaseController
             ]);
             $request->session()->flash('alert-success', 'Capa de Lote criada com Sucesso!');
         }
-        return redirect(route('capalote.index'));
+        return redirect(route('capalote.contingencia'));
     }
 
-    public function show(){
+    public function show()
+    {
         $menu = new Menu();
         $menus = $menu->menu();
         return view('capalote.show', compact('menus'));
@@ -152,7 +167,8 @@ class CapaLoteController extends BaseController
      * @param $doc_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showPDF(Request $request, array $doc_id) {
+    public function showPDF(Request $request, array $doc_id)
+    {
         $menu = new Menu();
         $menus = $menu->menu();
         if ($doc = Docs::find($doc_id)) {
@@ -168,7 +184,8 @@ class CapaLoteController extends BaseController
      * @param Request $request
      * @return Response
      */
-    public function showPDFMultiple(Request $request) {
+    public function showPDFMultiple(Request $request)
+    {
         $docs_id = $request->get('capalote');
         $docs = [];
         foreach ($docs_id as $doc_id) {

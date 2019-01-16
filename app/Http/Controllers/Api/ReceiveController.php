@@ -133,7 +133,7 @@ class ReceiveController extends BaseController
                     })
                         ->orWhere(function ($query) use ($juncao) {
                             $query->where([
-                                ['files.constante', '<>', 'DM'],
+                                ['files.constante', '=', 'DA'],
                                 ['docs.from_agency', '=', sprintf("%04d", $juncao)]
                             ]);
                         });
@@ -142,8 +142,7 @@ class ReceiveController extends BaseController
 
         return Datatables::of($query)
             ->addColumn('action', function ($doc) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
-                    'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
                     'value="'. $doc->id.'">';
             })
             ->addColumn('origem', function ($doc) use ($file) {
@@ -215,7 +214,7 @@ class ReceiveController extends BaseController
             }
         }
         return response()->json(
-            sprintf('%s Capa%s Recebida%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 0 ? 's':''), 200
+            sprintf('%s Envelope%s Recebido%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 1 ? 's':''), 200
         );
     }
 
@@ -315,7 +314,7 @@ class ReceiveController extends BaseController
                     })
                     ->orWhere(function ($query) use ($juncao) {
                         $query->where([
-                            ['files.constante', '<>', 'DM'],
+                            ['files.constante', '=', 'DA'],
                             ['docs.to_agency', '=', sprintf("%04d", $juncao)]
                         ])
                             ->where(function ($query) {
@@ -330,8 +329,7 @@ class ReceiveController extends BaseController
                 $query->where('files.constante', '=', $keyword);
             })
             ->addColumn('action', function ($doc) {
-                return '<input style="float:left;width:20px;margin: 6px 0 0 0;" ' .
-                'type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
             ->addColumn('view', function($doc) {

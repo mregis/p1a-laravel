@@ -151,4 +151,47 @@ class UserController extends BaseController
 
         return view('users.profile', compact('menus', 'usuario'));
     }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function updateMyProfile(Request $request)
+    {
+        $user_data = $request->all();
+
+        $validator = Validator::make($user_data, [
+            'password' => 'nullable|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = implode(', ', $validator->errors()->all());
+            $request->session()->flash('alert-danger','Erros encontrados. Verifique as informações e ' .
+                'tente novamente! Detalhes: [' . $errors . ']');
+            return redirect(route('users.my_profile'));
+        }
+
+        if ($user_data['password'] == null) {
+            unset($user_data['password']);
+        } else {
+            $user_data['password'] = Hash::make($user_data['password']);
+        }
+
+        $user_data['last_login'] = new \DateTime();
+        if (!$user = Users::find($user_data['_u'])) {
+            $request->session()->flash('alert-danger', 'Informação não encontrada');
+            return redirect(route('home'));
+        }
+
+        if ($user->fill($user_data)->save()) {
+            Audit::create([
+                'description' => sprintf('Usuario [%s] atualizou senha', $user->name),
+                'user_id' => $user->id
+            ]);
+            $request->session()->flash('alert-success', 'Informações atualizadas!');
+            return redirect(route('home'));
+        }
+        $request->session()->flash('alert-danger', 'Erro ao atualizar cadastro!');
+        return redirect(route('users.my_profile'));
+    }
 }

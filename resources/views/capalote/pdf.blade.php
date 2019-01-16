@@ -70,7 +70,6 @@
         font-family: 'Libre Barcode 39 Extended Text', cursive;
         font-size: 48pt;
         display: inline-block;
-        margin-left: 50pt !important;
         font-weight: normal;
     }
 
@@ -90,7 +89,7 @@
 <h3 class="text-center">Impressão de Capa de Lote</h3>
 
 
-<h5 class="text-center">Imprimir capa de lote para substituição mediante extravio ou inutilização</h5>
+<h5 class="text-center">Imprimir capa de lote para substituição ou envio em caso de exceção</h5>
 <div class="container">
     <div class="container" id="capalote">
         @foreach($docs as $i => $doc)

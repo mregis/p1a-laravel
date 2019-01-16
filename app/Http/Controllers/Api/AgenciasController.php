@@ -11,6 +11,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agencia;
+use App\Models\Audit;
+use App\Models\Users;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
 use Yajra\DataTables\DataTables;
@@ -83,7 +85,6 @@ class AgenciasController extends Controller
             return response()->json('Erros encontrados. Verifique as informações e ' .
                 'tente novamente! Detalhes: [' . $errors . ']', 400);
         }
-
 
         if ($agencia->fill($request->all())->save()) {
             Audit::create([

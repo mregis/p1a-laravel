@@ -26,7 +26,7 @@
                     <img src="{{asset('assets/app/media/img/logos/logo-auth.jpg')}}" class="card-img-top">
 
                     <div class="m-login__head card-header">
-                        <h3 class="m-login__title">Preencha os dados abaixo</h3>
+                        <h3 class="m-login__title">Rastreamento de cheques em trânsito</h3>
                     </div>
                     <div class="card-body">
                         <div class="m-login__signin">
@@ -35,11 +35,12 @@
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <input class="form-control m-input form-control-lg" type="text"
-                                               placeholder="Preencha seu email" name="username" autocomplete="off">
+                                               data-toggle="tooltip" title="Informe seu e-mail na forma 9999.adm ou 9999.adm@bradesco.com.br"
+                                               placeholder="Informe seu E-mail" name="username" autocomplete="off">
                                     </div>
                                     <div class="form-group">
                                         <input class="form-control form-control-lg m-input m-login__form-input--last"
-                                               type="password" placeholder="Preencha sua senha" name="password">
+                                               type="password" placeholder="Informe sua senha" name="password">
                                     </div>
                                     <div class="m-login__form-action">
                                         <button id="m_login_signin_submit"

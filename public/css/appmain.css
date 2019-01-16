@@ -11322,6 +11322,10 @@ td.details-control {
   width: 18px;
 }
 
+table.table-responsive {
+  min-width: 60%;
+}
+
 tr.shown td.details-control {
   background: url(/images/details_close.png?cdb0ad00d71eff5be6ca7305cff83ce9) no-repeat center center;
 }
@@ -11348,14 +11352,14 @@ input[type='checkbox']:focus {
     padding: 1.2rem !important;
   }
 
-  .m-body .m-content {
-    padding: 10px 10px !important;
-  }
-
   .table th,
   .table td {
     padding: 0.38rem !important;
   }
+}
+
+.m-body .m-content {
+  padding: 0 !important;
 }
 
 .m-topbar__notifications--img .m-dropdown__header {
@@ -11366,6 +11370,14 @@ input[type='checkbox']:focus {
 .m-topbar__user-profile .m-dropdown__header {
   background: url(/images/user_profile_bg.jpg?7968daa76ac10a126bfd4f37f26fb289);
   background-size: cover;
+}
+
+table.table.compact td {
+  padding: 0.25rem;
+}
+
+table.table.compact td:last-child {
+  min-width: 80px;
 }@charset "UTF-8";
 
 /*!
@@ -57527,7 +57539,7 @@ td > .m-checkbox.m-checkbox--single {
 
 .table.table-striped tbody th,
 .table.table-striped tbody td {
-  border1: 0;
+  border: 0;
 }
 
 .m-table.m-table--head-no-border thead th {

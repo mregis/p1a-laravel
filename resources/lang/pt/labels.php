@@ -38,7 +38,7 @@ return [
     'client' => 'Cliente',
     'type' => 'Tipo',
     'birthday' => 'Data de nascimento',
-    'status' => 'status',
+    'status' => 'Situação',
     'mobile' => 'Celular',
     'phone_fixed' => 'Telefone fixo',
     'fax' => 'Fax',
@@ -126,5 +126,6 @@ return [
     'cd' => 'CD',
     'village' => 'Bairro',
     'forgot_password' => 'Esqueci a senha',
-    'check_capalote' => 'Consultar Capa de Lote'
+    'check_capalote' => 'Consultar Capa de Lote',
+    'history' => 'Histórico',
 ];

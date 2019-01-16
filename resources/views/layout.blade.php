@@ -176,7 +176,7 @@
                                             pr-3" data-dropdown-toggle="click">
                                         <a href="#" class="m-nav__link m-dropdown__toggle text-white">
                                             <span class="m-topbar__username">
-                                                Usuário: {{ Auth::user()->name }} <i class="fas fa-user-cog fa-3x"></i>
+                                                Usuário: {{ Auth::user()->name }} <i class="fas fa-user-circle fa-3x"></i>
                                             </span>
                                         </a>
 
@@ -188,7 +188,7 @@
                                                 <div class="m-dropdown__header m--align-center">
                                                     <div class="m-card-user m-card-user--skin-dark">
                                                         <div class="m-card-user__pic text-white">
-                                                            <i class="fas fa-user-cog fa-4x"></i>
+                                                            <i class="far fa-user-circle fa-4x"></i>
                                                         </div>
                                                         <div class="m-card-user__details">
                                                             <span class="m-card-user__name m--font-weight-500">
@@ -313,7 +313,8 @@
                                 @endif
                             @else
                                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
-                                    m-menu-submenu-toggle="hover" @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
+                                    m-menu-submenu-toggle="hover"
+                                    @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
                                     <a href="{{$menu->sub_menus != "[]" ? 'javascript:;' : $menu->url }}"
                                        class="m-menu__link m-menu__toggle">
                                         <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
@@ -325,8 +326,7 @@
                                     </a>
                                     @if($menu->sub_menus != "[]") <!-- Caso tenha sub menu é adicionado  o Dropdown -->
                                         @foreach($menu->sub_menus as $sub_menu)
-                                            @if($sub_menu->name == "Upload de Arquivos" ||
-                                                $sub_menu->name == "Gestão de Arquivos")
+                                            @if(in_array($sub_menu->name, ["Upload de Arquivos","Gestão de Arquivos"]))
                                                 @if(in_array(Auth::user()->profile, ["ADMINISTRADOR","DEPARTAMENTO"]))
                                                     <div class="m-menu__submenu">
                                                         <span class="m-menu__arrow"></span>
@@ -343,7 +343,11 @@
                                                     </div>
                                                 @endif
                                             @else
-                                                @if(! ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA'))
+                                                @if( !(
+                                                    ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA') ||
+                                                    ($sub_menu->name == "Operador" && Auth::user()->profile == 'AGÊNCIA') ||
+                                                    ($sub_menu->name == "Contingencia" && Auth::user()->profile == 'OPERADOR')
+                                                    ))
                                                     <div class="m-menu__submenu ">
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">
@@ -371,6 +375,7 @@
 
             <div class="m-grid__item m-grid__item--fluid m-wrapper">
 
+                {{--
                 <!-- BEGIN: Subheader -->
                 <div class="m-subheader ">
                     <div class="d-flex align-items-center">
@@ -380,6 +385,7 @@
                         <div></div>
                     </div>
                 </div>
+                --}}
                 <div class="m-content">
 
                     @yield('content')
