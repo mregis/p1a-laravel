@@ -44,7 +44,8 @@
                 </div>
                 <div class="m-portlet__body">
                     {{ Form::model($unidade, array('url' => route('unidade.adicionar'),
-                           'method' => 'POST', 'id'=>'form_unidade', 'name'=>'form_unidade')) }}
+                           'method' => 'POST', 'id'=>'form_unidade', 'name'=>'form_unidade',
+                           'class'=>'m-form m-form--fit')) }}
                     @component('forms/unidade', ['unidade' => $unidade]);
                     @endcomponent
                     <div class="m-portlet__foot m-portlet__foot--fit">

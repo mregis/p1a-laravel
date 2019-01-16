@@ -35,7 +35,6 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <div class="row">
                         <input type="hidden" id="columns" value="id,name,email,profile,action">
                         <input type="hidden" id="baseurl" value="{{URL::to('/api/users/list')}}">
 
@@ -71,7 +70,6 @@
                                 </tr>
                             </table>
                         </script>
-                    </div>
                 </div>
             </div>
         </div>

@@ -39,11 +39,11 @@ Route::get('/receber','Api\ReceiveController@index');
 Route::get('/receber/{id}','Api\ReceiveController@list');
 
 Route::group(['prefix' => 'cadastros'], function() {
-	Route::get('/produtos', 'Cadastros\CadastrosController@produtos');
+	Route::get('/produtos', 'Cadastros\CadastrosController@produtos')->name('cadastros.produto_index');
 	Route::get('/produto/remove/{id}', 'Cadastros\CadastrosController@produto_remove')->name('cadastros.delete_produto');
 	Route::get('/produto/edit/{id}', 'Cadastros\CadastrosController@produto_edit')->name('cadastros.edit_produto');
 
-	Route::get('/perfil', 'Cadastros\CadastrosController@perfis');
+	Route::get('/perfil', 'Cadastros\CadastrosController@perfis')->name('cadastros.profile_index');
 	Route::get('/perfil/remove/{id}', 'Cadastros\CadastrosController@perfil_remove')->name('cadastros.delete_profile');
 	Route::get('/perfil/edit/{id}', 'Cadastros\CadastrosController@perfil_edit')->name('cadastros.edit_profile');
 

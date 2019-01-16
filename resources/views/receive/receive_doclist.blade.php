@@ -44,7 +44,6 @@
 
                         <input type="hidden" id="check_url" value="{{URL::to('/arquivo/recebe')}}">
 
-                        <div class="row">
                             <table class="table table-striped table-hover table-responsive compact nowrap text-center"
                                    id="datatable"
                                    data-column-defs='[{"targets":[0,7,8],"orderable":false}]'
@@ -72,7 +71,6 @@
                                 <i class="fas fa-file-download"></i> Receber
                             </button>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

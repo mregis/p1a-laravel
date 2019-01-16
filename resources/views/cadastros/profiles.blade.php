@@ -65,22 +65,6 @@
                             <div class="tab-pane active" id="m_tabs_6_1" role="tabpanel">
                                 <div class="col-md-12">
                                     <div class="m-portlet m-portlet--tab">
-                                        <div class="m-portlet__head">
-                                            <div class="m-portlet__head-caption">
-                                                <div class="m-portlet__head-title">
-                                                    <span class="m-portlet__head-icon m--hide">
-                                                        <i class="la la-gear"></i>
-                                                    </span>
-                                                    <h3 class="m-portlet__head-text">
-                                                        @if (isset($profile))
-                                                            {{__('titles.edit_profile')}}
-                                                        @else
-                                                            {{__('titles.add_profile')}}
-                                                        @endif
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </div>
                                         {{ Form::open(array('url' => url('api/profiles'),
                                             'class'=>'m-form m-form--fit m-form--label-align-right ajax-form')) }}
                                         @if ($errors->any())
@@ -121,9 +105,10 @@
                                         </div>
                                         <div class="m-portlet__foot m-portlet__foot--fit">
                                             <div class="m-form__actions">
+                                                <a class="btn btn-lg btn-outline-secondary"
+                                                   href="{{route('cadastros.profile_index')}}">{{__('buttons.cancel')}}</a>
                                                 {{ Form::submit(__('buttons.submit'), array('class' => 'btn btn-success btn-lg')) }}
-                                                <button type="reset" class="btn btn-lg btn-outline-secondary"
-                                                        onclick="window.history.back()">{{__('buttons.cancel')}}</button>
+
                                             </div>
                                         </div>
                                         {{ csrf_field() }}

@@ -250,6 +250,10 @@ class CapaLoteController extends BaseController
                 ->filterColumn('status', function($query, $keyword) {
                     $query->where('docs.status', '=', $keyword);
                 })
+                ->addColumn('action', function ($doc) {
+                    return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
+                    'value="'. $doc->id.'">';
+                })
                 ->addColumn('view', function($doc) use ($user) {
                     return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
                     ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .

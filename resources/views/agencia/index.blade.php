@@ -37,7 +37,7 @@
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-right mb-2">
                                 <a href="{{ route('agencias.novo') }}" class="btn btn-md btn-success"><i
                                             class="fas fa-plus-circle"></i> {{ __('labels.add') }}</a>
                             </div>
@@ -48,8 +48,8 @@
                         <input type="hidden" id="baseurl"
                                value="{{ route('agencias.api-listar') }}">
 
-                        <div class="row">
-                            <table class="table table-hover table-striped hasdetails compact nowrap"
+                        <div class="col">
+                            <table class="table table-hover table-striped hasdetails table-responsive compact nowrap"
                                    id="datatable" data-column-defs='[{"targets":[0,5],"orderable":false}]'
                                    data-order='[[ 1, "asc" ]]'>
                                 <thead class="table-dark">

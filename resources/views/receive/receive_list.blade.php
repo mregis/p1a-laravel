@@ -34,39 +34,28 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <div class="row">
-                        <input type="hidden" id="columns" value="action,content,origin,destin,movimento,status">
+                        <input type="hidden" id="columns" value="action,content,from_agency,to_agency,movimento,status">
                         <input type="hidden" id="baseurl"
                                value="{{ route('capalote.get-not-received-by-file', [Auth::id(), $id])}}">
-                        <table class="table table-striped table-bordered hasdetails table-hover nowrap
+                        <table class="table table-striped table-bordered table-hover nowrap
                                 table-responsive compact text-center"
                                id="datatable"
                                data-column-defs='[{"targets":[1],"orderable":false}]'
                                data-order='[[3, "asc"],[5, "asc"]]'>
                             <thead class="thead-dark form-group">
                             <tr>
-                                <th></th>
                                 <th><input type="checkbox" name="all_lote" class="form-control m-input" style="width: 20px"
                                            onclick="allCheck(this);" id="all_lote"></th>
                                 <th>{{__('Capa Lote')}}</th>
                                 <th>{{__('Origem')}}</th>
                                 <th>{{__('Destino')}}</th>
                                 <th>{{__('Movimento')}}</th>
-                                <th>{{__('Status')}}</th>
+                                <th>{{__('labels.status')}}</th>
                             </tr>
                             </thead>
                             <tbody class="form-group"></tbody>
                         </table>
-                    </div>
                     <div class="row">
-                        <script id="details-template" type="text/x-handlebars-template">
-                            <table class="table" id="check_details">
-                                <tr>
-                                    <td>@{{confirm}}</td>
-                                    <td>@{{content}}</td>
-                                </tr>
-                            </table>
-                        </script>
                         <div class="m-form__actions">
                             <button class="btn btn-lg btn-success" type="submit" onclick="save()">
                                 <i class="fas fa-file-download"></i> Receber

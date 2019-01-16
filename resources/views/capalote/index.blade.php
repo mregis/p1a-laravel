@@ -36,18 +36,17 @@
                 </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
-                        <div class="row">
                             {{ Form::open(array('url' => route('capalote.imprimir-multiplo'),
                                 'target' => '_blank', 'id' => 'formprint-capalote')) }}
 
                             <div class="form-inline">
                                 <div class="form-group">
-                                    <label for="di" class="text-right mr-1 ml-2">Data Inicial</label>
-                                    <input type="date" class="form-control" id="di" name="di" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="di" class="text-right mr-1 ml-2">Data Final</label>
-                                    <input type="date" class="form-control" id="df" name="df" />
+                                    <label for="di" class="text-right mr-1 ml-2">Período de</label>
+                                    <div class="input-group input-daterange">
+                                        <input type="text" class="form-control" readonly="readonly" id="di">
+                                        <div class="input-group-addon">Até</div>
+                                        <input type="text" class="form-control" readonly="readonly" id="df">
+                                    </div>
                                 </div>
                             </div>
                             <table class="table table-striped _auto-dt table-bordered table-responsive nowrap compact">
@@ -75,7 +74,6 @@
                             </div>
                             @csrf
                             {{ Form::close() }}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -109,11 +107,20 @@
                     columnDefs: [{"targets":[0,6],"orderable":false,"searchable":false}],
                     ajax:{
                         "url" : "{{ route('capalote.list', Auth::user()->id) }}",
-                        "data":function(data){data.di = jQuery("#di").val(); data.df = jQuery("#df").val();}
+                        "data":function(data){
+                            var _i = jQuery("#di").val();
+                            data.di = _i.replace(/\D/g,'-');
+                            _i = jQuery("#df").val();
+                            data.df = _i.replace(/\D/g,'-');
+                        }
                     }
 
                 });
             }
+
+            $('.input-daterange input').each(function() {
+                $(this).datepicker({format: "dd/mm/yyyy", language:"pt-BR"});
+            });
         });
         // Impressão de Capa de Lote
         function view(docid) {

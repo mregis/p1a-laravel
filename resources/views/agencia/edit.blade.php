@@ -38,7 +38,8 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <span class="m-portlet__head-icon"><i class="fas fa-new"></i></span>
-                            <h3 class="m-portlet__head-text">Editar Cadastro da Agência <span class="badge badge-primary">{{ $agencia }}</span> </h3>
+                            <h3 class="m-portlet__head-text">Editar Cadastro da Agência
+                                <span class="badge badge-primary">{{ $agencia }}</span> </h3>
                         </div>
                     </div>
                 </div>
