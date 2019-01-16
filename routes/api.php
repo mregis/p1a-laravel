@@ -70,9 +70,13 @@ Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
 Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
 
 Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');
-Route::post('/capalote/contingencia', 'Api\CapaLoteController@_new')->name('capalote.api-new');
-Route::get('/capalote/contingencia/{user_id}', 'Api\CapaLoteController@index')->name('capalote.api-index');
 
+// Capa de Lote
+Route::group(['prefix' => '/capalote'], function () {
+    Route::get('/list/{user_id}', 'Api\CapaLoteController@_list')->name('capalote.list');
+    Route::post('/contingencia', 'Api\CapaLoteController@_new')->name('capalote.api-new');
+    Route::get('/contingencia/list/{user_id}', 'Api\CapaLoteController@list_contigencia')->name('capalote.list_contingencia');
+});
 // Dashboard
 Route::group(['prefix' => '/dashboard'], function () {
     Route::get('/envios/{user_id}', 'Api\DashboardController@toAgencyReport')->name('dashboard.envios');
@@ -108,4 +112,5 @@ Route::get('/capalote/arquivo/{user_id}/{file_id}', 'Api\CapaLoteController@repo
 
 Route::group(['prefix' => 'ocorrencias'], function() {
     Route::put('/edit/{id}', 'Api\AlertsController@update')->name('alerts.api_edit_alert');
+    Route::get('/list', 'Api\AlertsController@listAlerts')->name('alerts.list');
 });

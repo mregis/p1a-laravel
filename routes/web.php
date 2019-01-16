@@ -34,7 +34,7 @@ Route::group(['prefix' => 'users'], function() {
 });
 
 Route::get('/auditoria', 'Api\AuditController@index')->name('audit.audit_list');
-Route::get('/upload','Api\UploadController@index');
+Route::get('/upload','Api\UploadController@index')->name('upload.index');
 Route::get('/receber','Api\ReceiveController@index');
 Route::get('/receber/{id}','Api\ReceiveController@list');
 
@@ -83,7 +83,8 @@ Route::get('/receber-todos/','Api\ReceiveController@docListingIndex');
 
 Route::group(['prefix' => 'capalote'], function() {
 	Route::get('ver', 'CapaLote\CapaLoteController@show')->name('capalote.show');
-    Route::get('contingencia', 'CapaLote\CapaLoteController@index')->name('capalote.index');
+    Route::get('contingencia', 'CapaLote\CapaLoteController@contingencia')->name('capalote.contingencia');
+    Route::get('list', 'CapaLote\CapaLoteController@index')->name('capalote.index');
     Route::post('contingencia', 'CapaLote\CapaLoteController@_new')->name('capalote.new');
 	Route::get('contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
 	Route::post('contingencia/imprimir/', 'CapaLote\CapaLoteController@showPDFMultiple')->name('capalote.imprimir-multiplo');
