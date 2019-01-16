@@ -29,7 +29,7 @@ return [
     'sender' => 'Remetente',
     'recipient' => 'Destinatário',
     'outlet' => 'Previsão de entrega',
-    'status' => 'Status',
+    'status' => 'Situação',
     'cod_bank' => 'Código do Banco',
     'bank' => 'Banco',
     'proc' => 'Processo',

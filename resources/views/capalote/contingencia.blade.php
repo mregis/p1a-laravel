@@ -22,13 +22,13 @@
                                 <li class="m-nav__separator">-</li>
                                 <li class="m-nav__item">
                                     <a href="javascript:void(0)" class="m-nav__link">
-                                        <span class="m-nav__link-text">Capa Lote</span>
+                                        <span class="m-nav__link-text">Remessa (Envio)</span>
                                     </a>
                                 </li>
                                 <li class="m-nav__separator">-</li>
                                 <li class="m-nav__item">
                                     <a href="javascript:void(0)" class="m-nav__link">
-                                        <h3 class="m-portlet__head-text">{{__('Contingência')}}</h3>
+                                        <h3 class="m-portlet__head-text">Contingência</h3>
                                     </a>
                                 </li>
                             </ul>

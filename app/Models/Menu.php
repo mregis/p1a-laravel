@@ -17,11 +17,16 @@ class Menu extends Model
         'item_order',
     ];
 
-    public function sub_menus(){
+    public function sub_menus()
+    {
         return $this->hasMany(Sub_Menu::class);
     }
-    public function menu(){
-        $menus = Menu::with('sub_menus')->orderBy('item_order')->get();
+
+    public function menu()
+    {
+        $menus = Menu::with(['sub_menus' => function ($query) {
+            $query->orderBy('item_order');
+        }])->orderBy('item_order')->get();
         return $menus;
     }
 }

@@ -35,11 +35,13 @@ class AlertsController extends BaseController
                 return $alert->updated_at ? with(new Carbon($alert->updated_at))->format('d/m/Y H:i') : '';
             })
             ->editColumn('description', function($alert) {
-                return sprintf('<ul><li>%s</li></ul>', implode('</li><li>', explode("\n", $alert->description)));
+                return sprintf('<div class="text-left" style="white-space: normal"><ul><li>%s</li></ul></div>',
+                    implode('</li><li>', explode("\n", $alert->description)));
             })
             ->addColumn('user.local', function($alert) {
                 return $alert->user->getLocal();
             })
+            ->rawColumns(['description', 'action'])
             ->make(true);
     }
 

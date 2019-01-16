@@ -93,7 +93,7 @@ return [
     'add_event' => 'Adicionar compromisso',
     'details' => 'Detalhes',
     'merchandise' => 'Mercadoria',
-    'status' => 'Status',
+    'status' => 'Situação',
     'info_exepertise' => 'Informação sobre a perícia',
     'notification' => 'Notificação',
     'add_lawyer' => 'Adicionar Advogado',

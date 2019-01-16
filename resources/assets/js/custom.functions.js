@@ -524,7 +524,7 @@ jQuery(document).ready(function () {
 
     $('.cep').add("#zipcode").mask('99999-999', options);
 
-    $('#check_details th').each(function () {
+    $('table.checkdetails th').each(function () {
         var check = Array($(this).find("td").eq(1).html());
     });
     if ($("#details-template").length > 0) {
@@ -554,26 +554,7 @@ jQuery(document).ready(function () {
         ajax: $('#baseurl').val(),
         columns: columns,
     });
-    $('#datatable tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row(tr);
 
-        if (row.child.isShown()) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        } else {
-            // Open this row
-            $.each(row.data(), function (index, value) {
-                if (value == null) {
-                    row.data()[index] = "---";
-                    console.log(value);
-                }
-            });
-            row.child(template(row.data())).show();
-            tr.addClass('shown');
-        }
-    });
     $('#nav-list-tab').on("click", function () {
         $('#datatable').DataTable().ajax.reload();
     });
@@ -726,25 +707,6 @@ jQuery(document).ready(function () {
     $('#form_user').validator();
     $('[data-toggle="tooltip"]').tooltip();
     $('.js-select_2').select2();
-    $("#end_date").datetimepicker({
-        locale: 'pt-BR',
-        format: 'dd-mm-yyyy hh:ii',
-        autoclose: true,
-        todayBtn: true,
-        startDate: dateToday()
-    });
-
-    $("#date").datetimepicker({
-        format: 'dd-mm-yyyy hh:ii',
-        autoclose: true,
-        todayBtn: true,
-        startDate: dateToday()
-    });
-    $("#date_of_birth").datepicker({
-        format: 'dd-mm-yyyy',
-        autoclose: true,
-        endDate: dateToday()
-    });
 
     var autodt = null; // Automatic Datatables
     if (typeof(autodt) == "undefined" || autodt == null) {
@@ -774,6 +736,30 @@ jQuery(document).ready(function () {
             },
             language: lang,
             order: [[1, "asc"]]
+        });
+    }
+
+    if ($("#details-template").length > 0) {
+
+        $('table.hasdetails tbody').on('click', 'td.details-control', function () {
+            var tbl = $(this).parents('table:first').hasClass('auto-dt') ? autodt : table;
+            var tr = $(this).closest('tr');
+            var row = tbl.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                $.each(row.data(), function (index, value) {
+                    if (value == null) {
+                        row.data()[index] = "---";
+                    }
+                });
+                row.child(template(row.data())).show();
+                tr.addClass('shown');
+            }
         });
     }
 

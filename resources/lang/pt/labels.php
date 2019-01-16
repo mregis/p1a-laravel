@@ -38,7 +38,7 @@ return [
     'client' => 'Cliente',
     'type' => 'Tipo',
     'birthday' => 'Data de nascimento',
-    'status' => 'status',
+    'status' => 'Situação',
     'mobile' => 'Celular',
     'phone_fixed' => 'Telefone fixo',
     'fax' => 'Fax',

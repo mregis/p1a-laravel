@@ -302,7 +302,7 @@ class UploadController extends BaseController
                 $query->where('docs.to_agency', '=', $keyword);
             })
             ->addColumn('action', function ($doc) {
-                return '<input type="checkbox" name="lote[]" class="form-control m-input input-doc" ' .
+                return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
                 'value="'. $doc->id.'">';
             })
             ->editColumn('from_agency', function ($doc) {
@@ -333,8 +333,8 @@ class UploadController extends BaseController
             ->addColumn('view', function($doc) use ($user) {
                 return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
                 ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
-                '</a>';
+                'title="Histórico" class="btn btn-outline-primary btn-sm m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></a>';
             })
             ->escapeColumns([])
             ->make(true);
