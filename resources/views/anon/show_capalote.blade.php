@@ -25,16 +25,16 @@
 </head>
 <body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default"
       style="background: url('{{ asset('assets/app/media/img/bg/bg-1.png') }}') 0 0 #a3c3e9;">
-<div class="container-fluid">
-    <div class="row justify-content-md-center" id="capalote">
+<div class="container">
+    <div class="row justify-content-md-center">
         <div class="col-md-8">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header h-50">
                 <img src="{{asset('assets/app/media/img/logos/logo-auth.jpg')}}" class="card-img-top col-md-4">
-
-                <h3 class="m-portlet__head-text">
+                <h3>
                     Capa de Lote <span class="badge badge-pill badge-primary">{{$doc->content}}</span>
-                </h3></div>
+                </h3>
+            </div>
             <div class="card-body">
                 <div class="form-row">
                     <div class="form-group col-md-2">
