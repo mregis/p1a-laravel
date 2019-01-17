@@ -37,7 +37,7 @@
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         <input type="hidden" id="columns"
-                               value="action,content,constante,from_agency,to_agency,created_at,updated_at,status,view">
+                               value="action,content,constante,from_agency,to_agency,movimento,updated_at,status,view">
 
                         <input type="hidden" id="baseurl"
                                value="{{ route('capalote.get-not-received', Auth::user()->id)}}"/>

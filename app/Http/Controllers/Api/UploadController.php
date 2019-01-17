@@ -330,6 +330,9 @@ class UploadController extends BaseController
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
             })
+            ->editColumn('movimento', function ($doc) {
+                return $doc->movimento? with(new Carbon($doc->movimento))->format('d/m/Y') : '';
+            })
             ->addColumn('view', function($doc) use ($user) {
                 return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
                 ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
