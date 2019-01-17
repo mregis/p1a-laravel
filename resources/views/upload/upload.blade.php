@@ -35,7 +35,19 @@
                     </div>
                 </div>
             </div>
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+						        <i class="la la-gear"></i>
+						    </span>
 
+                        <h3 class="m-portlet__head-text">
+                            <i class="far fa-file-alt"></i>
+                            Carregar Arquivo de Capas de Lotes</h3>
+                    </div>
+                </div>
+            </div>
 			<div class="m-portlet__body">
 				<div class="form-group m-form__group row upp">
 					<label class="col-form-label col-lg-2 col-sm-12">Importação de arquivos com códigos dos envelopes em trânsito</label>

@@ -155,11 +155,35 @@ class CapaLoteController extends BaseController
         return redirect(route('capalote.contingencia'));
     }
 
-    public function show()
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(Request $request)
+    {
+        $capalote = preg_replace('#\D#', '', $request->get('capalote'));
+        if (strlen($capalote) == 13) {
+            if (!$doc = Docs::where('content', $capalote)->first()) {
+                $request->session()->flash('alert-warning', 'Capa de Lote inexistente!');
+                return redirect(route('capalote.buscar'));
+            }
+        } else {
+            $request->session()->flash('alert-danger', 'Código de Capa de Lote inválida!');
+            return redirect(route('capalote.buscar'));
+        }
+        $menu = new Menu();
+        $menus = $menu->menu();
+        return view('capalote.show', compact('menus', 'doc'));
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function find()
     {
         $menu = new Menu();
         $menus = $menu->menu();
-        return view('capalote.show', compact('menus'));
+        return view('capalote.find', compact('menus'));
     }
 
     /**
