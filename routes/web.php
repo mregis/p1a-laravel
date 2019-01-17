@@ -82,12 +82,13 @@ Route::get('/doc/history/{id}','Api\UploadController@history');
 Route::get('/receber-todos/','Api\ReceiveController@docListingIndex');
 
 Route::group(['prefix' => 'capalote'], function() {
-	Route::get('ver', 'CapaLote\CapaLoteController@show')->name('capalote.show');
-    Route::get('contingencia', 'CapaLote\CapaLoteController@contingencia')->name('capalote.contingencia');
-    Route::get('list', 'CapaLote\CapaLoteController@index')->name('capalote.index');
-    Route::post('contingencia', 'CapaLote\CapaLoteController@_new')->name('capalote.new');
-	Route::get('contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
-	Route::post('contingencia/imprimir/', 'CapaLote\CapaLoteController@showPDFMultiple')->name('capalote.imprimir-multiplo');
+	Route::get('/ver', 'CapaLote\CapaLoteController@show')->name('capalote.show');
+	Route::any('/buscar', 'CapaLote\CapaLoteController@find')->name('capalote.buscar');
+    Route::get('/contingencia', 'CapaLote\CapaLoteController@contingencia')->name('capalote.contingencia');
+    Route::get('/list', 'CapaLote\CapaLoteController@index')->name('capalote.index');
+    Route::post('/contingencia', 'CapaLote\CapaLoteController@_new')->name('capalote.new');
+	Route::get('/contingencia/imprimir/{doc_id}', 'CapaLote\CapaLoteController@showPDF')->name('capalote.imprimir');
+	Route::post('/contingencia/imprimir/', 'CapaLote\CapaLoteController@showPDFMultiple')->name('capalote.imprimir-multiplo');
 });
 
 Route::group(['prefix' => 'cadastros/unidades'], function() {

@@ -30,6 +30,6 @@ class Users extends BaseModel
 
     public function getLocal()
     {
-        return ($this->juncao != null ? (string)$this->agencia() : ($this->unidade != null ? $this->unidade : '-'));
+        return ($this->juncao != null ? (string)$this->agencia : ($this->unidade != null ? $this->unidade : '-'));
     }
 }
