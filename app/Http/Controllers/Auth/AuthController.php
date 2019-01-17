@@ -41,7 +41,7 @@ class AuthController extends Controller
                 Mail::send('emails.recuperar-senha', $dados, function ($message) use ($request) {
                     $message
                         ->to(Input::get('email'))
-                        ->subject('Resgate de Senha – Sistema de Rastreamento de Envelopes');
+                        ->subject('Sistema de Rastreamento de Envelopes');
                 });
                 Audit::create([
                     'description' => 'Enviado email de recuperação de senha para ' . Input::get('email')
