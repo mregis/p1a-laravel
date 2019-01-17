@@ -31,7 +31,7 @@
                 <img src="{{asset('assets/app/media/img/logos/logo-auth.jpg')}}" class="card-img-top">
                 <div class="card-header"><h3>Rastrear Capa de Lote</h3></div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('anon.get_capalote_history') }}">
+                    <form method="get" action="{{ route('anon.show_capalote_history') }}">
                         <p class="">Entre com o número da Capa de Lote a ser pesquisada</p>
                         <div class="form-group">
                             <input type="text" class="form-control form-control-lg" name="capalote" autocomplete="off"
@@ -55,8 +55,6 @@
         </div>
     </div>
 
-</body>
-
 <!--begin::Base Scripts -->
 <script src="{{ mix('/js/polyfill.min.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/manifest.js') }}" type="text/javascript"></script>
@@ -69,4 +67,5 @@
 <!-- Flash Messages if exists -->
 @component('flashmessages')
 @endcomponent
+</body>
 </html>
