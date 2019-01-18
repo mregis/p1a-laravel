@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Users
 Route::group(['prefix' => '/users'], function () {
     Route::get('/', 'Api\UsersController@index');
-    Route::get('/list', 'Api\UsersController@list');
+    Route::get('/list/{user_id}', 'Api\UsersController@listUsers')->name('users.get_users_list');
     Route::post('/', 'Api\UsersController@store')->name('users.api-store');
     Route::get('/{id}', 'Api\UsersController@show');
     Route::put('/meus-dados', 'Api\UsersController@updateMyProfile')->name('users.profile_update');
