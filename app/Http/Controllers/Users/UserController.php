@@ -24,8 +24,14 @@ class UserController extends BaseController
      */
     public function index(Request $request)
     {
-        $menu = new Menu();
-        $menus = $menu->menu();
+        if (in_array(Auth::user()->profile, ['ADMINISTRADOR', 'DEPARTAMENTO'])) {
+            $menu = new Menu();
+            $menus = $menu->menu();
+        } else {
+            $request->session()->flash('alert-danger', 'O recurso solicitado não existe.');
+            return redirect(route('home'));
+        }
+
         return view('users.users_list', compact('menus'));
     }
 

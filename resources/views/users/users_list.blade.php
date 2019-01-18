@@ -36,7 +36,7 @@
                 </div>
                 <div class="m-portlet__body">
                         <input type="hidden" id="columns" value="id,name,email,profile,action">
-                        <input type="hidden" id="baseurl" value="{{URL::to('/api/users/list')}}">
+                        <input type="hidden" id="baseurl" value="{{ route('users.get_users_list', Auth::id())}}">
 
                         <table class="table table-striped table-hover hasdetails table-responsive compact nowrap"
                                id="datatable"

@@ -41,7 +41,7 @@
 				<div class="m-portlet__body">
                     <table class="table table-striped table-bordered nowrap table-responsive compact text-center"
                                id="datatable"
-                               data-order='[[4, "asc"], [5, "asc"]]'
+                               data-order='[[5, "asc"],[4, "asc"]]'
                                data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>
 							<thead class="thead-dark">
 							<tr>

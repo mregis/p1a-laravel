@@ -19,27 +19,46 @@ use App\Models\Audit;
 
 class UsersController extends BaseController
 {
-    public function list(Request $request)
+    /**
+     * @param Request $request
+     * @param $user_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listUsers(Request $request, $user_id)
     {
-        return Datatables::of(Users::query())
-            ->addColumn('action', function ($users) {
-                return '<div align="center"><a href="edit/' . $users->id .
+        if (!$user = Users::find($user_id)) {
+            return $this->sendError('Erro ao recuperar informações', 404);
+        }
+
+        if (!in_array($user->profile, ["ADMINISTRADOR", "DEPARTAMENTO"])) {
+            return $this->sendError('Recurso não encontrado', 404);
+        }
+
+        $query = Users::query();
+
+        if ($user->profile != "ADMINISTRADOR") {
+            $query->where('profile', 'AGÊNCIA');
+        }
+
+        return Datatables::of($query)
+            ->addColumn('action', function ($user) {
+                return '<div align="center"><a href="edit/' . $user->id .
                     '" data-toggle="tooltip" title="Editar" ' .
                     'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
                     '<i class="fas fa-edit"></i></a>' .
-                    '<button onclick="modalDelete(' . $users->id . ')"' .
+                    '<button onclick="modalDelete(' . $user->id . ')"' .
                     'data-toggle="tooltip" title="Excluir" ' .
                     'class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
                     '<i class="fas fa-trash-alt"></i></button></div>';
             })
-            ->editColumn('last_login', function ($users) {
-                return $users->last_login ? with(new Carbon($users->last_login))->format('d/m/Y H:i:s') : 'Nunca';
+            ->editColumn('last_login', function ($user) {
+                return $user->last_login ? with(new Carbon($user->last_login))->format('d/m/Y H:i') : 'Nunca';
             })
-            ->editColumn('created_at', function ($users) {
-                return $users->created_at ? with(new Carbon($users->created_at))->format('d/m/Y H:i:s') : null;
+            ->editColumn('created_at', function ($user) {
+                return $user->created_at ? with(new Carbon($user->created_at))->format('d/m/Y H:i') : null;
             })
-            ->editColumn('updated_at', function ($users) {
-                return $users->updated_at ? with(new Carbon($users->updated_at))->format('d/m/Y H:i:s') : '';
+            ->editColumn('updated_at', function ($user) {
+                return $user->updated_at ? with(new Carbon($user->updated_at))->format('d/m/Y H:i') : '';
             })
             ->editColumn('juncao', function ($user) {
                 if ($agencia = $user->agencia) {
