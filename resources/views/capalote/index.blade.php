@@ -36,9 +36,6 @@
                 </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
-                            {{ Form::open(array('url' => route('capalote.imprimir-multiplo'),
-                                'target' => '_blank', 'id' => 'formprint-capalote')) }}
-
                             <div class="form-inline">
                                 <div class="form-group">
                                     <label for="di" class="text-right mr-1 ml-2">Período de</label>
@@ -49,31 +46,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-striped _auto-dt table-bordered table-responsive nowrap compact">
+                            <table class="table table-striped _auto-dt table-bordered table-responsive nowrap compact text-center">
                                 <thead class="thead-dark">
-                                <tr>
-                                    <th><input type="checkbox" name="all_capalote" style="width: 20px"
-                                               class="form-control form-control-sm"
-                                               onclick="allCheck(this);" id="all_capalote"></th>
+                                <tr>                                    
                                     <th>{{__('Capa Lote')}}</th>
                                     <th>{{__('Origem')}}</th>
                                     <th>{{__('Destino')}}</th>
                                     <th>{{__('Movimento')}}</th>
-                                    <th>{{__('Status')}}</th>
+                                    <th>{{__('labels.status')}}</th>
                                     <th>{{__('tables.action')}}</th>
                                 </tr>
                                 </thead>
-                            </table>
-                            <div class="m-portlet__foot m-portlet__foot--fit">
-                                <div class="m-form__actions">
-                                    <button type="submit" class="btn btn-success btn-lg">
-                                        <i class="fas fa-print"
-                                           aria-hidden="true"></i> {{__('IMPRIMIR CAPA DE LOTE')}}
-                                    </button>
-                                </div>
-                            </div>
-                            @csrf
-                            {{ Form::close() }}
+                            </table>                            
                     </div>
                 </div>
             </div>
@@ -103,8 +87,8 @@
                     language: lang,
                     order: [[4,"desc" ]],
                     serverSide: "true",
-                    columns: [{"data":"action"},{"data":"content"},{"data":"from_agency"},{"data":"to_agency"},{"data":"movimento"},{"data":"status"},{"data":"view"}],
-                    columnDefs: [{"targets":[0,6],"orderable":false,"searchable":false}],
+                    columns: [{"data":"content"},{"data":"from_agency"},{"data":"to_agency"},{"data":"movimento"},{"data":"status"},{"data":"view"}],
+                    columnDefs: [{"targets":[5],"orderable":false,"searchable":false}],
                     ajax:{
                         "url" : "{{ route('capalote.list', Auth::user()->id) }}",
                         "data":function(data){
