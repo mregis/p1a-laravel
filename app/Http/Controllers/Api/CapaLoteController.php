@@ -95,20 +95,12 @@ class CapaLoteController extends BaseController
                 })
                 ->filterColumn('status', function($query, $keyword) {
                     $query->where('docs.status', '=', $keyword);
-                })
-                ->addColumn('action', function ($doc) {
-                    return '<input type="checkbox" name="capalote[]" id="capalote-' . $doc->id . '"
-                    class="form-control form-control-sm m-input input-doc" ' .
-                    'value="'. $doc->id.'">';
-                })
+                })                
                 ->addColumn('view', function($doc) use ($user) {
                     return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
                     ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
                     'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                    '<i class="fas fa-eye"></i></a> <button type="reset" class="btn btn-sm m-btn btn-outline-default ' .
-                    'm-btn--icon m-btn--icon-only print-capalote" ' .
-                    'onclick="view(' . $doc->id . ')" title="Imprimir">' .
-                    '<i class="fas fa-print"></i></button>';
+                    '<i class="fas fa-eye"></i></a>';
                 })
                 ->editColumn('from_agency', function ($doc) {
                     if ($doc->origin != null) {
