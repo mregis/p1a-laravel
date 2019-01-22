@@ -37,7 +37,7 @@
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         <input type="hidden" id="columns"
-                               value="action,content,constante,from_agency,to_agency,movimento,updated_at,status,view">
+                               value="action,content,constante,from_agency,to_agency,movimento,status,view">
 
                         <input type="hidden" id="baseurl"
                                value="{{ route('capalote.get-not-received', Auth::user()->id)}}"/>
@@ -46,7 +46,7 @@
 
                             <table class="table table-striped table-hover table-responsive compact nowrap text-center"
                                    id="datatable"
-                                   data-column-defs='[{"targets":[0,7,8],"orderable":false}]'
+                                   data-column-defs='[{"targets":[0,6,7],"orderable":false}]'
                                    data-order='[[3,"asc"],[4,"asc"]]'>
                                 <thead class="thead-dark form-group">
                                 <tr>
@@ -57,9 +57,8 @@
                                     <th>{{__('Tipo')}}</th>
                                     <th>{{__('Origem')}}</th>
                                     <th>{{__('Destino')}}</th>
-                                    <th>{{__('Movimento')}}</th>
-                                    <th>{{__('Ultima Atualização')}}</th>
-                                    <th>{{__('Status')}}</th>
+                                    <th>{{__('tables.movimento')}}</th>
+                                    <th>{{__('labels.status')}}</th>
                                     <th>{{__('tables.action')}}</th>
                                 </tr>
                                 </thead>

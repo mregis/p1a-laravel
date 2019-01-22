@@ -26,10 +26,10 @@
                            id="datatable" data-column-defs='[{"targets":[4], "orderable":false}]'>
                         <thead class="thead-dark">
                         <tr>
-                            <th>#</th>
+                            <th></th>
                             <th>{{__('tables.id')}}</th>
                             <th>{{__('Capa Lote')}}</th>
-                            <th>{{__('Status')}}</th>
+                            <th>{{__('labels.status')}}</th>
                             <th>{{__('tables.options')}}</th>
                         </tr>
                         </thead>

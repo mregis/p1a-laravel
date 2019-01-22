@@ -34,31 +34,41 @@
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__head-caption">
-                    <div class="m-portlet__head-title">
-                        <h3 class="m-portlet__head-text">
-                            Detalhes do arquivo <span class="badge badge-pill badge-primary">{{$file->name}}</span>
-                        </h3>
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                Arquivo <span class="badge badge-pill badge-primary">{{$file->name}}</span> -
+                                Movimento <span
+                                        class="badge badge-pill badge-primary">{{(new \Carbon\Carbon($file->movimento))->format('d/m/Y') }}</span>
+                            </h3>
+                        </div>
                     </div>
                 </div>
 
                 <div class="m-portlet__body">
-                    <input type="hidden" id="columns" value="content,created_at,updated_at,status">
-                    <input type="hidden" id="baseurl" value="{{ route('report.file_content', [$id, Auth::id()]) }}" />
+                    <input type="hidden" id="columns" value="content,created_at,updated_at,status,action">
+                    <input type="hidden" id="baseurl"
+                           value="{{ route('report.file_content', [$file->id, Auth::id()]) }}"/>
                     <table class="table table-striped table-hover table-responsive compact nowrap text-center"
-                           id="datatable" data-column-defs='[{ "targets":[0], "orderable": false}]'>
+                           id="datatable" data-column-defs='[{ "targets":[4], "orderable": false}]'>
                         <thead class="thead-dark">
                         <tr>
                             <th>{{__('Capa Lote')}}</th>
                             <th>{{__('tables.created_at')}}</th>
                             <th>{{__('tables.updated_at')}}</th>
                             <th>{{__('labels.status')}}</th>
+                            <th>{{__('tables.options')}}</th>
                         </tr>
                         </thead>
                     </table>
+                    <a href="{{route('uploads.upload_index')}}" class="btn btn-lg btn-outline-secondary">
+                        <i class="fas fa-arrow-circle-left"></i> Voltar
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-
+    @component('dochistory')
+    @endcomponent
 @stop

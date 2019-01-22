@@ -95,7 +95,7 @@ class UploadController extends BaseController
                                 $oHistory = new DocsHistory(
                                     [
                                         'doc_id' => $oDoc->id,
-                                        'description' => "Upload do Arquivo",
+                                        'description' => "upload",
                                         'user_id' => $user_id,
                                     ]
                                 );
@@ -138,20 +138,27 @@ class UploadController extends BaseController
         return view('upload.upload', compact('menus'));
     }
 
-    public function list()
+    public function listFiles()
     {
-        return Datatables::of(Files::query())
-            ->addColumn('action', function ($files) {
-                return '<div align="center"><a href="/arquivo/' . $files->id .
+        $query = Files::query();
+        return Datatables::of($query)
+            ->addColumn('action', function ($file) {
+                return '<div align="center"><a href="' . route('arquivo.file', $file->id) .
                 '" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                '<i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $files->id . ')" ' .
+                '<i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $file->id . ')" ' .
                 'class="btn btn-sm btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
                 '<i class="fas fa-trash-alt"></i></button></div>';
-            })->editColumn('created_at', function ($files) {
-                return $files->created_at ? with(new Carbon($files->created_at))->format('d/m/Y H:i:s') : '-';
-            })->editColumn('updated_at', function ($files) {
-                return $files->updated_at ? with(new Carbon($files->updated_at))->format('d/m/Y H:i:s') : '-';
-            })->make(true);
+            })
+            ->editColumn('created_at', function ($file) {
+                return $file->created_at ? with(new Carbon($file->created_at))->format('d/m/Y H:i') : '-';
+            })
+            ->editColumn('updated_at', function ($file) {
+                return $file->updated_at ? with(new Carbon($file->updated_at))->format('d/m/Y H:i') : '-';
+            })
+            ->editColumn('movimento', function ($file) {
+                return with(new Carbon($file->movimento))->format('d/m/Y');
+            })
+            ->make(true);
     }
 
     public function arquivos(Request $request)
@@ -210,6 +217,9 @@ class UploadController extends BaseController
             ->editColumn('updated_at', function ($doc) {
                 return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i:s') : '';
             })
+            ->editColumn('status', function ($doc){
+                return $doc->status ? __('status.' . $doc->status) : '-';
+            })
             ->make(true);
     }
 
@@ -239,16 +249,28 @@ class UploadController extends BaseController
             ->editColumn('updated_at', function ($docs) {
                 return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
             })
+            ->editColumn('status', function ($doc){
+                return $doc->status ? __('status.' . $doc->status) : '-';
+            })
             ->make(true);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         if (!$file = Files::find($id)) {
             return $this->sendError('Informação não encontrada', 404);
         }
 
+        $in_transaction = DB::beginTransaction();
+        foreach ($file->docs as $doc) {
+            $doc->delete();
+        }
         $file->delete();
+        $in_transaction = !DB::commit();
         return $this->sendResponse(null, 'Informação excluída com sucesso');
     }
 
@@ -327,6 +349,9 @@ class UploadController extends BaseController
             ->editColumn('updated_at', function ($doc) {
                 return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
             })
+            ->editColumn('status', function ($doc){
+                return $doc->status ? __('status.' . $doc->status) : '-';
+            })
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
             })
@@ -379,7 +404,7 @@ class UploadController extends BaseController
                     $docHistory = new DocsHistory(
                         [
                             'doc_id' => $doc_id,
-                            'description' => "Capa enviada",
+                            'description' => "capa_enviada",
                             'user_id' => $user->id,
                         ]
                     );
@@ -430,7 +455,7 @@ class UploadController extends BaseController
                 $doc->dest = $doc->to_agency;
             }
             $doc->register = "Upload do Arquivo";
-
+            $doc->status = __('status.' . $doc->status);
             if (!$user = $doc->user) {
                 throw new Exception('Erro ao buscar informações de usuário de capa de lote');
             }
@@ -450,7 +475,7 @@ class UploadController extends BaseController
                 }
                 $user->juncao = ($user->juncao == null ? '-' : $user->juncao);
 
-                $h->register = $h->description;
+                $h->register = __('status.' . $h->description);
                 $h->unidade = (int)$h->juncao > 0 ? $h->juncao : ($h->unidade != null ? $h->unidade : '-');
                 $res[] = $h;
             }

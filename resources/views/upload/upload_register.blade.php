@@ -35,14 +35,14 @@
                     </div>
                 </div>
 
-				<input type="hidden" id="columns" value='action,content,constante,from_agency,to_agency,movimento,updated_at,status,view'>
+				<input type="hidden" id="columns" value='action,content,constante,from_agency,to_agency,movimento,status,view'>
 				<input type="hidden" id="baseurl" value="{{URL::to('/api/remessa/registrar/')}}/{{Auth::user()->id}}">
                 <input type="hidden" id="check_url" value="{{URL::to('/remessa/registrar')}}">
 				<div class="m-portlet__body">
                     <table class="table table-striped table-bordered nowrap table-responsive compact text-center"
                                id="datatable"
                                data-order='[[5, "asc"],[4, "asc"]]'
-                               data-column-defs='[{"targets":[0,7,8],"orderable":false, "searchable":false}]'>
+                               data-column-defs='[{"targets":[0,6,7],"orderable":false, "searchable":false}]'>
 							<thead class="thead-dark">
 							<tr>
 								<th>
@@ -54,20 +54,11 @@
 								<th>{{__('Origem')}}</th>
 								<th>{{__('Destino')}}</th>
 								<th>{{__('Movimento')}}</th>
-                                <th>{{__('tables.updated_at')}}</th>
-								<th>{{__('Status')}}</th>
+								<th>{{__('labels.status')}}</th>
 								<th>{{__('Detalhes')}}</th>
 							</tr>
 							</thead>
 						</table>
-						<script id="details-template" type="text/x-handlebars-template">
-							<table class="table" id="check_details">
-								<tr>
-									<td>@{{confirm}}</td>
-									<td>@{{content}}</td>
-								</tr>
-							</table>
-						</script>
 						<div class="m-form__actions">
 							<button class="btn btn-lg btn-success" data-toggle="modal" data-target="#receberModal">
                                 <i class="fas fa-file-download"></i> Registrar</button>

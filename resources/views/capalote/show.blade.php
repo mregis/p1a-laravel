@@ -82,7 +82,7 @@
                                         <tbody>
                                         @foreach($doc->history as $h)
                                             <tr>
-                                                <td>{{$h->description}}</td>
+                                                <td>{{__('status.' . $h->description)}}</td>
                                                 <td>{{(new \Carbon\Carbon($h->created_at))->format('d/m/Y H:i')}}</td>
                                                 <td>{{$h->user}}</td>
                                                 <td>{{$h->user->profile}}</td>

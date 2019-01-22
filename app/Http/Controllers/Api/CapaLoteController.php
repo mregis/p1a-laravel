@@ -130,6 +130,9 @@ class CapaLoteController extends BaseController
                 ->editColumn('created_at', function ($doc) {
                     return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
                 })
+                ->editColumn('status', function ($doc) {
+                    return __('status.' . $doc->status);
+                })
                 ->escapeColumns([])
                 ->make(true);
         } catch (\Exception $e) {
@@ -288,6 +291,9 @@ class CapaLoteController extends BaseController
                 ->editColumn('constante', function ($doc) {
                     return __('labels.' . $doc->constante);
                 })
+                ->editColumn('status', function ($doc) {
+                    return __('status.' . $doc->status);
+                })
                 ->editColumn('movimento', function($doc) {
                     return with(new Carbon($doc->movimento))->format('d/m/Y');
                 })
@@ -347,6 +353,9 @@ class CapaLoteController extends BaseController
             })
             ->editColumn('updated_at', function ($docs) {
                 return $docs->updated_at ? with(new Carbon($docs->updated_at))->format('d/m/Y H:i:s') : '';
+            })
+            ->editColumn('status', function ($doc) {
+                return __('status.' . $doc->status);
             })
             ->make(true);
     }

@@ -154,7 +154,7 @@ class ReceiveController extends BaseController
                 return ($file->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
             })
             ->addColumn('status', function($doc) {
-                return $doc->status ? $doc->status : '-';
+                return $doc->status ? __('status.' . $doc->status) : '-';
             })
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
@@ -207,7 +207,7 @@ class ReceiveController extends BaseController
                 $docs->save();
                 $docsHistory = new DocsHistory();
                 $docsHistory->doc_id = $doc;
-                $docsHistory->description = "Capa recebida";
+                $docsHistory->description = "capa_recebida";
                 $docsHistory->user_id = $params['user'];
                 $docsHistory->save();
                 $regs++;
@@ -238,13 +238,13 @@ class ReceiveController extends BaseController
         $notfound = [];
         foreach ($params['doc'] as $capaLote) {
             if ($doc = Docs::where('content', 'like', '%' . trim($capaLote) . '%')->first()) {
-                $doc->status = 'em trânsito';
+                $doc->status = 'em_transito';
                 $doc->user_id = $user_id;
                 $doc->save();
 
                 $docsHistory = new DocsHistory();
                 $docsHistory->doc_id = $doc->id;
-                $docsHistory->description = "Capa em trânsito";
+                $docsHistory->description = "capa_em_transito";
                 $docsHistory->user_id = $user_id;
                 $docsHistory->save();
                 if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
@@ -358,9 +358,11 @@ class ReceiveController extends BaseController
                 return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
             })
 
-            ->addColumn('status', function($doc) {
-                return $doc->status ? $doc->status : '-';
+            ->editColumn('status', function($doc) {
+                return $doc->status ? __('status.' . $doc->status) : '-';
+
             })
+
             ->editColumn('updated_at', function ($doc) {
                 return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
             })

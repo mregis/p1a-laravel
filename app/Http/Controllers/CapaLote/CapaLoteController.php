@@ -129,7 +129,7 @@ class CapaLoteController extends BaseController
                     $oHistory = new DocsHistory(
                         [
                             'doc_id' => $oDoc->id,
-                            'description' => "Contingenciamento",
+                            'description' => "contingenciamento",
                             'user_id' => Auth::user()->id,
                         ]
                     );
@@ -171,6 +171,7 @@ class CapaLoteController extends BaseController
             $request->session()->flash('alert-danger', 'Código de Capa de Lote inválida!');
             return redirect(route('capalote.buscar'));
         }
+
         $menu = new Menu();
         $menus = $menu->menu();
         return view('capalote.show', compact('menus', 'doc'));
