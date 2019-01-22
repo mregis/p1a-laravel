@@ -146,10 +146,13 @@ class ReportController extends BaseController
                 return '<div align="center"><a href="#">Histórico</a></div>';
             })
             ->editColumn('created_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i') : '';
             })
             ->editColumn('updated_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
+                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('status', function ($doc) {
+                return $doc->status ? __('status.' . $doc->status) : '-';
             })
             ->make(true);
     }
@@ -206,26 +209,39 @@ class ReportController extends BaseController
         }
     }
 
+    /**
+     * @param $file_id
+     * @param $user_id
+     * @return mixed
+     */
     public function fileContent($file_id, $user_id) {
         if (!$user = Users::find($user_id)) {
             return $this->response()->json("Erro ao verificar permissões", 400);
         }
         $query = Docs::query()
-            ->select(
-                [
-                    "files.id as id", "files.constante as constante", "files.name as name",
-                    "files.movimento as movimento", "files.created_at as created_at",
-                    "files.updated_at as updated_at",
-                    DB::raw("count(files.id) as total"),
-                ])
-            ->join("files", "docs.files_id", "=", "files.id")
-            ->groupBy(["files.id", "files.constante", "files.name", "files.movimento",
-                "files.created_at", "files.updated_at"]);
+            ->join("files", "docs.file_id", "=", "files.id")
+            ->where("files.id", $file_id)
+            ;
         if ($user->juncao != null) {
             $query->orWhere("docs.from_agency", "=", $user->juncao)
                 ->orWhere("docs.to_agency", "=", $user->juncao);
         }
         return Datatables::of($query)
+            ->editColumn('created_at', function ($docs) {
+                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('updated_at', function ($docs) {
+                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('status', function ($doc) {
+                return $doc->status ? __('status.' . $doc->status) : '-';
+            })
+            ->addColumn('action', function ($doc) use ($user) {
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
+                'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></i></a>';
+            })
             ->make(true);
     }
 }

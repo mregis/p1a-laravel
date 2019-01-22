@@ -339,7 +339,13 @@ function actionAjax(url, type) {
 }
 
 function deleteData(id, url) {
-    var _url = (typeof url == "undefined" ? "delete/" : url) + id;
+    var _url = 'delete/' + id;
+    if (typeof url == "undefined") {
+        if ($('#delete_url').val() != null) {
+            _url = $('#delete_url').val().replace('/\#.*?\#/ig', id);
+        }
+    }
+
     actionAjax(_url, "delete");
 }
 

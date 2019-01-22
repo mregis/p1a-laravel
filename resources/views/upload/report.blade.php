@@ -29,7 +29,7 @@
                                 <th></th>
                                 <th>{{__('tables.id')}}</th>
                                 <th>{{__('Capa Lote')}}</th>
-                                <th>{{__('Status')}}</th>
+                                <th>{{__('labels.status')}}</th>
                                 <th>{{__('tables.options')}}</th>
                             </tr>
                         </thead>

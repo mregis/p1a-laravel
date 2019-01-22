@@ -43,7 +43,8 @@ Route::get('/audit/list', 'Api\AuditController@list');
 
 Route::post('/products/', 'Api\ProductsController@store');
 Route::post('/upload/{user_id}', 'Api\UploadController@index');
-Route::get('/upload/list', 'Api\UploadController@list');
+Route::get('/upload/list', 'Api\UploadController@listFiles')->name('upload.list');
+Route::delete('/upload/delete/{file_id}', 'Api\UploadController@destroy')->name('upload.delete');
 Route::get('/upload/docs/{id}/{profile}/{juncao}', 'Api\UploadController@docs');
 Route::get('/upload/docs/{id}/{profile}', 'Api\UploadController@docs');
 Route::get('/upload/report/{id}/{profile}/{juncao}', 'Api\UploadController@report');
@@ -85,7 +86,10 @@ Route::group(['prefix' => '/dashboard'], function () {
     Route::get('/report/{user_id}', 'Api\DashboardController@report')->name('dashboard.report');
 });
 
-Route::get('/arquivos/receber/{user_id}', 'Api\ReceiveController@fileList')->name('receive.lista-arquivos');
+Route::group(['prefix' => '/arquivos'], function () {
+    Route::get('/receber/{user_id}', 'Api\ReceiveController@fileList')->name('receive.lista-arquivos');
+    Route::get('/{file_id}/list/{user_id}', 'Api\ReportController@fileContent')->name('report.file_content');
+});
 Route::get('/report/{file_id}/{user_id}/', 'Api\ReportController@fileContent')->name('report.arquivo');
 Route::get('/recebimento/{user_id}', 'Api\CapaLoteController@getNotReceived')->name('capalote.get-not-received');
 Route::get('/recebimento/{user_id}/{file_id}', 'Api\CapaLoteController@getNotReceived')->name('capalote.get-not-received-by-file');
