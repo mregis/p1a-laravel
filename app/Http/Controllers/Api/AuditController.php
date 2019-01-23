@@ -14,14 +14,27 @@ use Illuminate\Support\Facades\Hash;
 
 class AuditController extends BaseController
 {
-    public function list()
+    public function listAudit()
     {
         $query = Audit::query()
             ->select([
                 "audit.description", "audit.created_at",
                 "users.name as name", "users.email as email", "users.profile as profile"])
             ->leftJoin("users", "audit.user_id", "=", "users.id");
+
         return Datatables::of($query)
+            ->filterColumn('description', function($query, $keyword) {
+                $query->orWhere('audit.description', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('name', function($query, $keyword) {
+                $query->orWhere('users.name', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('email', function($query, $keyword) {
+                $query->orWhere('users.email', $keyword);
+            })
+            ->filterColumn('profile', function($query, $keyword) {
+                $query->orWhere('users.profile', $keyword);
+            })
             ->editColumn('created_at', function ($audit) {
                 return $audit->created_at ? with(new Carbon($audit->created_at))->format('d/m/Y H:i:s') : '';
             })

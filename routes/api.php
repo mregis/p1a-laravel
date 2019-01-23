@@ -38,7 +38,7 @@ Route::group(['prefix' => '/alerts'], function () {
     Route::delete('/{id}', 'Api\AlertsController@destroy');
 });
 
-Route::get('/audit/list', 'Api\AuditController@list');
+Route::get('/audit/list', 'Api\AuditController@listAudit')->name('audit.list');
 
 
 Route::post('/products/', 'Api\ProductsController@store');
