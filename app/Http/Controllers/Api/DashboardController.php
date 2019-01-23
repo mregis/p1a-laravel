@@ -117,11 +117,11 @@ class DashboardController extends BaseController
         $query = Docs::query()
             ->select([
                 DB::raw("SUM(CASE WHEN docs.status = 'pendente' AND fa.constante='DA' THEN 1 ELSE 0 END) as pendentea"),
-                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido') AND fa.constante='DA' THEN 1 ELSE 0 END) as concluidoa"),
+                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido', 'em transito', 'em_transito') AND fa.constante='DA' THEN 1 ELSE 0 END) as concluidoa"),
                 DB::raw("SUM(CASE WHEN docs.status = 'pendente' AND fb.constante='DA' THEN 1 ELSE 0 END) as pendenteb"),
-                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido') AND fb.constante='DA' THEN 1 ELSE 0 END) as concluidob"),
-                DB::raw("SUM(CASE WHEN docs.status = 'pendente' AND fc.constante='DM' THEN 1 ELSE 0 END) as pendentec"),
-                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido') AND fc.constante='DM' THEN 1 ELSE 0 END) as concluidoc"),
+                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido', 'em transito', 'em_transito') AND fb.constante='DA' THEN 1 ELSE 0 END) as concluidob"),
+                DB::raw("SUM(CASE WHEN docs.status = 'enviado' AND fc.constante='DM' THEN 1 ELSE 0 END) as pendentec"),
+                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'recebido', 'em transito', 'em_transito') AND fc.constante='DM' THEN 1 ELSE 0 END) as concluidoc"),
                 DB::raw("COUNT(*) as total"),
                 "files.movimento as movimento",
             ])

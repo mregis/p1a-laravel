@@ -14,6 +14,7 @@ return [
     'em trânsito' => 'Em Trânsito',
     'recebido' => 'Recebido Destino',
     'contingenciamento' => 'Avulso enviado pela AG',
+    'Contingenciamento' => 'Avulso enviado pela AG',
     'capa_em_transito' => 'Enviado Empresa a AG Destino',
     'Capa em trânsito' => 'Enviado Empresa a AG Destino',
     'recebido' => 'Recebido Destino',
