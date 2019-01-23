@@ -20,6 +20,6 @@ return [
     'capa_recebida' => 'Recebido pela AG Destino',
     'Capa recebida' => 'Recebido pela AG Destino',
     'enviado' => 'Enviado',
-    'capa_enviada' => 'Enviado pela AG Origem',
-    'Capa enviada' => 'Enviado pela AG Origem',
+    'capa_enviada' => 'Enviado pela Origem',
+    'Capa enviada' => 'Enviado pela Origem',
 ];
