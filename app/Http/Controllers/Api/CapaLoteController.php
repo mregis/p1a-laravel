@@ -44,8 +44,10 @@ class CapaLoteController extends BaseController
             ;
 
             if ($user->profile != 'ADMINISTRADOR') {
-                $query->orWhere('docs.from_agency', '=', sprintf("%04d", $user->juncao));
-                $query->orWhere('docs.to_agency', '=', sprintf("%04d", $user->juncao));
+                $query->where(function($query) use ($user) {
+                    $query->orWhere('docs.from_agency', '=', sprintf("%04d", $user->juncao))
+                        ->orWhere('docs.to_agency', '=', sprintf("%04d", $user->juncao));
+                });
             }
 
             return Datatables::of($query)
