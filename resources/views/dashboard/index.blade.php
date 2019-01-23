@@ -56,12 +56,12 @@
                             <thead class="table-dark text-center">
                             <tr>
                                 <td></td>
-                                <td colspan="2">Envios para outra Agência</td>
+                                <td colspan="2">Envio para outra Agência</td>
                                 <td colspan="2">Recebimento outra Agência</td>
-                                <td colspan="2">Devolucões Matriz</td>
+                                <td colspan="2">Devoluções Matriz</td>
                             </tr>
                             <tr>
-                                <th>Data</th>
+                                <th>Movimento</th>
                                 <th>Pendente</th>
                                 <th>Confirmado</th>
                                 <th>Pendente</th>
