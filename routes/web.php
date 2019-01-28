@@ -63,7 +63,7 @@ Route::group(['prefix' => 'arquivos'], function() {
 	Route::get('/', 'Api\UploadController@arquivos')->name('uploads.upload_index');
 	Route::any('/delete/{id}', 'Api\UploadController@destroy')->name('uploads.upload_delete');
 	Route::get('/edit/{id}', 'Api\UploadController@arquivo')->name('uploads.upload_edit');
-	Route::get('/{file_id}', 'arquivo\ArquivoController@file')->name('arquivo.file');
+	Route::get('/{file_id}', 'Arquivo\ArquivoController@file')->name('arquivo.file');
 });
 
 Route::get('/arquivo/{id}', 'Api\UploadController@arquivo');
