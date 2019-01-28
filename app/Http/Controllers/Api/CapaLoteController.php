@@ -210,21 +210,7 @@ class CapaLoteController extends BaseController
                 $query->where("files.id", "=", $file_id);
             }
             if ($user->profile != 'ADMINISTRADOR') {
-                $query->where(function ($query) use ($user) {
-                    $query
-                        ->orWhere(function ($query) use ($user) {
-                            $query->where([
-                                ['files.constante', '=', 'DM'],
-                                ['docs.from_agency', '=', sprintf("%04d", $user->juncao)]
-                            ]);
-                        })
-                        ->orWhere(function ($query) use ($user) {
-                            $query->where([
-                                ['files.constante', '=', 'DA'],
-                                ['docs.to_agency', '=', sprintf("%04d", $user->juncao)]
-                            ]);
-                        });
-                });
+                $query->where('docs.to_agency', sprintf("%04d", $user->juncao));
             }
 
             return Datatables::of($query)
