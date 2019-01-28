@@ -36,7 +36,7 @@
                         <table class="table table-striped table-responsive compact table-bordered auto-dt text-center"
                                data-columns='[{"data": "movimento_sort", "visible":false,"searchable":false},{"data": "movimento","orderData":0},{"data": "pendentea"},{"data":"concluidoa"},{"data": "pendenteb"},{"data":"concluidob"},{"data": "pendentec"},{"data":"concluidoc"}]'
                                data-ajax='{{ route('dashboard.report', Auth::user()->id) }}'
-                               data-order='[[1, "asc"]]'
+                               data-order='[[1, "desc"]]'
                                data-dom='<"row"<"col-4"l><"col-6"B>><"row"<"col-10"r>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
                                data-processing="true">
                             <thead class="table-dark">
