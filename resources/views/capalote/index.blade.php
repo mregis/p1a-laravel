@@ -85,7 +85,7 @@
                     dom: "<'row'<'col-10'r>><'row'<'col-5'l><'col-7 text-right'f>>" +
                     "<'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
                     language: lang,
-                    order: [[4,"desc" ]],
+                    order: [[3,"desc" ]],
                     serverSide: "true",
                     columns: [{"data":"content"},{"data":"from_agency"},{"data":"to_agency"},{"data":"movimento"},{"data":"status"},{"data":"view"}],
                     columnDefs: [{"targets":[5],"orderable":false,"searchable":false}],

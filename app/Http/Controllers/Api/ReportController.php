@@ -219,6 +219,13 @@ class ReportController extends BaseController
             return $this->response()->json("Erro ao verificar permissões", 400);
         }
         $query = Docs::query()
+            ->select([
+                "docs.id",
+                "docs.created_at",
+                "docs.updated_at",
+                "docs.status",
+                "docs.content",
+            ])
             ->join("files", "docs.file_id", "=", "files.id")
             ->where("files.id", $file_id)
             ;
@@ -227,20 +234,19 @@ class ReportController extends BaseController
                 ->orWhere("docs.to_agency", "=", $user->juncao);
         }
         return Datatables::of($query)
-            ->editColumn('created_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i') : '';
+            ->addColumn('action', function ($doc) use ($user) {
+                return sprintf('<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(%d,\'%s\',%d)" ' .
+                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fas fa-eye"></i></a>', $doc->id, route('docshistory.get-doc-history'), $user->id);
             })
-            ->editColumn('updated_at', function ($docs) {
-                return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i') : '';
+            ->editColumn('created_at', function ($doc) {
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
+            })
+            ->editColumn('updated_at', function ($doc) {
+                return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
             })
             ->editColumn('status', function ($doc) {
                 return $doc->status ? __('status.' . $doc->status) : '-';
-            })
-            ->addColumn('action', function ($doc) use ($user) {
-                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
-                ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                '<i class="fas fa-eye"></i></a>';
             })
             ->make(true);
     }

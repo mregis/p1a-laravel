@@ -47,7 +47,7 @@
                             <table class="table table-striped table-hover table-responsive compact nowrap text-center"
                                    id="datatable"
                                    data-column-defs='[{"targets":[0,6,7],"orderable":false}]'
-                                   data-order='[[3,"asc"],[4,"asc"]]'>
+                                   data-order='[[5,"asc"]]'>
                                 <thead class="thead-dark form-group">
                                 <tr>
                                     <th><input type="checkbox" name="all_lote" style="width: 20px"

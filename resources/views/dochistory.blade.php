@@ -8,25 +8,24 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover nowrap text-center" id="history">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>CAPA LOTE</th>
-                                    <th>JUNÇÃO ORIGEM</th>
-                                    <th>JUNÇÃO DESTINO</th>
-                                    <th>DATA MOVIMENTO</th>
-                                    <th>DATA ENVIO</th>
-                                    <th>REGISTRO</th>
-                                    <th>DATA</th>
-                                    <th>USUÁRIO</th>
-                                    <th>PERFIL</th>
-                                    <th>LOCAL</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+                    <table class="table table-bordered table-striped table-hover compact nowrap text-center"
+                           id="history">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>CAPA LOTE</th>
+                            <th>JUNÇÃO ORIGEM</th>
+                            <th>JUNÇÃO DESTINO</th>
+                            <th>DATA MOVIMENTO</th>
+                            <th>DATA ENVIO</th>
+                            <th>REGISTRO</th>
+                            <th>DATA</th>
+                            <th>USUÁRIO</th>
+                            <th>PERFIL</th>
+                            <th>LOCAL</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
             <!-- /.modal-content -->

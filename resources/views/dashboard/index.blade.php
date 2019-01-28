@@ -9,9 +9,6 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-                                <i class="la la-gear"></i>
-                            </span>
                             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                                 <li class="m-nav__item m-nav__item--home">
                                     <a href="javascript:void(0)" class="m-nav__link m-nav__link--icon">
@@ -34,34 +31,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
-
-                            <h3 class="m-portlet__head-text">Relatório Geral</h3>
-                        </div>
-                    </div>
-                </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
-
-                        <table class="table table-striped table-responsive compact table-bordered auto-dt"
-                               data-columns='[{"data": "movimento"},{"data": "pendentea"},{"data":"concluidoa"},{"data": "pendenteb"},{"data":"concluidob"},{"data": "pendentec"},{"data":"concluidoc"}]'
+                        <table class="table table-striped table-responsive compact table-bordered auto-dt text-center"
+                               data-columns='[{"data": "movimento_sort", "visible":false,"searchable":false},{"data": "movimento","orderData":0},{"data": "pendentea"},{"data":"concluidoa"},{"data": "pendenteb"},{"data":"concluidob"},{"data": "pendentec"},{"data":"concluidoc"}]'
                                data-ajax='{{ route('dashboard.report', Auth::user()->id) }}'
-                               data-server-side="true" data-order='[[0, "desc"]]'
+                               data-order='[[1, "desc"]]'
+                               data-dom='<"row"<"col-4"l><"col-6"B>><"row"<"col-10"r>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
                                data-processing="true">
-                            <thead class="table-dark text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="2">Envio para outra Agência</td>
+                                    <td colspan="2">Recebimento outra Agência</td>
+                                    <td colspan="2">Devoluções Matriz</td>
+                                </tr>
                             <tr>
-                                <td></td>
-                                <td colspan="2">Envios para outra Agência</td>
-                                <td colspan="2">Recebimento outra Agência</td>
-                                <td colspan="2">Devolucões Matriz</td>
-                            </tr>
-                            <tr>
-                                <th>Data</th>
+                                <th></th>
+                                <th>Movimento</th>
                                 <th>Pendente</th>
                                 <th>Confirmado</th>
                                 <th>Pendente</th>
@@ -70,7 +58,7 @@
                                 <th>Confirmado</th>
                             </tr>
                             </thead>
-                            <tbody class="text-center"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>

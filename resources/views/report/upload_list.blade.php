@@ -31,7 +31,7 @@
                             <th>{{__('tables.name')}}</th>
                             <th>{{__('tables.constante')}}</th>
                             <th>{{__('tables.movimento')}}</th>
-                            <th>{{__('total')}}</th>
+                            <th>{{__('tables.total')}}</th>
                             <th>{{__('tables.options')}}</th>
                         </tr>
                         </thead>
@@ -41,7 +41,7 @@
                             <tr>
                                 <td>{{__('labels.name')}}:</td>
                                 <td>@{{name}}</td>
-                                <td>{{__('labels.total')}}:</td>
+                                <td>{{__('tables.total')}}:</td>
                                 <td>@{{total}}</td>
                             </tr>
                             <tr>
