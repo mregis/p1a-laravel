@@ -46,7 +46,7 @@ class Docs extends BaseModel
      */
     public function history()
     {
-        return $this->hasMany(DocsHistory::class, 'doc_id', 'id');
+        return $this->hasMany(DocsHistory::class, 'doc_id', 'id')->orderBy('created_at', 'asc');
     }
 
     /**
