@@ -156,6 +156,9 @@ class DashboardController extends BaseController
             ->editColumn('movimento', function($doc) {
                 return with(new Carbon($doc->movimento))->format('d/m/Y');
             })
+            ->addColumn('movimento_sort', function ($doc) {
+                return with(new Carbon($doc->movimento))->format('Ymd');
+            })
             ->make(true);
     }
 }
