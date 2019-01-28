@@ -11489,8 +11489,8 @@ jQuery(document).ready(function () {
     var autodt = null; // Automatic Datatables
     if (typeof(autodt) == "undefined" || autodt == null) {
         autodt = $('table.auto-dt').DataTable({
-            dom: "<'row'<'col-5'l><'col-7 text-right'f>><'row'<'col-12'B>>" +
-            "<'row'<'col-10'r>><'row'<'col-12't>><'row'<'col-4'i><'col-6'p>>",
+            dom: "<'row'<'col-10'r>><'row'<'col-5'l><'col-7 text-right'f>>" +
+            "<'row'<'col-sm-12'B>><'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
             buttons: {
                 dom: {
                     button: {
