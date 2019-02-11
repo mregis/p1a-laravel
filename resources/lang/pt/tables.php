@@ -51,4 +51,6 @@ return [
     'zipcode' => 'CEP',
     'village' => 'Bairro',
     'local' => 'Localidade',
+    'filename' => 'Nome Arquivo',
+    'filetype' => 'Tipo Arquivo',
 ];
