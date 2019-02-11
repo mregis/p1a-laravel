@@ -118,11 +118,12 @@ class DashboardController extends BaseController
             ->select([
                 DB::raw("SUM(CASE WHEN docs.status = 'pendente' AND fa.constante='DA' THEN 1 ELSE 0 END) as pendentea"),
                 DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido', 'em transito', 'em_transito') AND fa.constante='DA' THEN 1 ELSE 0 END) as concluidoa"),
-                DB::raw("SUM(CASE WHEN docs.status = 'pendente' AND fb.constante='DA' THEN 1 ELSE 0 END) as pendenteb"),
-                DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'enviado', 'recebido', 'em transito', 'em_transito') AND fb.constante='DA' THEN 1 ELSE 0 END) as concluidob"),
+                DB::raw("SUM(CASE WHEN docs.status NOT IN ('recebido') AND fb.constante='DA' THEN 1 ELSE 0 END) as pendenteb"),
+                DB::raw("SUM(CASE WHEN docs.status = 'recebido' AND fb.constante='DA' THEN 1 ELSE 0 END) as concluidob"),
                 DB::raw("SUM(CASE WHEN docs.status IN ('enviado','em transito', 'em_transito') AND fc.constante='DM' THEN 1 ELSE 0 END) as pendentec"),
                 DB::raw("SUM(CASE WHEN docs.status IN ('concluido', 'recebido') AND fc.constante='DM' THEN 1 ELSE 0 END) as concluidoc"),
-                DB::raw("COUNT(*) as total"),
+                DB::raw("SUM(CASE WHEN files.constante='DA' THEN 1 ELSE 0 END) as total_da"),
+                DB::raw("SUM(CASE WHEN files.constante='DM' THEN 1 ELSE 0 END) as total_dm"),
                 "files.movimento as movimento",
             ])
             ->join("files", "docs.file_id", "=", "files.id")
@@ -159,6 +160,31 @@ class DashboardController extends BaseController
             ->addColumn('movimento_sort', function ($doc) {
                 return with(new Carbon($doc->movimento))->format('Ymd');
             })
+            ->editColumn('pendentea', function($doc) {
+                return number_format($doc->pendentea, 0, '', '.');
+            })
+            ->editColumn('concluidoa', function($doc) {
+                return number_format($doc->concluidoa, 0, '', '.');
+            })
+            ->editColumn('pendenteb', function($doc) {
+                return number_format($doc->pendenteb, 0, '', '.');
+            })
+            ->editColumn('concluidob', function($doc) {
+                return number_format($doc->concluidob, 0, '', '.');
+            })
+            ->editColumn('pendentec', function($doc) {
+                return number_format($doc->pendentec, 0, '', '.');
+            })
+            ->editColumn('concluidoc', function($doc) {
+                return number_format($doc->concluidoc, 0, '', '.');
+            })
+            ->editColumn('total_da', function($doc) {
+                return number_format($doc->total_da, 0, '', '.');
+            })
+            ->editColumn('total_dm', function($doc) {
+                return number_format($doc->total_dm, 0, '', '.');
+            })
+
             ->make(true);
     }
 }
