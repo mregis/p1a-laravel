@@ -261,6 +261,7 @@ class ReportController extends BaseController
     public function analytic(Request $request)
     {
         $user_id = (int) $request->get('_u');
+
         try {
             if (!$user = Users::find($user_id)) {
                 throw new \Exception('Erro ao verificar permissões.');
@@ -270,21 +271,21 @@ class ReportController extends BaseController
                 throw new AccessDeniedHttpException('Você não tem permissão para acessar esse recurso.');
             }
 
-            $query = Files::query()
+            $query = Docs::query()
                 ->select([
                     "files.constante as constante", "files.movimento as movimento",
                     "files.name as filename", "docs.id",
                     "docs.content", "docs.status", "docs.from_agency",
                     "docs.to_agency", "docs.updated_at", "docs.created_at",
-                    "docs.id", "origin.nome as origin", "destin.nome as destin",
+                    "origin.nome as origin", "destin.nome as destin",
                     "docs.user_id",
                 ])
-                ->join("docs", "files.id", "=", "docs.file_id")
+                ->join("files", "docs.file_id", "=", "files.id")
                 ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
                 ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo");
 
 
-            return Datatables::of($query)
+            $datatable = Datatables::of($query)
                 ->filter(function ($query) {
                     if (request()->has('di')) {
                         if (request('di') != null) {
@@ -303,6 +304,12 @@ class ReportController extends BaseController
                 ->filterColumn('constante', function ($query, $keyword) {
                     $query->where('files.constante', '=', $keyword);
                 })
+                ->filterColumn('movimento', function ($query, $keyword) {
+                    ;
+                })
+                ->filterColumn('filename', function ($query, $keyword) {
+                    $query->where('files.name', '=', $keyword);
+                })
                 ->filterColumn('content', function ($query, $keyword) {
                     $query->where('docs.content', '=', $keyword);
                 })
@@ -320,6 +327,13 @@ class ReportController extends BaseController
                 })
                 ->addColumn('profile', function ($doc) {
                     return $doc->user->profile;
+                })
+                ->addColumn('seals', function ($doc) {
+                    $seals = [];
+                    foreach ($doc->seals as $seal) {
+                        $seals[] = '<span class="badge badge-pills badge-primary">' . $seal->content . '</span>';
+                    }
+                    return implode(", ", $seals);
                 })
                 ->addColumn('local', function ($doc) {
                     return $doc->user->getLocal();
@@ -358,11 +372,13 @@ class ReportController extends BaseController
                 ->editColumn('status', function ($doc) {
                     return __('status.' . $doc->status);
                 })
-                ->escapeColumns([])
-                ->make(true);
+                ->escapeColumns([]);
+
+                return $datatable->make(true);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 400);
         }
 
     }
+
 }

@@ -73,7 +73,7 @@ class ReceiveController extends BaseController
             ->make(true);
     }
 
-    public function list(Request $request, $id)
+    public function _list(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
