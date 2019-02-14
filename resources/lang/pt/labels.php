@@ -128,4 +128,6 @@ return [
     'forgot_password' => 'Esqueci a senha',
     'check_capalote' => 'Consultar Capa de Lote',
     'history' => 'Histórico',
+    'seal' => 'Lacre',
+    'seals' => 'Lacres',
 ];

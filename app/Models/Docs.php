@@ -77,4 +77,12 @@ class Docs extends BaseModel
             ['nome' => 'Agência sem cadastro', 'codigo' => $this->to_agency,]
         );
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function seals()
+    {
+        return $this->belongsToMany(Seal::class, 'seal_group', 'doc_id', 'seal_id');
+    }
 }

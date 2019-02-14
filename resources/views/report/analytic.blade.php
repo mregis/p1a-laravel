@@ -22,14 +22,23 @@
                                         De
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" readonly="readonly" id="di">
+                                <input type="text" class="form-control" readonly="readonly" id="di"
+                                       data-date-end-date="0d" data-date-autoclose="true"
+                                       value="{{date('d/m/Y', strtotime('-90 days'))}}"
+                                       >
                                 <div class="input-group-prepend input-group-append">
                                     <div class="input-group-text">
                                         Até
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" readonly="readonly" id="df">
+                                <input type="text" class="form-control" readonly="readonly" id="df"
+                                       data-date-end-date="0d" data-date-autoclose="true"
+                                       value="{{date('d/m/Y')}}">
                             </div>
+                            <span class="text-warning ml-2" title="O período máximo é de 90 dias"
+                                    data-toggle="tooltip">
+                                <i class="fas exclamation-circle"></i>
+                            </span>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered
@@ -46,11 +55,15 @@
                             <th>{{__('labels.user')}}</th>
                             <th>{{__('tables.profile')}}</th>
                             <th>{{__('tables.local')}}</th>
+                            <th>{{__('labels.seal')}}</th>
                             <th>{{__('tables.created_at')}}</th>
                             <th>{{__('tables.details')}}</th>
                         </tr>
                         </thead>
                     </table>
+                </div>
+                <div class="m-portlet__body">
+                    <button class="btn btn-lg btn-info" type="button" onclick="exportResult();"><i class="far fa-file-excel"></i> Exportar</button>
                 </div>
             </div>
         </div>
@@ -62,6 +75,48 @@
 @section('scripts')
     <script type="text/javascript">
 
+        function exportResult() {
+            if (report != null) {
+                var _data = report.ajax.params();
+                var _form = document.createElement("FORM");
+
+                _form.action = '{{route('relatorios.analytic-export')}}';
+                _form.method = 'POST';
+                _form.target = '_blank';
+                var _input = document.createElement("input");
+                _input.type = 'hidden';
+
+                // Period
+                var input = _input;
+                input.name = 'di';
+                input.value = _data.di;
+                _form.appendChild(input);
+                var input = _input;
+                input.name = 'df';
+                input.value = _data.df;
+                _form.appendChild(input);
+
+                // Order items
+                $.each(_data.order, function(i, item){
+                    var input = _input;
+                    input.name = 'order[' + i + '][column]';
+                    input.value = item.column;
+                    _form.appendChild(input);
+                    var input = _input;
+                    input.name = 'order[' + i + '][dir]';
+                    input.value = item.dir;
+                    _form.appendChild(input);
+                });
+                // Search term
+                var input = _input;
+                input.name = 'search[value]';
+                input.value = _data.search.value;
+                _form.appendChild(input);
+                document.body.appendChild(_form);
+                _form.submit();
+                document.body.removeChild(_form);
+            }
+        }
         var report = null; // Automatic Datatables
         $(function () {
             var DataTablesLocalOptions = {
@@ -83,23 +138,41 @@
                 order: [[2, "desc"]],
                 columns: [
                     {"data": "content"},
-                    {"data": "status"},
-                    {"data": "movimento"},
+                    {"data": "status", "searchable": false},
+                    {"data": "movimento", "searchable": false},
                     {"data": "filename"},
                     {"data": "constante"},
                     {"data": "from_agency"},
                     {"data": "to_agency"},
-                    {"data": "username"},
-                    {"data": "profile"},
-                    {"data": "local"},
-                    {"data": "created_at"},
-                    {"data": "view"}
+                    {"data": "username", "searchable": false, "orderable": false},
+                    {"data": "profile", "searchable": false, "orderable": false},
+                    {"data": "local", "searchable": false, "orderable": false},
+                    {"data": "seals", "searchable": false, "orderable": false},
+                    {"data": "created_at", "searchable": false,},
+                    {"data": "view", "searchable": false, "orderable": false}
                 ]
             };
 
             if (typeof(report) == "undefined" || report == null) {
                 report = $('#report-analitico').DataTable(DataTablesLocalOptions);
-                $('#di, #df').change( function() {
+                $('#di').change( function() {
+                    var a = $('#di').datepicker('getDate').getTime();
+                    var b = $('#df').datepicker('getDate').getTime();
+                    var maxdiff = 90*24*60*60*1000; // 90 dias
+                    if (b - a > maxdiff) {
+                        $("#df").datepicker('setDate', new Date(a+maxdiff));
+                        return;
+                    }
+                    report.ajax.reload();
+                });
+                $('#df').change( function() {
+                    var a = $('#di').datepicker('getDate').getTime();
+                    var b = $('#df').datepicker('getDate').getTime();
+                    var maxdiff = 90*24*60*60*1000; // 90 dias
+                    if (b - a > maxdiff) {
+                        $("#di").datepicker('setDate', new Date(b-maxdiff));
+                        return;
+                    }
                     report.ajax.reload();
                 });
             }

@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SealGroup extends BaseModel
+class SealGroup extends Pivot
 {
     use SoftDeletes;
 
@@ -16,4 +17,20 @@ class SealGroup extends BaseModel
     ];
 
     protected $table = 'seal_group';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function doc()
+    {
+        return $this->belongsTo(Docs::class, 'doc_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function seal()
+    {
+        return $this->belongsTo(Seal::class, 'seal_id');
+    }
 }

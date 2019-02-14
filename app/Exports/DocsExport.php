@@ -6,12 +6,12 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, ShouldAutoSize, WithHeadingRow
+class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, ShouldAutoSize, WithHeadings
 {
     use Exportable;
 
@@ -30,6 +30,9 @@ class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, Should
         return $this->query;
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return [
@@ -47,6 +50,10 @@ class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, Should
         ];
     }
 
+    /**
+     * @param mixed $reg
+     * @return array
+     */
     public function map($reg): array
     {
         return [
