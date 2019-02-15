@@ -11,6 +11,7 @@ use App\Models\Seal;
 use App\Models\SealGroup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ use Auth;
 
 class ReportController extends BaseController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -70,7 +72,7 @@ class ReportController extends BaseController
      * @param $user_id
      * @return mixed
      */
-    public function list($user_id)
+    public function _list($user_id)
     {
         if (!$user = Users::find($user_id)) {
             return $this->response()->json("Erro ao verificar permissões", 400);
@@ -250,4 +252,133 @@ class ReportController extends BaseController
             })
             ->make(true);
     }
+
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function analytic(Request $request)
+    {
+        $user_id = (int) $request->get('_u');
+
+        try {
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception('Erro ao verificar permissões.');
+            }
+
+            if (!in_array($user->profile, ['ADMINISTRADOR', 'DEPARTAMENTO']) ) {
+                throw new AccessDeniedHttpException('Você não tem permissão para acessar esse recurso.');
+            }
+
+            $query = Docs::query()
+                ->select([
+                    "files.constante as constante", "files.movimento as movimento",
+                    "files.name as filename", "docs.id",
+                    "docs.content", "docs.status", "docs.from_agency",
+                    "docs.to_agency", "docs.updated_at", "docs.created_at",
+                    "origin.nome as origin", "destin.nome as destin",
+                    "docs.user_id",
+                ])
+                ->join("files", "docs.file_id", "=", "files.id")
+                ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
+                ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo");
+
+
+            $datatable = Datatables::of($query)
+                ->filter(function ($query) {
+                    if (request()->has('di')) {
+                        if (request('di') != null) {
+                            $di = new \DateTime(request('di'));
+                            $query->where('files.movimento', '>=', $di);
+                        }
+                    }
+
+                    if (request()->has('df')) {
+                        if (request('df') != null) {
+                            $df = new \DateTime(request('df'));
+                            $query->where('files.movimento', '<=', $df);
+                        }
+                    }
+                }, true)
+                ->filterColumn('constante', function ($query, $keyword) {
+                    $query->where('files.constante', '=', $keyword);
+                })
+                ->filterColumn('movimento', function ($query, $keyword) {
+                    ;
+                })
+                ->filterColumn('filename', function ($query, $keyword) {
+                    $query->where('files.name', '=', $keyword);
+                })
+                ->filterColumn('content', function ($query, $keyword) {
+                    $query->where('docs.content', '=', $keyword);
+                })
+                ->filterColumn('from_agency', function ($query, $keyword) {
+                    $query->where('docs.from_agency', '=', $keyword);
+                })
+                ->filterColumn('to_agency', function ($query, $keyword) {
+                    $query->where('docs.to_agency', '=', $keyword);
+                })
+                ->filterColumn('status', function ($query, $keyword) {
+                    $query->where('docs.status', '=', $keyword);
+                })
+                ->addColumn('username', function ($doc) {
+                    return $doc->user->name;
+                })
+                ->addColumn('profile', function ($doc) {
+                    return $doc->user->profile;
+                })
+                ->addColumn('seals', function ($doc) {
+                    $seals = [];
+                    foreach ($doc->seals as $seal) {
+                        $seals[] = '<span class="badge badge-pills badge-primary">' . $seal->content . '</span>';
+                    }
+                    return implode(", ", $seals);
+                })
+                ->addColumn('local', function ($doc) {
+                    return $doc->user->getLocal();
+                })
+                ->addColumn('view', function ($doc) use ($user) {
+                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
+                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fas fa-eye"></i></a>';
+                })
+                ->editColumn('from_agency', function ($doc) {
+                    if ($doc->origin != null) {
+                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                        $doc->from_agency . '</a>';
+                    } else {
+                        return $doc->from_agency;
+                    }
+                })
+                ->editColumn('to_agency', function ($doc) {
+                    if ($doc->destin != null) {
+                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                        $doc->to_agency . '</a>';
+                    } else {
+                        return $doc->to_agency;
+                    }
+                })
+                ->editColumn('constante', function ($doc) {
+                    return __('labels.' . $doc->constante);
+                })
+                ->editColumn('movimento', function ($doc) {
+                    return with(new Carbon($doc->movimento))->format('d/m/Y');
+                })
+                ->editColumn('created_at', function ($doc) {
+                    return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
+                })
+                ->editColumn('status', function ($doc) {
+                    return __('status.' . $doc->status);
+                })
+                ->escapeColumns([]);
+
+                return $datatable->make(true);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+
+    }
+
 }

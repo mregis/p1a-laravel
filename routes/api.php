@@ -42,15 +42,20 @@ Route::get('/audit/list', 'Api\AuditController@listAudit')->name('audit.list');
 
 
 Route::post('/products/', 'Api\ProductsController@store');
-Route::post('/upload/{user_id}', 'Api\UploadController@index');
-Route::get('/upload/list', 'Api\UploadController@listFiles')->name('upload.list');
-Route::delete('/upload/delete/{file_id}', 'Api\UploadController@destroy')->name('upload.delete');
-Route::get('/upload/docs/{id}/{profile}/{juncao}', 'Api\UploadController@docs');
-Route::get('/upload/docs/{id}/{profile}', 'Api\UploadController@docs');
-Route::get('/upload/report/{id}/{profile}/{juncao}', 'Api\UploadController@report');
-Route::get('/upload/report/{id}/{profile}', 'Api\UploadController@report');
 
-Route::delete('upload/{id}', 'Api\UploadController@destroy');
+// Upload Group
+Route::group(['prefix' => '/upload'], function () {
+    Route::post('/{user_id}', 'Api\UploadController@index');
+    Route::get('/list', 'Api\UploadController@listFiles')->name('upload.list');
+    Route::delete('/delete/{file_id}', 'Api\UploadController@destroy')->name('upload.delete');
+    Route::get('/docs/{id}/{profile}/{juncao}', 'Api\UploadController@docs');
+    Route::get('/docs/{id}/{profile}', 'Api\UploadController@docs');
+    Route::get('/report/{id}/{profile}/{juncao}', 'Api\UploadController@report');
+    Route::get('/report/{id}/{profile}', 'Api\UploadController@report');
+    Route::delete('/{id}', 'Api\UploadController@destroy');
+
+});
+
 
 Route::get('/receive/docs/{id}/{profile}/{juncao}', 'Api\ReceiveController@docs');
 Route::get('/receive/docs/{id}/{profile}', 'Api\ReceiveController@docs');
@@ -59,8 +64,12 @@ Route::post('/remessa/registrar', 'Api\UploadController@register');
 Route::post('/receber/registrar', 'Api\ReceiveController@register');
 Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperador')->name('receive.register-capa-lote');
 
-Route::get('/report/list/{user_id}', 'Api\ReportController@list')->name('report.list');
-Route::get('/report/docs/{id}', 'Api\ReportController@docs');
+// Relatórios
+Route::group(['prefix' => '/report'], function () {
+    Route::get('/list/{user_id}', 'Api\ReportController@_list')->name('report.list');
+    Route::get('/docs/{id}', 'Api\ReportController@docs');
+    Route::any('/analytic', 'Api\ReportController@analytic')->name('report.analytic');
+});
 
 Route::post('/contingencia', 'Api\UploadController@contingencia');
 

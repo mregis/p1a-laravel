@@ -16,4 +16,17 @@ class Seal extends BaseModel
     ];
 
     protected $table = 'seal';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(Users::class, 'user_id');
+    }
+
+    public function docs()
+    {
+        return $this->belongsToMany(Docs::class)->using(SealGroup::class);
+    }
 }

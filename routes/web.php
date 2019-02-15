@@ -36,7 +36,7 @@ Route::group(['prefix' => 'users'], function() {
 Route::get('/auditoria', 'Api\AuditController@index')->name('audit.audit_list');
 Route::get('/upload','Api\UploadController@index')->name('upload.index');
 Route::get('/receber','Api\ReceiveController@index');
-Route::get('/receber/{id}','Api\ReceiveController@list');
+Route::get('/receber/{id}','Api\ReceiveController@_list');
 
 Route::group(['prefix' => 'cadastros'], function() {
 	Route::get('/produtos', 'Cadastros\CadastrosController@produtos')->name('cadastros.produto_index');
@@ -74,6 +74,8 @@ Route::delete('/arquivo/recebe/{id}', 'Api\ReceiveController@check')->name('rece
 Route::get('/remessa/registrar', 'Api\UploadController@registrar')->name('uploads.upload_register');
 Route::get('/receber/registrar', 'Api\ReceiveController@registrar')->name('uploads.receive_register');
 Route::get('/reports/remessa', 'Api\ReportController@remessa')->name('report.remessa');
+Route::get('/relatorios/analitico', 'Relatorios\RelatoriosController@analytic')->name('relatorios.analytic');
+Route::post('/relatorios/analitico/export', 'Relatorios\RelatoriosController@exportAnalytic')->name('relatorios.analytic-export');
 Route::get('/arquivo-remessa/{id}', 'Api\ReportController@arquivo')->name('report.upload_edit');
 Route::get('/report-remessa/{id}', 'Api\ReportController@arquivo')->name('uploads.report');
 
