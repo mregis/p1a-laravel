@@ -36,28 +36,46 @@
                 </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
-                            <div class="form-inline">
-                                <div class="form-group">
-                                    <label for="di" class="text-right mr-1 ml-2">Período de</label>
-                                    <div class="input-group input-daterange">
-                                        <input type="text" class="form-control" readonly="readonly" id="di">
-                                        <div class="input-group-addon">Até</div>
-                                        <input type="text" class="form-control" readonly="readonly" id="df">
+                        <div class="form-inline m-2">
+                            <div class="form-group">
+                                <label for="di" class="text-right mr-1 ml-2">Período:</label>
+
+                                <div class="input-group input-daterange">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            De
+                                        </div>
                                     </div>
+                                    <input type="text" class="form-control" readonly="readonly" id="di"
+                                           data-date-end-date="0d" data-date-autoclose="true">
+
+                                    <div class="input-group-prepend input-group-append">
+                                        <div class="input-group-text">
+                                            Até
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" readonly="readonly" id="df"
+                                           data-date-end-date="0d" data-date-autoclose="true"
+                                           value="{{date('d/m/Y')}}">
                                 </div>
+                            <span class="text-warning ml-2" title="O período máximo é de 90 dias"
+                                  data-toggle="tooltip">
+                                <i class="fas exclamation-circle"></i>
+                            </span>
                             </div>
-                            <table class="table table-striped _auto-dt table-bordered table-responsive nowrap compact text-center">
-                                <thead class="thead-dark">
-                                <tr>                                    
-                                    <th>{{__('Capa Lote')}}</th>
-                                    <th>{{__('Origem')}}</th>
-                                    <th>{{__('Destino')}}</th>
-                                    <th>{{__('Movimento')}}</th>
-                                    <th>{{__('labels.status')}}</th>
-                                    <th>{{__('tables.action')}}</th>
-                                </tr>
-                                </thead>
-                            </table>                            
+                        </div>
+                        <table class="table table-striped _auto-dt table-bordered table-responsive nowrap compact text-center">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>{{__('Capa Lote')}}</th>
+                                <th>{{__('Origem')}}</th>
+                                <th>{{__('Destino')}}</th>
+                                <th>{{__('Movimento')}}</th>
+                                <th>{{__('labels.status')}}</th>
+                                <th>{{__('tables.action')}}</th>
+                            </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -85,25 +103,25 @@
                     dom: "<'row'<'col-10'r>><'row'<'col-5'l><'col-7 text-right'f>>" +
                     "<'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
                     language: lang,
-                    order: [[3,"desc" ]],
+                    order: [[3, "desc"]],
                     serverSide: "true",
-                    columns: [{"data":"content"},{"data":"from_agency"},{"data":"to_agency"},{"data":"movimento"},{"data":"status"},{"data":"view"}],
-                    columnDefs: [{"targets":[5],"orderable":false,"searchable":false}],
-                    ajax:{
-                        "url" : "{{ route('capalote.list', Auth::user()->id) }}",
-                        "data":function(data){
+                    columns: [{"data": "content"}, {"data": "from_agency"}, {"data": "to_agency"}, {"data": "movimento"}, {"data": "status"}, {"data": "view"}],
+                    columnDefs: [{"targets": [5], "orderable": false, "searchable": false}],
+                    ajax: {
+                        "url": "{{ route('capalote.list', Auth::user()->id) }}",
+                        "data": function (data) {
                             var _i = jQuery("#di").val();
-                            data.di = _i.replace(/\D/g,'-');
+                            data.di = _i.replace(/\D/g, '-');
                             _i = jQuery("#df").val();
-                            data.df = _i.replace(/\D/g,'-');
+                            data.df = _i.replace(/\D/g, '-');
                         }
                     }
 
                 });
             }
 
-            $('.input-daterange input').each(function() {
-                $(this).datepicker({format: "dd/mm/yyyy", language:"pt-BR"});
+            $('.input-daterange input').each(function () {
+                $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
             });
         });
         // Impressão de Capa de Lote
@@ -111,12 +129,13 @@
             $('[name="capalote[]"]').attr('checked', false);
             $('#capalote-' + docid).attr('checked', true);
             $('#formprint-capalote').submit();
-        };
+        }
+        ;
         function allCheck(elem) {
             var t = $('#all_capalote').prop('checked') == true;
             $('.input-doc').prop('checked', t);
         }
-        $('#di, #df').change( function() {
+        $('#di, #df').change(function () {
             _autodt.ajax.reload();
         });
     </script>
