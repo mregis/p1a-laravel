@@ -15,9 +15,6 @@ use App\Models\Docs;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RelatoriosController extends BaseController
@@ -43,11 +40,15 @@ class RelatoriosController extends BaseController
         if (!in_array($user->profile, ['ADMINISTRADOR', 'DEPARTAMENTO']) ) {
             throw new AccessDeniedHttpException('Você não tem permissão para acessar esse recurso.');
         }
-
+        // Criando um nome unico para cada requisicao
         $hash = hash('crc32b', serialize($request->all()));
         $basename = sprintf('analitico_%s.xlsx', $hash);
-        // $filename = sprintf('%s/%s', config('cache.stores.file.path'), $basename);
-        if(!$file = Cache::get($hash)) {
+        $basepath = config('filesystems.disks.local.root');
+        $export_dir = $basepath . '/excel_exports';
+        // Garantindo a existencia do diretorio
+        !is_dir($export_dir) && mkdir($export_dir, 0775, true) && ($export_dir = $basepath);
+
+        if(!is_file($export_dir . '/' . $basename)) {
             $query = Docs::query()
                 ->select([
                     "files.constante as constante", "files.movimento as movimento",
@@ -74,7 +75,6 @@ class RelatoriosController extends BaseController
             }
             $query->where('files.movimento', '>=', $di);
 
-
             if ($request->get('df') != null) {
                 $df = new \DateTime($request->get('df'));
                 $query->where('files.movimento', '<=', $df);
@@ -99,13 +99,10 @@ class RelatoriosController extends BaseController
                 });
             }
 
-            $export = new DocsExport($query);
-            // Excel::store($export, $filename);
-            $binary = $export->download($basename);
-            Cache::put($hash, $binary);
-            return $binary;
-        } else {
-            return $file;
+            $export = new DocsExport($query); // Criando a planilha
+            $filename = str_replace($basepath, '', $export_dir) . '/' . $basename;
+            $export->store($filename); // Salvando em disco para usar como cache
         }
+        return response()->download($export_dir . '/' . $basename, $basename); // Lendo do disco
     }
 }

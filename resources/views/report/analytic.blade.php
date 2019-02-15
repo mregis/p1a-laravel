@@ -83,32 +83,37 @@
                 _form.action = '{{route('relatorios.analytic-export')}}';
                 _form.method = 'POST';
                 _form.target = '_blank';
-                var _input = document.createElement("input");
-                _input.type = 'hidden';
+                var input = document.createElement("input");
+                input.type = 'hidden';
 
                 // Period
-                var input = _input;
+                var input = document.createElement("input");
+                input.type = 'hidden';
                 input.name = 'di';
                 input.value = _data.di;
                 _form.appendChild(input);
-                var input = _input;
+                var input = document.createElement("input");
+                input.type = 'hidden';
                 input.name = 'df';
                 input.value = _data.df;
                 _form.appendChild(input);
 
                 // Order items
                 $.each(_data.order, function(i, item){
-                    var input = _input;
+                    var input = document.createElement("input");
+                    input.type = 'hidden';
                     input.name = 'order[' + i + '][column]';
                     input.value = item.column;
                     _form.appendChild(input);
-                    var input = _input;
+                    var input = document.createElement("input");
+                    input.type = 'hidden';
                     input.name = 'order[' + i + '][dir]';
                     input.value = item.dir;
                     _form.appendChild(input);
                 });
                 // Search term
-                var input = _input;
+                var input = document.createElement("input");
+                input.type = 'hidden';
                 input.name = 'search[value]';
                 input.value = _data.search.value;
                 _form.appendChild(input);
