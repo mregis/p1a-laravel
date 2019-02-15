@@ -73,9 +73,13 @@ Route::delete('/arquivo/recebe/{id}', 'Api\ReceiveController@check')->name('rece
 
 Route::get('/remessa/registrar', 'Api\UploadController@registrar')->name('uploads.upload_register');
 Route::get('/receber/registrar', 'Api\ReceiveController@registrar')->name('uploads.receive_register');
-Route::get('/reports/remessa', 'Api\ReportController@remessa')->name('report.remessa');
-Route::get('/relatorios/analitico', 'Relatorios\RelatoriosController@analytic')->name('relatorios.analytic');
-Route::post('/relatorios/analitico/export', 'Relatorios\RelatoriosController@exportAnalytic')->name('relatorios.analytic-export');
+
+Route::group(['prefix' => 'relatorios'], function() {
+	Route::get('/remessa', 'Api\ReportController@remessa')->name('report.remessa');
+	Route::get('/analitico', 'Relatorios\RelatoriosController@analytic')->name('relatorios.analytic');
+	Route::post('/analitico/export', 'Relatorios\RelatoriosController@exportAnalytic')->name('relatorios.analytic-export');
+});
+
 Route::get('/arquivo-remessa/{id}', 'Api\ReportController@arquivo')->name('report.upload_edit');
 Route::get('/report-remessa/{id}', 'Api\ReportController@arquivo')->name('uploads.report');
 
