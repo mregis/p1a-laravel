@@ -111,7 +111,6 @@ class DocsHistoryController extends BaseController
                     "user_agency.codigo as codigo_juncao_criador",
                     "user_agency.nome as nome_juncao_criador",
                     "users.unidade as unidade_criador",
-//                    DB::raw("array_agg(seal.content) as seals"),
                 ])
                 ->join("docs", "docs_history.doc_id", "=", "docs.id")
                 ->join("files", "docs.file_id", "=", "files.id")
@@ -119,69 +118,13 @@ class DocsHistoryController extends BaseController
                 ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
                 ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
                 ->leftJoin("agencia as user_agency", "users.juncao", "=", "user_agency.codigo")
-//                ->leftJoin("seal_group", "docs.id", "=", "seal_group.doc_id")
-//                ->leftJoin("seal", "seal_group.seal_id", "=", "seal.id")
             ->where([
                     ['files.movimento', '<=', $df],
                     ['files.movimento', '>=', $di],
                 ])
             ;
 
-            $query_seal = Seal::query()
-                ->select(['seal.content'])
-                ->join("seal_group", "seal.id", "=", "seal_group.seal_id")
-            ;
-
             $datatable = DataTables::of($query)
-/* *
-                ->filter(function ($query) {
-                    if (request()->has('di')) {
-                        if (request('di') != null) {
-                            $di = new \DateTime(request('di'));
-                            $query->where('files.movimento', '>=', $di);
-                        }
-                    }
-
-                    if (request()->has('df')) {
-                        if (request('df') != null) {
-                            $df = new \DateTime(request('df'));
-                            $query->where('files.movimento', '<=', $df);
-                        }
-                    }
-                }, true)
-/* *
-                ->filterColumn('constante', function ($query, $keyword) {
-                    $query->where('files.constante', '=', $keyword);
-                })
-                ->filterColumn('movimento', function ($query, $keyword) {
-                    ;
-                })
-                ->filterColumn('filename', function ($query, $keyword) {
-                    $query->where('files.name', '=', $keyword);
-                })
-                ->filterColumn('content', function ($query, $keyword) {
-                    $query->where('docs.content', '=', $keyword);
-                })
-                ->filterColumn('from_agency', function ($query, $keyword) {
-                    $query->where('docs.from_agency', '=', $keyword);
-                })
-                ->filterColumn('to_agency', function ($query, $keyword) {
-                    $query->where('docs.to_agency', '=', $keyword);
-                })
-                ->filterColumn('status', function ($query, $keyword) {
-                    $query->where('docs.status', '=', $keyword);
-                })
-/* *
-                ->addColumn('seals', function ($doc) use($query_seal) {
-                    return '';
-                    $seals = [];
-                    $q = $query_seal->where("seal_group.doc_id", "=", $doc->doc_id);
-                    foreach ($q->get() as $seal) {
-                        $seals[] = '<span class="badge badge-pills badge-primary">' . $seal->content . '</span>';
-                    }
-                    return implode(", ", $seals);
-                })
-/* */
                 ->addColumn('local', function ($doc) {
                     return ($doc->juncao_usuario_criador != null ?
                         $doc->juncao_usuario_criador . ': ' . $doc->nome_juncao_criador :
