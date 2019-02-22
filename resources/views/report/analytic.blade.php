@@ -16,22 +16,9 @@
         border: 10px solid rgba(0, 0, 0, .3);
         border-radius: 50%;
         border-top-color: #000;
-        animation: fa-spin 1.5s infinite;
-        -webkit-animation: fa-spin 1.5s infinite;
+        animation: fa-spin 1.5s ease-in-out infinite;
+        -webkit-animation: fa-spin 1.5s ease-in-out infinite;
     }
-
-    @keyframes spin {
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @-webkit-keyframes spin {
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
 
     /** MODAL STYLING **/
 
@@ -143,7 +130,7 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="loader"></div>
-                    <div clas="loader-txt">
+                    <div>
                         <p>Iniciando a exportação. Por favor aguarde.</p>
                         <p>Este processo pode levar alguns minutos
                             dependendo da quantidade de registros. Tenha paciência.</p>
