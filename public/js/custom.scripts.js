@@ -11023,8 +11023,8 @@ var lang = {
     "sInfoPostFix": "",
     "sInfoThousands": ".",
     "sLengthMenu": "_MENU_ resultados por página",
-    "sLoadingRecords": "Carregando...",
-    "sProcessing": "Processando...",
+    "sLoadingRecords": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br/> Carregando...',
+    "sProcessing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br/> Processando...',
     "sZeroRecords": "Nenhum registro encontrado",
     "sSearch": "Pesquisar",
     "oPaginate": {
