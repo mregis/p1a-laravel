@@ -78,6 +78,7 @@ Route::group(['prefix' => 'relatorios'], function() {
 	Route::get('/remessa', 'Api\ReportController@remessa')->name('report.remessa');
 	Route::get('/analitico', 'Relatorios\RelatoriosController@analytic')->name('relatorios.analytic');
 	Route::post('/analitico/export', 'Relatorios\RelatoriosController@exportAnalytic')->name('relatorios.analytic-export');
+	Route::get('/analitico/export/{code}', 'Relatorios\RelatoriosController@downloadAnalyticReport')->name('relatorios.analytic-export-download');
 });
 
 Route::get('/arquivo-remessa/{id}', 'Api\ReportController@arquivo')->name('report.upload_edit');

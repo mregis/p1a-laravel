@@ -101,6 +101,7 @@ class DocsHistoryController extends BaseController
                     "docs.id as doc_id",
                     "files.movimento",
                     "files.constante",
+                    "files.name as filename",
                     "origin.codigo as cod_agencia_origem",
                     "origin.nome as nome_agencia_origem",
                     "destin.codigo as cod_agencia_destino",
@@ -118,13 +119,53 @@ class DocsHistoryController extends BaseController
                 ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
                 ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
                 ->leftJoin("agencia as user_agency", "users.juncao", "=", "user_agency.codigo")
-            ->where([
-                    ['files.movimento', '<=', $df],
-                    ['files.movimento', '>=', $di],
-                ])
+
             ;
 
             $datatable = DataTables::of($query)
+                ->filter(function ($query) use ($df, $di) {
+                    $query->where([
+                        ['files.movimento', '<=', $df],
+                        ['files.movimento', '>=', $di],
+                    ]);
+                }, true)
+                ->filterColumn('constante', function ($query, $keyword) {
+                    $query->where('files.constante', '=', $keyword);
+                })
+                ->filterColumn('filename', function ($query, $keyword) {
+                    $query->where('files.name', '=', $keyword);
+                })
+                ->filterColumn('content', function ($query, $keyword) {
+                    $query->where('docs.content', '=', $keyword);
+                })
+                ->filterColumn('from_agency', function ($query, $keyword) {
+                    $query->where('docs.from_agency', '=', $keyword);
+                })
+                ->filterColumn('nome_agencia_origem', function ($query, $keyword) {
+                    $query->where('origin.nome', '=', $keyword);
+                })
+                ->filterColumn('to_agency', function ($query, $keyword) {
+                    $query->where('docs.to_agency', '=', $keyword);
+                })
+                ->filterColumn('nome_agencia_destino', function ($query, $keyword) {
+                    $query->where('destin.nome', '=', $keyword);
+                })
+                ->filterColumn('nome_usuario_criador', function ($query, $keyword) {
+                    $query->where('users.name', '=', $keyword);
+                })
+                ->filterColumn('perfil_usuario_criador', function ($query, $keyword) {
+                    $query->where('users.profile', '=', $keyword);
+                })
+                ->filterColumn('local', function ($query, $keyword) {
+                    $query->whereOr([
+                        ['users.unidade', '=', $keyword],
+                        ['users.juncao', '=', $keyword],
+                        ['user_agency.nome', '=', $keyword],
+                    ]);
+                })
+                ->filterColumn('status', function ($query, $keyword) {
+                    $query->where('docs.status', '=', $keyword);
+                })
                 ->addColumn('local', function ($doc) {
                     return ($doc->juncao_usuario_criador != null ?
                         $doc->juncao_usuario_criador . ': ' . $doc->nome_juncao_criador :
@@ -145,6 +186,7 @@ class DocsHistoryController extends BaseController
                 ->escapeColumns([]);
 
             return $datatable->make(true);
+
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 400);
         }
