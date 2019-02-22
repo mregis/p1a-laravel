@@ -45,8 +45,7 @@
                                 </div>
                                 <input type="text" class="form-control" readonly="readonly" id="di"
                                        data-date-end-date="0d" data-date-autoclose="true"
-                                       value="{{date('d/m/Y', strtotime('-90 days'))}}"
-                                       >
+                                       value="{{date('d/m/Y')}}">
                                 <div class="input-group-prepend input-group-append">
                                     <div class="input-group-text">
                                         Até
@@ -67,89 +66,69 @@
                         <thead class="thead-dark">
                         <tr>
                             <th>Capa de Lote</th>
-                            <th>{{__('tables.status')}}</th>
                             <th>{{__('tables.movimento')}}</th>
-                            <th>{{__('tables.filename')}}</th>
                             <th>{{__('tables.filetype')}}</th>
-                            <th>Origem</th>
-                            <th>Destino</th>
+                            <th>Cod Origem</th>
+                            <th>Agencia Origem</th>
+                            <th>Cod Destino</th>
+                            <th>Agencia Destino</th>
+                            <th>{{__('tables.status')}}</th>
                             <th>{{__('labels.user')}}</th>
                             <th>{{__('tables.profile')}}</th>
                             <th>{{__('tables.local')}}</th>
-                            <th>{{__('labels.seal')}}</th>
                             <th>{{__('tables.created_at')}}</th>
-                            <th>{{__('tables.details')}}</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
-                <div class="m-portlet__body">
-                    <button class="btn btn-lg btn-info" type="button" onclick="exportResult();"><i class="far fa-file-excel"></i> Exportar</button>
-                </div>
             </div>
         </div>
     </div>
-    @component('dochistory')
-    @endcomponent
+
 @stop
 
 @section('scripts')
     <script type="text/javascript">
-
-        function exportResult() {
-            if (report != null) {
-                var _data = report.ajax.params();
-                var _form = document.createElement("FORM");
-
-                _form.action = '{{route('relatorios.analytic-export')}}';
-                _form.method = 'POST';
-                _form.target = '_blank';
-                var input = document.createElement("input");
-                input.type = 'hidden';
-
-                // Period
-                var input = document.createElement("input");
-                input.type = 'hidden';
-                input.name = 'di';
-                input.value = _data.di;
-                _form.appendChild(input);
-                var input = document.createElement("input");
-                input.type = 'hidden';
-                input.name = 'df';
-                input.value = _data.df;
-                _form.appendChild(input);
-
-                // Order items
-                $.each(_data.order, function(i, item){
-                    var input = document.createElement("input");
-                    input.type = 'hidden';
-                    input.name = 'order[' + i + '][column]';
-                    input.value = item.column;
-                    _form.appendChild(input);
-                    var input = document.createElement("input");
-                    input.type = 'hidden';
-                    input.name = 'order[' + i + '][dir]';
-                    input.value = item.dir;
-                    _form.appendChild(input);
-                });
-                // Search term
-                var input = document.createElement("input");
-                input.type = 'hidden';
-                input.name = 'search[value]';
-                input.value = _data.search.value;
-                _form.appendChild(input);
-                document.body.appendChild(_form);
-                _form.submit();
-                document.body.removeChild(_form);
-            }
-        }
         var report = null; // Automatic Datatables
         $(function () {
             var DataTablesLocalOptions = {
-                serverSide: true,
+                serverSide: false,
                 processing: true,
                 responsive: true,
+                ordering: false,
                 language: lang,
+                dom: "<'row'<'col-sm-12'r>><'row'<'col-sm-12 mb-2'B>>" +
+                    "<'row'<'col-sm-5'l><'col-sm-7 text-right'f>>" +
+                    "<'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
+                buttons: {
+                    dom: {
+                        button: {
+                            tag: 'button',
+                            className: 'btn btn-sm'
+                        }
+                    },
+                    buttons: [
+                        {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
+                        {
+                            extend: "excelHtml5",
+                            text: "<i class='far fa-file-excel'></i> Salvar Excel",
+                            title: function(){ return "Relatorio_Analitico_" + $("#di").val() + "_" + $("#df").val();},
+                            className: 'btn-primary'
+                        },
+                        {
+                            extend: "pdfHtml5",
+                            text: "<i class='far fa-file-pdf'></i> Salvar PDF",
+                            title: function(){ return "Relatorio_Analitico_" + $("#di").val() + "_" + $("#df").val();},
+                            className: 'btn-primary'
+                        },
+                        {
+                            extend: "excel",
+                            text: "<i class='fas fa-file-csv'></i> Salvar Excel (CSV)",
+                            title: function(){ return "Relatorio_Analitico_" + $("#di").val() + "_" + $("#df").val();},
+                            className: 'btn-primary'
+                        }
+                    ],
+                },
                 ajax: {
                     url: "{{ route('report.analytic') }}",
                     type: "POST",
@@ -161,21 +140,20 @@
                         data._u = '{{Auth::id()}}';
                     }
                 },
-                order: [[2, "desc"]],
+                order: [[1, "desc"]],
                 columns: [
                     {"data": "content"},
-                    {"data": "status", "searchable": false},
                     {"data": "movimento", "searchable": false},
-                    {"data": "filename"},
                     {"data": "constante"},
                     {"data": "from_agency"},
+                    {"data": "nome_agencia_origem"},
                     {"data": "to_agency"},
-                    {"data": "username", "searchable": false, "orderable": false},
-                    {"data": "profile", "searchable": false, "orderable": false},
-                    {"data": "local", "searchable": false, "orderable": false},
-                    {"data": "seals", "searchable": false, "orderable": false},
-                    {"data": "created_at", "searchable": false,},
-                    {"data": "view", "searchable": false, "orderable": false}
+                    {"data": "nome_agencia_destino"},
+                    {"data": "status", "searchable": false},
+                    {"data": "nome_usuario_criador"},
+                    {"data": "perfil_usuario_criador"},
+                    {"data": "local"},
+                    {"data": "created_at", "searchable": false},
                 ]
             };
 
@@ -184,7 +162,11 @@
                 $('#di').change( function() {
                     var a = $('#di').datepicker('getDate').getTime();
                     var b = $('#df').datepicker('getDate').getTime();
-                    var maxdiff = 90*24*60*60*1000; // 90 dias
+                    if (a > b) {
+                        $("#df").datepicker('setDate', new Date(a));
+                        return;
+                    }
+                    var maxdiff = 30*24*60*60*1000; // 30 dias
                     if (b - a > maxdiff) {
                         $("#df").datepicker('setDate', new Date(a+maxdiff));
                         return;
@@ -194,7 +176,11 @@
                 $('#df').change( function() {
                     var a = $('#di').datepicker('getDate').getTime();
                     var b = $('#df').datepicker('getDate').getTime();
-                    var maxdiff = 90*24*60*60*1000; // 90 dias
+                    if (a > b) {
+                        $("#di").datepicker('setDate', new Date(b));
+                        return;
+                    }
+                    var maxdiff = 30*24*60*60*1000; // 30 dias
                     if (b - a > maxdiff) {
                         $("#di").datepicker('setDate', new Date(b-maxdiff));
                         return;
@@ -207,8 +193,6 @@
                 $(this).datepicker({format: "dd/mm/yyyy", language:"pt-BR"});
             });
         });
-
-
     </script>
 
 @stop
