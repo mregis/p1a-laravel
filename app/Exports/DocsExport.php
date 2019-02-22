@@ -37,12 +37,13 @@ class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, Should
     {
         return [
             'CAPA DE LOTE',
-            'SITUAÇÃO',
             'MOVIMENTO',
-            'NOME ARQUIVO',
             'TIPO ARQUIVO',
-            'AGÊNCIA ORIGEM',
-            'AGÊNCIA DESTINO',
+            'AGENCIA ORIGEM',
+            'NOME ORIGEM',
+            'AGENCIA DESTINO',
+            'NOME DESTINO',
+            'SITUAÇÃO',
             'CRIADO POR',
             'PERFIL',
             'LOCALIDADE',
@@ -58,15 +59,16 @@ class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, Should
     {
         return [
             $reg->content,
-            __('status.' . $reg->status),
             Date::dateTimeToExcel(new \DateTime($reg->movimento)),
-            $reg->filename,
             __('labels.' . $reg->constante),
-            sprintf("%04d: %s", $reg->from_agency, $reg->origin),
-            sprintf("%04d: %s", $reg->to_agency, $reg->destin),
-            $reg->username,
-            $reg->profile,
-            ($reg->juncao != null ? $reg->agencia_usuario : ($reg->unidade != null ? $reg->unidade : '-')),
+            sprintf("%04d", $reg->from_agency),
+            $reg->nome_agencia_origem,
+            sprintf("%04d", $reg->to_agency),
+            $reg->nome_agencia_destino,
+            __('status.' . $reg->descricao_historico),
+            $reg->nome_usuario_criador,
+            $reg->perfil_usuario_criador,
+            ($reg->juncao_usuario_criador != null ? $reg->juncao_usuario_criador : ($reg->unidade_criador != null ? $reg->unidade_criador : '-')),
             Date::dateTimeToExcel(new \DateTime($reg->created_at)),
         ];
     }
@@ -78,8 +80,8 @@ class DocsExport implements FromQuery, WithColumnFormatting, WithMapping, Should
     {
         return [
             'A' => NumberFormat::FORMAT_TEXT,
-            'C' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'K' => NumberFormat::FORMAT_DATE_DATETIME,
+            'B' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'L' => NumberFormat::FORMAT_DATE_DATETIME,
         ];
     }
 }

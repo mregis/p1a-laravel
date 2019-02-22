@@ -1,8 +1,41 @@
 @extends('layout')
 @section('title', __('Relatório Analítico'))
 
+@section('styles')
+<style type="text/css">
+    /** SPINNER CREATION **/
+
+    #loadMe .loader {
+        position: relative;
+        text-align: center;
+        margin: 15px auto 35px auto;
+        z-index: 9999;
+        display: block;
+        width: 80px;
+        height: 80px;
+        border: 10px solid rgba(0, 0, 0, .3);
+        border-radius: 50%;
+        border-top-color: #000;
+        animation: fa-spin 1.5s ease-in-out infinite;
+        -webkit-animation: fa-spin 1.5s ease-in-out infinite;
+    }
+
+    /** MODAL STYLING **/
+
+    #loadMe .modal-content {
+        border-radius: 0px;
+        box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    #loadMe .modal-backdrop.show {
+        opacity: 0.75;
+    }
+
+</style>
+@stop
 @section('content')
-    <div class="row"><div class="col-md-12">
+    <div class="row">
+        <div class="col">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -37,26 +70,24 @@
                     <div class="form-inline m-2">
                         <div class="form-group">
                             <label for="di" class="text-right mr-1 ml-2">Período:</label>
+
                             <div class="input-group input-daterange">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        De
-                                    </div>
+                                    <div class="input-group-text">De</div>
                                 </div>
                                 <input type="text" class="form-control" readonly="readonly" id="di"
                                        data-date-end-date="0d" data-date-autoclose="true"
                                        value="{{date('d/m/Y')}}">
+
                                 <div class="input-group-prepend input-group-append">
-                                    <div class="input-group-text">
-                                        Até
-                                    </div>
+                                    <div class="input-group-text">Até</div>
                                 </div>
                                 <input type="text" class="form-control" readonly="readonly" id="df"
                                        data-date-end-date="0d" data-date-autoclose="true"
                                        value="{{date('d/m/Y')}}">
                             </div>
                             <span class="text-warning ml-2" title="O período máximo é de 90 dias"
-                                    data-toggle="tooltip">
+                                  data-toggle="tooltip">
                                 <i class="fas exclamation-circle"></i>
                             </span>
                         </div>
@@ -81,66 +112,86 @@
                         </thead>
                     </table>
                 </div>
+                <div class="m-portlet__body">
+                    <button class="btn btn-lg btn-info" type="button" onclick="exportResult();"><i
+                                class="far fa-file-excel"></i> Exportar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white" id="loadMeLabel">Exportar Relatório Analítico</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="loader"></div>
+                    <div>
+                        <p>Iniciando a exportação. Por favor aguarde.</p>
+                        <p>Este processo pode levar alguns minutos
+                            dependendo da quantidade de registros. Tenha paciência.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('scripts')
     <script type="text/javascript">
+
+        function exportResult() {
+            if (report != null) {
+                var loadme = $("#loadMe").modal({
+                    backdrop: "static", //remove ability to close modal with click
+                    keyboard: false, //remove option to close with keyboard
+                    show: true //Display loader!
+                });
+
+                $.post('{{route('relatorios.analytic-export')}}',
+                        report.ajax.params(),
+                        function(response) {
+                            if (response.data.url != null) {
+                                loadme.modal('hide');
+                                window.location.href = response.data.url;
+                            } else {
+                                loadme.modal('hide');
+                                var message = response.message ? response.message : 'Ocorreu um erro. Tente novamente mais tarde.';
+                                $("#description_error").text(message);
+                                $("#on_error").modal();
+                            }
+                        },
+                        "json").fail(function(xhr){
+                            loadme.modal('hide');
+                            var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Ocorreu um erro. Tente novamente mais tarde.';
+                            $("#description_error").text(message);
+                            $("#on_error").modal();
+                        });
+            }
+        }
         var report = null; // Automatic Datatables
         $(function () {
             var DataTablesLocalOptions = {
-                serverSide: false,
+                serverSide: true,
                 processing: true,
                 responsive: true,
-                ordering: false,
                 language: lang,
-                dom: "<'row'<'col-sm-12'r>><'row'<'col-sm-12 mb-2'B>>" +
-                    "<'row'<'col-sm-5'l><'col-sm-7 text-right'f>>" +
-                    "<'row'<'col-sm-12't>><'row'<'col-5'i><'col-7'p>>",
-                buttons: {
-                    dom: {
-                        button: {
-                            tag: 'button',
-                            className: 'btn btn-sm'
-                        }
-                    },
-                    buttons: [
-                        {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
-                        {
-                            extend: "excelHtml5",
-                            text: "<i class='far fa-file-excel'></i> Salvar Excel",
-                            title: function(){ return "Relatorio_Analitico_" + $("#di").val() + "_" + $("#df").val();},
-                            className: 'btn-primary'
-                        },
-                        {
-                            extend: "pdfHtml5",
-                            text: "<i class='far fa-file-pdf'></i> Salvar PDF",
-                            title: function(){ return "Relatorio_Analitico_" + $("#di").val() + "_" + $("#df").val();},
-                            className: 'btn-primary'
-                        },
-                        {
-                            extend: "excel",
-                            text: "<i class='fas fa-file-csv'></i> Salvar Excel (CSV)",
-                            title: function(){ return "Relatorio_Analitico_" + $("#di").val() + "_" + $("#df").val();},
-                            className: 'btn-primary'
-                        }
-                    ],
-                },
                 ajax: {
                     url: "{{ route('report.analytic') }}",
                     type: "POST",
                     data: function (data) {
                         var _i = jQuery("#di").val();
-                        data.di = _i.replace(/\D/g,'-');
+                        data.di = _i.replace(/\D/g, '-');
                         _i = jQuery("#df").val();
-                        data.df = _i.replace(/\D/g,'-');
+                        data.df = _i.replace(/\D/g, '-');
                         data._u = '{{Auth::id()}}';
                     }
                 },
-                order: [[1, "desc"]],
+                order: [[1, "desc"], [0, "asc"]],
                 columns: [
                     {"data": "content"},
                     {"data": "movimento", "searchable": false},
@@ -159,38 +210,38 @@
 
             if (typeof(report) == "undefined" || report == null) {
                 report = $('#report-analitico').DataTable(DataTablesLocalOptions);
-                $('#di').change( function() {
+                $('#di').change(function () {
                     var a = $('#di').datepicker('getDate').getTime();
                     var b = $('#df').datepicker('getDate').getTime();
                     if (a > b) {
                         $("#df").datepicker('setDate', new Date(a));
                         return;
                     }
-                    var maxdiff = 30*24*60*60*1000; // 30 dias
+                    var maxdiff = 30 * 24 * 60 * 60 * 1000; // 30 dias
                     if (b - a > maxdiff) {
-                        $("#df").datepicker('setDate', new Date(a+maxdiff));
+                        $("#df").datepicker('setDate', new Date(a + maxdiff));
                         return;
                     }
                     report.ajax.reload();
                 });
-                $('#df').change( function() {
+                $('#df').change(function () {
                     var a = $('#di').datepicker('getDate').getTime();
                     var b = $('#df').datepicker('getDate').getTime();
                     if (a > b) {
                         $("#di").datepicker('setDate', new Date(b));
                         return;
                     }
-                    var maxdiff = 30*24*60*60*1000; // 30 dias
+                    var maxdiff = 30 * 24 * 60 * 60 * 1000; // 30 dias
                     if (b - a > maxdiff) {
-                        $("#di").datepicker('setDate', new Date(b-maxdiff));
+                        $("#di").datepicker('setDate', new Date(b - maxdiff));
                         return;
                     }
                     report.ajax.reload();
                 });
             }
 
-            $('.input-daterange input').each(function() {
-                $(this).datepicker({format: "dd/mm/yyyy", language:"pt-BR"});
+            $('.input-daterange input').each(function () {
+                $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
             });
         });
     </script>
