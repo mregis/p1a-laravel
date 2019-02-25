@@ -11541,6 +11541,10 @@ jQuery(document).ready(function () {
         });
     }
 
+    $('.datepicker').each(function () {
+        $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
+    });
+
     Select2.init();
     BootstrapSelect.init();
 });

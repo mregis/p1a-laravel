@@ -82,7 +82,7 @@
                                 <div class="input-group-prepend input-group-append">
                                     <div class="input-group-text">Até</div>
                                 </div>
-                                <input type="text" class="form-control" readonly="readonly" id="df"
+                                <input type="text" class="form-control datepicker" readonly="readonly" id="df"
                                        data-date-end-date="0d" data-date-autoclose="true"
                                        value="{{date('d/m/Y')}}">
                             </div>

@@ -6,10 +6,8 @@
  * Time: 13:22
  */
 ?>
-
         <!DOCTYPE html>
-
-<html lang="en">
+<html lang="pt-br">
 <!-- begin::Head -->
 <head>
     <meta charset="utf-8"/>
@@ -52,7 +50,7 @@
     </div>
     <!-- Only to avoid Vue #app not found error -->
     <div id="app"></div>
-
+</div>
     <!-- end:: Page -->
     <!--begin::Base Scripts -->
     <script src="{{ mix('/js/polyfill.min.js') }}" type="text/javascript"></script>

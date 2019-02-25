@@ -16,6 +16,7 @@ use App\Models\DocsHistory;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RelatoriosController extends BaseController
