@@ -66,56 +66,114 @@
                     </div>
                 </div>
 
-                <div class="m-portlet__body">
-                    <div class="form-inline m-2">
-                        <div class="form-group">
-                            <label for="di" class="text-right mr-1 ml-2">Período:</label>
-
-                            <div class="input-group input-daterange">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">De</div>
-                                </div>
-                                <input type="text" class="form-control" readonly="readonly" id="di"
-                                       data-date-end-date="0d" data-date-autoclose="true"
-                                       value="{{date('d/m/Y')}}">
-
-                                <div class="input-group-prepend input-group-append">
-                                    <div class="input-group-text">Até</div>
-                                </div>
-                                <input type="text" class="form-control datepicker" readonly="readonly" id="df"
-                                       data-date-end-date="0d" data-date-autoclose="true"
-                                       value="{{date('d/m/Y')}}">
+                <div class="m-portlet__body p-1">
+                    <div class="m-portlet m-portlet--tabs">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-tools">
+                                <ul class="nav nav-tabs m-tabs-line m-tabs-line--primary m-tabs-line--2x"
+                                    role="tablist">
+                                    <li class="nav-item m-tabs__item">
+                                        <a class="nav-link m-tabs__link active" data-toggle="tab" href="#m_tabs_6_1"
+                                           role="tab">
+                                            <i class="far fa-list-alt"></i> Relatório Analítico
+                                        </a>
+                                    </li>
+                                    <li class="nav-item m-tabs__item">
+                                        <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_2"
+                                           role="tab">
+                                            <i class="fas fa-tasks"></i> Relatórios disponíveis
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
-                            <span class="text-warning ml-2" title="O período máximo é de 90 dias"
-                                  data-toggle="tooltip">
-                                <i class="fas exclamation-circle"></i>
-                            </span>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered
-                    responsive nowrap hasdetails table-hover" id="report-analitico">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>Capa de Lote</th>
-                            <th>{{__('tables.movimento')}}</th>
-                            <th>{{__('tables.filetype')}}</th>
-                            <th>Cod Origem</th>
-                            <th>Agencia Origem</th>
-                            <th>Cod Destino</th>
-                            <th>Agencia Destino</th>
-                            <th>{{__('tables.status')}}</th>
-                            <th>{{__('labels.user')}}</th>
-                            <th>{{__('tables.profile')}}</th>
-                            <th>{{__('tables.local')}}</th>
-                            <th>{{__('tables.created_at')}}</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="m-portlet__body">
-                    <button class="btn btn-lg btn-info" type="button" onclick="exportResult();"><i
-                                class="far fa-file-excel"></i> Exportar
-                    </button>
+
+                    <div class="m-portlet__body p-1">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="m_tabs_6_1" role="tabpanel">
+
+                                <div class="form-inline m-2">
+                                    <div class="form-group">
+                                        <label for="di" class="text-right mr-1 ml-2">Período:</label>
+
+                                        <div class="input-group input-daterange">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">De</div>
+                                            </div>
+                                            <input type="text" class="form-control" readonly="readonly" id="di"
+                                                   data-date-end-date="0d" data-date-autoclose="true"
+                                                   value="{{date('d/m/Y')}}">
+
+                                            <div class="input-group-prepend input-group-append">
+                                                <div class="input-group-text">Até</div>
+                                            </div>
+                                            <input type="text" class="form-control datepicker" readonly="readonly" id="df"
+                                                   data-date-end-date="0d" data-date-autoclose="true"
+                                                   value="{{date('d/m/Y')}}">
+                                        </div>
+                                        <span class="text-warning ml-2" title="O período máximo é de 90 dias"
+                                              data-toggle="tooltip">
+                                            <i class="fas exclamation-circle"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                <table class="table table-striped table-bordered
+                                    responsive nowrap table-hover" id="report-analitico">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Capa de Lote</th>
+                                        <th>{{__('tables.movimento')}}</th>
+                                        <th>{{__('tables.filetype')}}</th>
+                                        <th>Cod Origem</th>
+                                        <th>Agencia Origem</th>
+                                        <th>Cod Destino</th>
+                                        <th>Agencia Destino</th>
+                                        <th>{{__('tables.status')}}</th>
+                                        <th>{{__('labels.user')}}</th>
+                                        <th>{{__('tables.profile')}}</th>
+                                        <th>{{__('tables.local')}}</th>
+                                        <th>{{__('tables.created_at')}}</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                </div>
+
+                                <button class="btn btn-lg btn-info" type="button" onclick="exportResult();"><i
+                                            class="far fa-file-excel"></i> Criar Relatório
+                                </button>
+
+                            </div>
+
+                            <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
+                                <div class="container-fluid">
+                                    <table class="table table-striped table-hover table-bordered auto-dt nowrap"
+                                           data-server-side="false" data-ajax="{{route('relatorios.analytics-report-list')}}?_u={{Auth::id()}}"
+                                           data-columns='[{"data":"filename"},{"data":"params"},{"data":"username"},{"data":"created_at"},{"data":"state"},{"data":"action", "searchable":false,"orderable":false}]'
+                                           id="datatable-report-list"
+                                           data-order='[[2,"asc"]]'
+                                           data-dom='<"row"<"col-sm-6"l><"col-sm-6"f>><"row"<"col-sm"t>><"row"<"col-sm-3"i><"col-sm-6"p>>'
+                                            >
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Arquivo</th>
+                                                <th>Argumentos</th>
+                                                <th>Usuário</th>
+                                                <th>Data Criação</th>
+                                                <th>Estado atual</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <button class="btn btn-lg btn-info" type="button"
+                                        onclick='$("#datatable-report-list").DataTable().ajax.reload();'>
+                                    <i class="fas fa-sync-alt"></i> Atualizar Listagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,6 +202,20 @@
 @section('scripts')
     <script type="text/javascript">
 
+        function deleteReport(id) {
+            var url = "{{route('relatorios.analytics-report-delete', [0])}}".replace("/0", "/"+id);
+            $.post(url, {"_u": "{{Auth::id()}}", "_method":"delete"}, function(response) {
+                var message = response.message ? response.message : 'Nem tudo saiu bem. Tente novamente mais tarde.';
+                $("#description_done").text(message);
+                $("#on_done_data").modal();
+                $("#datatable-report-list").DataTable().ajax.reload();
+            }).fail(function(xhr){
+                var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Ocorreu um erro. Tente novamente mais tarde.';
+                $("#description_error").text(message);
+                $("#on_error").modal();
+            });
+        }
+
         function exportResult() {
             if (report != null) {
                 var loadme = $("#loadMe").modal({
@@ -155,14 +227,14 @@
                 $.post('{{route('relatorios.analytic-export')}}',
                         report.ajax.params(),
                         function(response) {
+                            loadme.modal('hide');
                             if (response.data.url != null) {
-                                loadme.modal('hide');
                                 window.location.href = response.data.url;
                             } else {
-                                loadme.modal('hide');
                                 var message = response.message ? response.message : 'Ocorreu um erro. Tente novamente mais tarde.';
-                                $("#description_error").text(message);
-                                $("#on_error").modal();
+                                $("#description_done").text(message);
+                                $("#on_done_data").modal();
+                                $("#datatable-report-list").DataTable().ajax.reload();
                             }
                         },
                         "json").fail(function(xhr){

@@ -130,4 +130,10 @@ return [
     'history' => 'Histórico',
     'seal' => 'Lacre',
     'seals' => 'Lacres',
+    'state_created' => 'Processo iniciado',
+    'state_runing' => 'Processo em execução',
+    'state_complete' => 'Processo concluído',
+    'state_error' => 'Processado com erro',
+    'state_finished_error' => 'Processo concluído com erros',
+    'state_abort' => 'Processo interrompido',
 ];
