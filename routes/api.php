@@ -68,7 +68,9 @@ Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperado
 Route::group(['prefix' => '/report'], function () {
     Route::get('/list/{user_id}', 'Api\ReportController@_list')->name('report.list');
     Route::get('/docs/{id}', 'Api\ReportController@docs');
-    Route::any('/analytic', 'Api\DocsHistoryController@getDocsHistoryAnalyticReport')->name('report.analytic');
+    Route::any('/analytics', 'Api\DocsHistoryController@getDocsHistoryAnalyticReport')->name('report.analytic');
+    Route::any('/analytics/list', 'Api\AnalyticsReportController@_list')->name('relatorios.analytics-report-list');
+    Route::delete('/analytics/{id}', 'Api\AnalyticsReportController@_delete')->name('relatorios.analytics-report-delete');
 });
 
 Route::post('/contingencia', 'Api\UploadController@contingencia');

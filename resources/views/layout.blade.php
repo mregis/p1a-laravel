@@ -1,13 +1,13 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en">
+<html lang="pt-br">
 <!-- begin::Head -->
 <head>
     <meta charset="utf-8"/>
     <title>
         Address - @yield('title').
     </title>
-    <meta name="description" content="Latest updates and statistic charts">
+    <meta name="description" content="Sistema de Controle e Rastreamento de Cheques em Trânsito">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -169,7 +169,7 @@
                                             </div>
                                         </div>
                                     </li>
-
+@if (Auth::user() && Auth::user()->name):
                                     <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img
                                             m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill
                                             m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light
@@ -225,7 +225,7 @@
                                                             <li class="m-nav__separator m-nav__separator--fit"></li>
                                                             <li class="m-nav__item">
                                                                 <a href="{{ route('auth.logout')}}"
-                                                                   class="btn m-btn--pill btn-secondary
+                                                                   class="btn m-btn--pill btn-outline-secondary
                                                                    m-btn m-btn--custom m-btn--label-brand
                                                                    m-btn--bolder">
                                                                     Logout
@@ -237,6 +237,7 @@
                                             </div>
                                         </div>
                                     </li>
+@endif
                                 </ul>
                             </div>
                         </div>
@@ -1040,7 +1041,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Cadastrado com sucesso</p>
+                    <p id="description_done"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" onclick="redirect()"

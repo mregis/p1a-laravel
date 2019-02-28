@@ -15,6 +15,7 @@ use App\Models\Files;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Yajra\DataTables\DataTables;
 
 class CapaLoteController extends BaseController

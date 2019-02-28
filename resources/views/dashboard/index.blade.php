@@ -33,29 +33,28 @@
                 </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
-                        <table class="table table-striped table-responsive compact table-bordered auto-dt text-center"
+                        <table class="table table-striped table-responsive compact table-bordered auto-dt text-center nowrap"
                                data-columns='[{"data": "movimento_sort", "visible":false,"searchable":false},{"data": "movimento","orderData":0},{"data": "pendentea"},{"data":"concluidoa"},{"data": "pendenteb"},{"data":"concluidob"},{"data": "pendentec"},{"data":"concluidoc"}]'
                                data-ajax='{{ route('dashboard.report', Auth::user()->id) }}'
                                data-order='[[1, "desc"]]'
-                               data-dom='<"row"<"col-4"l><"col-6"B>><"row"<"col-10"r>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
-                               data-processing="true">
+                               data-dom='<"row"<"col-sm"l><"col-sm"B>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'>
                             <thead class="table-dark">
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td colspan="2">Envio para outra Agência</td>
-                                    <td colspan="2">Recebimento outra Agência</td>
-                                    <td colspan="2">Devoluções Matriz</td>
+                                <tr class="border">
+                                    <th></th>
+                                    <th></th>
+                                    <th colspan="2" class="border border-white">Envio para outra Agência</th>
+                                    <th colspan="2" class="border border-white">Recebimento outra Agência</th>
+                                    <th colspan="2" class="border border-white">Devoluções Matriz</th>
                                 </tr>
                             <tr>
                                 <th></th>
-                                <th>Movimento</th>
-                                <th>Pendente</th>
-                                <th>Confirmado</th>
-                                <th>Pendente</th>
-                                <th>Confirmado</th>
-                                <th>Pendente</th>
-                                <th>Confirmado</th>
+                                <th class="border border-white">Movimento</th>
+                                <th class="border border-white">Pendente</th>
+                                <th class="border border-white">Confirmado</th>
+                                <th class="border border-white">Pendente</th>
+                                <th class="border border-white">Confirmado</th>
+                                <th class="border border-white">Pendente</th>
+                                <th class="border border-white">Confirmado</th>
                             </tr>
                             </thead>
                             <tbody></tbody>
