@@ -225,8 +225,7 @@
                     backdrop: "static", //remove ability to close modal with click
                     keyboard: false, //remove option to close with keyboard
                     show: true //Display loader!
-                }).on('shown.bs.modal', function (e) {
-                    e.preventDefault();
+                }).one('shown.bs.modal', function (e) {
                     $.post('{{route('relatorios.analytic-export')}}',
                             report.ajax.params(),
                             function (response) {
@@ -236,8 +235,7 @@
                                 } else {
                                     var message = response.message ? response.message : 'Ocorreu um erro. Tente novamente mais tarde.';
                                     $("#description_done").text(message);
-                                    $("#on_done_data").modal().on('close.bs.modal', function(e2) {
-                                        e2.preventDefault();
+                                    $("#on_done_data").modal().on('close.bs.modal', function(e) {
                                         $("#datatable-report-list").DataTable().ajax.reload();
                                     });
                                 }
