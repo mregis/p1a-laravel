@@ -30,7 +30,7 @@ return [
 
     'compiled' => realpath(storage_path('framework/views')),
 
-    'TITLE_AUTH'=>".ADDRESS | Acesso Restrito.",
-    'TITLE_SYSTEM'=>".ADDRESS "
+    'TITLE_AUTH'=>"ADDRESS S.A. | Acesso Restrito.",
+    'TITLE_SYSTEM'=>"ADDRESS S.A."
 
 ];

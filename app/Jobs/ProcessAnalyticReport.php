@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use PHPUnit\Runner\Exception;
+use PhpOffice\PhpSpreadsheet as PhpSpreadsheet;
 
 class ProcessAnalyticReport implements ShouldQueue
 {
@@ -116,9 +117,51 @@ class ProcessAnalyticReport implements ShouldQueue
                             ->orWhere('user_agency.nome', '=', $search_value);
                     });
                 }
-                $export = new DocsExport($query); // Criando a planilha
-                $hash = str_replace($basepath, '', $export_dir) . '/' . $basename;
-                $export->store($hash, '', \Maatwebsite\Excel\Excel::XLSX); // Salvando em disco para usar como cache
+
+                $excel_template = realpath(resource_path('views') . '/report/relatorio_analitico_modelo.xlsx');
+                $filename = $export_dir . '/' . $basename;
+
+                $spreadsheet = PhpSpreadsheet\IOFactory::load($excel_template);
+                $worksheet = $spreadsheet->getActiveSheet();
+                $worksheet->getCell('G1')
+                    ->setValue(sprintf('Período: %s a %s', $di->format('d/m/Y'), $df->format('d/m/Y')));
+
+                $init_row = 3; // Linha que será iniciado a criação da Planilha
+                foreach($query->get() as $index => $data) {
+                    $row = $init_row + $index;
+                    $worksheet->setCellValueExplicit('A' . $row, '=TEXT("' . (string)$data->content . '", "00000000000000")',
+                        PhpSpreadsheet\Cell\DataType::TYPE_FORMULA);
+
+                    $worksheet->getCell('B' . $row)->getStyle()->getNumberFormat()->setFormatCode(
+                        PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY
+                    );
+                    $worksheet->setCellValue('B' . $row,
+                        PhpSpreadsheet\Shared\Date::PHPToExcel(new \DateTime($data->movimento))
+                    );
+
+                    $worksheet->setCellValue('C' . $row, __('labels.' . $data->constante));
+                    $worksheet->setCellValue('D' . $row, $data->from_agency);
+                    $worksheet->setCellValue('E' . $row, $data->nome_agencia_origem);
+                    $worksheet->setCellValue('F' . $row, $data->to_agency);
+                    $worksheet->setCellValue('G' . $row, $data->nome_agencia_destino);
+                    $worksheet->setCellValue('H' . $row, __('status.' . $data->descricao_historico));
+                    $worksheet->setCellValue('I' . $row, $data->nome_usuario_criador);
+                    $worksheet->setCellValue('J' . $row, $data->perfil_usuario_criador);
+                    $worksheet->setCellValue('K' . $row,
+                        ($data->juncao_usuario_criador != null ? $data->juncao_usuario_criador : ($data->unidade_criador != null ? $data->unidade_criador : '-'))
+                    );
+
+                    $worksheet->getCell('L' . $row)->getStyle()->getNumberFormat()->setFormatCode(
+                        PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
+                    );
+                    $worksheet->setCellValue('L' . $row,
+                        PhpSpreadsheet\Shared\Date::PHPToExcel(new \DateTime($data->created_at))
+                    );
+
+                }
+                $writer = new PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                $writer->save($filename);
+
                 $analyticsReport->state = AnalyticsReport::STATE_COMPLETE;
                 $analyticsReport->save();
             } catch (Exception $e) {
