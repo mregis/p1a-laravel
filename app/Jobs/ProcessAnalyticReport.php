@@ -2,16 +2,20 @@
 
 namespace App\Jobs;
 
-use App\Exports\DocsExport;
 use App\Models\AnalyticsReport;
 use App\Models\DocsHistory;
+use Box\Spout\Writer\Style\Border;
+use Box\Spout\Writer\Style\BorderBuilder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use PHPUnit\Runner\Exception;
-use PhpOffice\PhpSpreadsheet as PhpSpreadsheet;
+
+use Box\Spout\Writer\WriterFactory;
+use Box\Spout\Common\Type;
+use Box\Spout\Writer\Style\StyleBuilder;
+use Box\Spout\Writer\Style\Color;
 
 class ProcessAnalyticReport implements ShouldQueue
 {
@@ -118,53 +122,67 @@ class ProcessAnalyticReport implements ShouldQueue
                     });
                 }
 
-                $excel_template = realpath(resource_path('views') . '/report/relatorio_analitico_modelo.xlsx');
                 $filename = $export_dir . '/' . $basename;
 
-                $spreadsheet = PhpSpreadsheet\IOFactory::load($excel_template);
-                $worksheet = $spreadsheet->getActiveSheet();
-                $worksheet->getCell('G1')
-                    ->setValue(sprintf('Período: %s a %s', $di->format('d/m/Y'), $df->format('d/m/Y')));
+                $border_title = (new BorderBuilder())
+                    ->setBorderBottom(Color::DARK_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
+                    ->build();
+                $head_style = (new StyleBuilder())
+                    ->setFontBold()
+                    ->setBorder($border_title)
+                    ->setFontSize(15)
+                    ->setFontColor(Color::DARK_BLUE)
+                    ->setShouldWrapText()
+                    ->setBackgroundColor(Color::YELLOW)
+                    ->build();
+                $border_head = (new BorderBuilder())
+                    ->setBorderBottom(Color::DARK_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
+                    ->build();
+                $column_name_style = (new StyleBuilder())
+                    ->setFontBold()
+                    ->setBorder($border_head)
+                    ->setFontSize(12)
+                    ->setFontColor(Color::WHITE)
+                    ->setShouldWrapText()
+                    ->setBackgroundColor(Color::BLACK)
+                    ->build();
 
-                $init_row = 3; // Linha que será iniciado a criação da Planilha
+                $writer = WriterFactory::create(Type::XLSX); // for XLSX files
+                $writer->setShouldUseInlineStrings(true); // default (and recommended) value
+                $writer->openToFile($filename); // write data to a file or to a PHP stream
+                $writer->addRowWithStyle(['RELATORIO','ANALITICO','DE CAPAS','DE LOTE',' ','Período:',
+                        $di->format('d/m/Y'),'a', $df->format('d/m/Y')], $head_style);
+
+
+
+                $writer->addRowWithStyle(['CAPA DE LOTE','MOVIMENTO','TIPO ARQUIVO','AG ORIGEM',
+                    'NOME AGENCIA ORIGEM', 'AG DESTINO','NOME AGENCIA DESTINO','SITUAÇÃO','CRIADO POR',
+                    'PERFIL','LOCALIDADE','DATA CRIAÇÃO'], $column_name_style);
+
                 foreach($query->get() as $index => $data) {
-                    $row = $init_row + $index;
-                    $worksheet->setCellValueExplicit('A' . $row, '=TEXT("' . (string)$data->content . '", "00000000000000")',
-                        PhpSpreadsheet\Cell\DataType::TYPE_FORMULA);
+                    $singleRow = [
+                        $data->content,
+                        (new \DateTime($data->movimento))->format('d/m/Y'),
+                        __('labels.' . $data->constante),
+                        $data->from_agency,
+                        $data->nome_agencia_origem,
+                        $data->to_agency,
+                        $data->nome_agencia_destino,
+                        __('status.' . $data->descricao_historico),
+                        $data->nome_usuario_criador,
+                        $data->perfil_usuario_criador,
+                        ($data->juncao_usuario_criador != null ? $data->juncao_usuario_criador : ($data->unidade_criador != null ? $data->unidade_criador : '-')),
+                        (new \DateTime($data->created_at))->format('d/m/Y H:i:s'),
+                    ];
 
-                    $worksheet->getCell('B' . $row)->getStyle()->getNumberFormat()->setFormatCode(
-                        PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY
-                    );
-                    $worksheet->setCellValue('B' . $row,
-                        PhpSpreadsheet\Shared\Date::PHPToExcel(new \DateTime($data->movimento))
-                    );
-
-                    $worksheet->setCellValue('C' . $row, __('labels.' . $data->constante));
-                    $worksheet->setCellValue('D' . $row, $data->from_agency);
-                    $worksheet->setCellValue('E' . $row, $data->nome_agencia_origem);
-                    $worksheet->setCellValue('F' . $row, $data->to_agency);
-                    $worksheet->setCellValue('G' . $row, $data->nome_agencia_destino);
-                    $worksheet->setCellValue('H' . $row, __('status.' . $data->descricao_historico));
-                    $worksheet->setCellValue('I' . $row, $data->nome_usuario_criador);
-                    $worksheet->setCellValue('J' . $row, $data->perfil_usuario_criador);
-                    $worksheet->setCellValue('K' . $row,
-                        ($data->juncao_usuario_criador != null ? $data->juncao_usuario_criador : ($data->unidade_criador != null ? $data->unidade_criador : '-'))
-                    );
-
-                    $worksheet->getCell('L' . $row)->getStyle()->getNumberFormat()->setFormatCode(
-                        PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
-                    );
-                    $worksheet->setCellValue('L' . $row,
-                        PhpSpreadsheet\Shared\Date::PHPToExcel(new \DateTime($data->created_at))
-                    );
-
+                    $writer->addRow($singleRow); // add a row at a time
                 }
-                $writer = new PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-                $writer->save($filename);
+
+                $writer->close();
 
                 $analyticsReport->state = AnalyticsReport::STATE_COMPLETE;
                 $analyticsReport->save();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $analyticsReport->state = AnalyticsReport::STATE_ERROR;
                 $analyticsReport->save();
             }
