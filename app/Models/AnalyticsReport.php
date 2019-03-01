@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 
 class AnalyticsReport extends Model
 {
-    use SoftDeletes, SerializesModels;
+    use SerializesModels;
 
     /**
      * Model's states field basic entries

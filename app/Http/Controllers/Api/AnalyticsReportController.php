@@ -103,6 +103,15 @@ class AnalyticsReportController extends BaseController
             if (!$analyticReport = AnalyticsReport::find($id)) {
                 throw new NotFoundHttpException('Recurso não encontrado');
             }
+
+            $basename = $analyticReport->filename;
+            $basepath = config('filesystems.disks.local.root');
+            $export_dir = $basepath . '/excel_exports';
+            $filename = $export_dir . '/' . $basename;
+            if (!is_file($filename)) {
+                return $this->sendError("Requisição inválida!", 404);
+            }
+            unlink($filename);
             $analyticReport->delete();
             return $this->sendResponse([], "Relatório excluído com sucesso!");
         } catch (\Exception $e) {

@@ -206,17 +206,19 @@
     <script type="text/javascript">
 
         function deleteReport(id) {
-            var url = "{{route('relatorios.analytics-report-delete', [0])}}".replace("/0", "/" + id);
-            $.post(url, {"_u": "{{Auth::id()}}", "_method": "delete"}, function (response) {
-                var message = response.message ? response.message : 'Nem tudo saiu bem. Tente novamente mais tarde.';
-                $("#description_done").text(message);
-                $("#on_done_data").modal();
-                $("#datatable-report-list").DataTable().ajax.reload();
-            }).fail(function (xhr) {
-                var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Ocorreu um erro. Tente novamente mais tarde.';
-                $("#description_error").text(message);
-                $("#on_error").modal();
-            });
+            if (confirm('Tem certeza que deseja excluir o relatório?')) {
+                var url = "{{route('relatorios.analytics-report-delete', [0])}}".replace("/0", "/" + id);
+                $.post(url, {"_u": "{{Auth::id()}}", "_method": "delete"}, function (response) {
+                    var message = response.message ? response.message : 'Nem tudo saiu bem. Tente novamente mais tarde.';
+                    $("#description_done").text(message);
+                    $("#on_done_data").modal();
+                    $("#datatable-report-list").DataTable().ajax.reload();
+                }).fail(function (xhr) {
+                    var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Ocorreu um erro. Tente novamente mais tarde.';
+                    $("#description_error").text(message);
+                    $("#on_error").modal();
+                });
+            }
         }
 
         function exportResult() {
