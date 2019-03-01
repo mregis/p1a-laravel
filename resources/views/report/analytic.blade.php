@@ -152,9 +152,9 @@
                                     <table class="table table-striped table-hover table-bordered auto-dt nowrap"
                                            data-server-side="false"
                                            data-ajax="{{route('relatorios.analytics-report-list')}}?_u={{Auth::id()}}"
-                                           data-columns='[{"data":"filename"},{"data":"params"},{"data":"username"},{"data":"created_at"},{"data":"state"},{"data":"action", "searchable":false,"orderable":false}]'
+                                           data-columns='[{"data":"filename"},{"data":"params"},{"data":"username"},{"data":"created_at", "orderData":6},{"data":"state"},{"data":"action", "searchable":false,"orderable":false},{"data":"orderdata", "searchable":false,"visible":false}]'
                                            id="datatable-report-list"
-                                           data-order='[[2,"asc"]]' data-processing="true"
+                                           data-order='[[6,"desc"]]' data-processing="true"
                                            data-dom='<"row"<"col-sm-6"l><"col-sm-6"f>><"row"<"col-sm"t>><"row"<"col-sm-3"i><"col-sm-6"p>>'
                                             >
                                         <thead class="thead-dark">
@@ -165,6 +165,7 @@
                                             <th>Data Criação</th>
                                             <th>Estado atual</th>
                                             <th>Ações</th>
+                                            <th></th>
                                         </tr>
                                         </thead>
                                     </table>

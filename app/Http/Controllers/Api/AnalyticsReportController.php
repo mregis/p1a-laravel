@@ -65,7 +65,9 @@ class AnalyticsReportController extends BaseController
                 ->editColumn('created_at', function ($report) {
                     return $report->created_at ? with(new Carbon($report->created_at))->format('d/m/Y H:i') : '';
                 })
-
+                ->addColumn('orderdata', function ($report) {
+                    return $report->created_at ? with(new Carbon($report->created_at))->format('YmdHis') : '0';
+                })
                 ->addColumn('params', function ($report){
                     $args = json_decode($report->args, 1);
                     $res = sprintf('Período: <b>%s</b> a <b>%s</b>', $args['di'], $args['df']);
