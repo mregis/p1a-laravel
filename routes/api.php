@@ -87,6 +87,7 @@ Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')
 Route::group(['prefix' => '/capalote'], function () {
     Route::get('/list/{user_id}', 'Api\CapaLoteController@_list')->name('capalote.list');
     Route::post('/contingencia', 'Api\CapaLoteController@_new')->name('capalote.api-new');
+    Route::post('/nao-recebidos', 'Api\CapaLoteController@getNotReceivedByMovimento')->name('capalote.get_not_received_by_movimento');
     Route::get('/contingencia/list/{user_id}', 'Api\CapaLoteController@list_contigencia')->name('capalote.list_contingencia');
 });
 // Dashboard

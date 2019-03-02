@@ -55,8 +55,10 @@ Route::group(['prefix' => 'cadastros'], function() {
 Route::group(['prefix' => 'ocorrencias'], function() {
 	Route::get('/add', 'Cadastros\CadastrosController@alert_add');
 	Route::get('/list', 'Cadastros\CadastrosController@alert_list')->name('cadastros.list_alert');
+	Route::get('/', 'Ocorrencias\OcorrenciasController@index')->name('ocorrencias.index');
 	Route::get('/edit/{id}', 'Cadastros\CadastrosController@alert_edit')->name('cadastros.edit_alert');
 	Route::get('/remove/{id}', 'Cadastros\CadastrosController@alert_remove')->name('cadastros.delete_alert');;
+	Route::get('/reportar-roubo', 'Ocorrencias\OcorrenciasController@reportarRoubo')->name('ocorrencias.reportar_roubo');;
 });
 
 Route::group(['prefix' => 'arquivos'], function() {

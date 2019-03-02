@@ -87,7 +87,7 @@ return [
     'end_date' => 'Prazo final',
     'user' => 'Usuário',
     'created_at' => 'Criado em: ',
-    'updated_at' => 'Alteado em: ',
+    'updated_at' => 'Alterado em: ',
     'number_hiring' => 'N.º de Contratação',
     'job' => 'Trabalho',
     'pendencies' => 'Pendências',

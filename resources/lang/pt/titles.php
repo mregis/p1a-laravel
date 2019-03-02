@@ -129,4 +129,5 @@ return [
     'list_alerts' => 'Listagem de Ocorrências',
     'add_alert' => 'Cadastro de Ocorrência',
     'edit_alert' => 'Editar Ocorrência',
+    'report_theft' => 'Reportar Roubo',
 ];

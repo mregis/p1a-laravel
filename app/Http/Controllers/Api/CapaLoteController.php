@@ -210,7 +210,7 @@ class CapaLoteController extends BaseController
             if ($file_id > 0) {
                 $query->where("files.id", "=", $file_id);
             }
-            if ($user->profile != 'ADMINISTRADOR') {
+            if (!in_array($user->profile, ['ADMINISTRADOR', 'DEPARTAMENTO'])) {
                 $query->where('docs.to_agency', sprintf("%04d", $user->juncao));
             }
 
@@ -327,5 +327,110 @@ class CapaLoteController extends BaseController
             ->make(true);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNotReceivedByMovimento(Request $request)
+    {
+        try {
+            $user_id = $request->get('_u');
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception('Erro ao verificar permissões.');
+            }
+            if (!in_array($user->profile, ['ADMINISTRADOR', 'DEPARTAMENTO'])) {
+                throw new AccessDeniedHttpException('Você não tem permissão de utilizar este recurso.');
+            }
+            $dt_movimento = new \DateTime($request->get('movimento', '-2 days'));
+            $query = Files::query()
+                ->select([
+                    "files.constante as constante", "files.movimento as movimento",
+                    "docs.content", "docs.status", "docs.from_agency",
+                    "docs.to_agency", "docs.updated_at", "docs.created_at",
+                    "docs.id", "origin.nome as origin", "destin.nome as destin"
+                ])
+                ->join("docs", "files.id", "=", "docs.file_id")
+                ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
+                ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
+                ->whereIn('status', ['enviado', 'em_transito'])
+                ->where('files.movimento', $dt_movimento);
 
+            return Datatables::of($query)
+                ->orderColumn('atraso', 'docs.updated_at $1')
+                ->filterColumn('constante', function ($query, $keyword) {
+                    $query->where('files.constante', '=', $keyword);
+                })
+                ->filterColumn('content', function ($query, $keyword) {
+                    $query->where('docs.content', '=', $keyword);
+                })
+                ->filterColumn('from_agency', function ($query, $keyword) {
+                    $query->where('docs.from_agency', '=', $keyword);
+                })
+                ->filterColumn('to_agency', function ($query, $keyword) {
+                    $query->where('docs.to_agency', '=', $keyword);
+                })
+                ->filterColumn('status', function ($query, $keyword) {
+                    $query->where('docs.status', '=', $keyword);
+                })
+                ->addColumn('action', function ($doc) {
+                    return '<input type="checkbox" name="capalote[]" class="form-control form-control-sm m-input input-doc" ' .
+                    'value="' . $doc->id . '">';
+                })
+                ->addColumn('view', function ($doc) use ($user) {
+                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
+                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
+                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fas fa-eye"></a>';
+                })
+                ->addColumn('atraso', function ($doc) {
+                    $diff = time() - (new \DateTime($doc->updated_at))->format("U"); // diferença em segundos
+                    $_diff = ['dia' => intval($diff/86400), 'hora' => ($diff/3600)%60, 'minuto' => ($diff/60)%60];
+                    $title = $lbl = '';
+                    foreach ($_diff as $tipo => $v) {
+                        if ($v > 0) {
+                            $title .= $v . ' ' . $tipo . ($v > 1 ? 's' : '') . ' ';
+                            $lbl .= $v . strtoupper(substr($tipo, 0, 1)) . ' ';
+                        }
+                    }
+                    return sprintf('<span class="badge badge-pill badge-%s" title="%s" data-toggle="tooltip">%s</span>',
+                        ($diff/3600 < 48 ? 'success' : ($diff/3600 > 72 ? 'danger' : 'warning')),
+                        $title, $lbl);
+                })
+                ->editColumn('from_agency', function ($doc) {
+                    if ($doc->origin != null) {
+                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                        $doc->from_agency . '</a>';
+                    } else {
+                        return $doc->from_agency;
+                    }
+                })
+                ->editColumn('to_agency', function ($doc) {
+                    if ($doc->destin != null) {
+                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                        $doc->to_agency . '</a>';
+                    } else {
+                        return $doc->to_agency;
+                    }
+                })
+                ->editColumn('constante', function ($doc) {
+                    return __('labels.' . $doc->constante);
+                })
+                ->editColumn('status', function ($doc) {
+                    return __('status.' . $doc->status);
+                })
+                ->editColumn('movimento', function ($doc) {
+                    return with(new Carbon($doc->movimento))->format('d/m/Y');
+                })
+                ->editColumn('updated_at', function ($doc) {
+                    return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
+                })
+                ->editColumn('created_at', function ($doc) {
+                    return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
 }
