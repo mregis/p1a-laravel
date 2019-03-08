@@ -6,13 +6,21 @@
  * Time: 18:42
  */
 ?>
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="form-group row">
     <div class="col-2 text-right">
         <label for="codigo">{{__('labels.code')}}</label>
     </div>
     <div class="col-2" title="Código da Agência ou Junção com 4 dígitos" data-toggle="tooltip">
-        <input type="text" class="form-control" id="codigo" name="codigo"
+        <input type="text" class="form-control{{$errors->has('codigo') ? ' is-invalid' : ''}}" id="codigo" name="codigo"
                placeholder="Código" data-mask="0000" required="required"
                 value="{{$agencia->codigo}}"{{$agencia->codigo != null ?' readonly="readonly"' : ''}}>
     </div>
@@ -20,7 +28,7 @@
         <label for="nome">{{__('labels.name')}}</label>
     </div>
     <div class="col-6">
-        <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome da Agência"
+        <input type="text" class="form-control{{$errors->has('nome') ? ' is-invalid' : ''}}" id="nome" name="nome" placeholder="Nome da Agência"
                required="required" value="{{$agencia->nome}}">
     </div>
 </div>
@@ -30,14 +38,14 @@
         <label for="cep">{{__('labels.zipcode')}}</label>
     </div>
     <div class="col-2">
-        <input type="text" class="form-control" id="cep" name="cep" placeholder="CEP"
+        <input type="text" class="form-control{{$errors->has('cep') ? ' is-invalid' : ''}}" id="cep" name="cep" placeholder="CEP"
                data-mask="00000-000" value="{{$agencia->cep}}" required="required">
     </div>
     <div class="col-2 text-right">
         <label for="nome">{{__('labels.address')}}</label>
     </div>
     <div class="col-6" title="Nome do Logradouro, número e Complemento" data-toggle="tooltip">
-        <input type="text" class="form-control" id="endereco" name="endereco" required="required"
+        <input type="text" class="form-control{{$errors->has('endereco') ? ' is-invalid' : ''}}" id="endereco" name="endereco" required="required"
                placeholder="Rua, nº e complemento" value="{{$agencia->endereco}}">
     </div>
 </div>
@@ -47,7 +55,7 @@
         <label for="estado">{{__('labels.state')}}</label>
     </div>
     <div class="col-2" title="Unidade Fiscal da Federação" data-toggle="tooltip">
-        <select name="uf" id="uf" required="required" class="form-control">
+        <select name="uf" id="uf" required="required" class="form-control{{$errors->has('uf') ? ' is-invalid' : ''}}">
             <option value="">Selecione...</option>
             @foreach(['Acre (AC)' => 'AC', 'Alagoas (AL)' => 'AL',
                 'Amazonas (AM)' => 'AM', 'Amapá (AP)' => 'AP', 'Bahia (BA)' => 'BA',
@@ -71,7 +79,7 @@
         <label for="cidade">{{__('labels.city')}}</label>
     </div>
     <div class="col-6" title="Cidade" data-toggle="tooltip">
-        <input type="text" class="form-control" id="cidade" name="cidade"
+        <input type="text" class="form-control{{$errors->has('cidade') ? ' is-invalid' : ''}}" id="cidade" name="cidade"
                placeholder="Cidade" value="{{$agencia->cidade}}" required="required">
     </div>
 
@@ -82,7 +90,7 @@
         <label for="nome">{{__('labels.cd')}}</label>
     </div>
     <div class="col-2" title="Centro de Distribuição" data-toggle="tooltip">
-        <input type="text" class="form-control" id="cd" name="cd" placeholder="CD"
+        <input type="text" class="form-control{{$errors->has('cd') ? ' is-invalid' : ''}}" id="cd" name="cd" placeholder="CD"
                required="required" value="{{$agencia->cd}}">
     </div>
 
@@ -90,7 +98,7 @@
         <label for="bairro">{{__('labels.village')}}</label>
     </div>
     <div class="col-4" title="Bairro" data-toggle="tooltip">
-        <input type="text" class="form-control" id="bairro" name="bairro"
+        <input type="text" class="form-control{{$errors->has('bairro') ? ' is-invalid' : ''}}" id="bairro" name="bairro"
                placeholder="Bairro" value="{{$agencia->bairro}}">
     </div>
 

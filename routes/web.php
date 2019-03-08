@@ -49,6 +49,7 @@ Route::group(['prefix' => 'cadastros'], function() {
 
     Route::get('/agencias/', 'Agencias\AgenciasController@index')->name('agencias.index');
     Route::get('/agencias/adicionar', 'Agencias\AgenciasController@_new')->name('agencias.novo');
+    Route::put('/agencias/adicionar', 'Agencias\AgenciasController@store');
     Route::get('/agencias/editar/{agencia_id}', 'Agencias\AgenciasController@edit')->name('agencias.editar');
 });
 
