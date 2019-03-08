@@ -54,7 +54,7 @@ Route::group(['prefix' => 'cadastros'], function() {
 });
 
 Route::group(['prefix' => 'ocorrencias'], function() {
-	Route::get('/add', 'Cadastros\CadastrosController@alert_add');
+	Route::get('/nova', 'Ocorrencias\OcorrenciasController@_add')->name('ocorrencias.add');
 	Route::get('/list', 'Cadastros\CadastrosController@alert_list')->name('cadastros.list_alert');
 	Route::get('/', 'Ocorrencias\OcorrenciasController@index')->name('ocorrencias.index');
 	Route::get('/edit/{id}', 'Cadastros\CadastrosController@alert_edit')->name('cadastros.edit_alert');

@@ -32,7 +32,7 @@ Route::group(['prefix' => '/users'], function () {
 Route::group(['prefix' => '/alerts'], function () {
     Route::get('/', 'Api\AlertsController@index');
     Route::get('/list', 'Api\AlertsController@list');
-    Route::post('/', 'Api\AlertsController@store');
+    Route::put('/', 'Api\AlertsController@store')->name('ocorrencias.new');
     Route::get('/{id}', 'Api\AlertsController@show');
     Route::post('/{id}', 'Api\AlertsController@update');
     Route::delete('/{id}', 'Api\AlertsController@destroy');
