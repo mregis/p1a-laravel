@@ -13,9 +13,11 @@ use App\Http\Controllers\BaseController;
 use App\Models\Agencia;
 use App\Models\Menu;
 
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Auth;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Validator;
 use PDF;
 
@@ -66,6 +68,14 @@ class AgenciasController extends BaseController
      */
     public function store(Request $request)
     {
+        $user_id = $request->get('_u');
+        if (!$user = Users::find($user_id)) {
+            throw new \Exception('Erro ao verificar permissões.');
+        }
+        if (!in_array($user->profile, ['ADMINISTRADOR', 'DEPARTAMENTO'])) {
+            throw new AccessDeniedHttpException('Você não tem permissão de utilizar este recurso.');
+        }
+
         $validator = Validator::make($request->all(), [
             'codigo' => 'required|digits:4|not_in:0000',
             'nome' => 'required|between:5,100',
