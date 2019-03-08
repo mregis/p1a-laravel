@@ -26,4 +26,10 @@ class OcorrenciasController extends BaseController
         $menus = $menu->menu();
         return view('ocorrencias.report_theft', compact('menus'));
     }
+
+    public function _add() {
+        $menu = new Menu();
+        $menus = $menu->menu();
+        return view('ocorrencias.add', compact('menus'));
+    }
 }
