@@ -122,7 +122,6 @@ return [
     'RA' => 'Reenvio Agência',
     'code' => 'Código',
     'add' => 'Adicionar',
-    'address' => 'Endereço',
     'cd' => 'CD',
     'village' => 'Bairro',
     'forgot_password' => 'Esqueci a senha',

@@ -17,10 +17,11 @@ return [
     'Contingenciamento' => 'Avulso enviado pela AG',
     'capa_em_transito' => 'Enviado Empresa a AG Destino',
     'Capa em trânsito' => 'Enviado Empresa a AG Destino',
-    'recebido' => 'Recebido Destino',
     'capa_recebida' => 'Recebido pela AG Destino',
     'Capa recebida' => 'Recebido pela AG Destino',
     'enviado' => 'Enviado',
     'capa_enviada' => 'Enviado pela Origem',
     'Capa enviada' => 'Enviado pela Origem',
+    'capa_roubada' => 'Capa de Lote Roubada',
+    'roubado' => 'Roubado',
 ];

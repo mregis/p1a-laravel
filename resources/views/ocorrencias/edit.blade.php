@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title',  __('titles.alerts'))
+@section('title',  'Atualizar Ocorrência')
 @section('content')
 
     <div class="row">
@@ -41,9 +41,9 @@
                     </div>
                 </div>
 
-                {{ Form::open(array('url' => route('alerts.api_edit_alert', $alert->id),
+                {{ Form::open(array('url' => route('ocorrencias.edit', $ocorrencia->id),
                     'method' => 'put',
-                    'class'=>'m-form m-form--fit m-form--label-align-right ajax-form')) }}
+                    'class'=>'m-form m-form--fit m-form--label-align-right')) }}
                 <div class="m-portlet m-portlet--tabs">
                     <div class="m-portlet__body">
                         @if ($errors->any())
@@ -58,15 +58,15 @@
                         <div class="form-group m-form__group row">
                             <div class="col-3">
                                 <label for="product">Produto</label>
-                                <span class="form-control form-control-lg">{{$alert->product->description}}</span>
+                                <span class="form-control form-control-lg">{{$ocorrencia->product->description}}</span>
                             </div>
                             <div class="col-3">
                                 <label for="type">{{__('tables.type')}}</label>
-                                <span class="form-control form-control-lg">{{$alert->type}}</span>
+                                <span class="form-control form-control-lg">{{$ocorrencia->type}}</span>
                             </div>
                             <div class="col-5">
                                 <label for="content">{{__('labels.title')}}</label>
-                                <span class="form-control form-control-lg">{{$alert->content}}</span>
+                                <span class="form-control form-control-lg">{{$ocorrencia->content}}</span>
                             </div>
                         </div>
                         <div class="form-group m-form__group row">
@@ -82,19 +82,22 @@
                             <div class="col-6">
                                 <label for="description">Anteriores</label>
                                     <textarea class="form-control form-control-lg"
-                                              rows="4" readonly>{{$alert->description}}</textarea>
+                                              rows="4" readonly>{{$ocorrencia->description}}</textarea>
                             </div>
                         </div>
                     </div>
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
-                            {{ Form::submit(__('buttons.submit'), array('class' => 'btn btn-success btn-lg')) }}
+                            <button class="btn btn-success btn-lg" type="submit">
+                                <i class="fas fa-save"></i> {{__('buttons.save')}}
+                            </button>
                             <a class="btn btn-lg btn-outline-secondary" href="{{ route('ocorrencias.index') }}">
                                 {{__('buttons.cancel')}}</a>
                         </div>
                     </div>
                 </div>
                 <input type="hidden" name="_u" value="{{ Auth::id() }}"/>
+                <input type="hidden" name="_method" value="PUT"/>
                 {{ csrf_field() }}
                 {{ Form::close() }}
             </div>

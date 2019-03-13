@@ -32,7 +32,7 @@ Route::group(['prefix' => '/users'], function () {
 Route::group(['prefix' => '/alerts'], function () {
     Route::get('/', 'Api\AlertsController@index');
     Route::get('/list', 'Api\AlertsController@list');
-    Route::put('/', 'Api\AlertsController@store')->name('ocorrencias.new');
+    Route::put('/', 'Api\AlertsController@store')->name('alerts.new');
     Route::get('/{id}', 'Api\AlertsController@show');
     Route::post('/{id}', 'Api\AlertsController@update');
     Route::delete('/{id}', 'Api\AlertsController@destroy');
@@ -127,6 +127,8 @@ Route::group(['prefix' => '/unidades'], function () {
 Route::get('/capalote/arquivo/{user_id}/{file_id}', 'Api\CapaLoteController@report')->name('capalote.file_report');
 
 Route::group(['prefix' => 'ocorrencias'], function() {
-    Route::put('/edit/{id}', 'Api\AlertsController@update')->name('alerts.api_edit_alert');
-    Route::get('/list', 'Api\AlertsController@listAlerts')->name('alerts.list');
+    Route::put('/edit/{id}', 'Api\AlertsController@update')->name('ocorrencia.api_edit_ocorrencia');
+    Route::delete('/delete/{id}', 'Api\AlertsController@destroy')->name('ocorrencia.api_delete_ocorrencia');
+    Route::get('/list', 'Api\AlertsController@listAlerts')->name('ocorrencia.list');
+    Route::post('/report-theft', 'Api\AlertsController@reportTheft')->name('alerts.report_theft');
 });

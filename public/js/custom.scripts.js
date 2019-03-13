@@ -11102,7 +11102,7 @@ function actionAjax(url, type) {
             modal.find('.modal-body').find('p').text(data.message);
             modal.modal('show');
         }
-        $('#datatable').DataTable().ajax.reload();
+        $('table').DataTable().ajax.reload();
     }).fail(function(f) {
         var errormodal = $("#on_error").modal();
         errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText);
@@ -11114,10 +11114,9 @@ function deleteData(id, url) {
     var _url = 'delete/' + id;
     if (typeof url == "undefined") {
         if ($('#delete_url').val() != null) {
-            _url = $('#delete_url').val().replace('/\#.*?\#/ig', id);
+            _url = $('#delete_url').val().replace(/\#.*?\#/ig, id);
         }
     }
-
     actionAjax(_url, "delete");
 }
 

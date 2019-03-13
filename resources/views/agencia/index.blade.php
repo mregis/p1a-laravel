@@ -9,9 +9,6 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
                             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                                 <li class="m-nav__item m-nav__item--home">
                                     <a href="{{route('home')}}" class="m-nav__link m-nav__link--icon">
@@ -54,12 +51,12 @@
                                    data-order='[[ 1, "asc" ]]'>
                                 <thead class="table-dark">
                                 <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">{{ __('tables.code') }}</th>
-                                    <th scope="col">{{ __('tables.name') }}</th>
-                                    <th scope="col">{{ __('tables.cidade_uf') }}</th>
-                                    <th scope="col">{{ __('tables.cd') }}</th>
-                                    <th scope="col"></th>
+                                    <th></th>
+                                    <th>{{ __('tables.code') }}</th>
+                                    <th>{{ __('tables.name') }}</th>
+                                    <th>{{ __('tables.cidade_uf') }}</th>
+                                    <th>{{ __('tables.cd') }}</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>

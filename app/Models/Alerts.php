@@ -13,6 +13,8 @@ class Alerts extends BaseModel
     const TYPE_READ_ERROR = 'ERRO LEITURA';
     const TYPE_TEST = 'TESTE';
     const TYPE_DOC_NOTFOUND_ERROR = 'CAPA LOTE INEXISTENTE';
+    const TYPE_DOC_THEFT = 'CAPA LOTE ROUBADA';
+    const TYPE_OTHER = 'OUTRO';
 
     protected $fillable = [
         'user_id',

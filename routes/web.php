@@ -57,9 +57,11 @@ Route::group(['prefix' => 'ocorrencias'], function() {
 	Route::get('/nova', 'Ocorrencias\OcorrenciasController@_add')->name('ocorrencias.add');
 	Route::get('/list', 'Cadastros\CadastrosController@alert_list')->name('cadastros.list_alert');
 	Route::get('/', 'Ocorrencias\OcorrenciasController@index')->name('ocorrencias.index');
-	Route::get('/edit/{id}', 'Cadastros\CadastrosController@alert_edit')->name('cadastros.edit_alert');
+	Route::get('/edit/{id}', 'Ocorrencias\OcorrenciasController@edit')->name('ocorrencias.edit');
+	Route::put('/edit/{id}', 'Ocorrencias\OcorrenciasController@update');
 	Route::get('/remove/{id}', 'Cadastros\CadastrosController@alert_remove')->name('cadastros.delete_alert');;
 	Route::get('/reportar-roubo', 'Ocorrencias\OcorrenciasController@reportarRoubo')->name('ocorrencias.reportar_roubo');;
+	Route::put('/store', 'Ocorrencias\OcorrenciasController@store')->name('ocorrencias.new');
 });
 
 Route::group(['prefix' => 'arquivos'], function() {

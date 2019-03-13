@@ -62,7 +62,7 @@
                 </table>
                 <div class="row">
                     <div class="m-form__actions">
-                        <button class="btn btn-lg btn-success" onclick="save()">
+                        <button class="btn btn-lg btn-success" onclick="go()">
                             <i class="fas fa-broadcast-tower"></i> Reportar
                         </button>
                     </div>
@@ -83,21 +83,34 @@
             var t = $(elem).prop('checked') == true;
             $('.input-doc').prop('checked', t);
         }
-        function save() {
+        function go() {
             var _l = $('.input-doc:checked').length
 
             if (_l > 0) {
                 if (confirm('Confirmar reportar ' + _l + ' capa' + (_l > 1 ? 's' : '') +' de lote?')) {
-                    var doc = [];
-                    var c = 0;
+                    var docs = [];
                     var user = "{{ Auth::user()->id }}";
                     $('.input-doc').each(function () {
                         if ($(this).prop('checked') == true) {
-                            doc[c++] = $(this).val();
+                            docs.push($(this).val());
                         }
                     });
-                    $.post('/api/receber/registrar', {doc: doc, user: user}, function (r) {
+                    $.post('{{route('alerts.report_theft')}}', {docs: docs, _u: user}, function (r) {
+                        $('.modal').modal('hide');
+                        if (r.message != null) {
+                            var successmodal = $("#on_done_data").modal();
+                            successmodal.find('.modal-body')
+                                    .find('p')
+                                    .text(r.message);
+                            successmodal.show();
+                        }
                         report.ajax.reload();
+                    }).fail(function(xhr) {
+                        var errormodal = $("#on_error").modal();
+                        errormodal.find('.modal-body')
+                                .find('p')
+                                .text(xhr.responseJSON.message || xhr.responseText || xhr.message);
+                        errormodal.show();
                     });
                 }
             } else {
