@@ -32,6 +32,7 @@ namespace App\Http\Controllers;
  *   }
  * )
  */
+use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -53,11 +54,17 @@ class BaseController extends Controller
 {
     protected $redirectTo = '/dashboard';
 
+    /**
+     * @var Menu
+     */
+    protected $menu;
+
     public function __construct()
     {
         $route = Route::current()->uri();
         if (preg_match('#^(a|api)/#', $route) == false) {
             $this->middleware('auth');
+            $this->menu = new Menu();
         }
     }
 

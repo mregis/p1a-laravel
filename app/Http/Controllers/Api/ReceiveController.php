@@ -11,11 +11,13 @@ use App\Models\Seal;
 use App\Models\SealGroup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 
 use Auth;
+
 class ReceiveController extends BaseController
 {
     /**
@@ -34,7 +36,8 @@ class ReceiveController extends BaseController
      * @param $user_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function fileList($user_id) {
+    public function fileList($user_id)
+    {
 
         if (!$user = Users::find($user_id)) {
             return response()->json('Ocorreu um erro ao validar o acesso ao conteúdo.', 400);
@@ -54,17 +57,16 @@ class ReceiveController extends BaseController
                     }
                 }
             )
-            ->groupBy(["files.id", "files.name", "files.created_at", "files.movimento"])
-        ;
+            ->groupBy(["files.id", "files.name", "files.created_at", "files.movimento"]);
 
         return Datatables::of($query)
-            ->addColumn('view', function($file) {
-                return '<a href="/receber/' . $file->id .'" title="Exibir detalhes" ' .
+            ->addColumn('view', function ($file) {
+                return '<a href="/receber/' . $file->id . '" title="Exibir detalhes" ' .
                 'class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
                 '<i class="fas fa-eye"></a>';
             })
             ->editColumn('created_at', function ($file) {
-                return $file->created_at? with(new Carbon($file->created_at))->format('d/m/Y') : '';
+                return $file->created_at ? with(new Carbon($file->created_at))->format('d/m/Y') : '';
             })
             ->editColumn('movimento', function ($file) {
                 return with(new Carbon($file->movimento))->format('d/m/Y');
@@ -86,6 +88,7 @@ class ReceiveController extends BaseController
         $menus = $menu->menu();
         return view('upload.upload_list', compact('menus'));
     }
+
     public function arquivo(Request $request, $id)
     {
         $menu = new Menu();
@@ -93,7 +96,7 @@ class ReceiveController extends BaseController
         return view('upload.upload_edit', compact('menus', 'id'));
     }
 
-    public function removearquivo(Request $request,$id)
+    public function removearquivo(Request $request, $id)
     {
         $menu = new Menu();
         $menus = $menu->menu();
@@ -106,7 +109,7 @@ class ReceiveController extends BaseController
      * @param bool|false $juncao
      * @return \Illuminate\Http\JsonResponse
      */
-    public function docs($id , $profile , $juncao = false)
+    public function docs($id, $profile, $juncao = false)
     {
         if (!$file = Files::find($id)) {
             return response()->json('Não foi possível recuperar as informações requisitadas', 400);
@@ -119,7 +122,7 @@ class ReceiveController extends BaseController
             ->where(function ($query) {
                 $query->whereNotIn('docs.status', ['recebido'])
                     ->orWhere('docs.status', '=', null);
-                }
+            }
             );
 
         if ($profile != 'ADMINISTRADOR') {
@@ -143,7 +146,7 @@ class ReceiveController extends BaseController
         return Datatables::of($query)
             ->addColumn('action', function ($doc) {
                 return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
-                    'value="'. $doc->id.'">';
+                'value="' . $doc->id . '">';
             })
             ->addColumn('origem', function ($doc) use ($file) {
                 $doc->content = trim($doc->content);
@@ -153,7 +156,7 @@ class ReceiveController extends BaseController
                 $doc->content = trim($doc->content);
                 return ($file->constante == "DM" ? substr($doc->content, 0, 4) : substr($doc->content, -4, 4));
             })
-            ->addColumn('status', function($doc) {
+            ->addColumn('status', function ($doc) {
                 return $doc->status ? __('status.' . $doc->status) : '-';
             })
             ->editColumn('created_at', function ($doc) {
@@ -191,6 +194,7 @@ class ReceiveController extends BaseController
         $menus = $menu->menu();
         return view('receive.receive_register', compact('menus'));
     }
+
     public function register(Request $request)
     {
         if (!$user = Users::find($request->get('user'))) {
@@ -214,27 +218,32 @@ class ReceiveController extends BaseController
             }
         }
         return response()->json(
-            sprintf('%s Envelope%s Recebido%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 1 ? 's':''), 200
+            sprintf('%s Envelope%s Recebido%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 1 ? 's' : ''), 200
         );
     }
 
     public function registeroperador(Request $request)
     {
         $params = $request->all();
-        $user_id = $params['user'];
+        $user_id = $request->get('_u');
+        $lote = $request->get('lote');
+        $lacre = $request->get('lacre');
         if (!$user = Users::find($user_id)) {
             return response()->json('Erro ao verificar permissões.', 400);
         }
         if (!in_array($user->profile, ['OPERADOR', 'ADMINISTRADOR'])) {
             return response()->json('Você não tem permissão para executar esta operação.', 400);
         }
-
-        if (!$seal = Seal::where('content', $params['lacre'])->first()) {
-            $seal = new Seal();
-            $seal->user_id = $user_id;
-            $seal->content = $params['lacre'];
-            $seal->save();
+        $seal = null;
+        if ($lacre != null) {
+            if (!$seal = Seal::where('content', $lacre)->first()) {
+                $seal = new Seal();
+                $seal->user_id = $user_id;
+                $seal->content = $lacre;
+                $seal->save();
+            }
         }
+
         $notfound = [];
         foreach ($params['doc'] as $capaLote) {
             if ($doc = Docs::where('content', 'like', '%' . trim($capaLote) . '%')->first()) {
@@ -247,43 +256,29 @@ class ReceiveController extends BaseController
                 $docsHistory->description = "capa_em_transito";
                 $docsHistory->user_id = $user_id;
                 $docsHistory->save();
-                if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
-                    $sealGroup = new SealGroup();
-                    $sealGroup->seal_id = $seal->id;
-                    $sealGroup->doc_id = $doc->id;
-                    $sealGroup->save();
+                if ($seal != null) {
+                    if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
+                        $sealGroup = new SealGroup();
+                        $sealGroup->seal_id = $seal->id;
+                        $sealGroup->doc_id = $doc->id;
+                        $sealGroup->save();
+                    }
                 }
             } else {
                 $notfound[] = $capaLote;
             }
         }
+        Cache::forget($lote);
+
         ($msg = "Informação atualizada com sucesso!") &&
         (count($notfound) > 0) && ($msg .= "\n\nAtenção!\n" .
-        "As seguintes Capas de Lote não foram encontradas:\n[" . implode("]-[", $notfound) ."]");
+            "As seguintes Capas de Lote não foram encontradas:\n[" . implode("], [", $notfound) . "]");
 
         return response()->json($msg, 200);
     }
 
-    public function operador(Request $request)
+    public function docListingIndex()
     {
-        $menu = new Menu();
-        $menus = $menu->menu();
-
-	$files = Files::all();
-	foreach($files as &$file){
-		$docs = Docs::where('file_id', $file->id)->get();
-		$pendentes = 0;
-		foreach($docs as &$d){
-			if($d->status == 'pendente'){
-				$pendentes++;
-			}
-		}
-		$file->pendentes = $pendentes;
-	}
-        return view('receive.operador', compact('menus','files'));
-    }
-
-    public function docListingIndex() {
         $menu = new Menu();
         $menus = $menu->menu();
         return view('receive.receive_doclist', compact('menus', 'id'));
@@ -294,45 +289,44 @@ class ReceiveController extends BaseController
      * @param null|int $juncao
      * @return mixed
      */
-    public function doclisting($profile , $juncao = null)
+    public function doclisting($profile, $juncao = null)
     {
         $query = Docs::query()
             ->select("docs.*", "files.constante as constante")
-            ->join("files", "docs.file_id", "=", "files.id")
-        ;
+            ->join("files", "docs.file_id", "=", "files.id");
         if ($profile != 'ADMINISTRADOR') {
-                $query
-                    ->orWhere(function ($query) use ($juncao) {
-                        $query->where([
-                            ['files.constante', '=', 'DM'],
-                            ['docs.from_agency', '=', sprintf("%04d", $juncao)]
-                        ])
-                            ->where(function ($query) {
-                                $query->whereNotIn('status', ['recebido'])
-                                    ->orWhere('status', '=', null);
-                            });
-                    })
-                    ->orWhere(function ($query) use ($juncao) {
-                        $query->where([
-                            ['files.constante', '=', 'DA'],
-                            ['docs.to_agency', '=', sprintf("%04d", $juncao)]
-                        ])
-                            ->where(function ($query) {
-                                $query->whereNotIn('status', ['recebido'])
-                                    ->orWhere('status', '=', null);
-                            });
-                    });
+            $query
+                ->orWhere(function ($query) use ($juncao) {
+                    $query->where([
+                        ['files.constante', '=', 'DM'],
+                        ['docs.from_agency', '=', sprintf("%04d", $juncao)]
+                    ])
+                        ->where(function ($query) {
+                            $query->whereNotIn('status', ['recebido'])
+                                ->orWhere('status', '=', null);
+                        });
+                })
+                ->orWhere(function ($query) use ($juncao) {
+                    $query->where([
+                        ['files.constante', '=', 'DA'],
+                        ['docs.to_agency', '=', sprintf("%04d", $juncao)]
+                    ])
+                        ->where(function ($query) {
+                            $query->whereNotIn('status', ['recebido'])
+                                ->orWhere('status', '=', null);
+                        });
+                });
 
         }
         return Datatables::of($query)
-            ->filterColumn('constante', function($query, $keyword) {
+            ->filterColumn('constante', function ($query, $keyword) {
                 $query->where('files.constante', '=', $keyword);
             })
             ->addColumn('action', function ($doc) {
                 return '<input type="checkbox" name="lote[]" class="form-control form-control-sm m-input input-doc" ' .
-                'value="'. $doc->id.'">';
+                'value="' . $doc->id . '">';
             })
-            ->addColumn('view', function($doc) {
+            ->addColumn('view', function ($doc) {
                 return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id . ')" ' .
                 'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                 '</a>';
@@ -357,29 +351,130 @@ class ReceiveController extends BaseController
                 $doc->content = trim($doc->content);
                 return ($doc->constante == "DM" ? "Devolução Matriz" : "Devolução Agência");
             })
-
-            ->editColumn('status', function($doc) {
+            ->editColumn('status', function ($doc) {
                 return $doc->status ? __('status.' . $doc->status) : '-';
 
             })
-
             ->editColumn('updated_at', function ($doc) {
                 return $doc->updated_at ? with(new Carbon($doc->updated_at))->format('d/m/Y H:i') : '';
             })
             ->editColumn('created_at', function ($doc) {
-                return $doc->created_at? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
+                return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y') : '';
             })
             ->escapeColumns([])
             ->make(true);
     }
 
-    public function checkCapaLote(Request $request) {
-        $capaLote = $request->get('capaLote');
-        if ($doc = Docs::where('content', '=', $capaLote)->first()) {
-            return response()->json('Capa de Lote encontrada', 200);
-        } else {
-            return response()->json( sprintf('Capa de Lote inexistente [%s]', $capaLote), 400);
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkCapaLote(Request $request)
+    {
+        try {
+            if (!$capaLote = $request->get('capaLote')) {
+                throw new \Exception("Necessário informar uma Capa de Lote");
+            }
+            if (!$lote = $request->get('lote')) {
+                throw new \Exception("Necessário informar um Lote");
+            }
+
+            $user_id = $request->get('_u', 0);
+            $unidade = 0;
+            if ($user = Users::find($user_id)) {
+                $unidade = $user->getLocal();
+            }
+            $lotes = Cache::get('lotes', []);
+            // Verificar se essa leitura já não foi feita para esse lote
+            $_lote = json_decode(Cache::get($lote,
+                json_encode(['leituras' => [], 'unidade' => $unidade])),  1);
+            if (isset($_lote['leituras'][$capaLote])) { // Leitura já feita para Lote atual
+                throw new \Exception(
+                    sprintf("A Capa de Lote [%s] já foi lida para este Lote", $capaLote)
+                );
+            }
+            if (!isset($lotes[$lote])) {
+                $lotes[$lote] = ['unidade' => $unidade, 'qtitens' => count($_lote['leituras']) + 1, 'usuario' => $user->name];
+                Cache::put('lotes', $lotes);
+            }
+
+            // Nova Leitura para Lote atual
+            if ($doc = Docs::where('content', $capaLote)->first()) {
+                $_lote['leituras'][$capaLote] = true;
+                Cache::put($lote, json_encode($_lote), (24*3600));
+                return response()->json('Capa de Lote encontrada', 200);
+            } else {
+                $_lote['leituras'][$capaLote] = false;
+                Cache::put($lote, json_encode($_lote), (24*3600));
+                return response()->json(sprintf('Capa de Lote inexistente [%s]', $capaLote), 400);
+            }
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 400);
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeLeitura(Request $request)
+    {
+        $capaLote = $request->get('capaLote');
+        $lote = $request->get('lote');
+        $user_id = $request->get('_u', 0);
+        $unidade = 0;
+        if ($user = Users::find($user_id)) {
+            $unidade = $user->getLocal();
+        }
+        // Verificar se essa leitura já não foi feita para esse lote
+        $_lote = json_decode(Cache::get($lote,
+            json_encode(['leituras' => [], 'unidade' => $unidade])),  1);
+        if (isset($_lote['leituras'][$capaLote])) {
+            // Leitura já feita para Lote atual
+            unset($_lote['leituras'][$capaLote]);
+            Cache::put($lote, json_encode($_lote), (24*3600));
+        }
+        return response()->json('Leitura removida', 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function carregarLeituras(Request $request)
+    {
+        $lote = $request->get('lote');
+        $user_id = $request->get('_u', 0);
+        $unidade = 0;
+        if ($user = Users::find($user_id)) {
+            $unidade = $user->getLocal();
+        }
+        // Verificar se essa leitura já não foi feita para esse lote
+        $_lote = json_decode(Cache::get($lote,
+            json_encode(['leituras' => [], 'unidade' => $unidade])),  1);
+        if (isset($_lote['leituras']) && count($_lote['leituras']) > 0) {
+            $msg = sprintf("Recuperado %d leitura%s para o lote %s.",
+                count($_lote['leituras']), (count($_lote['leituras']) > 1 ? "s" : ""),
+                $lote);
+            return $this->sendResponse($_lote, $msg, 200);
+        } else {
+            return $this->sendError("Não há leituras para o Lote informado", 400);
+        }
+
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function gerarNumLote()
+    {
+        $numLote = date('YmdHi');
+        while(Cache::has($numLote)) {
+            $numLote++;
+            if ($numLote > date('YmdHi') + 60) { // Somente 60 iterações
+                return $this->sendError("Ocorreu um erro ao tentar gerar um novo Numero de Lote.", 400);
+            }
+        }
+        return $this->sendResponse(['lote' => $numLote], 200);
+    }
 }

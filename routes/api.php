@@ -83,6 +83,12 @@ Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
 
 Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');
 
+Route::group(['prefix' => '/recebimento'], function () {
+    Route::post('/remover-leitura', 'Api\ReceiveController@removeLeitura')->name('recebimento.remove-leitura');
+    Route::post('/carregar-leituras', 'Api\ReceiveController@carregarLeituras')->name('recebimento.carregar-leituras');
+    Route::post('/gerar-num-lote', 'Api\ReceiveController@gerarNumLote')->name('recebimento.gerar-num-lote');
+
+});
 // Capa de Lote
 Route::group(['prefix' => '/capalote'], function () {
     Route::get('/list/{user_id}', 'Api\CapaLoteController@_list')->name('capalote.list');

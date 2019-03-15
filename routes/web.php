@@ -85,9 +85,11 @@ Route::group(['prefix' => 'relatorios'], function() {
 Route::get('/arquivo-remessa/{id}', 'Api\ReportController@arquivo')->name('report.upload_edit');
 Route::get('/report-remessa/{id}', 'Api\ReportController@arquivo')->name('uploads.report');
 
-Route::get('/receber-operador','Api\ReceiveController@operador');
-Route::get('/doc/history/{id}','Api\UploadController@history');
+Route::group(['prefix' => 'recebimento'], function() {
+	Route::get('/operador', 'Recebimento\RecebimentoController@operador')->name('recebimento.operador');
+});
 
+Route::get('/doc/history/{id}', 'Api\UploadController@history');
 Route::get('/receber-todos/','Api\ReceiveController@docListingIndex');
 
 Route::group(['prefix' => 'capalote'], function() {
