@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Leitura;
+use App\Models\Lote;
+use App\Models\Profile;
+use App\Models\Unidade;
 use App\Models\Users;
 use App\Models\Files;
 use App\Models\Docs;
@@ -11,7 +15,6 @@ use App\Models\Seal;
 use App\Models\SealGroup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Yajra\Datatables\Datatables;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
@@ -168,11 +171,6 @@ class ReceiveController extends BaseController
             ->make(true);
     }
 
-    public function destroy(Request $request, $id)
-    {
-        die('aki');
-    }
-
     public function check(Request $request, $id)
     {
         $file = Docs::where('id', $id)->first();
@@ -220,61 +218,6 @@ class ReceiveController extends BaseController
         return response()->json(
             sprintf('%s Envelope%s Recebido%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 1 ? 's' : ''), 200
         );
-    }
-
-    public function registeroperador(Request $request)
-    {
-        $params = $request->all();
-        $user_id = $request->get('_u');
-        $lote = $request->get('lote');
-        $lacre = $request->get('lacre');
-        if (!$user = Users::find($user_id)) {
-            return response()->json('Erro ao verificar permissões.', 400);
-        }
-        if (!in_array($user->profile, ['OPERADOR', 'ADMINISTRADOR'])) {
-            return response()->json('Você não tem permissão para executar esta operação.', 400);
-        }
-        $seal = null;
-        if ($lacre != null) {
-            if (!$seal = Seal::where('content', $lacre)->first()) {
-                $seal = new Seal();
-                $seal->user_id = $user_id;
-                $seal->content = $lacre;
-                $seal->save();
-            }
-        }
-
-        $notfound = [];
-        foreach ($params['doc'] as $capaLote) {
-            if ($doc = Docs::where('content', 'like', '%' . trim($capaLote) . '%')->first()) {
-                $doc->status = 'em_transito';
-                $doc->user_id = $user_id;
-                $doc->save();
-
-                $docsHistory = new DocsHistory();
-                $docsHistory->doc_id = $doc->id;
-                $docsHistory->description = "capa_em_transito";
-                $docsHistory->user_id = $user_id;
-                $docsHistory->save();
-                if ($seal != null) {
-                    if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
-                        $sealGroup = new SealGroup();
-                        $sealGroup->seal_id = $seal->id;
-                        $sealGroup->doc_id = $doc->id;
-                        $sealGroup->save();
-                    }
-                }
-            } else {
-                $notfound[] = $capaLote;
-            }
-        }
-        Cache::forget($lote);
-
-        ($msg = "Informação atualizada com sucesso!") &&
-        (count($notfound) > 0) && ($msg .= "\n\nAtenção!\n" .
-            "As seguintes Capas de Lote não foram encontradas:\n[" . implode("], [", $notfound) . "]");
-
-        return response()->json($msg, 200);
     }
 
     public function docListingIndex()
@@ -371,44 +314,69 @@ class ReceiveController extends BaseController
      */
     public function checkCapaLote(Request $request)
     {
+        $in_transaction = false;
         try {
             if (!$capaLote = $request->get('capaLote')) {
                 throw new \Exception("Necessário informar uma Capa de Lote");
             }
-            if (!$lote = $request->get('lote')) {
+            if (!$_lote = $request->get('lote')) {
                 throw new \Exception("Necessário informar um Lote");
             }
 
             $user_id = $request->get('_u', 0);
-            $unidade = 0;
-            if ($user = Users::find($user_id)) {
-                $unidade = $user->getLocal();
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception("Erro ao verificar permissões");
             }
-            $lotes = Cache::get('lotes', []);
-            // Verificar se essa leitura já não foi feita para esse lote
-            $_lote = json_decode(Cache::get($lote,
-                json_encode(['leituras' => [], 'unidade' => $unidade])),  1);
-            if (isset($_lote['leituras'][$capaLote])) { // Leitura já feita para Lote atual
+
+            if (!in_array($user->profile, [Profile::ADMIN, Profile::OPERATOR])) {
+                throw new \Exception("Você não tem permissão para executar esta ação");
+            }
+
+            if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+                throw new \Exception("O seu cadastro não permite executar esta ação!");
+            }
+            DB::beginTransaction();
+            $in_transaction = true;
+
+            if (!$leitura = Leitura::with(['lotes' => function ($query) use ($_lote) {
+                $query->where('num_lote', $_lote);
+            }])->where('capalote', $capaLote)->first()
+            ) {
+                if (!$lote = Lote::where('num_lote', $_lote)->first()) {
+                    $lote = new Lote([
+                        'user_id' => $user_id,
+                        'unidade_id' => $unidade->id,
+                        'num_lote' => $_lote,
+                    ]);
+                    $lote->save();
+                }
+                $leitura = new Leitura([
+                    'user_id' => $user_id,
+                    'lote_id' => $lote->id,
+                    'capalote' => $capaLote,
+                ]);
+            } else {
                 throw new \Exception(
                     sprintf("A Capa de Lote [%s] já foi lida para este Lote", $capaLote)
                 );
             }
-            if (!isset($lotes[$lote])) {
-                $lotes[$lote] = ['unidade' => $unidade, 'qtitens' => count($_lote['leituras']) + 1, 'usuario' => $user->name];
-                Cache::put('lotes', $lotes);
-            }
 
             // Nova Leitura para Lote atual
             if ($doc = Docs::where('content', $capaLote)->first()) {
-                $_lote['leituras'][$capaLote] = true;
-                Cache::put($lote, json_encode($_lote), (24*3600));
-                return response()->json('Capa de Lote encontrada', 200);
+                $leitura->fill(['presente' => true]);
+                $response = $this->sendResponse([], 'Capa de Lote encontrada', 200);
             } else {
-                $_lote['leituras'][$capaLote] = false;
-                Cache::put($lote, json_encode($_lote), (24*3600));
-                return response()->json(sprintf('Capa de Lote inexistente [%s]', $capaLote), 400);
+                $leitura->fill(['presente' => false]);
+                $response = $this->sendError(sprintf('Capa de Lote inexistente [%s]', $capaLote), 400);
             }
+            $leitura->save();
+            DB::commit();
+            $in_transaction = false;
+            return $response;
         } catch (\Exception $e) {
+            if ($in_transaction == true) {
+                DB::rollBack();
+            }
             return $this->sendError($e->getMessage(), 400);
         }
     }
@@ -419,22 +387,29 @@ class ReceiveController extends BaseController
      */
     public function removeLeitura(Request $request)
     {
-        $capaLote = $request->get('capaLote');
-        $lote = $request->get('lote');
+        $capaLote = $request->get('capaLote', 0);
+        $_lote = $request->get('lote', 0);
         $user_id = $request->get('_u', 0);
-        $unidade = 0;
-        if ($user = Users::find($user_id)) {
-            $unidade = $user->getLocal();
+        if (!$user = Users::find($user_id)) {
+            throw new \Exception("Erro ao verificar permissões");
         }
-        // Verificar se essa leitura já não foi feita para esse lote
-        $_lote = json_decode(Cache::get($lote,
-            json_encode(['leituras' => [], 'unidade' => $unidade])),  1);
-        if (isset($_lote['leituras'][$capaLote])) {
-            // Leitura já feita para Lote atual
-            unset($_lote['leituras'][$capaLote]);
-            Cache::put($lote, json_encode($_lote), (24*3600));
+
+        if (!in_array($user->profile, [Profile::ADMIN, Profile::OPERATOR])) {
+            throw new \Exception("Você não tem permissão para executar esta ação");
         }
-        return response()->json('Leitura removida', 200);
+
+        if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+            throw new \Exception("O seu cadastro não permite executar esta ação!");
+        }
+
+        if ($leitura = Leitura::with(['lotes' => function ($query) use ($_lote) {
+            $query->where('num_lote', $_lote);
+        }])->where('capalote', $capaLote)->first() ||
+            $leitura = Leitura::find($request->get('leitura', 0))
+        ) {
+            $leitura->delete();
+        }
+        return $this->sendResponse([], 'Leitura removida', 200);
     }
 
     /**
@@ -443,22 +418,44 @@ class ReceiveController extends BaseController
      */
     public function carregarLeituras(Request $request)
     {
-        $lote = $request->get('lote');
-        $user_id = $request->get('_u', 0);
-        $unidade = 0;
-        if ($user = Users::find($user_id)) {
-            $unidade = $user->getLocal();
-        }
-        // Verificar se essa leitura já não foi feita para esse lote
-        $_lote = json_decode(Cache::get($lote,
-            json_encode(['leituras' => [], 'unidade' => $unidade])),  1);
-        if (isset($_lote['leituras']) && count($_lote['leituras']) > 0) {
-            $msg = sprintf("Recuperado %d leitura%s para o lote %s.",
-                count($_lote['leituras']), (count($_lote['leituras']) > 1 ? "s" : ""),
-                $lote);
-            return $this->sendResponse($_lote, $msg, 200);
-        } else {
-            return $this->sendError("Não há leituras para o Lote informado", 400);
+        try {
+            $_lote = $request->get('lote');
+            $user_id = $request->get('_u', 0);
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception("Erro ao verificar permissões");
+            }
+            if (!in_array($user->profile, [Profile::ADMIN, Profile::OPERATOR])) {
+                throw new \Exception("Você não tem permissão para executar esta ação");
+            }
+            if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+                throw new \Exception("O seu cadastro não permite executar esta ação!");
+            }
+
+            // Verificar se essa leitura já não foi feita para esse lote
+            if (!$lote = Lote::where('num_lote', $_lote)->first()) {
+                throw new \Exception("Lote não encontrado.");
+            }
+
+            if ($lote->estado == Lote::STATE_CLOSED) {
+                throw new \Exception("Este Lote já foi marcado como Finalizado. \n" .
+                    "Você pode verificar as leituras efetuadas na guia Leituras \n" .
+                    "Não há como adicionar novas leituras a este Lote."
+                );
+            }
+
+            if ($lote->unidade->nome != trim($user->unidade)) {
+                throw new \Exception("Você não tem permissão para ler este lote.");
+            }
+            if (count($lote->leituras) > 0) {
+                $msg = sprintf("Recuperado %d leitura%s para o lote %s.",
+                    count($lote->leituras), (count($lote->leituras) > 1 ? "s" : ""),
+                    $_lote);
+                return $this->sendResponse($lote, $msg, 200);
+            } else {
+                throw new \Exception("Não há leituras para o Lote informado");
+            }
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 400);
         }
 
     }
@@ -469,12 +466,214 @@ class ReceiveController extends BaseController
     public function gerarNumLote()
     {
         $numLote = date('YmdHi');
-        while(Cache::has($numLote)) {
+        while (Lote::where('num_lote', $numLote)->first()) {
             $numLote++;
             if ($numLote > date('YmdHi') + 60) { // Somente 60 iterações
                 return $this->sendError("Ocorreu um erro ao tentar gerar um novo Numero de Lote.", 400);
             }
         }
         return $this->sendResponse(['lote' => $numLote], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function registeroperador(Request $request)
+    {
+        $in_transaction = false;
+        try {
+            $lacre = $request->get('lacre');
+            $docs = $request->get('doc', []);
+            $_lote = $request->get('lote');
+            $user_id = $request->get('_u', 0);
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception("Erro ao verificar permissões");
+            }
+            if (!in_array($user->profile, [Profile::ADMIN, Profile::OPERATOR])) {
+                throw new \Exception("Você não tem permissão para executar esta ação");
+            }
+            if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+                throw new \Exception("O seu cadastro não permite executar esta ação!");
+            }
+            // Verificar se essa leitura já não foi feita para esse lote
+            if (!$lote = Lote::where('num_lote', $_lote)->first()) {
+                throw new \Exception("Lote não encontrado.");
+            }
+            // Tem leituras para serem incluidas...
+            if (count($docs) < 1) {
+                throw new \Exception('Nenhuma leitura foi informada para ser registrada.');
+            }
+
+            DB::beginTransaction();
+            $in_transaction = true;
+
+            $seal = null;
+            if ($lacre != null) {
+                if (!$seal = Seal::where('content', $lacre)->first()) {
+                    $seal = new Seal();
+                    $seal->user_id = $user_id;
+                    $seal->content = $lacre;
+                    $seal->save();
+                }
+            }
+
+            $notfound = [];
+            foreach ($docs as $capaLote) {
+                if ($doc = Docs::where('content', trim($capaLote))->first()) {
+                    $doc->status = Docs::STATE_IN_TRANSIT;
+                    $doc->user_id = $user_id;
+                    $doc->save();
+
+                    $docsHistory = new DocsHistory();
+                    $docsHistory->doc_id = $doc->id;
+                    $docsHistory->description = DocsHistory::STATE_IN_TRANSIT;
+                    $docsHistory->user_id = $user_id;
+                    $docsHistory->save();
+                    if ($seal != null) {
+                        if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
+                            $sealGroup = new SealGroup();
+                            $sealGroup->seal_id = $seal->id;
+                            $sealGroup->doc_id = $doc->id;
+                            $sealGroup->save();
+                        }
+                    }
+                } else {
+                    $notfound[] = $capaLote;
+                }
+            }
+            // Atualizando informações de Leitura/Lote
+            $lote->estado = Lote::STATE_CLOSED;
+            $lote->save();
+
+            ($msg = "Informação atualizada com sucesso!") &&
+            (count($notfound) > 0) && ($msg .= "\n\nAtenção!\n" .
+                "As seguintes Capas de Lote não foram encontradas:\n[" . implode("], [", $notfound) . "]");
+            DB::commit();
+            $in_transaction = false;
+
+            return response()->json($msg, 200);
+        } catch (\Exception $e) {
+            ($in_transaction == true) && DB::rollBack();
+            return $this->sendError($e->getMessage(), 400);
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Exception
+     */
+    public function listLotes(Request $request)
+    {
+        try {
+            $user_id = $request->get('_u', 0);
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception("Erro ao verificar permissões");
+            }
+            if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+                throw new \Exception("O seu cadastro não permite executar esta ação!");
+            }
+            $query = Lote::withCount([
+                'leituras',
+                'leituras as invalidas_count' => function ($query) {
+                    $query->where('presente', false);
+                }
+            ]);
+            return Datatables::of($query)
+                ->addColumn('action', function ($lote) use ($unidade) {
+                    $return = '';
+                    if ($lote->unidade_id == $unidade->id) {
+                        $return = '<a href="javascript:filtrarLeituras(\'' . $lote->num_lote .
+                            '\');" class="btn btn-sm btn-info" ' .
+                            'title="verificar as Leituras desse Lote"><i class="fas fa-search"></i></a>';
+                        if ($lote->estado == Lote::STATE_OPEN) {
+                            $return .= '<a href="javascript:carregarLeituras(\'' . $lote->num_lote . '\');" ' .
+                            'class="btn btn-sm btn-success" title="Carregar Leituras"> ' .
+                                '<i class="fas fa-tasks"></i></a>';
+                        }
+                    }
+                    return $return;
+                })
+                ->addColumn('usuario', function ($lote) {
+                    return $lote->user->name;
+                })
+                ->addColumn('unidade', function ($lote) {
+                    return $lote->unidade->nome;
+                })
+
+                ->addColumn('total', function ($lote) {
+                    return $lote->total;
+                })
+                ->addColumn('invalidos', function ($lote) {
+                    return $lote->invalidas_count;
+                })
+                ->editColumn('situacao', function ($lote) {
+                    return $lote->estado ? __('status.' . $lote->estado) : '-';
+                })
+                ->editColumn('created_at', function ($lote) {
+                    return $lote->created_at ? with(new Carbon($lote->created_at))->format('d/m/Y H:i') : '';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 400);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Exception
+     */
+    public function listLeituras(Request $request)
+    {
+        try {
+            $user_id = $request->get('_u', 0);
+            if (!$user = Users::find($user_id)) {
+                throw new \Exception("Erro ao verificar permissões");
+            }
+            if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+                throw new \Exception("O seu cadastro não permite executar esta ação!");
+            }
+            $query = Leitura::query();
+            return Datatables::of($query)
+                ->addColumn('action', function ($leitura) use ($unidade) {
+                    $return = '';
+                    if ($leitura->lote->unidade_id == $unidade->id &&
+                        $leitura->lote->estado == Lote::STATE_OPEN) {
+                        $return = sprintf('<input type="checkbox" name="leitura[]" value="%d" class="input-leitura">', $leitura->id);
+                    }
+                    return $return;
+
+                })
+                ->addColumn('num_lote', function ($leitura) {
+                    return $leitura->lote->num_lote;
+                })
+                ->addColumn('usuario', function ($leitura) {
+                    return $leitura->user->name;
+                })
+                ->addColumn('situacao', function ($leitura) {
+                    return $leitura->presente ? 'Presente' : 'Ausente';
+                })
+                ->editColumn('created_at', function ($leitura) {
+                    return $leitura->created_at ? with(new Carbon($leitura->created_at))->format('d/m/Y H:i') : '';
+                })
+                ->addColumn('buttons', function ($leitura) use ($unidade) {
+                    $return = '';
+                    if ($leitura->lote->unidade_id == $unidade->id &&
+                        $leitura->lote->estado == Lote::STATE_OPEN) {
+                        $return = '<a href="javascript: removeLeitura(' . $leitura->id . ')" ' .
+                        'class="btn btn-sm btn-danger" ' .
+                            'title="Remover leitura"><i class="fas fa-times"></i></a>';
+                    }
+                    return $return;
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 400);
+        }
     }
 }

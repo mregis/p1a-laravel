@@ -18,6 +18,7 @@ class CreateLotesTable extends Migration
             $table->integer('user_id');
             $table->integer('unidade_id');
             $table->bigInteger('num_lote')->index('IX_LOTES_NUMLOTE');
+            $table->string('lacre');
             $table->string('estado');
             $table->timestamps();
             $table->softDeletes();

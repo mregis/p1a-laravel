@@ -23,4 +23,6 @@ return [
     'enviado' => 'Enviado',
     'capa_enviada' => 'Enviado pela Origem',
     'Capa enviada' => 'Enviado pela Origem',
+    'finalizado' => 'Finalizado',
+    'aberto' => 'Aberto',
 ];

@@ -18,7 +18,6 @@ class CreateLeiturasTable extends Migration
             $table->timestamps();
             $table->integer('lote_id');
             $table->integer('user_id');
-            $table->integer('unidade_id');
             $table->string('capalote')->index('IX_LEITURAS_CAPALOTE');
             $table->boolean('presente');
             $table->softDeletes();

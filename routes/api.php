@@ -87,6 +87,8 @@ Route::group(['prefix' => '/recebimento'], function () {
     Route::post('/remover-leitura', 'Api\ReceiveController@removeLeitura')->name('recebimento.remove-leitura');
     Route::post('/carregar-leituras', 'Api\ReceiveController@carregarLeituras')->name('recebimento.carregar-leituras');
     Route::post('/gerar-num-lote', 'Api\ReceiveController@gerarNumLote')->name('recebimento.gerar-num-lote');
+    Route::any('/listar-lotes', 'Api\ReceiveController@listLotes')->name('recebimento.listar-lotes');
+    Route::any('/listar-leituras', 'Api\ReceiveController@listLeituras')->name('recebimento.listar-leituras');
 
 });
 // Capa de Lote

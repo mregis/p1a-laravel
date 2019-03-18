@@ -11,18 +11,17 @@ namespace App\Http\Controllers\Recebimento;
 
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class RecebimentoController extends BaseController
 {
 
     /**
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function operador(Request $request)
+    public function operador()
     {
         $menus = $this->menu->menu();
-
         return view('recebimento.operador', compact('menus'));
     }
 }

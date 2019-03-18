@@ -7,6 +7,12 @@ class DocsHistory extends BaseModel
 {
     use SoftDeletes;
 
+    const STATE_UPLOAD = "upload";
+    const STATE_SENT = "capa_enviada";
+    const STATE_RECEIVED = "capa_recebida";
+    const STATE_IN_TRANSIT = "capa_em_transito";
+    const STATE_CONTINGENCY = "contingenciamento";
+
     protected $fillable = [
         'doc_id',
         'description',

@@ -11,9 +11,9 @@ class Lote extends BaseModel
     /**
      * Model's types field basic entries
      */
-    const STATE_OPEN = 'Aberto';
-    const STATE_CLOSED = 'Finalizado';
-    const STATE_ABORTED = 'Interrompido';
+    const STATE_OPEN = 'aberto';
+    const STATE_CLOSED = 'finalizado';
+    const STATE_ABORTED = 'interrompido';
 
     /**
      * The table associated with the model.
@@ -27,11 +27,21 @@ class Lote extends BaseModel
         'num_lote',
         'user_id',
         'unidade_id',
+        'lacre',
         'estado',
     ];
 
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'deleted_at'
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'estado' => self::STATE_OPEN
     ];
 
     /**
@@ -48,5 +58,13 @@ class Lote extends BaseModel
     public function unidade()
     {
         return $this->belongsTo(Unidade::class, 'unidade_id');
+    }
+
+    /**
+     * Get the leituras for the Lote.
+     */
+    public function leituras()
+    {
+        return $this->hasMany(Leitura::class);
     }
 }

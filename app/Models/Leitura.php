@@ -30,9 +30,9 @@ class Leitura extends BaseModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function unidade()
+    public function user()
     {
-        return $this->belongsTo(Unidade::class, 'unidade_id');
+        return $this->belongsTo(Users::class, 'user_id');
     }
 
     /**

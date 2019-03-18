@@ -72,17 +72,24 @@
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-tools">
                             <ul class="nav nav-tabs m-tabs-line m-tabs-line--primary m-tabs-line--2x"
+                                id="myTab"
                                 role="tablist">
                                 <li class="nav-item m-tabs__item">
                                     <a class="nav-link m-tabs__link active" data-toggle="tab" href="#m_tabs_6_1"
                                        role="tab">
-                                        <i class="fas fa-barcode"></i> Registrar Capa de Lote</h3>
+                                        <i class="fas fa-barcode"></i> Registrar Capa de Lote
                                     </a>
                                 </li>
                                 <li class="nav-item m-tabs__item">
                                     <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_2"
                                        role="tab">
-                                        <i class="fas fa-tasks"></i> Outras ações
+                                        <i class="fas fa-layer-group"></i> Lotes de Leituras
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_3"
+                                       role="tab">
+                                        <i class="fas fa-tasks"></i> Leituras efetuadas
                                     </a>
                                 </li>
                             </ul>
@@ -170,16 +177,50 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
-                                <table class="table table-responsive table-bordered">
-                                    <thead class="thead-dark">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped auto-dt responsive nowrap"
+                                           id="datatable-lotes"
+                                           data-server-side="true"
+                                           data-ajax="{{route('recebimento.listar-lotes')}}?_u={{Auth::id()}}"
+                                           data-dom='<"row"<"col-sm"l><"col-sm"f>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
+                                           data-columns='[{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"unidade"},{"data":"leituras_count"},{"data":"invalidos"},{"data":"situacao"},{"data":"action"}]'>
+                                        <thead class="thead-dark">
                                         <tr>
-                                            <th></th>
                                             <th>Lote</th>
+                                            <th>Data Criação</th>
+                                            <th>Criado por</th>
                                             <th>Unidade</th>
                                             <th>Registros</th>
+                                            <th>Ausentes</th>
+                                            <th>Estado</th>
+                                            <th>Ações</th>
                                         </tr>
-                                    </thead>
-                                </table>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="m_tabs_6_3" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped auto-dt responsive nowrap"
+                                           id="datatable-leituras"
+                                           data-server-side="true"
+                                           data-ajax="{{route('recebimento.listar-leituras')}}?_u={{Auth::id()}}"
+                                           data-dom='<"row"<"col-sm"l><"col-sm"f>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
+                                           data-columns='[{"data":"action", "searchable":false, "orderable":false},{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"capalote"},{"data":"situacao", "searchable":false},{"data":"buttons", "searchable":false, "orderable":false}]'
+                                            data-order='[[1, "desc"]]'>
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th><input type="checkbox" onclick="checkAll(this);"> </th>
+                                            <th>Lote</th>
+                                            <th>Data Leitura</th>
+                                            <th>Lido por</th>
+                                            <th>Capa de Lote</th>
+                                            <th>Situação</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -286,7 +327,7 @@
                 var lote = $("#lote").val();
                 if (!event.options || !event.options.preventPost) {
                     $.post('{{ route('receive.check-capa-lote') }}',
-                            {capaLote: tag, lote: lote}, function (response) {
+                            {capaLote: tag, lote: lote, _u: '{{Auth::id()}}'}, function (response) {
                                 // Mark tag with success class
                                 $(".tag.badge-secondary")
                                         .addClass("badge-info")
@@ -304,7 +345,7 @@
                                 // Close all opened modals
                                 $('.modal').modal('hide');
                                 var errormodal = $("#on_error").modal();
-                                errormodal.find('.modal-body').find('p').text(f.responseText);
+                                errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText || f.message);
                                 errormodal.show();
                                 $("[data-toogle]").tooltip();
                             });
@@ -316,7 +357,7 @@
                 var lote = $("#lote").val();
                 if (!event.options || !event.options.preventPost) {
                     $.post('{{ route('recebimento.remove-leitura') }}',
-                            {capaLote: tag, lote: lote}, function (response) {
+                            {capaLote: tag, lote: lote, _u: '{{Auth::id()}}'}, function (response) {
                                 $("[data-toogle]").tooltip("hide");
                             }).fail(function (f) {
                                 $('#tags-input').tagsinput('add', tag, {preventPost: true});
@@ -328,7 +369,8 @@
                                 // Close all opened modals
                                 $('.modal').modal('hide');
                                 var errormodal = $("#on_error").modal();
-                                errormodal.find('.modal-body').find('p').text(f.responseText);
+                                errormodal.find('.modal-body').find('p')
+                                        .text(f.responseJSON.message || f.responseText || f.message);
                                 errormodal.show();
                                 $("[data-toogle]").tooltip();
                             });
@@ -390,7 +432,8 @@
                                 // Close all opened modals
                                 $('.modal').modal('hide');
                                 var successmodal = $("#on_done_data").modal();
-                                successmodal.find('.modal-body').find('p').text(r);
+                                successmodal.find('.modal-body').find('p')
+                                        .text(r.message || r.responseJSON.message || r.responseText);
                                 successmodal.show();
                             }
                     ).done(function () {
@@ -414,7 +457,8 @@
             } else {
                 $('.modal').modal('hide');
                 var errormodal = $("#on_error").modal();
-                errormodal.find('.modal-body').find('p').text("Não há capa de Lote a ser registrada.");
+                errormodal.find('.modal-body').find('p')
+                        .text("Não há capa de Lote a ser registrada.");
                 errormodal.show();
             }
         }
@@ -436,9 +480,9 @@
                     {lote: lote, _u: '{{ Auth::user()->id }}'},
                     function (r) {
                         var items = [];
-                        $.each(r.data.leituras, function (leitura, st) {
+                        $.each(r.data.leituras, function (index, leitura) {
                             $('#selectCapaLote').tagsinput("add",
-                                    {value: leitura, text: leitura, state: st},
+                                    {value: leitura.capalote, text: leitura.capalote, state: leitura.presente},
                                     {preventPost: true}
                             );
                         });
@@ -452,7 +496,9 @@
                         // Close all opened modals
                         $('.modal').modal('hide');
                         var successmodal = $("#on_done_data").modal();
-                        successmodal.find('.modal-body').find('p').text(r.message);
+                        successmodal.find('.modal-body')
+                                .find('p')
+                                .text(r.message ||  r.responseJSON.message || r.responseText);
                         successmodal.show();
                     }
             ).fail(function (f) {
@@ -473,6 +519,40 @@
                     $("#lote").val(r.data.lote);
                 });
             }
+        }
+
+        function filtrarLeituras(lote) {
+            $("#datatable-leituras_filter").find("input").val(lote).change();
+            $('#myTab a[href="#m_tabs_6_3"]').tab('show');
+        }
+
+        function carregarLeituras(lote) {
+            $("#lote").val(lote);
+            $("#load-lote").click();
+            $('#myTab a[href="#m_tabs_6_1"]').tab('show');
+        }
+
+        function removeLeitura(id) {
+            $.post('{{ route('recebimento.remove-leitura') }}',
+                    {leitura: id, _u: '{{Auth::id()}}'}, function (r) {
+                        // Close all opened modals
+                        $('.modal').modal('hide');
+                        var successmodal = $("#on_done_data").modal();
+                        successmodal.find('.modal-body').find('p')
+                                .text(r.message || r.responseJSON.message || r.responseText);
+                        successmodal.show();
+                    }).fail(function (f) {
+                        // Close all opened modals
+                        $('.modal').modal('hide');
+                        var errormodal = $("#on_error").modal();
+                        errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText || f.message);
+                        errormodal.show();
+                    });
+        }
+
+        function checkAll(el) {
+            var st = $(el).prop("checked") == true;
+            $('.input-leitura').prop('checked', st);
         }
     </script>
 @stop
