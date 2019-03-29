@@ -102,16 +102,13 @@
                                                 <div class="input-group-text">De</div>
                                             </div>
                                             <input type="text" class="form-control" readonly="readonly" id="di"
-                                                   data-date-end-date="0d" data-date-autoclose="true"
                                                    value="{{date('d/m/Y')}}">
 
                                             <div class="input-group-prepend input-group-append">
                                                 <div class="input-group-text">Até</div>
                                             </div>
-                                            <input type="text" class="form-control datepicker" readonly="readonly"
-                                                   id="df"
-                                                   data-date-end-date="0d" data-date-autoclose="true"
-                                                   value="{{date('d/m/Y')}}">
+                                            <input type="text" class="form-control" readonly="readonly"
+                                                   id="df" value="{{date('d/m/Y')}}">
                                         </div>
                                         <span class="text-warning ml-2" title="O período máximo é de 90 dias"
                                               data-toggle="tooltip">
