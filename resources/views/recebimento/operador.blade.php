@@ -43,9 +43,6 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
                             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                                 <li class="m-nav__item m-nav__item--home">
                                     <a href="{{ route('home') }}" class="m-nav__link m-nav__link--icon">
@@ -113,6 +110,7 @@
                                                     <button class="btn btn-info" data-toggle="tooltip"
                                                             title="Gera um numero unico para identificar
                                                     o conjunto de leituras"
+                                                            id="renew-num-lote"
                                                             onclick="generateLoteNum()">
                                                         <i class="fas fa-sync-alt"></i>
                                                     </button>
@@ -169,28 +167,30 @@
                                             <i class="fas fa-eraser"></i> Limpar
                                         </button>
                                     </div>
-                                    <div class="col-sm-1"></div>
-                                    <div class="col-sm-7 h3">
+
+                                    <div class="col-sm-8 h3 text-right">
                                         <select multiple name="capalote[]" id="selectCapaLote"
                                                 class="form-control form-control-lg"></select>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
-                                <div class="table-responsive">
+                                <div class="table-responsive-sm">
                                     <table class="table table-bordered table-striped auto-dt responsive nowrap"
                                            id="datatable-lotes"
-                                           data-server-side="true"
+                                           data-server-side="true" data-processing="true"
                                            data-ajax="{{route('recebimento.listar-lotes')}}?_u={{Auth::id()}}"
+                                           data-order='[[1, "desc"],[6, "asc"]]'
                                            data-dom='<"row"<"col-sm"l><"col-sm"f>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
-                                           data-columns='[{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"unidade"},{"data":"leituras_count"},{"data":"invalidos"},{"data":"situacao"},{"data":"action"}]'>
+                                           data-columns='[{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"unidade"},{"data":"lacre"},{"data":"leituras_count"},{"data":"invalidas_count"},{"data":"estado"},{"data":"action"}]'>
                                         <thead class="thead-dark">
                                         <tr>
                                             <th>Lote</th>
                                             <th>Data Criação</th>
                                             <th>Criado por</th>
                                             <th>Unidade</th>
-                                            <th>Registros</th>
+                                            <th>Lacre</th>
+                                            <th>Total</th>
                                             <th>Ausentes</th>
                                             <th>Estado</th>
                                             <th>Ações</th>
@@ -198,19 +198,25 @@
                                         </thead>
                                     </table>
                                 </div>
+                                <div class="row">
+                                    <button class="btn btn-outline-secondary"
+                                            onclick="refreshData()">
+                                        <i class="fas fa-sync"></i> Atualizar
+                                    </button>
+                                </div>
                             </div>
                             <div class="tab-pane" id="m_tabs_6_3" role="tabpanel">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped auto-dt responsive nowrap"
                                            id="datatable-leituras"
-                                           data-server-side="true"
+                                           data-server-side="true" data-processing="true"
                                            data-ajax="{{route('recebimento.listar-leituras')}}?_u={{Auth::id()}}"
                                            data-dom='<"row"<"col-sm"l><"col-sm"f>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
-                                           data-columns='[{"data":"action", "searchable":false, "orderable":false},{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"capalote"},{"data":"situacao", "searchable":false},{"data":"buttons", "searchable":false, "orderable":false}]'
-                                            data-order='[[1, "desc"]]'>
+                                           data-columns='[{"data":"action", "searchable":false, "orderable":false},{"data":"num_lote"},{"data":"created_at", "searchable":false},{"data":"usuario"},{"data":"capalote"},{"data":"situacao", "searchable":false},{"data":"buttons", "searchable":false, "orderable":false}]'
+                                           data-order='[[2, "desc"],[1, "asc"]]'>
                                         <thead class="thead-dark">
                                         <tr>
-                                            <th><input type="checkbox" onclick="checkAll(this);"> </th>
+                                            <th><input type="checkbox" onclick="checkAll(this);"></th>
                                             <th>Lote</th>
                                             <th>Data Leitura</th>
                                             <th>Lido por</th>
@@ -220,6 +226,16 @@
                                         </tr>
                                         </thead>
                                     </table>
+                                </div>
+                                <div class="row">
+                                    <button class="btn btn-danger mr-2" data-toggle="modal" id="btnRemoverLeituras"
+                                            data-target="#removerLeiturasModal">
+                                        <i class="fas fa-times-circle"></i> Remover Leituras
+                                    </button>
+                                    <button class="btn btn-outline-secondary"
+                                            onclick="refreshData()">
+                                        <i class="fas fa-sync"></i> Atualizar
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -303,6 +319,40 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Remover Leitura[s] -->
+    <div class="modal fade" id="removerLeiturasModal" tabindex="-1" role="dialog"
+         aria-labelledby="removerLeiturasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border-warning">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="removerLeiturasModalLabel">
+                        <i class="fas fa-clipboard-list"></i> Remover Leitura<span class="plural hidden">s</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ao confimar a ação a<span class="plural hidden">s</span>
+                    leitura<span class="plural hidden">s</span>
+                    selecionada<span class="plural">s</span> ser<span class="singular">á</span>
+                    <span class="plural hidden">serão</span> excluída<span class="plural">s</span>
+                    do lote <span class="lote hidden"></span>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        <i class="far fa-times-circle"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-outline-warning"
+                            onclick="removerLeituras()">
+                        <i class="far fa-clipboard"></i> Confirmar Exclusão de Leitura<span
+                                class="plural hidden">s</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @stop
 
 @section('scripts')
@@ -333,9 +383,7 @@
                                         .addClass("badge-info")
                                         .removeClass("badge-secondary")
                                         .attr({title: "Capa de Lote encontrada", "data-toggle": "tooltip"});
-                                $("[data-toogle]").tooltip();
-                                $("#limpar-leituras").removeClass('invisible').show();
-                                $("#registrar-leituras").attr({disabled: false});
+                                refreshData();
                             }).fail(function (f) {
                                 $(".tag.badge-secondary")
                                         .addClass("badge-danger")
@@ -345,9 +393,10 @@
                                 // Close all opened modals
                                 $('.modal').modal('hide');
                                 var errormodal = $("#on_error").modal();
-                                errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText || f.message);
+                                errormodal.find('.modal-body').find('p')
+                                        .text(f.message || f.responseJSON.message || f.responseText);
                                 errormodal.show();
-                                $("[data-toogle]").tooltip();
+                                refreshData();
                             });
                 }
             });
@@ -358,10 +407,10 @@
                 if (!event.options || !event.options.preventPost) {
                     $.post('{{ route('recebimento.remove-leitura') }}',
                             {capaLote: tag, lote: lote, _u: '{{Auth::id()}}'}, function (response) {
-                                $("[data-toogle]").tooltip("hide");
-                            }).fail(function (f) {
+                                refreshData();
+                            }, 'json')
+                            .fail(function (f) {
                                 $('#tags-input').tagsinput('add', tag, {preventPost: true});
-
                                 $(".tag.badge-secondary")
                                         .addClass("badge-danger")
                                         .removeClass("badge-secondary")
@@ -370,32 +419,39 @@
                                 $('.modal').modal('hide');
                                 var errormodal = $("#on_error").modal();
                                 errormodal.find('.modal-body').find('p')
-                                        .text(f.responseJSON.message || f.responseText || f.message);
+                                        .text(f.message || f.responseJSON.message || f.responseText);
                                 errormodal.show();
-                                $("[data-toogle]").tooltip();
+                                $('[data-toogle="tooltip"]').tooltip();
                             });
                 }
             });
 
-            $('#selectCapaLote').on('itemRemoved', function (event) {
-                if ($('#selectCapaLote').tagsinput("items").length < 1) {
+            $('#inputCapaLote').keypress(function (e) {
+                if (e.which == 13) {
+                    if ($('#inputCapaLote').val().length == 13) {
+                        $('#btnAddCapaLote').click();
+                    } else {
+                        return false;
+                    }
+                }
+            });
+            $('#selectCapaLote').on('change', function (e) {
+                if ($(this).val() != "") {
+                    $("#limpar-leituras").removeClass('invisible').show();
+                    $("#registrar-leituras").attr({disabled: false});
+                    $("#lote").attr({readonly: true});
+                    $("#load-lote").attr({disabled: true});
+                    $("#renew-num-lote").attr({disabled: true});
+                } else {
                     $("#lote").attr({readonly: false});
                     $("#load-lote").attr({disabled: false});
+                    $("#renew-num-lote").attr({disabled: false});
                     $("#limpar-leituras").hide();
                     $("#registrar-leituras").attr({disabled: true});
                 }
             });
         });
 
-        $('#inputCapaLote').keypress(function (e) {
-            if (e.which == 13) {
-                if ($('#inputCapaLote').val().length == 13) {
-                    $('#btnAddCapaLote').click();
-                } else {
-                    return false;
-                }
-            }
-        });
 
         function addCapaLote() {
             if ($("#lote").val() == "") {
@@ -407,8 +463,6 @@
                 errormodal.show();
                 $("#lote").focus();
             } else {
-                $("#lote").attr({readonly: true});
-                $("#load-lote").attr({disabled: true});
                 var capaLote = $('#inputCapaLote').val();
                 $('#selectCapaLote').tagsinput('add', {value: capaLote, text: capaLote});
                 $('#inputCapaLote').val("").focus();
@@ -436,20 +490,17 @@
                                         .text(r.message || r.responseJSON.message || r.responseText);
                                 successmodal.show();
                             }
-                    ).done(function () {
+                    ).done(function (xhr) {
                                 $('#selectCapaLote').tagsinput('removeAll');
                                 $('#lacre').val("");
-                                $('#lote').val("").attr({readonly: false});
-                                $("#load-lote").attr({disabled: false});
-                                $("#limpar-leituras").hide();
-                                $("#registrar-leituras").attr({disabled: true});
+                                $('#lote').val("");
                             }
-                    ).fail(function (f) {
+                    ).fail(function (xhr) {
                                 // Close all opened modals
                                 $('.modal').modal('hide');
                                 var errormodal = $("#on_error").modal();
                                 errormodal.find('.modal-body').find('p')
-                                        .text(f.responseJSON.message || f.responseText || f.message);
+                                        .text(xhr.message || xhr.responseJSON.message || xhr.responseText);
                                 errormodal.show();
                             });
                 });
@@ -486,28 +537,21 @@
                                     {preventPost: true}
                             );
                         });
-                        if ($('#selectCapaLote').tagsinput("items").length > 0) {
-                            $("#lote").attr({readonly: true});
-                            $("#load-lote").attr({disabled: true});
-                            $("#limpar-leituras").removeClass("invisible").show();
-                            $("#registrar-leituras").attr({disabled: false});
-                        }
 
                         // Close all opened modals
                         $('.modal').modal('hide');
                         var successmodal = $("#on_done_data").modal();
                         successmodal.find('.modal-body')
                                 .find('p')
-                                .text(r.message ||  r.responseJSON.message || r.responseText);
+                                .text(r.message || r.responseJSON.message || r.responseText);
                         successmodal.show();
                     }
             ).fail(function (f) {
-                        console.log(f);
                         // Close all opened modals
                         $('.modal').modal('hide');
                         var errormodal = $("#on_error").modal();
                         errormodal.find('.modal-body').find('p')
-                                .text(f.responseJSON.message || f.responseText || f.message);
+                                .text(f.message || f.responseJSON.message || f.responseText);
                         errormodal.show();
                     });
         }
@@ -522,7 +566,7 @@
         }
 
         function filtrarLeituras(lote) {
-            $("#datatable-leituras_filter").find("input").val(lote).change();
+            $("#datatable-leituras").DataTable().search(lote).draw();
             $('#myTab a[href="#m_tabs_6_3"]').tab('show');
         }
 
@@ -532,27 +576,62 @@
             $('#myTab a[href="#m_tabs_6_1"]').tab('show');
         }
 
-        function removeLeitura(id) {
-            $.post('{{ route('recebimento.remove-leitura') }}',
-                    {leitura: id, _u: '{{Auth::id()}}'}, function (r) {
-                        // Close all opened modals
-                        $('.modal').modal('hide');
-                        var successmodal = $("#on_done_data").modal();
-                        successmodal.find('.modal-body').find('p')
-                                .text(r.message || r.responseJSON.message || r.responseText);
-                        successmodal.show();
-                    }).fail(function (f) {
-                        // Close all opened modals
-                        $('.modal').modal('hide');
-                        var errormodal = $("#on_error").modal();
-                        errormodal.find('.modal-body').find('p').text(f.responseJSON.message || f.responseText || f.message);
-                        errormodal.show();
-                    });
+        function removerLeituras() {
+            var leituras = [];
+            $('.input-leitura:checked').each(function (ix, obj) {
+                leituras.push($(obj).val());
+            });
+            if (leituras.length > 0) {
+                $.post('{{ route('recebimento.remove-leitura') }}',
+                        {leituras: leituras, _u: '{{Auth::id()}}'}, function (r) {
+                            // Close all opened modals
+                            $('.modal').modal('hide');
+                            var successmodal = $("#on_done_data").modal();
+                            successmodal.find('.modal-body').find('p')
+                                    .text(r.message || r.responseJSON.message || r.responseText);
+                            successmodal.show();
+
+                            $.each(r.data, function (i, v) {
+                                $('#selectCapaLote').tagsinput('remove', v, {preventPost: true})
+                            });
+                            refreshData();
+                        }).fail(function (f) {
+                            // Close all opened modals
+                            $('.modal').modal('hide');
+                            var errormodal = $("#on_error").modal();
+                            errormodal.find('.modal-body').find('p')
+                                    .text(f.message || f.responseJSON.message || f.responseText);
+                            errormodal.show();
+                        });
+            } else {
+                // Close all opened modals
+                $('.modal').modal('hide');
+                var errormodal = $("#on_error").modal();
+                errormodal.find('.modal-body').find('p')
+                        .text("Nenhuma leitura foi selecionada para ser excluída!");
+                errormodal.show();
+                errormodal.on('close.bs.modal', function (e) {
+                    errormodal.find('.modal-body').find('p')
+                            .text("");
+                })
+            }
         }
 
         function checkAll(el) {
             var st = $(el).prop("checked") == true;
             $('.input-leitura').prop('checked', st);
+        }
+
+        function removeUmaLeitura(el) {
+            $(el).parents('tr').find(':checkbox.input-leitura')
+                    .prop('checked', true);
+            $('#btnRemoverLeituras').click();
+        }
+
+        function refreshData() {
+            $('#datatable-leituras').DataTable().ajax.reload();
+            $('#datatable-lotes').DataTable().ajax.reload();
+            $('[data-toogle="tooltip"]').tooltip("hide");
         }
     </script>
 @stop

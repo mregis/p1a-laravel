@@ -24,15 +24,16 @@ class Lote extends BaseModel
 
     protected $fillable = [
         'id',
-        'num_lote',
         'user_id',
         'unidade_id',
+        'num_lote',
         'lacre',
         'estado',
+        'created_at'
     ];
 
     protected $guarded = [
-        'id', 'created_at', 'updated_at', 'deleted_at'
+        'id', 'updated_at', 'deleted_at'
     ];
 
     /**

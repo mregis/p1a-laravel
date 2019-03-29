@@ -24,4 +24,13 @@ class RecebimentoController extends BaseController
         $menus = $this->menu->menu();
         return view('recebimento.operador', compact('menus'));
     }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function carregarArquivoLeituras()
+    {
+        $menus = $this->menu->menu();
+        return view('recebimento.carregar-arquivo', compact('menus'));
+    }
 }

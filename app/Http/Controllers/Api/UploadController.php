@@ -63,7 +63,7 @@ class UploadController extends BaseController
                 }
                 DB::beginTransaction(); // Iniciando uma transação para evitar problemas com o banco
                 $in_transaction = true;
-                    // Criando o registro do Arquivo
+                // Criando o registro do Arquivo
                 $oFile = new Files(
                     [
                         'name' => $name,

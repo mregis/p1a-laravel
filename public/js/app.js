@@ -44325,8 +44325,6 @@ try {
 
   __webpack_require__("./node_modules/blockui/jquery.blockUI.js");
 
-  __webpack_require__("./node_modules/daterangepicker/daterangepicker.js")(window, $);
-
   __webpack_require__("./node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js");
 
   __webpack_require__("./node_modules/bootstrap-maxlength/bootstrap-maxlength.js");
@@ -44344,8 +44342,6 @@ try {
   __webpack_require__("./node_modules/clipboard/dist/clipboard.js");
 
   __webpack_require__("./node_modules/ion-rangeslider/js/ion.rangeSlider.js");
-
-  __webpack_require__("./node_modules/dropzone/dist/dropzone.js")(window, $);
 
   __webpack_require__("./node_modules/summernote/dist/summernote.js");
 

@@ -368,7 +368,19 @@ function getHistory(id, url, u) {
         });
 }
 
+var datepickerConfig = {
+    uiLibrary: 'bootstrap4',
+    locale: 'pt-br',
+    format: 'dd/mm/yyyy',
+    icons: { rightIcon: '<i class="far fa-calendar-alt"></i>' }
+};
 
+var timepickerConfig = {
+    uiLibrary: 'bootstrap4',
+    locale: 'pt-br',
+    format: 'HH:MM',
+    icons: { rightIcon: '<i class="far fa-clock"></i>' }
+};
 
 /**
  * @class mApp  Metronic App class
@@ -8617,9 +8629,8 @@ Chart.elements.Rectangle.prototype.draw = function() {
     }
 };
 
-$.fn.markdown.defaults.iconlibrary = 'fa';
+$.fn.markdown.defaults.iconlibrary = 'fas';
 
-$.fn.timepicker.defaults.icons = {up: 'la la-angle-up', down: 'la la-angle-down'};
 jQuery.validator.setDefaults({
     errorElement: 'div', //default input error message container
     errorClass: 'form-control-feedback', // default input error message class

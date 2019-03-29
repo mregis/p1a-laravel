@@ -9,9 +9,6 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
                             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                                 <li class="m-nav__item m-nav__item--home">
                                     <a href="{{route('home')}}" class="m-nav__link m-nav__link--icon">
@@ -120,9 +117,15 @@
                 });
             }
 
-            $('.input-daterange input').each(function () {
-                $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
-            });
+            $('#di').datepicker($.extend(datepickerConfig, {maxDate: function () {
+                return $('#df').val();
+            }}));
+            $('#df').datepicker($.extend(datepickerConfig, {
+                minDate: function () {
+                    return $('#di').val();
+                },
+                maxDate: new Date()
+            }));
         });
         // Impressão de Capa de Lote
         function view(docid) {

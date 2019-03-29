@@ -8245,9 +8245,8 @@ Chart.elements.Rectangle.prototype.draw = function() {
     }
 };
 
-$.fn.markdown.defaults.iconlibrary = 'fa';
+$.fn.markdown.defaults.iconlibrary = 'fas';
 
-$.fn.timepicker.defaults.icons = {up: 'la la-angle-up', down: 'la la-angle-down'};
 jQuery.validator.setDefaults({
     errorElement: 'div', //default input error message container
     errorClass: 'form-control-feedback', // default input error message class

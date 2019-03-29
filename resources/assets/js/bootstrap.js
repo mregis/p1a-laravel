@@ -15,13 +15,13 @@ try {
 
     window.$ = window.jQuery = require('jquery');
     require('bootstrap');
+
     require('js-cookie');
     require('wnumb');
     require('jquery.input');
     require('jquery-form');
     require('malihu-custom-scrollbar-plugin')(window, $);
     require('blockui');
-    require('daterangepicker')(window, $);
     require('bootstrap-touchspin');
     require('bootstrap-maxlength');
     require('bootstrap-select');
@@ -31,7 +31,6 @@ try {
     require('autosize');
     require('clipboard');
     require('ion-rangeslider');
-    require('dropzone')(window, $);
     require('summernote');
     require('jquery-validation');
     require('toastr');

@@ -87,6 +87,7 @@ Route::get('/report-remessa/{id}', 'Api\ReportController@arquivo')->name('upload
 
 Route::group(['prefix' => 'recebimento'], function() {
 	Route::get('/operador', 'Recebimento\RecebimentoController@operador')->name('recebimento.operador');
+	Route::get('/carregar-arquivo', 'Recebimento\RecebimentoController@carregarArquivoLeituras')->name('recebimento.carregar-arquivo');
 });
 
 Route::get('/doc/history/{id}', 'Api\UploadController@history');

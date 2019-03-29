@@ -368,4 +368,16 @@ function getHistory(id, url, u) {
         });
 }
 
+var datepickerConfig = {
+    uiLibrary: 'bootstrap4',
+    locale: 'pt-br',
+    format: 'dd/mm/yyyy',
+    icons: { rightIcon: '<i class="far fa-calendar-alt"></i>' }
+};
 
+var timepickerConfig = {
+    uiLibrary: 'bootstrap4',
+    locale: 'pt-br',
+    format: 'HH:MM',
+    icons: { rightIcon: '<i class="far fa-clock"></i>' }
+};

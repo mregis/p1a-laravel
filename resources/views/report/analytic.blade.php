@@ -288,39 +288,28 @@
 
             if (typeof(report) == "undefined" || report == null) {
                 report = $('#report-analitico').DataTable(DataTablesLocalOptions);
-                $('#di').change(function () {
-                    var a = $('#di').datepicker('getDate').getTime();
-                    var b = $('#df').datepicker('getDate').getTime();
-                    if (a > b) {
-                        $("#df").datepicker('setDate', new Date(a));
-                        return;
-                    }
-                    var maxdiff = 30 * 24 * 60 * 60 * 1000; // 30 dias
-                    if (b - a > maxdiff) {
-                        $("#df").datepicker('setDate', new Date(a + maxdiff));
-                        return;
-                    }
+                $('#di').datepicker(
+                        $.extend(datepickerConfig, {
+                            maxDate: function () {
+                                return $('#df').val();
+                            }
+                        })
+                );
+                $('#df').datepicker(
+                        $.extend(datepickerConfig, {
+                            minDate: function () {
+                                return $('#di').val();
+                            },
+                            maxDate: new Date()
+                        })
+                );
+
+                $('#di, #df').change(function () {
                     report.ajax.reload();
                 });
-                $('#df').change(function () {
-                    var a = $('#di').datepicker('getDate').getTime();
-                    var b = $('#df').datepicker('getDate').getTime();
-                    if (a > b) {
-                        $("#di").datepicker('setDate', new Date(b));
-                        return;
-                    }
-                    var maxdiff = 30 * 24 * 60 * 60 * 1000; // 30 dias
-                    if (b - a > maxdiff) {
-                        $("#di").datepicker('setDate', new Date(b - maxdiff));
-                        return;
-                    }
-                    report.ajax.reload();
-                });
+
             }
 
-            $('.input-daterange input').each(function () {
-                $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
-            });
         });
     </script>
 
