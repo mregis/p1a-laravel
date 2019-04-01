@@ -143,9 +143,9 @@ class UploadController extends BaseController
         return Datatables::of($query)
             ->addColumn('action', function ($file) {
                 return '<div align="center"><a href="' . route('arquivo.file', $file->id) .
-                '" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only mr-1">' .
                 '<i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $file->id . ')" ' .
-                'class="btn btn-sm btn-outline-danger m-btn m-btn--icon m-btn--icon-only">' .
+                'class="btn btn-sm btn-outline-danger m-btn m-btn--icon m-btn--icon-only mr-1">' .
                 '<i class="fas fa-trash-alt"></i></button></div>';
             })
             ->editColumn('created_at', function ($file) {
@@ -156,6 +156,9 @@ class UploadController extends BaseController
             })
             ->editColumn('movimento', function ($file) {
                 return with(new Carbon($file->movimento))->format('d/m/Y');
+            })
+            ->editColumn('total', function ($file) {
+                return number_format($file->total, 0, ',', '.');
             })
             ->make(true);
     }
