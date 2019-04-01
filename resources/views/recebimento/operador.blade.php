@@ -6,33 +6,6 @@
         .bootstrap-tagsinput {
             border: none;
         }
-
-        #loadMe .loader {
-            position: relative;
-            text-align: center;
-            margin: 15px auto 35px auto;
-            z-index: 9999;
-            display: block;
-            width: 80px;
-            height: 80px;
-            border: 10px solid rgba(0, 0, 0, .3);
-            border-radius: 50%;
-            border-top-color: #000;
-            animation: fa-spin 1.5s ease-in-out infinite;
-            -webkit-animation: fa-spin 1.5s ease-in-out infinite;
-        }
-
-        /** MODAL STYLING **/
-
-        #loadMe .modal-content {
-            border-radius: 0px;
-            box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.7);
-        }
-
-        #loadMe .modal-backdrop.show {
-            opacity: 0.75;
-        }
-
     </style>
 @stop
 

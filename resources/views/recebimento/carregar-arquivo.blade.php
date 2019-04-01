@@ -46,35 +46,12 @@
         .dropzone .dz-message {
             margin: 0;
         }
+        .dz-success-mark svg g, .dz-success-mark svg g g {
+            fill: green;
+        }
         .bootstrap-tagsinput {
             overflow: auto;
             border: none;
-        }
-
-        #loadMe .loader {
-            position: relative;
-            text-align: center;
-            margin: 15px auto 35px auto;
-            z-index: 9999;
-            display: block;
-            width: 80px;
-            height: 80px;
-            border: 10px solid rgba(0, 0, 0, .3);
-            border-radius: 50%;
-            border-top-color: #000;
-            animation: fa-spin 1.5s ease-in-out infinite;
-            -webkit-animation: fa-spin 1.5s ease-in-out infinite;
-        }
-
-        /** MODAL STYLING **/
-
-        #loadMe .modal-content {
-            border-radius: 0px;
-            box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.7);
-        }
-
-        #loadMe .modal-backdrop.show {
-            opacity: 0.75;
         }
 
     </style>
@@ -173,12 +150,14 @@
                                     <input type="hidden" name="_u" value="{{Auth::id()}}"/>
 
                                     <div class="m-dropzone__msg dz-message needsclick m-dropzone m-dropzone--primary">
-                                        <h3 class="m-dropzone__msg-title">Carregar Leituras</h3>
                                             <span class="m-dropzone__msg-desc">
                                                 Arraste o arquivo ou clique para fazer o upload.
                                                 Faça upload de até 5 arquivos</span>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="form-group m-form__group form-row">
+                                <div id="dropzpone-preview" class="my-dropzpone-preview dropzone-previews"></div>
                             </div>
                             <div class="form-group m-form__group form-row">
                                 <button class="btn btn-success btn-lg mr-2"
@@ -230,6 +209,29 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="loader"></div>
+                    <div>
+                        <p>Efetuando o registro das Leituras de Capas de Lotes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Uploading File -->
+    <div class="modal fade" id="my-upload-progress" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white" id="loadMeLabel">Carregando Leituras do Arquivo</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="progress">
+                        <div id="my-upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar" aria-valuenow="1" aria-valuemin="0" style="width: 1%"
+                             aria-valuemax="100">
+
+                        </div>
+                    </div>
                     <div>
                         <p>Efetuando o registro das Leituras de Capas de Lotes</p>
                     </div>
@@ -306,17 +308,31 @@
     <script type="text/javascript">
 
         Dropzone.autoDiscover = false;
+
         var myDropzone = null;
+
         $(function () {
             myDropzone = new Dropzone("#my-dropzone");
+            myDropzone.on("sending", function (file, response) {
+                $("#loadMe").modal({
+                    backdrop: "static", //remove ability to close modal with click
+                    keyboard: false, //remove option to close with keyboard
+                    show: true //Display loader!
+                });
+            });
             myDropzone.on("success", function (file, response) {
                 // Arquivo carregado e validado
                 $.each(response.data, function (i, o) {
                     $('#selectLeitura').tagsinput('add',
-                            {value: o.capalote, text: o.capalote, state: o.presente, estado: o.estado},
+                            {value: o.c, text: o.c, state: o.p, estado: o.e},
                             {preventPost: true}
                     );
                 });
+                $("#loadMe").modal('hide');
+                var successmodal = $("#on_done_data").modal();
+                successmodal.find('.modal-body').find('p')
+                        .text(response.message || response.responseJSON.message || response.responseText);
+                successmodal.show();
             });
 
             $('#dt_leitura').datetimepicker(
@@ -330,7 +346,7 @@
             $('#selectLeitura').tagsinput({
                 tagClass: function (item) {
                     if (typeof item.state != "undefined") {
-                        var c = (item.state == true ? 'badge-info' : 'badge-danger');
+                        var c = (item.state == "1" ? 'badge-info' : 'badge-danger');
                         if (item.estado == '{{\App\Models\Docs::STATE_RECEIVED}}' ||
                                 item.estado == '{{\App\Models\Docs::STATE_THEFT}}'
                         ) {
@@ -396,12 +412,12 @@
                                 $('#lacre').val("");
                                 $('#lote').val("").attr({readonly: false});
                             })
-                            .fail(function (f) {
+                            .fail(function (xhr) {
                                 // Close all opened modals
                                 $('.modal').modal('hide');
                                 var errormodal = $("#on_error").modal();
                                 errormodal.find('.modal-body').find('p')
-                                        .text(f.message || f.responseJSON.message || f.responseText);
+                                        .text(xhr.message || xhr.responseJSON.message || xhr.responseText);
                                 errormodal.show();
                             });
                 });

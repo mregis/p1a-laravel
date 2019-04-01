@@ -45,7 +45,7 @@ Route::post('/products/', 'Api\ProductsController@store');
 
 // Upload Group
 Route::group(['prefix' => '/upload'], function () {
-    Route::post('/{user_id}', 'Api\UploadController@index');
+    Route::post('/', 'Api\UploadController@index')->name('upload.upload');
     Route::get('/list', 'Api\UploadController@listFiles')->name('upload.list');
     Route::delete('/delete/{file_id}', 'Api\UploadController@destroy')->name('upload.delete');
     Route::get('/docs/{id}/{profile}/{juncao}', 'Api\UploadController@docs');

@@ -869,7 +869,6 @@ class ReceiveController extends BaseController
                                 sprintf('Registro [%s] da linha %d é inválido. Processo interrompido', $r, $i)
                             );
                         }
-
                         $rows[] = $r;
                         $i++;
                     }
@@ -895,7 +894,7 @@ class ReceiveController extends BaseController
                 throw new \Exception('Arquivo inválido.');
             }
         } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 400);
+            return $this->sendError($e->getMessage(), 400);
         }
     }
 }
