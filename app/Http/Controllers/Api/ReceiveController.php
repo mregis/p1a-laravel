@@ -455,7 +455,7 @@ class ReceiveController extends BaseController
                 throw new \Exception("Lote não encontrado.");
             }
 
-            if ($lote->estado == Lote::STATE_CLOSED) {
+            if ($lote->situacao == Lote::STATE_CLOSED) {
                 throw new \Exception("Este Lote já foi marcado como Finalizado. \n" .
                     "Você pode verificar as leituras efetuadas na guia Leituras \n" .
                     "Não há como adicionar novas leituras a este Lote."
@@ -563,7 +563,7 @@ class ReceiveController extends BaseController
                 }
             }
             // Atualizando informações de Leitura/Lote
-            $lote->estado = Lote::STATE_CLOSED;
+            $lote->situacao = Lote::STATE_CLOSED;
             $lote->lacre = $lacre;
             $lote->save();
 
@@ -610,7 +610,7 @@ class ReceiveController extends BaseController
                         $return = '<a href="javascript:filtrarLeituras(\'' . $lote->num_lote .
                             '\');" class="btn btn-sm btn-info mr-2" ' .
                             'title="verificar as Leituras desse Lote"><i class="fas fa-search"></i></a>';
-                        if ($lote->estado == Lote::STATE_OPEN) {
+                        if ($lote->situacao == Lote::STATE_OPEN) {
                             $return .= '<a href="javascript:carregarLeituras(\'' . $lote->num_lote . '\');" ' .
                             'class="btn btn-sm btn-success mr-2" title="Carregar Leituras"> ' .
                                 '<i class="fas fa-tasks"></i></a>';
@@ -627,8 +627,8 @@ class ReceiveController extends BaseController
                 ->editColumn('lacre', function ($lote) {
                     return $lote->lacre ? $lote->lacre : '-';
                 })
-                ->editColumn('estado', function ($lote) {
-                    return $lote->estado ? __('status.' . $lote->estado) : '-';
+                ->editColumn('situacao', function ($lote) {
+                    return $lote->situacao ? __('status.' . $lote->situacao) : '-';
                 })
                 ->editColumn('created_at', function ($lote) {
                     return $lote->created_at ? with(new Carbon($lote->created_at))->format('d/m/Y H:i') : '';
@@ -659,7 +659,7 @@ class ReceiveController extends BaseController
                 ->select([
                     "leituras.*",
                     "lotes.num_lote as num_lote",
-                    "lotes.estado as estado",
+                    "lotes.situacao as situacao",
                     "lotes.unidade_id as unidade_id",
                     "users.name as usuario",
                 ])
@@ -677,7 +677,7 @@ class ReceiveController extends BaseController
                 ->addColumn('action', function ($leitura) use ($unidade) {
                     $return = '';
                     if ($leitura->lote->unidade_id == $unidade->id &&
-                        $leitura->lote->estado == Lote::STATE_OPEN) {
+                        $leitura->lote->situacao == Lote::STATE_OPEN) {
                         $return = sprintf('<input type="checkbox" name="leitura[]" value="%d" class="input-leitura">', $leitura->id);
                     }
                     return $return;
@@ -692,7 +692,7 @@ class ReceiveController extends BaseController
                 ->addColumn('buttons', function ($leitura) use ($unidade) {
                     $return = '';
                     if ($leitura->unidade_id == $unidade->id &&
-                        $leitura->estado == Lote::STATE_OPEN) {
+                        $leitura->situacao == Lote::STATE_OPEN) {
                         $return = '<a href="javascript:;" onclick="removeUmaLeitura($(this));" ' .
                         'class="btn btn-sm btn-danger btn-remove-leitura" ' .
                             'title="Remover leitura"><i class="fas fa-times"></i></a>';
@@ -724,108 +724,60 @@ class ReceiveController extends BaseController
                 throw new \Exception("O seu cadastro não permite executar esta ação!");
             }
 
-            // Validando campos obrigatórios
-            if (!$dt_leitura = $request->get('dt_leitura')) {
-                throw new \Exception("Valor para o campo Data de Leitura inválido");
-            }
-
-            $dt_leitura = new \DateTime(str_replace("/", "-", $dt_leitura));
-            if (!$_lote = $request->get('lote')) {
-                throw new \Exception("Valor para o campo Lote de Leitura inválido");
-            }
-            if (Lote::where('num_lote', $_lote)->first()) {
-                throw new \Exception("Este número de Lote de Leitura não pode ser utilizado.");
-            }
-            $_lacre = $request->get('_lacre');
-
-            if (!$leituras = $request->get('leituras')) {
+            if (!$lotes = $request->get('lotes')) {
                 throw new \Exception("Não há leituras para serem registradas");
             }
 
             $in_transaction = true;
             DB::beginTransaction();
             $seal = $msg = null;
-            // Verificando Lacre
-            if ($_lacre != null) {
-                if (!$seal = Seal::where('content', $_lacre)->first()) {
-                    $seal = new Seal();
-                    $seal->user_id = $user_id;
-                    $seal->content = $_lacre;
-                    $seal->save();
-                }
-            }
-
-            if (!$lote = Lote::where('num_lote', $_lote)->first()) {
-                $lote = new Lote([
-                    'user_id' => $user_id,
-                    'unidade_id' => $unidade->id,
-                    'num_lote' => $_lote,
-                    'created_at' => $dt_leitura,
-                    'lacre' => $_lacre,
-                ]);
-                $lote->save();
-            }
-
             $cntr = 0; // Contador de leituras efetuadas
-            $q_leitura = Leitura::query()
-                ->select(["leituras.id", "lotes.id"])
-                ->join('lotes', 'leituras.lote_id', '=', 'lotes.id');
-            foreach ($leituras as $capaLote) {
-                $q_leitura->where([
-                    ['leituras.capalote', '=', $capaLote],
-                    ['lotes.num_lote', '=', $_lote]
-                ]);
-                if (!$leitura = $q_leitura->first()) {
-                    $leitura = new Leitura([
-                        'user_id' => $user_id,
-                        'lote_id' => $lote->id,
-                        'capalote' => $capaLote,
-                        'lacre' => $_lacre,
-                    ]);
-                } else {
-                    throw new \Exception(
-                        sprintf("A Capa de Lote [%s] já foi lida para este Lote", $capaLote)
-                    );
-                }
-
-                // Nova Leitura para Lote atual
-                if ($doc = Docs::where('content', $capaLote)->first()) {
-                    $leitura->fill(['presente' => true]);
-                } else {
-                    $leitura->fill(['presente' => false]);
-                }
-                $leitura->save();
-
-                $notfound = [];
-                if ($doc = Docs::where('content', trim($capaLote))->first()) {
-                    if (in_array($doc->status,
-                        [Docs::STATE_IN_TRANSIT, Docs::STATE_CONTINGENCY, Docs::STATE_PENDING, Docs::STATE_SENT])
-                    ) {
-                        $doc->status = Docs::STATE_IN_TRANSIT;
-                        $doc->user_id = $user_id;
-                        $doc->save();
-                    }
-                    $docsHistory = new DocsHistory();
-                    $docsHistory->doc_id = $doc->id;
-                    $docsHistory->description = DocsHistory::STATE_IN_TRANSIT;
-                    $docsHistory->user_id = $user_id;
-                    $docsHistory->save();
-                    if ($seal != null) {
-                        if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
-                            $sealGroup = new SealGroup();
-                            $sealGroup->seal_id = $seal->id;
-                            $sealGroup->doc_id = $doc->id;
-                            $sealGroup->save();
+            foreach ($lotes as $id_lote) {
+                if ($lote = Lote::find($id_lote)) {
+                    if ($lote->situacao == Lote::STATE_OPEN) {
+                        // Verificando Lacre
+                        if ($lote->lacre != null) {
+                            if (!$seal = Seal::where('content', $lote->lacre)->first()) {
+                                $seal = new Seal();
+                                $seal->user_id = $user_id;
+                                $seal->content = $lote->lacre;
+                                $seal->save();
+                            }
                         }
-                    }
-                } else {
-                    $notfound[] = $capaLote;
-                }
 
-                // Atualizando informações de Leitura/Lote
-                $lote->estado = Lote::STATE_CLOSED;
-                $lote->save();
+                        foreach ($lote->leituras as $leitura) {
+                            if ($doc = Docs::where('content', trim($leitura->capalote))->first()) {
+                                if (in_array($doc->status,
+                                    [Docs::STATE_IN_TRANSIT, Docs::STATE_CONTINGENCY, Docs::STATE_PENDING, Docs::STATE_SENT])
+                                ) {
+                                    $doc->status = Docs::STATE_IN_TRANSIT;
+                                    $doc->user_id = $user_id;
+                                    $doc->save();
+                                }
+                                $docsHistory = new DocsHistory();
+                                $docsHistory->doc_id = $doc->id;
+                                $docsHistory->description = DocsHistory::STATE_IN_TRANSIT;
+                                $docsHistory->user_id = $user_id;
+                                $docsHistory->save();
+                                if ($seal != null) {
+                                    if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
+                                        $sealGroup = new SealGroup();
+                                        $sealGroup->seal_id = $seal->id;
+                                        $sealGroup->doc_id = $doc->id;
+                                        $sealGroup->save();
+                                    }
+                                }
+                                $cntr++;
+                            }
+                        }
+                        // Atualizando informações de Leitura/Lote
+                        $lote->situacao = Lote::STATE_CLOSED;
+                        $lote->save();
+                    }
+                }
             }
+
+
             DB::commit();
             $in_transaction = false;
             (($cntr == 0) && ($msg = ' Nenhuma leitura nova efetuada')) ||
@@ -843,6 +795,7 @@ class ReceiveController extends BaseController
     }
 
     public function lerArquivoLeituras(Request $request) {
+        $in_transaction = true;
         try {
             $user_id = $request->get('_u', 0);
             if (!$user = Users::find($user_id)) {
@@ -854,9 +807,16 @@ class ReceiveController extends BaseController
             if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
                 throw new \Exception("O seu cadastro não permite executar esta ação!");
             }
+            // Validando campos obrigatórios
+            if (!$dt_leitura = $request->get('dt_leitura')) {
+                throw new \Exception("Valor para o campo Data de Leitura inválido");
+            }
 
+            $dt_leitura = new \DateTime(str_replace("/", "-", $dt_leitura));
+            $_lacre = $request->get('_lacre');
             // Verificando o arquivo carregado
             if ($request->hasFile('file') && $request->file('file')->isValid()) {
+                $file_hash = hash_file('crc32b', $request->file->getPathName());
                 if (($handle = fopen($request->file->getPathName(), 'r')) !== FALSE) {
                     $i = 1;
                     $rows = [];
@@ -879,21 +839,142 @@ class ReceiveController extends BaseController
                 if (count($rows) < 1) {
                     throw new \Exception('Arquivo não contém registros');
                 }
-
-                $leituras = [];
-                foreach ($rows as $capaLote) {
-                    if ($doc = Docs::where('content', $capaLote)->first()) {
-                        $leituras[] = ['capalote' => $capaLote, 'presente' => true, 'estado' => $doc->status];
-                    } else {
-                        $leituras[] = ['capalote' => $capaLote, 'presente' => false, 'estado' => null];
+                // Verificando se esse arquivo já não foi carregado
+                $id_lotes = [];
+                $response = [];
+                if ($lotes = Lote::withcount(
+                    [
+                        'leituras',
+                        'leituras as leituras_ausentes_count' => function ($query) {
+                            $query->where('presente', false);
+                        }
+                    ])->where('file_hash', $file_hash)->get()) {
+                    $t = $a = 0;
+                    foreach ($lotes as $l) {
+                        $t += $l->leituras_count;
+                        $a += $l->leituras_ausentes_count;
+                        $response[$l->num_lote] = [
+                            'c' => $l->num_lote,
+                            'i' => $l->id,
+                            'p' => $l->leituras_count - $l->leituras_ausentes_count,
+                            'a' => $l->leituras_ausentes_count,
+                            's' => $l->situacao,
+                            't' => sprintf("Lote %s criado. %d leituras registradas. %d presentes e %d ausentes.",
+                                $l->num_lote,$l->leituras_count,
+                                $l->leituras_count - $l->leituras_ausentes_count,
+                                $l->leituras_ausentes_count),
+                        ];
+                        $id_lotes[] = $l->id;
+                    }
+                    if ($t >= count($rows)) {
+                        return $this->sendResponse($response, 'Este arquivo já foi carregado anteriormente porém as '.
+                            'Verifique a situação de cada lote gerado na lista de Lotes. Se preferir, ' .
+                            'as leituras podem ser gerenciadas acessando a aba [Lotes de Leitura] ' .
+                            'no item de menu [Recebimento->Operador]');
+                    }
+                }
+                set_time_limit(120);
+                DB::beginTransaction();
+                $msg = null;
+                // Verificando Lacre
+                if ($_lacre != null) {
+                    if (!$seal = Seal::where('content', $_lacre)->first()) {
+                        $seal = new Seal();
+                        $seal->user_id = $user_id;
+                        $seal->content = $_lacre;
+                        $seal->save();
                     }
                 }
 
-                return $this->sendResponse($leituras, 'Arquivo carregado.');
+                $_lote = $dt_leitura->format('YmdHi');
+                while ($lote = Lote::where('num_lote', $_lote)->first()) {
+                    $_lote++;
+                    if ((int)$dt_leitura->format('YmdHi') + 60 < $_lote) {
+                        throw new \Exception('Ocorreu um erro ao tentar gerar um lote para as leituras do arquivo');
+                    }
+                }
+                $lote = Lote::create([
+                    'user_id' => $user_id,
+                    'unidade_id' => $unidade->id,
+                    'num_lote' => $_lote,
+                    'created_at' => $dt_leitura,
+                    'lacre' => $_lacre,
+                    'file_hash' => $file_hash
+                ]);
+
+                $presentes = $ausentes = 0;
+                foreach ($rows as $k => $capaLote) {
+                    if (count($id_lotes) < 1 || !$leitura = Leitura::where('capalote', $capaLote)
+                        ->whereIn('lote_id', $id_lotes)->first()) {
+                        $leitura = new Leitura([
+                            'user_id' => $user_id,
+                            'lote_id' => $lote->id,
+                            'capalote' => $capaLote,
+                            'lacre' => $_lacre,
+                            'dt_leitura' => $dt_leitura
+                        ]);
+                        // Nova Leitura para Lote atual
+                        if ($doc = Docs::where('content', $capaLote)->first()) {
+                            $leitura->fill(['presente' => true]);
+                        } else {
+                            $leitura->fill(['presente' => false]);
+
+                        }
+                        if (!$leitura->save()) {
+                            throw new \Exception(
+                                sprintf("Ocorreu um erro ao tentar registrar a leitura da capa de " .
+                                    "lote [%s] presente na linha [%d]", $capaLote, $k + 1)
+                            );
+                        }
+                    }
+                    if ($leitura->presente == true) {
+                        $presentes++;
+                    } else {
+                        $ausentes++;
+                    }
+
+                    $response[$_lote] = [
+                        'c' => $_lote,
+                        'i' => $lote->id,
+                        'p' => $presentes,
+                        'a' => $ausentes,
+                        's' => $lote->situacao,
+                    ];
+
+                    if ($k % 500 == 0 && $k > 1) {
+                        $presentes = $ausentes = 0;
+                        $_lote++;
+                        while ($lote = Lote::where('num_lote', $_lote)->first()) {
+                            $_lote++;
+                            if ((int)$dt_leitura->format('YmdHi') + 60 < $_lote) {
+                                throw new \Exception('Ocorreu um erro ao tentar gerar um lote para as leituras do arquivo');
+                            }
+                        }
+                        $lote = Lote::create([
+                            'user_id' => $user_id,
+                            'unidade_id' => $unidade->id,
+                            'num_lote' => $_lote,
+                            'created_at' => $dt_leitura,
+                            'lacre' => $_lacre,
+                            'file_hash' => $file_hash,
+                        ]);
+                    }
+                }
+
+                foreach ($response as $c => $lote) {
+                    $lote['t'] = sprintf("Lote %s criado. %d leituras registradas. %d presentes e %d ausentes.", $c,
+                        ($lote['p'] + $lote['a']),$lote['p'], $lote['a']);
+                }
+                DB::commit();
+                $in_transaction = false;
+                return $this->sendResponse($response, 'Arquivo carregado.');
             } else {
                 throw new \Exception('Arquivo inválido.');
             }
         } catch (\Exception $e) {
+            if ($in_transaction == true) {
+                DB::rollBack();
+            }
             return $this->sendError($e->getMessage(), 400);
         }
     }

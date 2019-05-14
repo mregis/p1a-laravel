@@ -70,31 +70,24 @@ class BaseController extends Controller
 
     public function sendResponse($result, $message, $ret = false)
     {
-        if (is_null($result)) {
-            $response = [
-                'success' => true,
-                'message' => $message,
-            ];
-        } else {
-            $response = [
-                'success' => true,
-                'message' => $message,
-                'data'    => $result,
-            ];
+        $response = [
+            'success' => true,
+            'message' => $message,
+            'data' => $result,
+        ];
+
+        if ($ret) {
+            $response['return'] = $ret;
         }
-	if($ret){
-		$response['return'] = $ret;
-	}
         return response()->json($response, 200);
     }
 
     public function sendError($error, $code)
     {
-        $response     = [
+        $response = [
             'success' => false,
             'message' => $error,
         ];
-
         return response()->json($response, $code);
     }
 }

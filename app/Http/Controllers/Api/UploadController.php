@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Profile;
 use App\Models\Users;
 use App\Models\Files;
 use App\Models\Docs;
@@ -32,10 +33,13 @@ class UploadController extends BaseController
             try {
                 if ($file = $request->file('file')->isValid()) {
                     $name = $request->file->getClientOriginalName();
+                    if (!($dt_movimento = \DateTime::createFromFormat('dm.y', substr($name, 5, 7))) ||
+                    $dt_movimento->format('dm.y') != substr($name, 5, 7)) {
+                        throw new \Exception('A nomenclatura do arquivo é inválida!');
+                    }
 
                     $file_hash = hash_file('crc32b', $request->file->getPathName());
-                    $f = Files::where('file_hash', '=', $file_hash)->first();
-                    if ($f) {
+                    if (Files::where('file_hash', '=', $file_hash)->first()) {
                         throw new \Exception('Arquivo já carregado anteriormente');
                     }
                     if (($handle = fopen($request->file->getPathName(), 'r')) !== FALSE) {
@@ -44,7 +48,7 @@ class UploadController extends BaseController
                         while (!feof($handle)) {
                             $r = trim(fgets($handle));
                             if ($r == '') continue; // Evitar linhas em branco
-                            if (strlen($r) < 13) { // Linhas com menos de 6 caracteres são considerados erros
+                            if (strlen($r) < 13 || !is_numeric($r)) { // Linhas com menos de 6 caracteres são considerados erros
                                 fclose($handle);
                                 throw new \Exception(
                                     sprintf('Registro [%s] da linha %d é inválido. Processo abortado', $r, $i)
@@ -70,7 +74,7 @@ class UploadController extends BaseController
                             'constante' => substr($name, 0, 2),
                             'file_hash' => $file_hash,
                             'codigo' => substr($name, 2, 3),
-                            'movimento' => \DateTime::createFromFormat('dm.y', substr($name, 5, 7)),
+                            'movimento' => $dt_movimento,
                             'sequencial' => substr($name, 12, 1),
                             'user_id' => $user_id,
                         ]
@@ -199,7 +203,7 @@ class UploadController extends BaseController
         $query = Docs::query()
             ->where($params);
 
-        if ($profile != 'ADMINISTRADOR') {
+        if ($profile != Profile::ADMIN) {
             $query = Docs::query()
                 ->where([
                     ['file_id', '=', $id],
@@ -231,7 +235,7 @@ class UploadController extends BaseController
             $d->content = trim($d->content);
             $total_string = strlen($d->content);
             $separate = substr($d->content, ($total_string - 4), 4);
-            if ($profile == 'AGÊNCIA') {
+            if ($profile == Profile::AGENCY) {
                 if (substr($d->content, 0, 4) == $juncao || $separate == $juncao) {
                     $docs[] = $d;
                 }
@@ -265,12 +269,13 @@ class UploadController extends BaseController
             return $this->sendError('Informação não encontrada', 404);
         }
 
-        $in_transaction = DB::beginTransaction();
+        DB::beginTransaction();
         foreach ($file->docs as $doc) {
             $doc->delete();
         }
         $file->delete();
-        $in_transaction = !DB::commit();
+        DB::commit();
+
         return $this->sendResponse(null, 'Informação excluída com sucesso');
     }
 
@@ -302,7 +307,7 @@ class UploadController extends BaseController
             ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
             ->whereIn('docs.status', ['pendente']);
 
-        if ($user->profile != 'ADMINISTRADOR') {
+        if ($user->profile != Profile::ADMIN) {
             $juncao = $user->juncao;
             $query->where([
                 ['docs.from_agency', '=', sprintf("%04d", $juncao)]
@@ -328,7 +333,7 @@ class UploadController extends BaseController
             })
             ->editColumn('from_agency', function ($doc) {
                 if ($doc->agencia_origin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->agencia_origin . '" data-toggle="tooltip">' .
+                    return '<a href="javascript:void(0);" title="' . $doc->agencia_origin . '" data-toggle="tooltip">' .
                     $doc->from_agency . '</a>';
                 } else {
                     return $doc->from_agency;
@@ -336,7 +341,7 @@ class UploadController extends BaseController
             })
             ->editColumn('to_agency', function ($doc) {
                 if ($doc->agencia_destin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->agencia_destin . '" data-toggle="tooltip">' .
+                    return '<a href="javascript:void(0);" title="' . $doc->agencia_destin . '" data-toggle="tooltip">' .
                     $doc->to_agency . '</a>';
                 } else {
                     return $doc->to_agency;

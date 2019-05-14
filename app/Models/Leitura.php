@@ -21,6 +21,7 @@ class Leitura extends BaseModel
         'user_id',
         'capalote',
         'presente',
+        'lacre',
     ];
 
     protected $guarded = [

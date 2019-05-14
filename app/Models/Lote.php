@@ -28,7 +28,8 @@ class Lote extends BaseModel
         'unidade_id',
         'num_lote',
         'lacre',
-        'estado',
+        'situacao',
+        'file_hash',
         'created_at'
     ];
 
@@ -42,7 +43,7 @@ class Lote extends BaseModel
      * @var array
      */
     protected $attributes = [
-        'estado' => self::STATE_OPEN
+        'situacao' => self::STATE_OPEN
     ];
 
     /**
