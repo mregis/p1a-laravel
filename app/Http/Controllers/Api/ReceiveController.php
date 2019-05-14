@@ -270,13 +270,13 @@ class ReceiveController extends BaseController
                 'value="' . $doc->id . '">';
             })
             ->addColumn('view', function ($doc) {
-                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id . ')" ' .
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id . '" ' .
                 'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
                 '</a>';
             })
             ->addColumn('origin', function ($doc) {
                 if ($doc->origin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                    return '<a href="javascript:void(0);" title="' . $doc->origin . '" data-toggle="tooltip">' .
                     $doc->from_agency . '</a>';
                 } else {
                     return $doc->from_agency;
@@ -284,7 +284,7 @@ class ReceiveController extends BaseController
             })
             ->addColumn('destin', function ($doc) {
                 if ($doc->destin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                    return '<a href="javascript:void(0);" title="' . $doc->destin . '" data-toggle="tooltip">' .
                     $doc->to_agency . '</a>';
                 } else {
                     return $doc->to_agency;
