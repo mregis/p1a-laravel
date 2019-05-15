@@ -364,55 +364,6 @@ function active(id_user) {
     actionAjax(url, "get");
 }
 
-
-var masks = {
-    cpf: "000.000.000-00",
-    cnpj: "00.000.000/0000-00",
-    phone: "(##) ####-####",
-    zipcode: "00000-000",
-    cell_phone: "(99) 9 9999-9999",
-};
-
-function pf_pj(selectObject) {
-    var type = selectObject.value;
-
-    if (type === 'cnpj') {
-        document.getElementById('pf').style.display = 'none';
-        document.getElementById('pj').style.display = '';
-        document.getElementById('social_name').style.display = '';
-        document.getElementById('name').style.display = '';
-    }
-    else if (type === 'cpf') {
-        document.getElementById('pf').style.display = '';
-        document.getElementById('pj').style.display = 'none';
-        document.getElementById('social_name').style.display = 'none';
-        document.getElementById('name').style.display = '';
-    }
-
-};
-
-function hide_show(selectObject) {
-    var type = selectObject.value;
-    console.log("od");
-    if (type === 'cnpj') {
-        document.getElementById('social_name').style.display = '';
-        document.getElementById('fantasy_name').style.display = '';
-        document.getElementById('name').style.display = 'none';
-        document.getElementById('cpf_cnpj').value = '';
-        $("#cpf_cnpj").mask(masks.cnpj);
-
-    }
-    else if (type === 'cpf') {
-        document.getElementById('social_name').style.display = 'none';
-        document.getElementById('fantasy_name').style.display = 'none';
-        document.getElementById('name').style.display = '';
-        document.getElementById('cpf_cnpj').value = '';
-        $("#cpf_cnpj").mask(masks.cpf);
-
-
-    }
-};
-
 function changeSelect(id, value) {
     if (value !== undefined) {
         $("#" + id).val(value).trigger('change');
@@ -420,19 +371,6 @@ function changeSelect(id, value) {
     else {
         $("#" + id).val('selected').trigger('change');
     }
-}
-
-function dateToday() {
-    var date = new Date();
-    var month = date.getMonth();
-    month = month.toString();
-    if (month.length == 1) {
-        month = parseInt(month);
-        month = 1 + month;
-        month = "0" + month;
-    }
-    today = date.getDate() + "-" + month + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + "0";
-    return today
 }
 
 function redirect() {
@@ -448,7 +386,6 @@ function redirect() {
 function clearForm() {
     try {
         document.form.reset();
-        $('#calendar').fullCalendar('refetchEvents');
     } catch (e) {
 
     }
@@ -528,8 +465,6 @@ jQuery(document).ready(function () {
         }
     };
 
-    $('.cep').add("#zipcode").mask('99999-999', options);
-
     $('table.checkdetails th').each(function () {
         var check = Array($(this).find("td").eq(1).html());
     });
@@ -565,56 +500,6 @@ jQuery(document).ready(function () {
         $('#datatable').DataTable().ajax.reload();
     });
 
-    $("#type_assistent").change(function () {
-        if ($(this).val() == "Medicina") {
-            $('#doc').attr("placeholder", "CRM");
-            $('#label_type_assistent').text("CRM");
-            $('#showHide').hide('slow');
-            $('#showHide').show('slow');
-        }
-        else if ($(this).val() == "Engenharia") {
-            $('#doc').attr("placeholder", "CREA");
-            $('#label_type_assistent').text("CREA");
-            $('#showHide').hide('slow');
-            $('#showHide').show('slow');
-
-        } else if ($(this).val() == "Outros") {
-            $('#doc').attr("placeholder", "Outros");
-            $('#label_type_assistent').text("Outros");
-            $('#showHide').hide('slow');
-            $('#showHide').show('slow');
-        }
-        else {
-            return false;
-        }
-    });
-
-    $("#select_cpf_cnpj").change(function hide() {
-        // $('.cpf_cnpj').val('');
-        $('.pf_pj').show('slow');
-        if ($(this).val() === "cpf") {
-            $('.cpf_cnpj').mask(masks.cpf);
-            $('.cpf_cnpj').attr("placeholder", "CPF");
-            $('.cpf_cnpj').data("label", "CPF");
-            $('#label_cpf_cnpj').text("CPF");
-            $('#label_social_name').text("Nome");
-            $('#social_name').attr("placeholder", "Nome");
-            $('.pf').show('slow');
-            $('.pj').hide('slow');
-
-        } else if ($(this).val() === "cnpj") {
-            $('.cpf_cnpj').mask(masks.cnpj);
-            $('.cpf_cnpj').attr("placeholder", "CNPJ");
-            $('.cpf_cnpj').data("label", "CNPJ");
-            $('#label_cpf_cnpj').text("CNPJ");
-            $('#label_social_name').text("Razão social");
-            $('#social_name').attr("placeholder", "Razão social");
-            $('.pj').show('slow');
-            $('.pf').hide('slow');
-
-        }
-    });
-
     $("#nav-add-tab").click(function () {
         $('#redirect').val($("#redirect2").val());
     });
@@ -634,23 +519,6 @@ jQuery(document).ready(function () {
             }
         );
     });
-
-    $("#cpf").mask(masks.cpf, {reverse: true});
-    $("#cep").mask(masks.zipcode, {reverse: true});
-    $("#tel").mask(masks.phone);
-    $("#doc_cnpj").mask(masks.cnpj, {reverse: true});
-    $("#cell_phone").mask(masks.cell_phone);
-    $("#type_account").val($("#value_type_account").val());
-    var value_type_assistent = $("#value_type_assistent").val();
-    changeSelect('type_assistent', value_type_assistent);
-    try {
-        if ($("#input_cpf_cnpj").lenght > 0) {
-            var doc = $("#input_cpf_cnpj").val();
-            validaCpf(doc) || validaCNPJ(doc);
-        }
-    } catch (e) {
-        console.log(e);
-    }
 
     // Create the close button
     var closebtn = $('<button/>', {
@@ -696,23 +564,7 @@ jQuery(document).ready(function () {
         reader.readAsDataURL(file);
     });
 
-    //contacts/add | Lista contatos já cadastrados do customer selecionado
-    $("select#customer").on('change', function () {
-        //Enable buttons
-        $("button#customerListContacts").prop('disabled', false);
-        $("button#customerAddContacts").prop('disabled', false);
-
-    });
-    $("button#customerAddContacts").on('click', function () {
-        $(this).remove();
-        $(".wrraper-continue-form").removeClass("hidden");
-        $(".m-portlet__foot").removeClass("hidden");
-    });
-
-    $("#value").maskMoney();
-    $('#form_user').validator();
     $('[data-toggle="tooltip"]').tooltip();
-    $('.js-select_2').select2();
 
     var autodt = null; // Automatic Datatables
     if (typeof(autodt) == "undefined" || autodt == null) {
@@ -727,16 +579,29 @@ jQuery(document).ready(function () {
                     }
                 },
                 buttons: [
-                    {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
+                    {
+                        extend: "print",
+                        text: "<i class='fas fa-print'></i> Imprimir",
+                        className: 'btn-primary',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
                     {
                         extend: "excelHtml5",
                         text: "<i class='far fa-file-excel'></i> Salvar Excel",
-                        className: 'btn-primary'
+                        className: 'btn-primary',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
                     },
                     {
                         extend: "pdfHtml5",
                         text: "<i class='far fa-file-pdf'></i> Salvar PDF",
-                        className: 'btn-primary'
+                        className: 'btn-primary',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
                     },
                 ],
             },
@@ -771,8 +636,5 @@ jQuery(document).ready(function () {
 
     $('.datepicker').each(function () {
         $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
-    });
-
-    Select2.init();
-    BootstrapSelect.init();
+   });
 });

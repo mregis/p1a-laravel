@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-<html lang="pt-br">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <!-- begin::Head -->
 <head>
     <meta charset="utf-8"/>
@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ mix('favicon.ico') }}"/>
-    <link href="{{ mix('css/appfill.css')}}" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/appmain.css')}}" rel="stylesheet" type="text/css">
     <!--end::Base Styles -->
 
@@ -1057,7 +1056,6 @@
 
     @yield('aftercontent')
 
-
     <!-- begin::Footer -->
     <footer class="footer">
         <div class="container">
@@ -1072,8 +1070,8 @@
     <!--begin::Base Scripts -->
     <script src="{{ mix('/js/manifest.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/vendor.js') }}" type="text/javascript"></script>
-
     <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
+
     <script src="{{ mix('/js/noCommonJS.libs.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/custom.scripts.js') }}" type="text/javascript"></script>
 

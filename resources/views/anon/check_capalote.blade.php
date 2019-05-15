@@ -17,7 +17,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="{{ mix('css/appfill.css')}}" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/appmain.css')}}" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="{{asset('assets/demo/default/media/img/logo/favicon.ico')}}" />
 </head>
@@ -60,7 +59,7 @@
 <script src="{{ mix('/js/manifest.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/vendor.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
-<script src="{{ mix('/js/noCommonJS.libs.js') }}" type="text/javascript"></script>
+{{--<script src="{{ mix('/js/noCommonJS.libs.js') }}" type="text/javascript"></script>--}}
 <script src="{{ mix('/js/custom.scripts.js') }}" type="text/javascript"></script>
 <!--end::Base Scripts -->
 

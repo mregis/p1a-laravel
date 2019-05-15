@@ -2,6 +2,7 @@
 @section('title', __('Carregar Leituras por Arquivo'))
 
 @section('styles')
+    <link href="{{ mix('css/dropzone.css')}}" rel="stylesheet" type="text/css">
     <style type="text/css">
 
         .fa, .fas, .far, .fal, .fab {
@@ -109,9 +110,8 @@
                                 </i>
                             </div>
 
-                            <div class="form-group m-form__group form-row">
+<!--                            <div class="form-group m-form__group form-row">
                                 <label class="col-sm-3 col-form-label">Lote de Leitura</label>
-
                                 <div class="input-group col-sm-8">
                                             <span class="input-group-prepend">
                                                 <button class="btn btn-info" data-toggle="tooltip"
@@ -134,7 +134,7 @@
                                                    em seguida no botão ao lado"></i>
                                 </div>
                             </div>
-
+-->
                             <div class="form-group m-form__group form-row">
                                 <label for="lacre" class="col-sm-3 col-form-label">Lacre Malote</label>
 
@@ -144,15 +144,15 @@
                                 </div>
                             </div>
                             <div class="form-group m-form__group form-row">
-                                <form class="form-horizontal dropzone"
+                                <form class="form-horizontal dropzone disabled"
                                       action="{{route('recebimento.ler-arquivo-leituras')}}"
                                       method="POST" id="my-dropzone">
                                     <input type="hidden" name="_u" value="{{Auth::id()}}"/>
 
                                     <div class="m-dropzone__msg dz-message needsclick m-dropzone m-dropzone--primary">
-                                            <span class="m-dropzone__msg-desc">
-                                                Arraste o arquivo ou clique para fazer o upload.
-                                                Faça upload de até 5 arquivos</span>
+                                        <h3 class="m-dropzone__msg-title">Após preencher a <strong>Data de Leitura</strong>
+                                            e o <strong>Lacre de Malote</strong> (se houver),
+                                            arraste o arquivo ou clique para fazer o upload.</h3>
                                     </div>
                                 </form>
                             </div>
@@ -174,22 +174,23 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group m-form__group form-row">
-                                <label>Situação atual da Capa de Lote</label>
-                                <span class="badge badge-info p-2 ml-1" title="Leituras com essa cor indicam que a Capa de Lote
-                                      ainda não sofreu nenhuma alteração de estado"
-                                      data-toggle="tooltip">Normal</span>
-                                <span class="badge badge-warning p-2 ml-1"
-                                      title="Leituras com essa cor indicam que a Capa de Lote
-                                      já sofreu alteração de estado, por exemplo, já ter sido recebidas no destino"
-                                      data-toggle="tooltip">Novo estado</span>
+                                <label>Situação do Lote</label>
+                                <span class="badge badge-success p-2 ml-1"
+                                      title="Lotes com essa cor indicam que as leituras
+                                ainda não foram devidamente registradas."
+                                      data-toggle="tooltip">Fechado</span>
+                                <span class="badge badge-warning p-2 ml-1" title="Lotes com essa cor indicam que as leituras
+                                já foram devidamente registradas."
+                                      data-toggle="tooltip">Aberto</span>
+
                                 <span class="badge badge-danger p-2 ml-1"
-                                      title="Leituras com essa cor indicam que a Capa de Lote não possue entrada no
-                                      sistema e somente será incluída nos registros de Lotes e Leituras"
-                                      data-toggle="tooltip">Não encontrada</span>
+                                      title="Lotes com essa cor indicam que as Capas de Lote já foram lidas
+                                      em outro destino"
+                                      data-toggle="tooltip">Atrasado</span>
                             </div>
                             <div class="form-group m-form__group form-row">
-                                <div class="h3 text-right">
-                                    <select multiple name="leitura[]" id="selectLeitura"
+                                <div class="text-right">
+                                    <select multiple name="lote[]" id="selectLote"
                                             class="form-control form-control-lg"></select>
                                 </div>
                             </div>
@@ -308,52 +309,67 @@
     <script type="text/javascript">
 
         Dropzone.autoDiscover = false;
-
         var myDropzone = null;
-
         $(function () {
-            myDropzone = new Dropzone("#my-dropzone");
-            myDropzone.on("sending", function (file, response) {
+            myDropzone = new Dropzone("#my-dropzone", {timeout:180000});
+            myDropzone.on("sending", function (file, xhr, formData) {
+                formData.append('dt_leitura', $("#dt_leitura").val());
+                formData.append('lacre', $("#lacre").val());
                 $("#loadMe").modal({
                     backdrop: "static", //remove ability to close modal with click
                     keyboard: false, //remove option to close with keyboard
                     show: true //Display loader!
                 });
             });
+            myDropzone.on("complete", function (file, response) {
+                // Arquivo carregado e validado
+                $("#loadMe").modal('hide');
+            });
             myDropzone.on("success", function (file, response) {
                 // Arquivo carregado e validado
                 $.each(response.data, function (i, o) {
-                    $('#selectLeitura').tagsinput('add',
-                            {value: o.c, text: o.c, state: o.p, estado: o.e},
+                    $('#selectLote').tagsinput('add',
+                            {value: o.i, text: o.t, estado: o.s},
                             {preventPost: true}
                     );
                 });
-                $("#loadMe").modal('hide');
                 var successmodal = $("#on_done_data").modal();
                 successmodal.find('.modal-body').find('p')
                         .text(response.message || response.responseJSON.message || response.responseText);
                 successmodal.show();
             });
+            myDropzone.on("error", function (file, response) {
+                // Arquivo carregado e validado
+                var errormodal = $("#on_error").modal();
+                errormodal.find('.modal-body').find('p')
+                        .text(response.message || response.responseJSON.message || response.responseText);
+                errormodal.show();
 
+            });
             $('#dt_leitura').datetimepicker(
                     $.extend(datepickerConfig,{
                         format: 'dd/mm/yyyy HH:MM',
                         value: '',
                         footer: true
                     })
-            );
+            ).on('change', function(e) {
+                        if ($(this).val() == '') {
+                            $("#my-dropzone").addClass('disabled');
+                        } else {
+                            $("#my-dropzone").removeClass('disabled');
+                        }
+                    });
 
-            $('#selectLeitura').tagsinput({
+            $('#selectLote').tagsinput({
                 tagClass: function (item) {
-                    if (typeof item.state != "undefined") {
-                        var c = (item.state == "1" ? 'badge-info' : 'badge-danger');
-                        if (item.estado == '{{\App\Models\Docs::STATE_RECEIVED}}' ||
-                                item.estado == '{{\App\Models\Docs::STATE_THEFT}}'
-                        ) {
+                    var c = "badge-secondary";
+                    if (typeof item.estado != "undefined") {
+                        if (item.estado == '{{\App\Models\Lote::STATE_OPEN}}') {
                             c = 'badge-warning';
                         }
-                    } else {
-                        var c = "badge-secondary";
+                        if (item.estado == '{{\App\Models\Lote::STATE_CLOSED}}') {
+                            c = 'badge-success';
+                        }
                     }
                     return "badge " + c + " p-2 mb-2";
                 },
@@ -363,8 +379,8 @@
                 itemText: 'text',
             });
 
-            $('#selectLeitura').on('itemRemoved', function (event) {
-                if ($('#selectLeitura').tagsinput("items").length < 1) {
+            $('#selectLote').on('itemRemoved', function (event) {
+                if ($('#selectLote').tagsinput("items").length < 1) {
                     $("#lote").attr({readonly: false});
                     $("#load-lote").attr({disabled: false});
                     $("#limpar-leituras").hide();
@@ -372,7 +388,7 @@
                 }
             });
 
-            $('#selectLeitura').on('change', function (e) {
+            $('#selectLote').on('change', function (e) {
                 if ($(this).val() != "") {
                     $("#limpar-leituras").removeClass('invisible').show();
                     $("#registrar-leituras").attr({disabled: false});
@@ -385,7 +401,7 @@
         });
 
         function registrarLeituras() {
-            var items = $('#selectLeitura').val();
+            var items = $('#selectLote').val();
             var lacre = $('#lacre').val();
             var lote = $("#lote").val();
             var dt_leitura = $("#dt_leitura").val();
@@ -397,8 +413,7 @@
                     show: true //Display loader!
                 }).one('shown.bs.modal', function (e) {
                     $.post('{{ route('recebimento.carregar-arquivo-leituras') }}',
-                            {lacre: lacre, leituras: items, lote: lote,
-                                _u: '{{ Auth::user()->id }}', dt_leitura: dt_leitura},
+                            {lacre: lacre, lotes: items, _u: '{{ Auth::user()->id }}'},
                             function (r) {
                                 // Close all opened modals
                                 $('.modal').modal('hide');
@@ -407,8 +422,8 @@
                                         .text(r.message || r.responseJSON.message || r.responseText);
                                 successmodal.show();
                             }, 'json')
-                            .done(function () {
-                                limparLeituras();
+                            .done(function (xhr) {
+                                limparLeituras(true);
                                 $('#lacre').val("");
                                 $('#lote').val("").attr({readonly: false});
                             })
@@ -430,13 +445,15 @@
             }
         }
 
-        function limparLeituras() {
-            $('#selectLeitura').tagsinput('removeAll');
+        function limparLeituras(hidemessage) {
+            $('#selectLote').tagsinput('removeAll');
             myDropzone == null  || myDropzone.removeAllFiles();
-            $('.modal').modal('hide');
-            var successmodal = $("#on_done_data").modal();
-            successmodal.find('.modal-body').find('p').text("Leituras excluídas");
-            successmodal.show();
+            if (typeof hidemessage == "undefined") {
+                $('.modal').modal('hide');
+                var successmodal = $("#on_done_data").modal();
+                successmodal.find('.modal-body').find('p').text("Leituras excluídas");
+                successmodal.show();
+            }
         }
 
         function generateLoteNum() {

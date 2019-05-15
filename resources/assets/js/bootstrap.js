@@ -1,5 +1,5 @@
-﻿window._ = require('lodash');
-window.Popper = require('popper.js').default;
+﻿
+window._ = require('lodash');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -8,19 +8,14 @@ window.Popper = require('popper.js').default;
  */
 
 try {
-    require('@fortawesome/fontawesome-free');
-
-    var $ = require('jquery');
-    global.$ = global.jQuery = $;
-
-    window.$ = window.jQuery = require('jquery');
+    window.Popper = require('popper.js').default;
+    global.$ = global.jQuery = require('jquery');
     require('bootstrap');
-
+    require('jquery-form');
+/*
     require('js-cookie');
     require('wnumb');
     require('jquery.input');
-    require('jquery-form');
-    require('malihu-custom-scrollbar-plugin')(window, $);
     require('blockui');
     require('bootstrap-touchspin');
     require('bootstrap-maxlength');
@@ -33,34 +28,46 @@ try {
     require('ion-rangeslider');
     require('summernote');
     require('jquery-validation');
-    require('toastr');
     require('jstree');
     require('raphael');
     require('chartist');
     require('chart.js');
-    require('fullcalendar');
     require('jquery-mask-plugin');
     require('bootstrap-validator')(window, $);
-    require('jquery-easing');
+*/
 
+//    window.Handlebars = require('handlebars');
+//    require('jquery-easing');
+//    require("jquery-mousewheel")(window, $);
+
+    window.moment = require('moment');
     // ### Datatables
-    var dt = require('datatables.net')( window, $);
+    window.JSZip = require( 'jszip' );
+    require( 'datatables.net-bs4' );
+    require( 'datatables.net-buttons-bs4' );
+    require( 'datatables.net-buttons/js/buttons.colVis.js' );
+    require( 'datatables.net-buttons/js/buttons.flash.js' );
+    require( 'datatables.net-buttons/js/buttons.html5.js' );
+    require( 'datatables.net-buttons/js/buttons.print.js' );
+    require( 'datatables.net-responsive-bs4' );
+    // pdfMake for Datatables HTML5 Buttons
+    var pdfMake = require('pdfmake/build/pdfmake.js');
+    var pdfFonts = require('pdfmake/build/vfs_fonts.js');
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-    require('datatables.net-responsive')(window, $);
-    require('datatables.net-buttons')(window, $);
+//    require('datetime-moment');
 
-    require('datatables.net-bs4')();
-    require('datatables.net-buttons-bs4')();
-    require('datatables.net-responsive-bs4')();
-    require('datatables.net-buttons/js/buttons.colVis.js')();
-    require('datatables.net-buttons/js/buttons.html5.js')();
-    require('datatables.net-buttons/js/buttons.print.js')();
+    // ### Toastr messages
+    window.toastr = require('toastr');
 
+/*
     require('tether');
     require('markdown');
+*/
 
-} catch (e) {
-}
+    // Fonts
+    require('@fortawesome/fontawesome-free');
+} catch (e) {}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -86,19 +93,3 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from 'laravel-echo'
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });

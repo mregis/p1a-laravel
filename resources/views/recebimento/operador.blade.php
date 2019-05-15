@@ -11,7 +11,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-12">
             <div class="m-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -155,7 +155,7 @@
                                            data-ajax="{{route('recebimento.listar-lotes')}}?_u={{Auth::id()}}"
                                            data-order='[[1, "desc"],[6, "asc"]]'
                                            data-dom='<"row"<"col-sm"l><"col-sm"f>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'
-                                           data-columns='[{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"unidade"},{"data":"lacre"},{"data":"leituras_count"},{"data":"invalidas_count"},{"data":"estado"},{"data":"action"}]'>
+                                           data-columns='[{"data":"num_lote"},{"data":"created_at"},{"data":"usuario"},{"data":"unidade"},{"data":"lacre"},{"data":"leituras_count"},{"data":"invalidas_count"},{"data":"situacao"},{"data":"action"}]'>
                                         <thead class="thead-dark">
                                         <tr>
                                             <th>Lote</th>
@@ -165,7 +165,7 @@
                                             <th>Lacre</th>
                                             <th>Total</th>
                                             <th>Ausentes</th>
-                                            <th>Estado</th>
+                                            <th>Situação</th>
                                             <th>Ações</th>
                                         </tr>
                                         </thead>
@@ -602,9 +602,11 @@
         }
 
         function refreshData() {
-            $('#datatable-leituras').DataTable().ajax.reload();
-            $('#datatable-lotes').DataTable().ajax.reload();
-            $('[data-toogle="tooltip"]').tooltip("hide");
+            if ($('#selectCapaLote').val().length % 10) {
+                $('#datatable-leituras').DataTable().ajax.reload();
+                $('#datatable-lotes').DataTable().ajax.reload();
+                $('[data-toogle="tooltip"]').tooltip("hide");
+            }
         }
     </script>
 @stop

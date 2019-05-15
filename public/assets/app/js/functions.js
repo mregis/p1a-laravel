@@ -3,78 +3,7 @@ var masks = {
     cnpj: "00.000.000/0000-00",
     phone: "(##) ####-####",
     zipcode: "00000-000",
-    cell_phone: "(99) 9 9999-9999",
-};
-
-$("#type_assistent").change(function () {
-    if ($(this).val() == "Medicina") {
-        $('#doc').attr("placeholder", "CRM");
-        $('#label_type_assistent').text("CRM");
-        $('#showHide').hide('slow');
-        $('#showHide').show('slow');
-    }
-    else if ($(this).val() == "Engenharia") {
-        $('#doc').attr("placeholder", "CREA");
-        $('#label_type_assistent').text("CREA");
-        $('#showHide').hide('slow');
-        $('#showHide').show('slow');
-
-    } else if ($(this).val() == "Outros") {
-        $('#doc').attr("placeholder", "Outros");
-        $('#label_type_assistent').text("Outros");
-        $('#showHide').hide('slow');
-        $('#showHide').show('slow');
-    }
-    else {
-        return false;
-    }
-});
-
-$("#select_cpf_cnpj").change(function hide() {
-    // $('.cpf_cnpj').val('');
-    $('.pf_pj').show('slow');
-    if ($(this).val() === "cpf") {
-        $('.cpf_cnpj').mask(masks.cpf);
-        $('.cpf_cnpj').attr("placeholder", "CPF");
-        $('.cpf_cnpj').data("label", "CPF");
-        $('#label_cpf_cnpj').text("CPF");
-        $('#label_social_name').text("Nome");
-        $('#social_name').attr("placeholder", "Nome");
-        $('.pf').show('slow');
-        $('.pj').hide('slow');
-
-    } else if ($(this).val() === "cnpj") {
-        $('.cpf_cnpj').mask(masks.cnpj);
-        $('.cpf_cnpj').attr("placeholder", "CNPJ");
-        $('.cpf_cnpj').data("label", "CNPJ");
-        $('#label_cpf_cnpj').text("CNPJ");
-        $('#label_social_name').text("Razão social");
-        $('#social_name').attr("placeholder", "Razão social");
-        $('.pj').show('slow');
-        $('.pf').hide('slow');
-
-    }
-});
-
-function pf_pj(selectObject) {
-    var type = selectObject.value;
-
-    if (type === 'cnpj') {
-        document.getElementById('pf').style.display = 'none';
-        document.getElementById('pj').style.display = '';
-        document.getElementById('social_name').style.display = '';
-        document.getElementById('name').style.display = '';
-        // document.getElementById('name').removeAttribute("data-validation");
-
-    }
-    else if (type === 'cpf') {
-        document.getElementById('pf').style.display = '';
-        document.getElementById('pj').style.display = 'none';
-        document.getElementById('social_name').style.display = 'none';
-        document.getElementById('name').style.display = '';
-        // document.getElementById('name').setAttribute("data-validation", "notempty($(this))");
-    }
-
+    cell_phone: "(99) 99999-9999",
 };
 
 function hide_show(selectObject) {
@@ -110,18 +39,6 @@ $(document).ready(function () {
     $("#tel").mask(masks.phone);
     $("#doc_cnpj").mask(masks.cnpj, {reverse: true});
     $("#cell_phone").mask(masks.cell_phone);
-    $("#type_account").val($("#value_type_account").val());
-    var value_type_assistent = $("#value_type_assistent").val();
-    changeSelect('type_assistent', value_type_assistent);
-    // $("#type_assistent").val(value_type_assistent).trigger('change');
-    // setImage($("#id_setImage").val(), $("#src_setImage"));
-    try {
-        var doc = $("#input_cpf_cnpj").val();
-        checkCpfCnpj(doc);
-    } catch (e) {
-
-    }
-
 });
 
 function changeSelect(id, value) {
@@ -192,47 +109,8 @@ $(function () {
     });
 });
 
-function dateToday() {
-    var date = new Date();
-    var month = date.getMonth();
-    month = month.toString();
-    if (month.length == 1) {
-        month = parseInt(month);
-        month = 1 + month;
-        month = "0" + month;
-    }
-    today = date.getDate() + "-" + month + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + "0";
-    return today
-}
-
-$(function () {
-    $("#value").maskMoney();
-    $('#form_user').validator();
-});
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-});
-$(document).ready(function () {
-    $('.js-select_2').select2();
-});
-$("#end_date").datetimepicker({
-    locale: 'pt-BR',
-    format: 'dd-mm-yyyy hh:ii',
-    autoclose: true,
-    todayBtn: true,
-    startDate: dateToday()
-});
-
-$("#date").datetimepicker({
-    format: 'dd-mm-yyyy hh:ii',
-    autoclose: true,
-    todayBtn: true,
-    startDate: dateToday()
-})
-;$("#date_of_birth").datepicker({
-    format: 'dd-mm-yyyy',
-    autoclose: true,
-    endDate: dateToday()
 });
 
 function redirect() {
@@ -245,14 +123,7 @@ function redirect() {
     }
 
 }
-function clearForm() {
-    try {
-        document.form.reset();
-        $('#calendar').fullCalendar('refetchEvents');
-    } catch (e) {
 
-    }
-}
 function imageZoom() {
     var modal = $('#on_done_data');
     var src = $('#imageList').attr('src');
