@@ -85,6 +85,23 @@
         <!-- /.modal-dialog -->
     </div>
 
+    <!-- Modal Loading Content -->
+    <div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white" id="loadMeLabel">Registrando Remessas</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="loader"></div>
+                    <div>
+                        <p>Efetuando o registro das Remessas de Capas de Lotes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @component('dochistory')
     @endcomponent
 @endsection
@@ -104,6 +121,11 @@
                     if ($(this).prop('checked') == true) {
                         doc[c++] = $(this).val();
                     }
+                });
+                $("#loadMe").modal({
+                    backdrop: "static", //remove ability to close modal with click
+                    keyboard: false, //remove option to close with keyboard
+                    show: true //Display loader!
                 });
                 $.post('{{route('remessa.registrar-remessa')}}', {lacre: lacre, doc: doc, user: user}, function (r) {
                     // Close all opened modals
