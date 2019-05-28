@@ -60,7 +60,11 @@ Route::group(['prefix' => '/upload'], function () {
 Route::get('/receive/docs/{id}/{profile}/{juncao}', 'Api\ReceiveController@docs');
 Route::get('/receive/docs/{id}/{profile}', 'Api\ReceiveController@docs');
 
-Route::post('/remessa/registrar', 'Api\UploadController@register');
+Route::group(['prefix' => '/remessa'], function() {
+    Route::post('/registrar', 'Api\RemessaController@registrarRemessa')->name('remessa.registrar-remessa');
+    Route::get('/listar-nao-registrado', 'Api\RemessaController@getCapaLoteUnregistered')->name('remessa.nao-registrados');
+});
+
 Route::post('/receber/registrar', 'Api\ReceiveController@register');
 Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperador')->name('receive.register-capa-lote');
 
@@ -79,7 +83,7 @@ Route::post('/perfil/', 'Api\ProfileController@store');
 
 Route::get('/receber-todos/{profile}/{juncao}', 'Api\ReceiveController@doclisting');
 Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
-Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
+
 
 Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');
 

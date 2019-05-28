@@ -72,7 +72,7 @@ Route::any('/arquivo/delete/{id}', 'Api\UploadController@destroy');
 
 Route::delete('/arquivo/recebe/{id}', 'Api\ReceiveController@check')->name('receive.receive_check');
 
-Route::get('/remessa/registrar', 'Api\UploadController@registrar')->name('uploads.upload_register');
+Route::get('/remessa/registrar', 'Remessa\RemessaController@registrar')->name('remessa.registrar');
 Route::get('/receber/registrar', 'Api\ReceiveController@registrar')->name('uploads.receive_register');
 
 Route::group(['prefix' => 'relatorios'], function() {

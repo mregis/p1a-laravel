@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', __('Remessa'))
+@section('title', 'Remessa')
 
 @section('content')
     <div class="row">
@@ -8,9 +8,7 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <h3 class="m-portlet__head-text">
-                                {{__('Registrar Remessa')}}
-                            </h3>
+                            <h3 class="m-portlet__head-text">Registrar Remessa</h3>
                         </div>
                     </div>
                 </div>
