@@ -41,9 +41,11 @@
         $('#capaLoteHistoryModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('dochistoryId') // Extract info from data-* attributes
+            var capalote_content = button.data('dochistoryContent') // Extract info from data-* attributes
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this)
+            var modal = $(this);
+            $("span.capalote-placeholder").text(capalote_content);
             $('#capaloteSelected').val(recipient)
         }).on('shown.bs.modal', function (e) {
             historytable.ajax.reload();

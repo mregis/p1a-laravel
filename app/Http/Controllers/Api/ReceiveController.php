@@ -270,9 +270,10 @@ class ReceiveController extends BaseController
                 'value="' . $doc->id . '">';
             })
             ->addColumn('view', function ($doc) {
-                return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id . '" ' .
-                'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
-                '</a>';
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
+                '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></i></a>';
             })
             ->addColumn('origin', function ($doc) {
                 if ($doc->origin != null) {

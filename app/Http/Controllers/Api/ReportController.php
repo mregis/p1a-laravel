@@ -237,9 +237,10 @@ class ReportController extends BaseController
         }
         return Datatables::of($query)
             ->addColumn('action', function ($doc) use ($user) {
-                return sprintf('<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="%d" ' .
-                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                    '<i class="fas fa-eye"></i></a>', $doc->id);
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
+                '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></i></a>';
             })
             ->editColumn('created_at', function ($doc) {
                 return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
@@ -340,7 +341,8 @@ class ReportController extends BaseController
                 })
                 ->addColumn('view', function ($doc) use ($user) {
                     return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
-                    '" title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                    'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
                     '<i class="fas fa-eye"></i></a>';
                 })
                 ->editColumn('from_agency', function ($doc) {

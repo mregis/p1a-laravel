@@ -104,7 +104,8 @@ class RemessaController extends BaseController
             })
             ->addColumn('view', function ($doc) use ($user) {
                 return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
-                '" title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
                 '<i class="fas fa-eye"></i></a>';
             })
             ->escapeColumns([])
