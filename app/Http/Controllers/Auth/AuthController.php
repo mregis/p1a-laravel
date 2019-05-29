@@ -20,7 +20,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'dashboard';
+    protected $redirectTo = 'painel';
 
 
     public function index(Request $request)

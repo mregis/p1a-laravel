@@ -143,7 +143,7 @@ class CadastrosController extends BaseController
     {
         if (!$alert = Alerts::find($id)) {
             $request->session()->flash('alert-danger', 'Informação não encontrada');
-            return redirect(route('cadastros.list_alert'));
+            return redirect(route('ocorrencias.listagem'));
         }
 
         $menu = new Menu();
@@ -156,11 +156,11 @@ class CadastrosController extends BaseController
     {
         if(!$alert = Alerts::find($id)) {
             $request->session()->flash('alert-danger', 'Informação não encontrada');
-            return redirect(route('cadastros.list_alert'));
+            return redirect(route('ocorrencias.listagem'));
         }
         $alert->delete();
         $request->session()->flash('alert-success', 'Ocorrência atualizada');
-        return redirect(route('cadastros.list_alert'));
+        return redirect(route('ocorrencias.listagem'));
     }
 
     public function produto_edit(Request $request, $id)

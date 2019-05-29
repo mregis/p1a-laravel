@@ -106,7 +106,7 @@
                                         <div class="m-portlet__foot m-portlet__foot--fit">
                                             <div class="m-form__actions">
                                                 <a class="btn btn-lg btn-outline-secondary"
-                                                   href="{{route('cadastros.profile_index')}}">{{__('buttons.cancel')}}</a>
+                                                   href="{{route('cadastro.perfis')}}">{{__('buttons.cancel')}}</a>
                                                 {{ Form::submit(__('buttons.submit'), array('class' => 'btn btn-success btn-lg')) }}
 
                                             </div>

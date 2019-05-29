@@ -89,7 +89,7 @@
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
                             {{ Form::submit(__('buttons.submit'), array('class' => 'btn btn-success btn-lg')) }}
-                            <a class="btn btn-lg btn-outline-secondary" href="{{ route('cadastros.list_alert') }}">
+                            <a class="btn btn-lg btn-outline-secondary" href="{{ route('ocorrencias.listagem') }}">
                                 {{__('buttons.cancel')}}</a>
                         </div>
                     </div>

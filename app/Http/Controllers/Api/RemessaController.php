@@ -169,4 +169,33 @@ class RemessaController extends BaseController
             sprintf('%s Remessa%s Registrada%2$s', ($regs > 0 ? $regs : 'Nenhuma'), $regs > 1 ? 's' : ''), 200
         );
     }
+
+    /**
+     * @return mixed
+     */
+    public function listarRemessas()
+    {
+        $query = Files::query();
+        return Datatables::of($query)
+            ->addColumn('action', function ($file) {
+                return '<div align="center"><a href="' . route('arquivo.file', $file->id) .
+                '" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only mr-1">' .
+                '<i class="fas fa-eye"></i></a><button onclick="modalDelete(' . $file->id . ')" ' .
+                'class="btn btn-sm btn-outline-danger m-btn m-btn--icon m-btn--icon-only mr-1">' .
+                '<i class="fas fa-trash-alt"></i></button></div>';
+            })
+            ->editColumn('created_at', function ($file) {
+                return $file->created_at ? with(new Carbon($file->created_at))->format('d/m/Y H:i') : '-';
+            })
+            ->editColumn('updated_at', function ($file) {
+                return $file->updated_at ? with(new Carbon($file->updated_at))->format('d/m/Y H:i') : '-';
+            })
+            ->editColumn('movimento', function ($file) {
+                return with(new Carbon($file->movimento))->format('d/m/Y');
+            })
+            ->editColumn('total', function ($file) {
+                return number_format($file->total, 0, ',', '.');
+            })
+            ->make(true);
+    }
 }

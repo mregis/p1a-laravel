@@ -62,7 +62,7 @@
                         </tr>
                         </thead>
                     </table>
-                    <a href="{{route('uploads.upload_index')}}" class="btn btn-lg btn-outline-secondary">
+                    <a href="{{route('remessa.listagem')}}" class="btn btn-lg btn-outline-secondary">
                         <i class="fas fa-arrow-circle-left"></i> Voltar
                     </a>
                 </div>

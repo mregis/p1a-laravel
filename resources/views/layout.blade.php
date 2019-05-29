@@ -33,7 +33,7 @@
                     <div class="m-stack__item m-brand  m-brand--skin-dark ">
                         <div class="m-stack m-stack--ver m-stack--general">
                             <div class="m-stack__item m-stack__item--middle m-brand__logo">
-                                <a href="/dashboard" class="m-brand__logo-wrapper">
+                                <a href="{{route('home')}}" class="m-brand__logo-wrapper">
                                     <img alt="" src="{{ asset('images/logo_default_dark.png')}}"/>
                                 </a>
                             </div>
@@ -265,7 +265,7 @@
                                 @if((Auth::user()->profile == "ADMINISTRADOR" || Auth::user()->profile == "DEPARTAMENTO"))
                                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
                                         m-menu-submenu-toggle="hover">
-                                        <a href="{{$menu->sub_menus != "[]" ? 'javascript:;' : $menu->url }}" class="m-menu__link m-menu__toggle">
+                                        <a href="{{$menu->url == "" ? 'javascript:;' : route($menu->url) }}" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
                                                        data-placement="top" title="{{$menu->name}}">
                                             </i>
@@ -282,7 +282,7 @@
                                                             <span class="m-menu__arrow"></span>
                                                             <ul class="m-menu__subnav">
                                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                                    <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                    <a href="{{route($sub_menu->url)}}" class="m-menu__link">
                                                                         <i class="m-menu__link-bullet {{$sub_menu->icon}}">
                                                                             <span></span>
                                                                         </i>
@@ -297,7 +297,7 @@
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">
                                                             <li class="m-menu__item " aria-haspopup="true">
-                                                                <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                <a href="{{route($sub_menu->url)}}" class="m-menu__link">
                                                                     <i class="m-menu__link-bullet {{$sub_menu->icon}}">
                                                                         <span></span>
                                                                     </i>
@@ -315,7 +315,7 @@
                                 <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"
                                     m-menu-submenu-toggle="hover"
                                     @if(Auth::user()->profile == "OPERADOR" && $menu->name == "Remessa") style="display:none" @endif>
-                                    <a href="{{$menu->sub_menus != "[]" ? 'javascript:;' : $menu->url }}"
+                                    <a href="{{$menu->url == "" ? 'javascript:;' : route($menu->url) }}"
                                        class="m-menu__link m-menu__toggle">
                                         <i class="m-menu__link-icon {{$menu->icon}}" data-toggle="tooltip"
                                                    data-placement="top" title="{{$menu->name}}"></i>
@@ -332,7 +332,7 @@
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">
                                                             <li class="m-menu__item " aria-haspopup="true">
-                                                                <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                <a href="{{route($sub_menu->url)}}" class="m-menu__link">
                                                                     <i class="m-menu__link-bullet {{$sub_menu->icon}}">
                                                                         <span></span>
                                                                     </i>
@@ -344,15 +344,15 @@
                                                 @endif
                                             @else
                                                 @if( !(
-                                                    ($sub_menu->name == "Agência" && Auth::user()->profile == 'AGÊNCIA') ||
-                                                    ($sub_menu->name == "Operador" && Auth::user()->profile == 'AGÊNCIA') ||
-                                                    ($sub_menu->name == "Contingencia" && Auth::user()->profile == 'OPERADOR')
+                                                    ($sub_menu->name == "Agência" && Auth::user()->profile == \App\Models\Profile::AGENCY) ||
+                                                    ($sub_menu->name == "Operador" && Auth::user()->profile == \App\Models\Profile::AGENCY) ||
+                                                    ($sub_menu->name == "Contingencia" && Auth::user()->profile == \App\Models\Profile::OPERATOR)
                                                     ))
                                                     <div class="m-menu__submenu ">
                                                         <span class="m-menu__arrow"></span>
                                                         <ul class="m-menu__subnav">
                                                             <li class="m-menu__item " aria-haspopup="true">
-                                                                <a href="{{$menu->url.$sub_menu->url}}" class="m-menu__link">
+                                                                <a href="{{route($sub_menu->url)}}" class="m-menu__link">
                                                                     <i class="m-menu__link-bullet {{$sub_menu->icon}}">
                                                                         <span></span>
                                                                     </i>
@@ -374,18 +374,6 @@
             </div>
 
             <div class="m-grid__item m-grid__item--fluid m-wrapper">
-
-                {{--
-                <!-- BEGIN: Subheader -->
-                <div class="m-subheader ">
-                    <div class="d-flex align-items-center">
-                        <div class="mr-auto">
-                            <h3 class="m-subheader__title ">@yield('title')</h3>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-                --}}
                 <div class="m-content">
 
                     @yield('content')
@@ -422,184 +410,7 @@
                 </li>
             </ul>
             <div class="tab-content">
-{{--
-            <div class="tab-pane active m-scrollable" id="m_quick_sidebar_tabs_messenger" role="tabpanel">
 
-                <div class="m-messenger m-messenger--message-arrow m-messenger--skin-light">
-                    <div class="m-messenger__messages">
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--in">
-                                <div class="m-messenger__message-pic">
-                                    <img src="{{url('assets/app/media/img/users/user3.jpg')}}" alt=""/>
-                                </div>
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-username">
-                                            Megan wrote
-                                        </div>
-                                        <div class="m-messenger__message-text">
-                                            Hi Bob. What time will be the meeting ?
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--out">
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-text">
-                                            Hi Megan. It's at 2.30PM
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--in">
-                                <div class="m-messenger__message-pic">
-                                    <img src="{{url('assets/app/media/img/users/user3.jpg')}}" alt=""/>
-                                </div>
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-username">
-                                            Megan wrote
-                                        </div>
-                                        <div class="m-messenger__message-text">
-                                            Will the development team be joining ?
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--out">
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-text">
-                                            Yes sure. I invited them as well
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__datetime">
-                            2:30PM
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--in">
-                                <div class="m-messenger__message-pic">
-                                    <img src="{{url('assets/app/media/img/users/user3.jpg')}}" alt=""/>
-                                </div>
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-username">
-                                            Megan wrote
-                                        </div>
-                                        <div class="m-messenger__message-text">
-                                            Noted. For the Coca-Cola Mobile App project as well ?
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--out">
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-text">
-                                            Yes, sure.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--out">
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-text">
-                                            Please also prepare the quotation for the Loop CRM project as well.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__datetime">
-                            3:15PM
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--in">
-                                <div class="m-messenger__message-no-pic m--bg-fill-danger">
-                                            <span>
-                                                M
-                                            </span>
-                                </div>
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-username">
-                                            Megan wrote
-                                        </div>
-                                        <div class="m-messenger__message-text">
-                                            Noted. I will prepare it.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--out">
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-text">
-                                            Thanks Megan. I will see you later.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-messenger__wrapper">
-                            <div class="m-messenger__message m-messenger__message--in">
-                                <div class="m-messenger__message-pic">
-                                    <img src="{{url('assets/app/media/img/users/user3.jpg')}}" alt=""/>
-                                </div>
-                                <div class="m-messenger__message-body">
-                                    <div class="m-messenger__message-arrow"></div>
-                                    <div class="m-messenger__message-content">
-                                        <div class="m-messenger__message-username">
-                                            Megan wrote
-                                        </div>
-                                        <div class="m-messenger__message-text">
-                                            Sure. See you in the meeting soon.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-messenger__seperator"></div>
-                    <div class="m-messenger__form">
-                        <div class="m-messenger__form-controls">
-                            <input type="text" name="" placeholder="Type here..." class="m-messenger__form-input">
-                        </div>
-                        <div class="m-messenger__form-tools">
-                            <a href="" class="m-messenger__form-attachment">
-                                <i class="la la-paperclip"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
---}}
                 <div class="tab-pane m-scrollable" id="m_quick_sidebar_tabs_settings" role="tabpanel">
                     <div class="m-list-settings">
                         <div class="m-list-settings__group">
