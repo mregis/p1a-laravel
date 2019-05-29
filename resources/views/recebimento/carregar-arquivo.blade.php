@@ -143,6 +143,21 @@
                                            id="lacre">
                                 </div>
                             </div>
+                            @if(Auth::user()->profile == \App\Models\Profile::ADMIN)
+                            <div class="form-group m-form__group form-row">
+                                <label for="unidade" class="col-sm-3 col-form-label">Unidade Leitura</label>
+
+                                <div class="col-sm-8">
+                                    <select required="required" class="form-control form-control-lg m-input"
+                                            id="unidades" name="unidades">
+                                        <option>Selecione uma opção</option>
+                                        @foreach($unidades as $u)
+                                            <option value="{{$u->id}}">{{$u->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @endif
                             <div class="form-group m-form__group form-row">
                                 <form class="form-horizontal dropzone disabled"
                                       action="{{route('recebimento.ler-arquivo-leituras')}}"
@@ -230,7 +245,6 @@
                         <div id="my-upload-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
                              role="progressbar" aria-valuenow="1" aria-valuemin="0" style="width: 1%"
                              aria-valuemax="100">
-
                         </div>
                     </div>
                     <div>
@@ -404,6 +418,12 @@
             var items = $('#selectLote').val();
             var lacre = $('#lacre').val();
             var lote = $("#lote").val();
+            var u = '{{ Auth::user()->id }}';
+            var unidade = null;
+            if ($("#unidades").length > 0) { // Tem o elemento para ser selecionado
+                unidade = $("#unidades").val();
+            }
+
             var dt_leitura = $("#dt_leitura").val();
             if (items.length > 0) {
                 $('.modal').modal('hide');
@@ -413,7 +433,7 @@
                     show: true //Display loader!
                 }).one('shown.bs.modal', function (e) {
                     $.post('{{ route('recebimento.carregar-arquivo-leituras') }}',
-                            {lacre: lacre, lotes: items, _u: '{{ Auth::user()->id }}'},
+                            {lacre: lacre, lotes: items, _u: u, unidade: unidade},
                             function (r) {
                                 // Close all opened modals
                                 $('.modal').modal('hide');

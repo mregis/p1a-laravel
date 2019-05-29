@@ -597,13 +597,24 @@ class ReceiveController extends BaseController
             if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
                 throw new \Exception("O seu cadastro não permite executar esta ação!");
             }
-            $query = Lote::withCount([
-                'leituras',
-                'leituras as invalidas_count' => function ($query) {
-                    $query->where('presente', false);
-                }
-            ])
+
+            $query = Lote::query()
+                ->select([
+                    "lotes.num_lote as num_lote",
+                    "lotes.situacao as situacao",
+                    "lotes.unidade_id as unidade_id",
+                    "lotes.user_id as user_id",
+                    "lotes.lacre as lacre",
+                    "lotes.situacao as situacao",
+                    "lotes.created_at as created_at",
+                    DB::raw("COUNT(leituras.*) as leituras_count"),
+                    DB::raw("SUM(CASE WHEN leituras.presente = false THEN 1 ELSE 0 END) as invalidas_count")
+                ])
+                ->join("leituras", "lotes.id", "=", "leituras.lote_id")
+                ->groupBy(["lotes.num_lote", "lotes.situacao", "lotes.unidade_id", "lotes.user_id",
+                    "lotes.lacre", "lotes.situacao", "lotes.created_at"])
             ;
+
             return Datatables::of($query)
                 ->addColumn('action', function ($lote) use ($unidade) {
                     $return = '';
@@ -636,6 +647,7 @@ class ReceiveController extends BaseController
                 })
                 ->escapeColumns([])
                 ->make(true);
+
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 400);
         }
@@ -868,10 +880,10 @@ class ReceiveController extends BaseController
                         $id_lotes[] = $l->id;
                     }
                     if ($t >= count($rows)) {
-                        return $this->sendResponse($response, 'Este arquivo já foi carregado anteriormente porém as '.
+                        return $this->sendResponse($response, 'Este arquivo já foi carregado anteriormente! '.
                             'Verifique a situação de cada lote gerado na lista de Lotes. Se preferir, ' .
                             'as leituras podem ser gerenciadas acessando a aba [Lotes de Leitura] ' .
-                            'no item de menu [Recebimento->Operador]');
+                            'no item de menu [Recebimento -> Operador]');
                     }
                 }
                 set_time_limit(120);

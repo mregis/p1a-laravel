@@ -55,15 +55,8 @@ try {
     var pdfFonts = require('pdfmake/build/vfs_fonts.js');
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-//    require('datetime-moment');
-
     // ### Toastr messages
     window.toastr = require('toastr');
-
-/*
-    require('tether');
-    require('markdown');
-*/
 
     // Fonts
     require('@fortawesome/fontawesome-free');

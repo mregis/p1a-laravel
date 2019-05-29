@@ -43,6 +43,7 @@ class RecebimentoController extends BaseController
             return redirect(route('home'));
         }
         $menus = $this->menu->menu();
-        return view('recebimento.carregar-arquivo', compact('menus'));
+        $unidades = Unidade::all();
+        return view('recebimento.carregar-arquivo', compact('menus', 'unidades'));
     }
 }

@@ -61,6 +61,7 @@ Route::get('/receive/docs/{id}/{profile}/{juncao}', 'Api\ReceiveController@docs'
 Route::get('/receive/docs/{id}/{profile}', 'Api\ReceiveController@docs');
 
 Route::group(['prefix' => '/remessa'], function() {
+    Route::get('/listar-remessas', 'Api\RemessaController@listarRemessas')->name('arquivo.api-listar-remessa');
     Route::post('/registrar', 'Api\RemessaController@registrarRemessa')->name('remessa.registrar-remessa');
     Route::get('/listar-nao-registrado', 'Api\RemessaController@getCapaLoteUnregistered')->name('remessa.nao-registrados');
 });

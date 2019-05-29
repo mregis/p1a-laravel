@@ -61,7 +61,9 @@ $la-css-prefix: la !default;
 
 // @import '~normalize.css/normalize.css';
 // @import '~typeahead.js-bootstrap4-css/typeaheadjs.scss';
-// @import '~gijgo/css/gijgo.min.css';
+
+// ### DateTimePicker
+@import '~gijgo/css/gijgo.min.css';
 
 /*!
  * Custom elements for Specific App

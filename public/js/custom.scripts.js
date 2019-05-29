@@ -307,24 +307,22 @@ $(document).ajaxComplete(function() {
 });
 
 var historytable = null;
-var historytableModal = null;
 function getHistory(id, url, u) {
     $("span.capalote-placeholder").text('');
-    if (typeof historytableModal == "undefined" || historytableModal == null) {
-        historytableModal = $("#capaLoteHistoryModal").modal("hide")
-            .on('hidden.bs.modal', function (e) {
-                historytable.clear().draw();
-            })
-            .on('shown.bs.modal', function (e) {
-                historytable.responsive.recalc();
-            });
-    }
-/*
-    if (typeof historytable == "undefined" || historytable == null) {
+    $("#capaLoteHistoryModal").modal();
+    $('#capaLoteHistoryModal').on('hidden.bs.modal', function (e) {
+        historytable.clear().draw();
+    });
+    if (typeof(historytable) == "undefined" || historytable == null) {
         historytable = $('#history').DataTable({
-            dom: "<'row'<'col-10'r>><'row'<'col-sm-12'B>><'row'<'col-sm-12't>><'row'<'col-5'i>>" ,
+            dom: 'B',
             buttons: {
-                dom: {button: { tag: 'button',className: 'btn btn-sm'}},
+                dom: {
+                    button: {
+                        tag: 'button',
+                        className: 'btn btn-sm'
+                    }
+                },
                 buttons: [
                     {extend: "print", text: "<i class='fas fa-print'></i> Imprimir", className: 'btn-primary'},
                     {
@@ -339,18 +337,13 @@ function getHistory(id, url, u) {
                         title: function(){ return "CapaLote_" + $("span.capalote-placeholder").text();},
                         className: 'btn-primary'
                     },
-                ]
+                ],
             },
             language: lang,
             ordering: false,
-            processing: true,
-            responsive: true
-//            columnDefs: [ { targets: [0,1,2,3,4], visible: false } ]
+            columnDefs: [ { targets: [0,1,2,3,4], visible: false } ]
         });
     }
-
-    historytableModal.modal("show");
-
     $.post(url, {id: id, u: u},
         function (r) {
             $("span.capalote-placeholder").text(r.content);
@@ -367,18 +360,13 @@ function getHistory(id, url, u) {
                     r.history[i].user.name,
                     r.history[i].user.profile,
                     (r.history[i].local || '-')
-                ]);
+                ]).draw();
             }
-            historytable.draw();
-            historytable.responsive.recalc();
-        }, 'json')
-        .fail(function (r) {
-            var errormodal = $("#on_error").modal();
-            errormodal.find('.modal-body').find('p')
-                .text('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
-            errormodal.show();
+            // historytable.draw();
+
+        }, 'json').fail(function (r) {
+            alert('Ocorreu um erro ao tentar recuperar as informações requisitadas.');
         });
-*/
 }
 
 var datepickerConfig = {
