@@ -95,35 +95,6 @@ class DocsHistoryController extends BaseController
                 ->escapeColumns([]);
 
             return $datatable->make(true);
-
-/*            if (!$doc = Docs::find($id)) {
-                return $this->sendResponse((new Docs()), "Capa de Lote inexistente", 200);
-            }
-            if (!$file = $doc->file) {
-                throw new \Exception('Arquivo não encontrado');
-            }
-            if (!$user = $doc->user) {
-                throw new Exception('Erro ao buscar informações de usuário de capa de lote');
-            }
-
-            if ($doc->origin == null) {
-                $doc->origin()->associate(new Agencia(['codigo' => $doc->from_agency, 'nome' => 'Agência sem cadastro']));
-            }
-
-            if ($doc->destin == null) {
-                $doc->destin()->associate(new Agencia(['codigo' => $doc->to_agency, 'nome' => 'Agência sem cadastro']));
-            }
-
-            foreach ($doc->history as $h) {
-                if (!$user = $h->user) {
-                    throw new Exception('Erro ao buscar informações de usuário de histórico');
-                }
-                $h->local = ($h->user->agencia == null ? $h->user->unidade : (string)$h->user->agencia);
-                $h->description = __('status.' . $h->description);
-            }
-
-            return $this->sendResponse($doc, "", 200);
-*/
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 400);
         }
