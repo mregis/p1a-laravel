@@ -817,12 +817,17 @@ class ReceiveController extends BaseController
             if (!in_array($user->profile, [Profile::ADMIN, Profile::OPERATOR])) {
                 throw new \Exception("Você não tem permissão para executar esta ação");
             }
-            if (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
+            if ($user->profile == Profile::ADMIN) {
+                if ((!$unidade_id = $request->get('unidade')) || (!$unidade = Unidade::find($unidade_id))) {
+                    throw new \Exception("Valor para o campo Unidade Leitura inválido!");
+                }
+
+            } elseif (!$unidade = Unidade::where('nome', trim($user->unidade))->first()) {
                 throw new \Exception("O seu cadastro não permite executar esta ação!");
             }
             // Validando campos obrigatórios
             if (!$dt_leitura = $request->get('dt_leitura')) {
-                throw new \Exception("Valor para o campo Data de Leitura inválido");
+                throw new \Exception("Valor para o campo Data de Leitura inválido!");
             }
 
             $dt_leitura = new \DateTime(str_replace("/", "-", $dt_leitura));
@@ -855,13 +860,25 @@ class ReceiveController extends BaseController
                 // Verificando se esse arquivo já não foi carregado
                 $id_lotes = [];
                 $response = [];
-                if ($lotes = Lote::withcount(
-                    [
-                        'leituras',
-                        'leituras as leituras_ausentes_count' => function ($query) {
-                            $query->where('presente', false);
-                        }
-                    ])->where('file_hash', $file_hash)->get()) {
+
+                if ($lotes = Lote::query()
+                    ->select([
+                        "lotes.id as id",
+                        "lotes.num_lote as num_lote",
+                        "lotes.situacao as situacao",
+                        "lotes.unidade_id as unidade_id",
+                        "lotes.user_id as user_id",
+                        "lotes.lacre as lacre",
+                        "lotes.situacao as situacao",
+                        "lotes.created_at as created_at",
+                        DB::raw("COUNT(leituras.*) as leituras_count"),
+                        DB::raw("SUM(CASE WHEN leituras.presente = false THEN 1 ELSE 0 END) as leituras_ausentes_count")
+                    ])
+                    ->join("leituras", "lotes.id", "=", "leituras.lote_id")
+                    ->where('file_hash', $file_hash)
+                    ->groupBy(["lotes.id", "lotes.num_lote", "lotes.situacao", "lotes.unidade_id", "lotes.user_id",
+                        "lotes.lacre", "lotes.situacao", "lotes.created_at"])
+                    ->get()) {
                     $t = $a = 0;
                     foreach ($lotes as $l) {
                         $t += $l->leituras_count;

@@ -109,32 +109,21 @@
                                    data-toggle="tooltip" title="Informe a data/hora real da leitura">
                                 </i>
                             </div>
+                            @if(Auth::user()->profile == \App\Models\Profile::ADMIN)
+                                <div class="form-group m-form__group form-row">
+                                    <label for="unidades" class="col-sm-3 col-form-label">Unidade Leitura</label>
 
-<!--                            <div class="form-group m-form__group form-row">
-                                <label class="col-sm-3 col-form-label">Lote de Leitura</label>
-                                <div class="input-group col-sm-8">
-                                            <span class="input-group-prepend">
-                                                <button class="btn btn-info" data-toggle="tooltip"
-                                                        title="Gera um numero unico para identificar
-                                                            o conjunto de leituras"
-                                                        onclick="generateLoteNum()">
-                                                    <i class="fas fa-sync-alt"></i>
-                                                </button>
-                                            </span>
-
-                                    <input class="form-control form-control-lg m-input"
-                                           id="lote" aria-describedby="loteHelp"
-                                           type="text" placeholder="Lote de Leitura"
-                                           value="{{date('YmdHi')}}" data-mask="000000000000">
+                                    <div class="col-sm-8">
+                                        <select required="required" class="form-control form-control-lg m-input"
+                                                id="unidades" name="unidades">
+                                            <option value="">Selecione uma opção</option>
+                                            @foreach($unidades as $u)
+                                                <option value="{{$u->id}}">{{$u->nome}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="input-group col-sm">
-                                    <i class="far fa-question-circle text-warning" data-toggle="tooltip"
-                                       title="Identifica o grupo de leituras atual.
-                                                   É possível recuperar leituras anteriores digitando o número do Lote e
-                                                   em seguida no botão ao lado"></i>
-                                </div>
-                            </div>
--->
+                            @endif
                             <div class="form-group m-form__group form-row">
                                 <label for="lacre" class="col-sm-3 col-form-label">Lacre Malote</label>
 
@@ -143,21 +132,7 @@
                                            id="lacre">
                                 </div>
                             </div>
-                            @if(Auth::user()->profile == \App\Models\Profile::ADMIN)
-                            <div class="form-group m-form__group form-row">
-                                <label for="unidade" class="col-sm-3 col-form-label">Unidade Leitura</label>
 
-                                <div class="col-sm-8">
-                                    <select required="required" class="form-control form-control-lg m-input"
-                                            id="unidades" name="unidades">
-                                        <option>Selecione uma opção</option>
-                                        @foreach($unidades as $u)
-                                            <option value="{{$u->id}}">{{$u->nome}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            @endif
                             <div class="form-group m-form__group form-row">
                                 <form class="form-horizontal dropzone disabled"
                                       action="{{route('recebimento.ler-arquivo-leituras')}}"
@@ -166,7 +141,9 @@
 
                                     <div class="m-dropzone__msg dz-message needsclick m-dropzone m-dropzone--primary">
                                         <h3 class="m-dropzone__msg-title">Após preencher a <strong>Data de Leitura</strong>
-                                            e o <strong>Lacre de Malote</strong> (se houver),
+                                            {!! Auth::user()->profile == \App\Models\Profile::ADMIN ?
+                            ', a <strong>Unidade de Leitura</strong> ' : Auth::user()->unidade()->id  !!}
+                                            e o <strong>Lacre de Malote</strong> (se houver)
                                             arraste o arquivo ou clique para fazer o upload.</h3>
                                     </div>
                                 </form>
@@ -329,6 +306,7 @@
             myDropzone.on("sending", function (file, xhr, formData) {
                 formData.append('dt_leitura', $("#dt_leitura").val());
                 formData.append('lacre', $("#lacre").val());
+                formData.append('unidade', $("#unidades").val() | 0);
                 $("#loadMe").modal({
                     backdrop: "static", //remove ability to close modal with click
                     keyboard: false, //remove option to close with keyboard
@@ -341,18 +319,21 @@
             });
             myDropzone.on("success", function (file, response) {
                 // Arquivo carregado e validado
+                $("#loadMe").modal('hide');
+                var successmodal = $("#on_done_data").modal();
+                successmodal.find('.modal-body').find('p')
+                        .text(response.message || response.responseJSON.message || response.responseText);
+                successmodal.show();
                 $.each(response.data, function (i, o) {
                     $('#selectLote').tagsinput('add',
                             {value: o.i, text: o.t, estado: o.s},
                             {preventPost: true}
                     );
                 });
-                var successmodal = $("#on_done_data").modal();
-                successmodal.find('.modal-body').find('p')
-                        .text(response.message || response.responseJSON.message || response.responseText);
-                successmodal.show();
+
             });
             myDropzone.on("error", function (file, response) {
+                $("#loadMe").modal('hide');
                 // Arquivo carregado e validado
                 var errormodal = $("#on_error").modal();
                 errormodal.find('.modal-body').find('p')
@@ -367,7 +348,9 @@
                         footer: true
                     })
             ).on('change', function(e) {
-                        if ($(this).val() == '') {
+                        var unidade = {!! Auth::user()->profile == \App\Models\Profile::ADMIN ?
+                            'parseInt($("#unidades").val() | 0)' : Auth::user()->unidade()->id  !!};
+                        if ($(this).val() == '' || unidade < 1) {
                             $("#my-dropzone").addClass('disabled');
                         } else {
                             $("#my-dropzone").removeClass('disabled');
@@ -412,6 +395,15 @@
                     $("#registrar-leituras").attr({disabled: true});
                 }
             });
+
+            $("#unidades").on('change', function (e) {
+                if (parseInt($(this).val() | 0) > 0 && $("#dt_leitura").val() != '') {
+                    $("#my-dropzone").removeClass('disabled');
+                } else {
+                    $("#my-dropzone").addClass('disabled');
+                }
+            });
+
         });
 
         function registrarLeituras() {
@@ -419,9 +411,9 @@
             var lacre = $('#lacre').val();
             var lote = $("#lote").val();
             var u = '{{ Auth::user()->id }}';
-            var unidade = null;
+            var unidade = 0;
             if ($("#unidades").length > 0) { // Tem o elemento para ser selecionado
-                unidade = $("#unidades").val();
+                unidade = parseInt($("#unidades").val());
             }
 
             var dt_leitura = $("#dt_leitura").val();
