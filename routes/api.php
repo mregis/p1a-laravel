@@ -45,7 +45,7 @@ Route::post('/products/', 'Api\ProductsController@store');
 
 // Upload Group
 Route::group(['prefix' => '/upload'], function () {
-    Route::post('/{user_id}', 'Api\UploadController@index');
+    Route::post('/', 'Api\UploadController@index')->name('upload.upload');
     Route::get('/list', 'Api\UploadController@listFiles')->name('upload.list');
     Route::delete('/delete/{file_id}', 'Api\UploadController@destroy')->name('upload.delete');
     Route::get('/docs/{id}/{profile}/{juncao}', 'Api\UploadController@docs');
@@ -60,7 +60,12 @@ Route::group(['prefix' => '/upload'], function () {
 Route::get('/receive/docs/{id}/{profile}/{juncao}', 'Api\ReceiveController@docs');
 Route::get('/receive/docs/{id}/{profile}', 'Api\ReceiveController@docs');
 
-Route::post('/remessa/registrar', 'Api\UploadController@register');
+Route::group(['prefix' => '/remessa'], function() {
+    Route::get('/listar-remessas', 'Api\RemessaController@listarRemessas')->name('arquivo.api-listar-remessa');
+    Route::post('/registrar', 'Api\RemessaController@registrarRemessa')->name('remessa.registrar-remessa');
+    Route::get('/listar-nao-registrado', 'Api\RemessaController@getCapaLoteUnregistered')->name('remessa.nao-registrados');
+});
+
 Route::post('/receber/registrar', 'Api\ReceiveController@register');
 Route::post('/receber/registraroperador', 'Api\ReceiveController@registeroperador')->name('receive.register-capa-lote');
 
@@ -79,10 +84,20 @@ Route::post('/perfil/', 'Api\ProfileController@store');
 
 Route::get('/receber-todos/{profile}/{juncao}', 'Api\ReceiveController@doclisting');
 Route::get('/receber-todos/{profile}', 'Api\ReceiveController@doclisting');
-Route::get('/remessa/registrar/{user_id}', 'Api\UploadController@capaLoteList');
+
 
 Route::post('/receber/validar-capa-lote', 'Api\ReceiveController@checkCapaLote')->name('receive.check-capa-lote');
 
+Route::group(['prefix' => '/recebimento'], function () {
+    Route::post('/remover-leitura', 'Api\ReceiveController@removeLeitura')->name('recebimento.remove-leitura');
+    Route::post('/carregar-leituras', 'Api\ReceiveController@carregarLeituras')->name('recebimento.carregar-leituras');
+    Route::post('/gerar-num-lote', 'Api\ReceiveController@gerarNumLote')->name('recebimento.gerar-num-lote');
+    Route::any('/listar-lotes', 'Api\ReceiveController@listLotes')->name('recebimento.listar-lotes');
+    Route::any('/listar-leituras', 'Api\ReceiveController@listLeituras')->name('recebimento.listar-leituras');
+    Route::any('/ler-arquivo', 'Api\ReceiveController@lerArquivoLeituras')->name('recebimento.ler-arquivo-leituras');
+    Route::any('/carregar-leituras-de-arquivo', 'Api\ReceiveController@carregarArquivoLeituras')->name('recebimento.carregar-arquivo-leituras');
+
+});
 // Capa de Lote
 Route::group(['prefix' => '/capalote'], function () {
     Route::get('/list/{user_id}', 'Api\CapaLoteController@_list')->name('capalote.list');

@@ -20,6 +20,7 @@ class ArquivoController extends BaseController
     /**
      * @param Request $request
      * @param $file_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function file(Request $request, $file_id)
     {
@@ -30,5 +31,15 @@ class ArquivoController extends BaseController
         $menu = new Menu();
         $menus = $menu->menu();
         return view('arquivo.file', compact('menus', 'file'));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function listagemRemessa(Request $request)
+    {
+        $menus = $this->menu->menu();
+        return view('arquivo.listagem_remessa', compact('menus'));
     }
 }

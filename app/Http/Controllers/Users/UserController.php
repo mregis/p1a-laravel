@@ -115,7 +115,7 @@ class UserController extends BaseController
             $request->session()->flash('alert-danger', 'Ocorreu um erro ao tentar criar o cadastro!');
         }
 
-        return redirect(route('users.users_index'));
+        return redirect(route('usuarios.listar'));
     }
 
     /**
@@ -130,7 +130,7 @@ class UserController extends BaseController
         if (!$usuario = User::find($id)) {
             $request->session()->flash('alert-danger', 'Erro ao recuperar informações. ' .
                 'Tente novamente. Se o problema persistir informe ao Administrador do Sistema');
-            return redirect(route('users.users_index'));
+            return redirect(route('usuarios.listar'));
         }
         $menu = new Menu();
 

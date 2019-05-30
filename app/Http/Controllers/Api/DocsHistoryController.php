@@ -10,10 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\BaseController;
-use App\Models\Agencia;
-use App\Models\Docs;
 use App\Models\DocsHistory;
-use App\Models\Seal;
 use App\Models\Users;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,39 +27,76 @@ class DocsHistoryController extends BaseController
      */
     public function getDocsHistory(Request $request)
     {
-        $id = $request->get('id');
+        $id = (int)$request->get('id');
         try {
-
-            if (!$doc = Docs::find($id)) {
-                throw new \Exception('Capa de Lote inexistente');
+            if ($id < 1) {
+                return $this->sendResponse([], "Capa de Lote inexistente", 200);
             }
-            if (!$file = $doc->file) {
-                throw new \Exception('Arquivo não encontrado');
-            }
-            if (!$user = $doc->user) {
-                throw new Exception('Erro ao buscar informações de usuário de capa de lote');
-            }
+            $query = DocsHistory::query()
+                ->select([
+                    "docs_history.id",
+                    "docs_history.description as history_description",
+                    "docs_history.created_at",
+                    "docs.content",
+                    "docs.from_agency",
+                    "docs.to_agency",
+                    "docs.created_at as doc_created_at",
+                    "docs.id as doc_id",
+                    "files.movimento",
+                    "files.constante",
+                    "files.name as filename",
+                    "origin.codigo as cod_agencia_origem",
+                    "origin.nome as nome_agencia_origem",
+                    "destin.codigo as cod_agencia_destino",
+                    "destin.nome as nome_agencia_destino",
+                    "users.name as history_user_name",
+                    "users.juncao as juncao_usuario_criador",
+                    "users.profile as history_user_profile",
+                    "user_agency.codigo as codigo_juncao_criador",
+                    "user_agency.nome as nome_juncao_criador",
+                    "users.unidade as unidade_criador",
+                ])
+                ->join("docs", "docs_history.doc_id", "=", "docs.id")
+                ->join("files", "docs.file_id", "=", "files.id")
+                ->join("users", "docs_history.user_id", "=", "users.id")
+                ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
+                ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
+                ->leftJoin("agencia as user_agency", "users.juncao", "=", "user_agency.codigo")
+                ->where("docs.id", $id)
+            ;
 
-            if ($doc->origin == null) {
-                $doc->origin()->associate(new Agencia(['codigo' => $doc->from_agency, 'nome' => 'Agência sem cadastro']));
-            }
+            $datatable = DataTables::of($query)
+                ->addColumn('local', function ($doc) {
+                    return ($doc->juncao_usuario_criador != null ?
+                        $doc->juncao_usuario_criador . ': ' . $doc->nome_juncao_criador :
+                        $doc->unidade_criador);
+                })
+                ->editColumn('constante', function ($doc) {
+                    return __('labels.' . $doc->constante);
+                })
+                ->editColumn('movimento', function ($doc) {
+                    return with(new Carbon($doc->movimento))->format('d/m/Y');
+                })
+                ->editColumn('created_at', function ($doc) {
+                    return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
+                })
+                ->editColumn('status', function ($doc) {
+                    return __('status.' . $doc->descricao_historico);
+                })
+                ->editColumn('origem', function ($doc) {
+                    return $doc->cod_agencia_origem . ': ' . $doc->nome_agencia_origem;
+                })
+                ->editColumn('destino', function ($doc) {
+                    return $doc->cod_agencia_destino . ': ' . $doc->nome_agencia_destino;
+                })
+                ->addColumn('history_local', function ($doc) {
+                    return $doc->nome_juncao_criador == null ? $doc->unidade_criador : (string)$doc->nome_juncao_criador;
+                })
+                ->escapeColumns([]);
 
-            if ($doc->destin == null) {
-                $doc->destin()->associate(new Agencia(['codigo' => $doc->to_agency, 'nome' => 'Agência sem cadastro']));
-            }
-
-            foreach ($doc->history as $h) {
-                if (!$user = $h->user) {
-                    throw new Exception('Erro ao buscar informações de usuário de histórico');
-                }
-                $h->local = ($h->user->agencia == null ? $h->user->unidade : (string)$h->user->agencia);
-                $h->description = __('status.' . $h->description);
-            }
-
-            return response()->json($doc, 200);
-
+            return $datatable->make(true);
         } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 400);
+            return $this->sendError($e->getMessage(), 400);
         }
 
     }

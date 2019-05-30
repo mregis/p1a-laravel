@@ -54,7 +54,7 @@ class UnidadeController extends BaseController
     {
         if (!$unidade = Unidade::find($unidade_id)) {
             $request->session()->flash('alert-danger', 'Não foi possível encontrar o cadastro!');
-            return redirect(route('unidades.index'));
+            return redirect(route('cadastro.unidades'));
         }
         $menu = new Menu();
         $menus = $menu->menu();
@@ -89,6 +89,6 @@ class UnidadeController extends BaseController
             $request->session()->flash('alert-danger', 'Ocorreu um erro ao tentar criar o cadastro!');
         }
 
-        return redirect(route('unidades.index'));
+        return redirect(route('cadastro.unidades'));
     }
 }

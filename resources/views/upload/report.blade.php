@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', __('Arquivos'))
+@section('title', 'Arquivos')
 
 @section('content')
     <div class="row">
@@ -8,12 +8,7 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
-                            <h3 class="m-portlet__head-text">
-                                {{__('Listagem')}}
-                            </h3>
+                            <h3 class="m-portlet__head-text">Listagem</h3>
                         </div>
                     </div>
                 </div>

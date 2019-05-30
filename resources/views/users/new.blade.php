@@ -73,7 +73,7 @@
                     @endcomponent
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
-                            <a class="btn btn-outline-secondary btn-lg" href="{{route('users.users_index')}}">Cancelar</a>
+                            <a class="btn btn-outline-secondary btn-lg" href="{{route('usuarios.listar')}}">Cancelar</a>
                             {{ Form::submit(__('Salvar'), array('class' => 'btn btn-success btn-lg')) }}
                         </div>
                     </div>

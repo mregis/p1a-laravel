@@ -32,6 +32,7 @@ namespace App\Http\Controllers;
  *   }
  * )
  */
+use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -53,41 +54,40 @@ class BaseController extends Controller
 {
     protected $redirectTo = '/dashboard';
 
+    /**
+     * @var Menu
+     */
+    protected $menu;
+
     public function __construct()
     {
         $route = Route::current()->uri();
         if (preg_match('#^(a|api)/#', $route) == false) {
             $this->middleware('auth');
+            $this->menu = new Menu();
         }
     }
 
     public function sendResponse($result, $message, $ret = false)
     {
-        if (is_null($result)) {
-            $response = [
-                'success' => true,
-                'message' => $message,
-            ];
-        } else {
-            $response = [
-                'success' => true,
-                'message' => $message,
-                'data'    => $result,
-            ];
+        $response = [
+            'success' => true,
+            'message' => $message,
+            'data' => $result,
+        ];
+
+        if ($ret) {
+            $response['return'] = $ret;
         }
-	if($ret){
-		$response['return'] = $ret;
-	}
         return response()->json($response, 200);
     }
 
     public function sendError($error, $code)
     {
-        $response     = [
+        $response = [
             'success' => false,
             'message' => $error,
         ];
-
         return response()->json($response, $code);
     }
 }

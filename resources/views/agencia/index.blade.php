@@ -38,53 +38,36 @@
                     <div class="tab-content">
                         <div class="row">
                             <div class="col-12 text-right mb-2">
-                                <a href="{{ route('agencias.novo') }}" class="btn btn-md btn-success"><i
-                                            class="fas fa-plus-circle"></i> {{ __('labels.add') }}</a>
+                                <a href="{{ route('agencias.novo') }}" class="btn btn-lg btn-success"><i
+                                            class="fas fa-plus-circle"></i> Nova Agência</a>
                             </div>
                         </div>
                         <input type="hidden" id="columns"
-                               value="codigo,nome,cidade_uf,cd,action">
+                               value="codigo,nome,cidade_uf,cd,endereco,bairro,cep,created_at,updated_at,action">
 
                         <input type="hidden" id="baseurl"
                                value="{{ route('agencias.api-listar') }}">
 
                         <div class="col">
-                            <table class="table table-hover table-striped hasdetails table-responsive compact nowrap"
-                                   id="datatable" data-column-defs='[{"targets":[0,5],"orderable":false}]'
+                            <table class="table table-hover table-striped responsive table-responsive compact nowrap"
+                                   id="datatable" data-column-defs='[{"targets":[7],"orderable":false}]'
                                    data-order='[[ 1, "asc" ]]'>
                                 <thead class="table-dark">
                                 <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">{{ __('tables.code') }}</th>
-                                    <th scope="col">{{ __('tables.name') }}</th>
-                                    <th scope="col">{{ __('tables.cidade_uf') }}</th>
-                                    <th scope="col">{{ __('tables.cd') }}</th>
-                                    <th scope="col"></th>
+                                    <th>{{ __('tables.code') }}</th>
+                                    <th>{{ __('tables.name') }}</th>
+                                    <th>{{ __('tables.cidade_uf') }}</th>
+                                    <th>{{ __('tables.cd') }}</th>
+                                    <th>{{ __('tables.address') }}</th>
+                                    <th>{{ __('tables.village') }}</th>
+                                    <th>{{ __('tables.zipcode') }}</th>
+                                    <td>{{ __('tables.created_at') }}</td>
+                                    <td>{{__('tables.updated_at')}}</td>
+                                    <th class="all"></th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
-
-                            <script id="details-template" type="text/x-handlebars-template">
-                                <table class="table checkdetails">
-                                    <tr>
-                                        <td>{{__('tables.address')}}:</td>
-                                        <td colspan="3">@{{endereco}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{__('tables.zipcode')}}:</td>
-                                        <td>@{{cep}}</td>
-                                        <td>{{__('tables.village')}}:</td>
-                                        <td>@{{bairro}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{__('tables.created_at')}}:</td>
-                                        <td>@{{created_at}}</td>
-                                        <td>{{__('tables.updated_at')}}:</td>
-                                        <td>@{{updated_at}}</td>
-                                    </tr>
-                                </table>
-                            </script>
                         </div>
                     </div>
                 </div>

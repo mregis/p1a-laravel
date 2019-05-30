@@ -16,27 +16,34 @@ $web-font-path: 'https://fonts.googleapis.com/css?family=Poppins|Roboto';
 // Bootswatch Bootstrap Theme
 @import 'bootswatch';
 
-// From old <style> entries
-@import '~fullcalendar/dist/fullcalendar.css';
+// Metronic Template
+@import 'metronic';
+
+// Datatables Styles
+@import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+@import '~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css';
+@import '~datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
 @import '~malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
-@import '~tether/src/css/tether.sass';
-@import '~daterangepicker/daterangepicker.css';
-@import '~bootstrap-touchspin/src/jquery.bootstrap-touchspin.css';
-@import '~bootstrap-select/sass/bootstrap-select.scss';
-@import '~select2/src/scss/core.scss';
-@import '~nouislider/distribute/nouislider.css';
-@import '~ion-rangeslider/css/ion.rangeSlider.css';
-@import '~ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
-@import '~dropzone/dist/dropzone.css';
-@import '~summernote/src/less/summernote-bs4.scss';
-@import '~bootstrap-markdown/css/bootstrap-markdown.min.css';
+
+// From old <style> entries
+// @import '~fullcalendar/dist/fullcalendar.css';
+
+// @import '~tether/src/css/tether.sass';
+// @import '~bootstrap-touchspin/src/jquery.bootstrap-touchspin.css';
+// @import '~bootstrap-select/sass/bootstrap-select.scss';
+// @import '~select2/src/scss/core.scss';
+// @import '~nouislider/distribute/nouislider.css';
+// @import '~ion-rangeslider/css/ion.rangeSlider.css';
+// @import '~ion-rangeslider/css/ion.rangeSlider.skinFlat.css';
+// @import '~summernote/src/less/summernote-bs4.scss';
+// @import '~bootstrap-markdown/css/bootstrap-markdown.min.css';
 @import '~bootstrap-tagsinput/dist/bootstrap-tagsinput.css';
-@import '~animate.css/animate.css';
+// @import '~animate.css/animate.css';
 @import '~toastr/toastr.scss';
-@import '~chartist/dist/scss/chartist.scss';
+// @import '~chartist/dist/scss/chartist.scss';
 
 // Social Icon Fonts
-@import '~socicon/css/socicon.css';
+// @import '~socicon/css/socicon.css';
 // Font Awesome Fonts
 @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
@@ -46,22 +53,17 @@ $web-font-path: 'https://fonts.googleapis.com/css?family=Poppins|Roboto';
 @import '../fonts/flaticon/flaticon.css';
 // Metronic Fonts
 @import '../fonts/metronic/metronic.css';
-
-@import '~sweetalert2/src/sweetalert2.scss';
-
-@import '~normalize.css/normalize.css';
-@import '~typeahead.js-bootstrap4-css/typeaheadjs.scss';
-
-// Metronic
-@import 'metronic';
-
 // Line-Awesome fonts
 $la-css-prefix: la !default;
 @import '~line-awesome';
 
-@import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
-@import '~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css';
-@import '~datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
+// @import '~sweetalert2/src/sweetalert2.scss';
+
+// @import '~normalize.css/normalize.css';
+// @import '~typeahead.js-bootstrap4-css/typeaheadjs.scss';
+
+// ### DateTimePicker
+@import '~gijgo/css/gijgo.min.css';
 
 /*!
  * Custom elements for Specific App

@@ -4,7 +4,7 @@
 
 // multiselectsplitter.js
 +function(a){"use strict";function c(c){return this.each(function(){var d=a(this),e=d.data("multiselectsplitter"),f="object"==typeof c&&c;(e||"destroy"!=c)&&(e||d.data("multiselectsplitter",e=new b(this,f)),"string"==typeof c&&e[c]())})}var b=function(a,b){this.init("multiselectsplitter",a,b)};b.DEFAULTS={selectSize:null,maxSelectSize:null,clearOnFirstChange:!1,onlySameGroup:!1,groupCounter:!1,maximumSelected:null,afterInitialize:null,maximumAlert:function(a){alert("Only "+a+" values can be selected")},createFirstSelect:function(a,b){return"<option>"+a+"</option>"},createSecondSelect:function(a,b){return"<option>"+a+"</option>"},template:'<div class="row" data-multiselectsplitter-wrapper-selector><div class="col-xs-6 col-sm-6"><select class="form-control" data-multiselectsplitter-firstselect-selector></select></div> <!-- Add the extra clearfix for only the required viewport --><div class="col-xs-6 col-sm-6"><select class="form-control" data-multiselectsplitter-secondselect-selector></select></div></div>'},b.prototype.init=function(c,d,e){var f=this;f.type=c,f.last$ElementSelected=[],f.initialized=!1,f.$element=a(d),f.$element.hide(),f.options=a.extend({},b.DEFAULTS,e),f.$element.after(f.options.template),f.$wrapper=f.$element.next("div[data-multiselectsplitter-wrapper-selector]"),f.$firstSelect=a("select[data-multiselectsplitter-firstselect-selector]",f.$wrapper),f.$secondSelect=a("select[data-multiselectsplitter-secondselect-selector]",f.$wrapper);var g=0,h=0;if(0!=f.$element.find("optgroup").length){f.$element.find("optgroup").each(function(){var b=a(this).attr("label"),c=a(f.options.createFirstSelect(b,f.$element));c.val(b),c.attr("data-current-label",c.text()),f.$firstSelect.append(c);var d=a(this).find("option").length;d>h&&(h=d),g++});var i=Math.max(g,h);i=Math.min(i,10),f.options.selectSize?i=f.options.selectSize:f.options.maxSelectSize&&(i=Math.min(i,f.options.maxSelectSize)),f.$firstSelect.attr("size",i),f.$secondSelect.attr("size",i),f.$element.attr("multiple")&&f.$secondSelect.attr("multiple","multiple"),f.$element.is(":disabled")&&f.disable(),f.$firstSelect.on("change",a.proxy(f.updateParentCategory,f)),f.$secondSelect.on("click change",a.proxy(f.updateChildCategory,f)),f.update=function(){if(!(f.$element.find("option").length<1)){var b,a=f.$element.find("option:selected:first");b=a.length?a.parent().attr("label"):f.$element.find("option:first").parent().attr("label"),f.$firstSelect.find('option[value="'+b+'"]').prop("selected",!0),f.$firstSelect.trigger("change")}},f.update(),f.initialized=!0,f.options.afterInitialize&&f.options.afterInitialize(f.$firstSelect,f.$secondSelect)}},b.prototype.disable=function(){this.$secondSelect.prop("disabled",!0),this.$firstSelect.prop("disabled",!0)},b.prototype.enable=function(){this.$secondSelect.prop("disabled",!1),this.$firstSelect.prop("disabled",!1)},b.prototype.createSecondSelect=function(){var b=this;b.$secondSelect.empty(),a.each(b.$element.find('optgroup[label="'+b.$firstSelect.val()+'"] option'),function(c,d){var e=a(this).val(),f=a(this).text(),g=a(b.options.createSecondSelect(f,b.$firstSelect));g.val(e),a.each(b.$element.find("option:selected"),function(b,c){a(c).val()==e&&g.prop("selected",!0)}),b.$secondSelect.append(g)})},b.prototype.updateParentCategory=function(){var a=this;a.last$ElementSelected=a.$element.find("option:selected"),a.options.clearOnFirstChange&&a.initialized&&a.$element.find("option:selected").prop("selected",!1),a.createSecondSelect(),a.checkSelected(),a.updateCounter()},b.prototype.updateCounter=function(){var b=this;b.$element.attr("multiple")&&b.options.groupCounter&&a.each(b.$firstSelect.find("option"),function(c,d){var e=a(d).val(),f=a(d).data("currentLabel"),g=b.$element.find('optgroup[label="'+e+'"] option:selected').length;g>0&&(f+=" ("+g+")"),a(d).html(f)})},b.prototype.checkSelected=function(){var b=this;if(b.$element.attr("multiple")&&b.options.maximumSelected){var c=0;if(c="function"==typeof b.options.maximumSelected?b.options.maximumSelected(b.$firstSelect,b.$secondSelect):b.options.maximumSelected,!(c<1)){var d=b.$element.find("option:selected");if(d.length>c){b.$firstSelect.find("option:selected").prop("selected",!1),b.$secondSelect.find("option:selected").prop("selected",!1),b.initialized?(b.$element.find("option:selected").prop("selected",!1),b.last$ElementSelected.prop("selected",!0)):a.each(b.$element.find("option:selected"),function(b,d){b>c-1&&a(d).prop("selected",!1)});var e=b.last$ElementSelected.first().parent().attr("label");b.$firstSelect.find('option[value="'+e+'"]').prop("selected",!0),b.createSecondSelect(),b.options.maximumAlert(c)}}}},b.prototype.basicUpdateChildCategory=function(b,c){var d=this;d.last$ElementSelected=d.$element.find("option:selected");var e=d.$secondSelect.val();a.isArray(e)||(e=[e]);var f=d.$firstSelect.val(),g=!1;d.$element.attr("multiple")?d.options.onlySameGroup?a.each(d.$element.find("option:selected"),function(b,c){if(a(c).parent().attr("label")!=f)return g=!0,!1}):c||(g=!0):g=!0,g?d.$element.find("option:selected").prop("selected",!1):a.each(d.$element.find("option:selected"),function(b,c){f==a(c).parent().attr("label")&&a.inArray(a(c).val(),e)==-1&&a(c).prop("selected",!1)}),a.each(e,function(a,b){d.$element.find('option[value="'+b+'"]').prop("selected",!0)}),d.checkSelected(),d.updateCounter(),d.$element.trigger("change")},b.prototype.updateChildCategory=function(b){"change"==b.type?this.timeOut=setTimeout(a.proxy(function(){this.basicUpdateChildCategory(b,b.ctrlKey)},this),10):"click"==b.type&&(clearTimeout(this.timeOut),this.basicUpdateChildCategory(b,b.ctrlKey))},b.prototype.destroy=function(){this.$wrapper.remove(),this.$element.removeData(this.type),this.$element.show()},a.fn.multiselectsplitter=c,a.fn.multiselectsplitter.Constructor=b,a.fn.multiselectsplitter.VERSION="1.0.1"}(jQuery);
-
+/*
 jQuery.validator.setDefaults({
     errorElement: 'div', //default input error message container
     errorClass: 'form-control-feedback', // default input error message class
@@ -77,7 +77,7 @@ jQuery.notifyDefaults({
     '<a href="{3}" target="{4}" data-notify="url"></a>' +
     '</div>'
 });
-
+*/
 // Sem idéia ao que se refere o código abaixo - Presente no arquivo Vendors do Metronic Theme
 (function(t){function z(){for(var a=0;a<g.length;a++)g[a][0](g[a][1]);g=[];m=!1}function n(a,b){g.push([a,b]);m||(m=!0,A(z,0))}function B(a,b){function c(a){p(b,a)}function h(a){k(b,a)}try{a(c,h)}catch(d){h(d)}}function u(a){var b=a.owner,c=b.state_,b=b.data_,h=a[c];a=a.then;if("function"===typeof h){c=l;try{b=h(b)}catch(d){k(a,d)}}v(a,b)||(c===l&&p(a,b),c===q&&k(a,b))}function v(a,b){var c;try{if(a===b)throw new TypeError("A promises callback cannot return that same promise.");if(b&&("function"===
     typeof b||"object"===typeof b)){var h=b.then;if("function"===typeof h)return h.call(b,function(d){c||(c=!0,b!==d?p(a,d):w(a,d))},function(b){c||(c=!0,k(a,b))}),!0}}catch(d){return c||k(a,d),!0}return!1}function p(a,b){a!==b&&v(a,b)||w(a,b)}function w(a,b){a.state_===r&&(a.state_=x,a.data_=b,n(C,a))}function k(a,b){a.state_===r&&(a.state_=x,a.data_=b,n(D,a))}function y(a){var b=a.then_;a.then_=void 0;for(a=0;a<b.length;a++)u(b[a])}function C(a){a.state_=l;y(a)}function D(a){a.state_=q;y(a)}function e(a){if("function"!==
@@ -86,6 +86,7 @@ typeof define&&define.amd?define(function(){return s?f:e}):s||(t.Promise=e);var 
     Object.prototype.toString.call(a))throw new TypeError("You must pass an array to Promise.all().");return new this(function(b,c){function h(a){e++;return function(c){d[a]=c;--e||b(d)}}for(var d=[],e=0,f=0,g;f<a.length;f++)(g=a[f])&&"function"===typeof g.then?g.then(h(f),c):d[f]=g;e||b(d)})};e.race=function(a){if("[object Array]"!==Object.prototype.toString.call(a))throw new TypeError("You must pass an array to Promise.race().");return new this(function(b,c){for(var e=0,d;e<a.length;e++)(d=a[e])&&"function"===
 typeof d.then?d.then(b,c):b(d)})};e.resolve=function(a){return a&&"object"===typeof a&&a.constructor===this?a:new this(function(b){b(a)})};e.reject=function(a){return new this(function(b,c){c(a)})}})("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this);
 
+/*
 swal.mixin({
     width: 400,
     padding: '2.5rem',
@@ -293,7 +294,7 @@ var BootstrapSelect = function () {
         }
     };
 }();
-
+*/
 
 $.ajaxSetup({
     headers: {
@@ -368,4 +369,31 @@ function getHistory(id, url, u) {
         });
 }
 
+var datepickerConfig = {
+    uiLibrary: 'bootstrap4',
+    locale: 'pt-br',
+    format: 'dd/mm/yyyy',
+    icons: { rightIcon: '<i class="far fa-calendar-alt"></i>' }
+};
 
+var timepickerConfig = {
+    uiLibrary: 'bootstrap4',
+    locale: 'pt-br',
+    format: 'HH:MM',
+    icons: { rightIcon: '<i class="far fa-clock"></i>' }
+};
+// Datatables order plugins
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "numeric-fixed-pre": function ( a ) {
+        var x = (a == "-") ? 0 : a.replace( /\./g, "" );
+        return parseInt( x );
+    },
+
+    "numeric-fixed-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "numeric-fixed-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );

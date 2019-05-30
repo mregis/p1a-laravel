@@ -7,6 +7,13 @@ class Docs extends BaseModel
 {
     use SoftDeletes;
 
+    const STATE_SENT = 'enviado';
+    const STATE_PENDING = 'pendente';
+    const STATE_IN_TRANSIT = 'em_transito';
+    const STATE_RECEIVED = 'recebido';
+    const STATE_THEFT = 'roubado';
+    const STATE_CONTINGENCY = 'contingencia';
+
     protected $fillable = [
         'file_id',
         'content',

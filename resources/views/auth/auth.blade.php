@@ -11,7 +11,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="{{ mix('css/appfill.css')}}" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/appmain.css')}}" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="{{asset('assets/demo/default/media/img/logo/favicon.ico')}}" />
 </head>
@@ -35,12 +34,15 @@
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <input class="form-control m-input form-control-lg" type="text"
-                                               data-toggle="tooltip" title="Informe seu e-mail na forma 9999.adm ou 9999.adm@bradesco.com.br"
-                                               placeholder="Informe seu E-mail" name="username" autocomplete="off">
+                                               data-toggle="tooltip"
+                                               title="Informe seu e-mail na forma 9999.adm ou 9999.adm@bradesco.com.br"
+                                               placeholder="Informe seu E-mail" name="username" autocomplete="off"
+                                               required>
                                     </div>
                                     <div class="form-group">
                                         <input class="form-control form-control-lg m-input m-login__form-input--last"
-                                               type="password" placeholder="Informe sua senha" name="password">
+                                               type="password" placeholder="Informe sua senha" name="password"
+                                                required>
                                     </div>
                                     <div class="m-login__form-action">
                                         <button id="m_login_signin_submit"
@@ -78,7 +80,7 @@
                                 <div class="form-group m-form__group">
                                     <input class="form-control m-input form-control-lg" type="text"
                                            placeholder="Preencha seu email" name="email" id="m_email"
-                                           autocomplete="off" />
+                                           autocomplete="off" required/>
                                 </div>
                                 <div class="m-login__form-action">
                                     <button id="m_login_forget_password_submit"
@@ -111,11 +113,11 @@
 <script src="{{ mix('/js/manifest.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/vendor.js') }}" type="text/javascript"></script>
 <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
-<script src="{{ mix('/js/noCommonJS.libs.js') }}" type="text/javascript"></script>
+{{--<script src="{{ mix('/js/noCommonJS.libs.js') }}" type="text/javascript"></script> --}}
 <script src="{{ mix('/js/custom.scripts.js') }}" type="text/javascript"></script>
 <!--end::Base Scripts -->
 <!--begin::Page Snippets -->
-<script src="{{asset('assets/snippets/pages/user/login.js')}}" type="text/javascript"></script>
+<script src="{{mix('/js/login.js')}}" type="text/javascript"></script>
 <!--end::Page Snippets -->
 
 </body>

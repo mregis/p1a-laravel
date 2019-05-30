@@ -50,7 +50,7 @@
                     @endcomponent
                     <div class="m-portlet__foot m-portlet__foot--fit">
                         <div class="m-form__actions">
-                            <a class="btn btn-outline-secondary btn-lg" href="{{route('unidades.index')}}">Cancelar</a>
+                            <a class="btn btn-outline-secondary btn-lg" href="{{route('cadastro.unidades')}}">Cancelar</a>
                             {{ Form::submit(__('Salvar'), array('class' => 'btn btn-success btn-lg')) }}
                         </div>
                     </div>

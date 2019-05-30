@@ -1,17 +1,13 @@
 @extends('layout')
-@section('title', __('Remessa'))
+@section('title', 'Remessa')
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="m-portlet m-portlet--tab">
-
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
                             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                                 <li class="m-nav__item m-nav__item--home">
                                     <a href="{{ route('home') }}" class="m-nav__link m-nav__link--icon">
@@ -42,7 +38,7 @@
                     <table class="table table-striped table-bordered nowrap table-responsive compact text-center"
                                id="datatable"
                                data-order='[[5, "asc"],[4, "asc"]]'
-                               data-column-defs='[{"targets":[0,6,7],"orderable":false, "searchable":false}]'>
+                               data-column-defs='[{"targets":[0,2,6,7],"orderable":false, "searchable":false}]'>
 							<thead class="thead-dark">
 							<tr>
 								<th>
@@ -103,7 +99,7 @@ function save(){
             var lacre = $('#lacre').val().toUpperCase();
             var doc = [];
             var c = 0;
-            var user = {{ Auth::user()->id }};
+            var user ='{{ Auth::user()->id }}';
             $('.input-doc').each(function () {
                 if ($(this).prop('checked') == true) {
                     doc[c++] = $(this).val();

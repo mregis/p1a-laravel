@@ -102,16 +102,13 @@
                                                 <div class="input-group-text">De</div>
                                             </div>
                                             <input type="text" class="form-control" readonly="readonly" id="di"
-                                                   data-date-end-date="0d" data-date-autoclose="true"
                                                    value="{{date('d/m/Y')}}">
 
                                             <div class="input-group-prepend input-group-append">
                                                 <div class="input-group-text">Até</div>
                                             </div>
-                                            <input type="text" class="form-control datepicker" readonly="readonly"
-                                                   id="df"
-                                                   data-date-end-date="0d" data-date-autoclose="true"
-                                                   value="{{date('d/m/Y')}}">
+                                            <input type="text" class="form-control" readonly="readonly"
+                                                   id="df" value="{{date('d/m/Y')}}">
                                         </div>
                                         <span class="text-warning ml-2" title="O período máximo é de 90 dias"
                                               data-toggle="tooltip">
@@ -288,39 +285,28 @@
 
             if (typeof(report) == "undefined" || report == null) {
                 report = $('#report-analitico').DataTable(DataTablesLocalOptions);
-                $('#di').change(function () {
-                    var a = $('#di').datepicker('getDate').getTime();
-                    var b = $('#df').datepicker('getDate').getTime();
-                    if (a > b) {
-                        $("#df").datepicker('setDate', new Date(a));
-                        return;
-                    }
-                    var maxdiff = 30 * 24 * 60 * 60 * 1000; // 30 dias
-                    if (b - a > maxdiff) {
-                        $("#df").datepicker('setDate', new Date(a + maxdiff));
-                        return;
-                    }
+                $('#di').datepicker(
+                        $.extend(datepickerConfig, {
+                            maxDate: function () {
+                                return $('#df').val();
+                            }
+                        })
+                );
+                $('#df').datepicker(
+                        $.extend(datepickerConfig, {
+                            minDate: function () {
+                                return $('#di').val();
+                            },
+                            maxDate: new Date()
+                        })
+                );
+
+                $('#di, #df').change(function () {
                     report.ajax.reload();
                 });
-                $('#df').change(function () {
-                    var a = $('#di').datepicker('getDate').getTime();
-                    var b = $('#df').datepicker('getDate').getTime();
-                    if (a > b) {
-                        $("#di").datepicker('setDate', new Date(b));
-                        return;
-                    }
-                    var maxdiff = 30 * 24 * 60 * 60 * 1000; // 30 dias
-                    if (b - a > maxdiff) {
-                        $("#di").datepicker('setDate', new Date(b - maxdiff));
-                        return;
-                    }
-                    report.ajax.reload();
-                });
+
             }
 
-            $('.input-daterange input').each(function () {
-                $(this).datepicker({format: "dd/mm/yyyy", language: "pt-BR"});
-            });
         });
     </script>
 

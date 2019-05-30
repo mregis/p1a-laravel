@@ -55,7 +55,7 @@ class AgenciasController extends BaseController
     {
         if (!$agencia = Agencia::find($agencia_id)) {
             $request->session()->flash('alert-danger', 'Não foi possível encontrar o cadastro!');
-            return redirect(route('agencias.index'));
+            return redirect(route('cadastro.agencias'));
         }
         $menu = new Menu();
         $menus = $menu->menu();
@@ -100,6 +100,6 @@ class AgenciasController extends BaseController
             $request->session()->flash('alert-danger', 'Ocorreu um erro ao tentar criar o cadastro!');
         }
 
-        return redirect(route('agencias.index'));
+        return redirect(route('cadastro.agencias'));
     }
 }

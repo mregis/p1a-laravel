@@ -4,7 +4,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-12">
+        <div class="col">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -34,7 +34,7 @@
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         <table class="table table-striped table-responsive compact table-bordered auto-dt text-center nowrap"
-                               data-columns='[{"data": "movimento_sort", "visible":false,"searchable":false},{"data": "movimento","orderData":0},{"data": "pendentea"},{"data":"concluidoa"},{"data": "pendenteb"},{"data":"concluidob"},{"data": "pendentec"},{"data":"concluidoc"}]'
+                               data-columns='[{"data": "movimento_sort", "visible":false,"searchable":false},{"data": "movimento","orderData":0},{"data": "pendentea", "type": "numeric-fixed"},{"data":"concluidoa", "type": "numeric-fixed"},{"data": "pendenteb", "type": "numeric-fixed"},{"data":"concluidob", "type": "numeric-fixed"},{"data": "pendentec","type": "numeric-fixed"},{"data":"concluidoc","type": "numeric-fixed"}]'
                                data-ajax='{{ route('dashboard.report', Auth::user()->id) }}'
                                data-order='[[1, "desc"]]'
                                data-dom='<"row"<"col-sm"l><"col-sm"B>><"row"<"col-sm-12"t>><"row"<"col-3"i><"col-6"p>>'>

@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', __('Arquivos'))
+@section('title', 'Arquivos')
 
 @section('content')
 
@@ -9,9 +9,6 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <span class="m-portlet__head-icon m--hide">
-						        <i class="la la-gear"></i>
-						    </span>
                             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                                 <li class="m-nav__item m-nav__item--home">
                                     <a href="{{ route('home') }}" class="m-nav__link m-nav__link--icon">
@@ -40,6 +37,7 @@
 
                 <div class="m-portlet__body">
                     <table class="table table-striped table-responsive table-hover compact nowrap text-center"
+                           data-order='[[1,"desc"]]'
                            id="datatable" data-column-defs='[{"targets":[5],"orderable":false}]'>
                         <thead class="thead-dark">
                             <tr>

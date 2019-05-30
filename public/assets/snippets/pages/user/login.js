@@ -69,22 +69,6 @@ var SnippetLogin = function() {
             var btn = $(this);
             var form = $(this).closest('form');
 
-            form.validate({
-                rules: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true
-                    }
-                }
-            });
-
-            if (!form.valid()) {
-                return;
-            }
-
             btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
 
             form.ajaxSubmit({
@@ -113,31 +97,6 @@ var SnippetLogin = function() {
 
             var btn = $(this);
             var form = $(this).closest('form');
-
-            form.validate({
-                rules: {
-                    fullname: {
-                        required: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true
-                    },
-                    rpassword: {
-                        required: true
-                    },
-                    agree: {
-                        required: true
-                    }
-                }
-            });
-
-            if (!form.valid()) {
-                return;
-            }
 
             btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
 

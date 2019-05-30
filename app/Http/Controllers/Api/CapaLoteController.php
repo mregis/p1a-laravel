@@ -12,6 +12,7 @@ namespace app\Http\Controllers\Api;
 use App\Http\Controllers\BaseController;
 use App\Models\Docs;
 use App\Models\Files;
+use App\Models\Profile;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -83,14 +84,14 @@ class CapaLoteController extends BaseController
                     $query->where('docs.status', '=', $keyword);
                 })
                 ->addColumn('view', function ($doc) use ($user) {
-                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
-                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
+                    '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                    'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
                     '<i class="fas fa-eye"></i></a>';
                 })
                 ->editColumn('from_agency', function ($doc) {
                     if ($doc->origin != null) {
-                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                        return '<a href="javascript:void(0);" title="' . $doc->origin . '" data-toggle="tooltip">' .
                         $doc->from_agency . '</a>';
                     } else {
                         return $doc->from_agency;
@@ -98,7 +99,7 @@ class CapaLoteController extends BaseController
                 })
                 ->editColumn('to_agency', function ($doc) {
                     if ($doc->destin != null) {
-                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                        return '<a href="javascript:void(0);" title="' . $doc->destin . '" data-toggle="tooltip">' .
                         $doc->to_agency . '</a>';
                     } else {
                         return $doc->to_agency;
@@ -163,7 +164,7 @@ class CapaLoteController extends BaseController
             })
             ->editColumn('from_agency', function ($doc) {
                 if ($doc->origin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                    return '<a href="javascript:void(0);" title="' . $doc->origin . '" data-toggle="tooltip">' .
                     $doc->from_agency . '</a>';
                 } else {
                     return $doc->from_agency;
@@ -171,7 +172,7 @@ class CapaLoteController extends BaseController
             })
             ->editColumn('to_agency', function ($doc) {
                 if ($doc->destin != null) {
-                    return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                    return '<a href="javascript:void(0);" title="' . $doc->destin . '" data-toggle="tooltip">' .
                     $doc->to_agency . '</a>';
                 } else {
                     return $doc->to_agency;
@@ -235,14 +236,14 @@ class CapaLoteController extends BaseController
                     'value="' . $doc->id . '">';
                 })
                 ->addColumn('view', function ($doc) use ($user) {
-                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
-                    ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                    'title="Histórico" class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
-                    '<i class="fas fa-eye"></a>';
+                    return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
+                    '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                    'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                    '<i class="fas fa-eye"></i></a>';
                 })
                 ->editColumn('from_agency', function ($doc) {
                     if ($doc->origin != null) {
-                        return '<a href="javascript:void();" title="' . $doc->origin . '" data-toggle="tooltip">' .
+                        return '<a href="javascript:void(0);" title="' . $doc->origin . '" data-toggle="tooltip">' .
                         $doc->from_agency . '</a>';
                     } else {
                         return $doc->from_agency;
@@ -250,7 +251,7 @@ class CapaLoteController extends BaseController
                 })
                 ->editColumn('to_agency', function ($doc) {
                     if ($doc->destin != null) {
-                        return '<a href="javascript:void();" title="' . $doc->destin . '" data-toggle="tooltip">' .
+                        return '<a href="javascript:void(0);" title="' . $doc->destin . '" data-toggle="tooltip">' .
                         $doc->to_agency . '</a>';
                     } else {
                         return $doc->to_agency;
@@ -303,17 +304,17 @@ class CapaLoteController extends BaseController
         if ($file_id > 0) {
             $query->where("docs.file_id", $file_id);
         }
-        if ($user->profile == 'AGÊNCIA') {
+        if ($user->profile == Profile::AGENCY) {
             $query->where('docs.from_agency', '=', sprintf("%04d", $user->juncao))
                 ->orWhere('docs.to_agency', '=', sprintf("%04d", $user->juncao));
         }
 
         return Datatables::of($query)
             ->addColumn('action', function ($doc) use ($user) {
-                return '<a data-toggle="modal" href="#capaLoteHistoryModal" onclick="getHistory(' . $doc->id .
-                ',\'' . route('docshistory.get-doc-history') . '\',' . ($user->id) . ')" ' .
-                'title="Histórico" class="btn btn-outline-primary m-btn m-btn--icon m-btn--icon-only"><i class="fas fa-eye">' .
-                '</a>';
+                return '<a data-toggle="modal" href="#capaLoteHistoryModal" data-dochistory-id="' . $doc->id .
+                '" data-dochistory-content="' . $doc->content . '" title="Histórico" ' .
+                'class="btn btn-sm btn-outline-primary m-btn m-btn--icon m-btn--icon-only">' .
+                '<i class="fas fa-eye"></i></a>';
             })
             ->editColumn('created_at', function ($docs) {
                 return $docs->created_at ? with(new Carbon($docs->created_at))->format('d/m/Y H:i:s') : '';
