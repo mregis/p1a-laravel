@@ -83,10 +83,10 @@
                                         @foreach($doc->history as $h)
                                             <tr>
                                                 <td>{{__('status.' . $h->description)}}</td>
-                                                <td>{{(new \Carbon\Carbon($h->created_at))->format('d/m/Y H:i')}}</td>
+                                                <td>{{(new \Carbon\Carbon($h->dt_leitura))->format('d/m/Y H:i')}}</td>
                                                 <td>{{$h->user}}</td>
                                                 <td>{{$h->user->profile}}</td>
-                                                <td>{{$h->user->getLocal()}}</td>
+                                                <td>{{$h->getLocal()}}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>

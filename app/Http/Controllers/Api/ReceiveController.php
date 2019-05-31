@@ -720,7 +720,11 @@ class ReceiveController extends BaseController
     }
 
     /**
+     * Registra as leituras carregadas de um arquivo para o historico
+     * de capa de lote
+     *
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function carregarArquivoLeituras(Request $request)
     {
@@ -771,6 +775,8 @@ class ReceiveController extends BaseController
                                 $docsHistory->doc_id = $doc->id;
                                 $docsHistory->description = DocsHistory::STATE_IN_TRANSIT;
                                 $docsHistory->user_id = $user_id;
+                                $docsHistory->unidade_id = $lote->unidade_id;
+                                $docsHistory->dt_leitura = $leitura->dt_leitura;
                                 $docsHistory->save();
                                 if ($seal != null) {
                                     if (!$sealGroup = SealGroup::where('doc_id', $doc->id)->first()) {
@@ -807,6 +813,13 @@ class ReceiveController extends BaseController
         }
     }
 
+    /**
+     * Carrega as leituras a partir de um arquivo de texto criando um lote
+     * para cada grupo de 500 leituras e as deixando no estado ABERTO
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function lerArquivoLeituras(Request $request) {
         $in_transaction = true;
         try {
@@ -927,7 +940,7 @@ class ReceiveController extends BaseController
                     'user_id' => $user_id,
                     'unidade_id' => $unidade->id,
                     'num_lote' => $_lote,
-                    'created_at' => $dt_leitura,
+                    'dt_leitura' => $dt_leitura,
                     'lacre' => $_lacre,
                     'file_hash' => $file_hash
                 ]);
@@ -941,6 +954,7 @@ class ReceiveController extends BaseController
                             'lote_id' => $lote->id,
                             'capalote' => $capaLote,
                             'lacre' => $_lacre,
+                            'unidade_id' => $unidade->id,
                             'dt_leitura' => $dt_leitura
                         ]);
                         // Nova Leitura para Lote atual
@@ -969,6 +983,10 @@ class ReceiveController extends BaseController
                         'p' => $presentes,
                         'a' => $ausentes,
                         's' => $lote->situacao,
+                        't' => sprintf("Lote %s criado. %d leituras registradas. %d presentes e %d ausentes.",
+                            $lote->num_lote, $presentes + $ausentes,
+                            $presentes,
+                            $ausentes),
                     ];
 
                     if ($k % 500 == 0 && $k > 1) {
@@ -984,7 +1002,6 @@ class ReceiveController extends BaseController
                             'user_id' => $user_id,
                             'unidade_id' => $unidade->id,
                             'num_lote' => $_lote,
-                            'created_at' => $dt_leitura,
                             'lacre' => $_lacre,
                             'file_hash' => $file_hash,
                         ]);

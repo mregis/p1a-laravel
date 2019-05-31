@@ -37,6 +37,7 @@ class DocsHistoryController extends BaseController
                     "docs_history.id",
                     "docs_history.description as history_description",
                     "docs_history.created_at",
+                    "docs_history.dt_leitura",
                     "docs.content",
                     "docs.from_agency",
                     "docs.to_agency",
@@ -55,6 +56,7 @@ class DocsHistoryController extends BaseController
                     "user_agency.codigo as codigo_juncao_criador",
                     "user_agency.nome as nome_juncao_criador",
                     "users.unidade as unidade_criador",
+                    "local.nome as history_local",
                 ])
                 ->join("docs", "docs_history.doc_id", "=", "docs.id")
                 ->join("files", "docs.file_id", "=", "files.id")
@@ -62,6 +64,7 @@ class DocsHistoryController extends BaseController
                 ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
                 ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
                 ->leftJoin("agencia as user_agency", "users.juncao", "=", "user_agency.codigo")
+                ->leftJoin("unidades as local", "docs_history.unidade_id", "=", "local.id")
                 ->where("docs.id", $id)
             ;
 
@@ -78,7 +81,7 @@ class DocsHistoryController extends BaseController
                     return with(new Carbon($doc->movimento))->format('d/m/Y');
                 })
                 ->editColumn('created_at', function ($doc) {
-                    return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
+                    return $doc->dt_leitura ? with(new Carbon($doc->dt_leitura))->format('d/m/Y H:i') : '';
                 })
                 ->editColumn('status', function ($doc) {
                     return __('status.' . $doc->descricao_historico);
@@ -90,7 +93,7 @@ class DocsHistoryController extends BaseController
                     return $doc->cod_agencia_destino . ': ' . $doc->nome_agencia_destino;
                 })
                 ->addColumn('history_local', function ($doc) {
-                    return $doc->nome_juncao_criador == null ? $doc->unidade_criador : (string)$doc->nome_juncao_criador;
+                    return $doc->history_local ? $doc->history_local : ($doc->nome_juncao_criador == null ? $doc->unidade_criador : (string)$doc->nome_juncao_criador);
                 })
                 ->escapeColumns([]);
 
@@ -146,6 +149,7 @@ class DocsHistoryController extends BaseController
                     "user_agency.codigo as codigo_juncao_criador",
                     "user_agency.nome as nome_juncao_criador",
                     "users.unidade as unidade_criador",
+                    "local.nome as history_local",
                 ])
                 ->join("docs", "docs_history.doc_id", "=", "docs.id")
                 ->join("files", "docs.file_id", "=", "files.id")
@@ -153,7 +157,7 @@ class DocsHistoryController extends BaseController
                 ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
                 ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
                 ->leftJoin("agencia as user_agency", "users.juncao", "=", "user_agency.codigo")
-
+                ->leftJoin("unidades as local", "docs_history.unidade_id", "=", "local.id")
             ;
 
             $datatable = DataTables::of($query)
@@ -201,9 +205,9 @@ class DocsHistoryController extends BaseController
                     $query->where('docs.status', '=', $keyword);
                 })
                 ->addColumn('local', function ($doc) {
-                    return ($doc->juncao_usuario_criador != null ?
-                        $doc->juncao_usuario_criador . ': ' . $doc->nome_juncao_criador :
-                        $doc->unidade_criador);
+                    return $doc->history_local ? $doc->history_local :
+                        ($doc->nome_juncao_criador == null ? $doc->unidade_criador :
+                            (string)$doc->nome_juncao_criador);
                 })
                 ->editColumn('constante', function ($doc) {
                     return __('labels.' . $doc->constante);

@@ -34,7 +34,7 @@ class Lote extends BaseModel
     ];
 
     protected $guarded = [
-        'id', 'updated_at', 'deleted_at'
+        'id', 'updated_at', 'deleted_at',
     ];
 
     /**

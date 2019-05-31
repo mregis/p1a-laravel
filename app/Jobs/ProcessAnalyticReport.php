@@ -80,6 +80,7 @@ class ProcessAnalyticReport implements ShouldQueue
                         "user_agency.codigo as codigo_juncao_criador",
                         "user_agency.nome as nome_juncao_criador",
                         "users.unidade as unidade_criador",
+                        "local.nome as history_local",
                     ])
                     ->join("docs", "docs_history.doc_id", "=", "docs.id")
                     ->join("files", "docs.file_id", "=", "files.id")
@@ -87,6 +88,7 @@ class ProcessAnalyticReport implements ShouldQueue
                     ->leftJoin("agencia as origin", "docs.from_agency", "=", "origin.codigo")
                     ->leftJoin("agencia as destin", "docs.to_agency", "=", "destin.codigo")
                     ->leftJoin("agencia as user_agency", "users.juncao", "=", "user_agency.codigo")
+                    ->leftJoin("unidades as local", "docs_history.unidade_id", "=", "local.id")
                     ->where([
                         ['files.movimento', '>=', $di->format('Y-m-d')],
                         ['files.movimento', '<=', $df->format('Y-m-d')],
@@ -171,7 +173,10 @@ class ProcessAnalyticReport implements ShouldQueue
                         __('status.' . $data->descricao_historico),
                         $data->nome_usuario_criador,
                         $data->perfil_usuario_criador,
-                        ($data->juncao_usuario_criador != null ? $data->juncao_usuario_criador : ($data->unidade_criador != null ? $data->unidade_criador : '-')),
+                        ($data->history_local ? $data->history_local :
+                            ($data->juncao_usuario_criador != null ? $data->juncao_usuario_criador :
+                                ($data->unidade_criador != null ? $data->unidade_criador : '-'))
+                        ),
                         (new \DateTime($data->created_at))->format('d/m/Y H:i:s'),
                     ];
 

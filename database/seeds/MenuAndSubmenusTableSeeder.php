@@ -192,7 +192,7 @@ class MenuAndSubmenusTableSeeder extends Seeder
         ]);
 
         ##### Menu Consulta
-        Menu::create([
+        $menu = Menu::create([
             "name" => "Consulta",
             "icon" => "fas fa-search",
             "item_order" => 9,

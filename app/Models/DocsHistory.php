@@ -16,7 +16,9 @@ class DocsHistory extends BaseModel
     protected $fillable = [
         'doc_id',
         'description',
-        'user_id'
+        'user_id',
+        'unidade_id',
+        'dt_leitura',
     ];
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'deleted_at'
@@ -38,4 +40,15 @@ class DocsHistory extends BaseModel
         return $this->belongsTo(Users::class, 'user_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function unidade() {
+        return $this->belongsTo(Unidade::class, 'unidade_id');
+    }
+
+    public function getLocal()
+    {
+        return ($this->unidade_id != null ? (string)$this->unidade : ($this->user->unidade != null ? $this->user->unidade : '-'));
+    }
 }
