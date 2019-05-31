@@ -16,4 +16,9 @@ class Unidade extends BaseModel
     ];
 
     protected $table = 'unidades';
+
+    public function __toString()
+    {
+        return $this->nome;
+    }
 }

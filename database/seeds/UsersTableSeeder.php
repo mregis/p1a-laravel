@@ -11,7 +11,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        //
 
         \App\User::create([
             "id"=>1,

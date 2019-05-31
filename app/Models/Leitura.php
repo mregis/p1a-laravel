@@ -22,6 +22,7 @@ class Leitura extends BaseModel
         'capalote',
         'presente',
         'lacre',
+        'dt_leitura',
     ];
 
     protected $guarded = [
