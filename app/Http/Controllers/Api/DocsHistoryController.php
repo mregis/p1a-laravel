@@ -216,7 +216,7 @@ class DocsHistoryController extends BaseController
                     return with(new Carbon($doc->movimento))->format('d/m/Y');
                 })
                 ->editColumn('created_at', function ($doc) {
-                    return $doc->created_at ? with(new Carbon($doc->created_at))->format('d/m/Y H:i') : '';
+                    return $doc->dt_leitura ? with(new Carbon($doc->dt_leitura))->format('d/m/Y H:i') : '';
                 })
                 ->editColumn('status', function ($doc) {
                     return __('status.' . $doc->descricao_historico);
