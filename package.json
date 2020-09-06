@@ -22,7 +22,7 @@
         "datetime-moment": "^1.0.0",
         "dropzone": "^5.5.1",
         "gijgo": "^1.9.13",
-        "handlebars": "^4.1.1",
+        "handlebars": "^4.5.3",
         "handlebars-loader": "^1.7.1",
         "jquery": "^3.2",
         "jquery-easing": "0.0.1",
