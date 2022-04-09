@@ -35,7 +35,7 @@
         "line-awesome": "^1.0.2",
         "lodash": "^4.17.5",
         "malihu-custom-scrollbar-plugin": "^3.1.5",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "pdfmake": "^0.1.54",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
